@@ -1,37 +1,20 @@
-modules = ["python-3.11"]
-run = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-server.txt && python3 app.py"
+modules = ["nodejs-24"]
 
-[nix]
-channel = "stable-25_05"
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
 
 [workflows]
 runButton = "Project"
 
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Server"
-
-[[workflows.workflow]]
-name = "Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-server.txt && python3 app.py"
-waitForPort = 8000
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[ports]]
-localPort = 8000
-externalPort = 80
-
-[[ports]]
-localPort = 8080
-externalPort = 8080
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000

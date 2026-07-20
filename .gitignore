@@ -1,47 +1,49 @@
-# Build outputs
-SmithAI/target/
-*.jar
-*.class
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# IDEs
-.idea/
-*.iml
-.vscode/
-*.project
-*.classpath
+# compiled output
+dist
+tmp
+out-tsc
+*.tsbuildinfo
+.expo
+.expo-shared
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
 .settings/
+*.sublime-workspace
 
-# OS files
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
 .DS_Store
 Thumbs.db
 
-# Python
-SmithAI-Server/venv/
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
 
-# Models (large files, do not commit)
-*.gguf
-*.bin
-models/*.gguf
-models/*.bin
-
-# SmithAI runtime data
-SmithAI/memory/
-SmithAI/models/
-SmithAI/skills.yml
-SmithAI/training.yml
-
-# SmithAI-Server runtime
-SmithAI-Server/models/*.gguf
-SmithAI-Server/models/*.bin
-SmithAI-Server/__pycache__/
-
-# Workspace / Nix environment files
-.replit.bak
+# Replit
 .cache/
-.pythonlibs/
-node_modules/
-.agents/
+.local/
