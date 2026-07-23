@@ -4,139 +4,693 @@
     "category": "block",
     "name": "Stone",
     "description": "A common solid block found underground. Mined fastest with a pickaxe. Drops cobblestone unless mined with Silk Touch.",
-    "tags": ["block", "mining", "building"]
+    "tags": [
+      "block",
+      "mining",
+      "building"
+    ]
   },
   {
     "id": "minecraft:cobblestone",
     "category": "block",
     "name": "Cobblestone",
     "description": "Dropped when mining stone without Silk Touch. Used for tools, furnaces, and building.",
-    "tags": ["block", "mining", "building"]
+    "tags": [
+      "block",
+      "mining",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:granite",
+    "category": "block",
+    "name": "Granite",
+    "description": "An igneous rock variant of stone. Can be polished for decorative building.",
+    "tags": [
+      "block",
+      "mining",
+      "building",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:diorite",
+    "category": "block",
+    "name": "Diorite",
+    "description": "A white stone variant. Can be polished for decorative use.",
+    "tags": [
+      "block",
+      "mining",
+      "building",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:andesite",
+    "category": "block",
+    "name": "Andesite",
+    "description": "A gray stone variant. Can be polished for decorative building.",
+    "tags": [
+      "block",
+      "mining",
+      "building",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate",
+    "category": "block",
+    "name": "Deepslate",
+    "description": "A dark stone variant found deep underground. Harder than stone and used for building.",
+    "tags": [
+      "block",
+      "mining",
+      "building",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:cobbled_deepslate",
+    "category": "block",
+    "name": "Cobbled Deepslate",
+    "description": "Drops from mining deepslate. Used for tools and building.",
+    "tags": [
+      "block",
+      "mining",
+      "building"
+    ]
   },
   {
     "id": "minecraft:iron_ore",
     "category": "block",
     "name": "Iron Ore",
-    "description": "Iron ore is found underground, usually between Y=-64 and Y=72. It requires a stone pickaxe or better. Smelt it in a furnace to get iron ingots.",
-    "tags": ["block", "mining", "ore", "iron"]
+    "description": "Iron ore is found underground, usually between Y=-64 and Y=72. Requires a stone pickaxe or better. Smelt it to get iron ingots.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_iron_ore",
+    "category": "block",
+    "name": "Deepslate Iron Ore",
+    "description": "Iron ore embedded in deepslate. Requires a stone pickaxe or better. Drops iron ore.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "iron"
+    ]
   },
   {
     "id": "minecraft:gold_ore",
     "category": "block",
     "name": "Gold Ore",
     "description": "Gold ore is found underground around Y=-16 and abundantly in Badlands. Requires an iron pickaxe or better. Smelt to get gold ingots.",
-    "tags": ["block", "mining", "ore", "gold"]
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "gold"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_gold_ore",
+    "category": "block",
+    "name": "Deepslate Gold Ore",
+    "description": "Gold ore embedded in deepslate. Requires an iron pickaxe or better.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "gold"
+    ]
   },
   {
     "id": "minecraft:diamond_ore",
     "category": "block",
     "name": "Diamond Ore",
-    "description": "Diamond ore is found deep underground, most commonly around Y=-59. It requires an iron pickaxe or better. Drops diamonds when mined.",
-    "tags": ["block", "mining", "ore", "diamond"]
+    "description": "Diamond ore is found deep underground, most commonly around Y=-59. Requires an iron pickaxe or better. Drops diamonds.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_diamond_ore",
+    "category": "block",
+    "name": "Deepslate Diamond Ore",
+    "description": "Diamond ore embedded in deepslate. Requires an iron pickaxe or better.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "diamond"
+    ]
   },
   {
     "id": "minecraft:coal_ore",
     "category": "block",
     "name": "Coal Ore",
     "description": "Coal ore is common underground and in mountains. Mined with any pickaxe. Drops coal for torches and fuel.",
-    "tags": ["block", "mining", "ore", "coal", "fuel"]
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "coal",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_coal_ore",
+    "category": "block",
+    "name": "Deepslate Coal Ore",
+    "description": "Coal ore embedded in deepslate. Mined with any pickaxe. Drops coal.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "coal",
+      "fuel"
+    ]
   },
   {
     "id": "minecraft:redstone_ore",
     "category": "block",
     "name": "Redstone Ore",
-    "description": "Redstone ore is found deep underground. Requires an iron pickaxe or better. Drops redstone dust for circuits.",
-    "tags": ["block", "mining", "ore", "redstone"]
+    "description": "Redstone ore is found deep underground. Requires an iron pickaxe or better. Drops redstone dust.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "redstone"
+    ]
   },
   {
     "id": "minecraft:lapis_ore",
     "category": "block",
     "name": "Lapis Lazuli Ore",
-    "description": "Lapis ore is found underground. Requires a stone pickaxe or better. Drops lapis lazuli, used for enchanting and blue dye.",
-    "tags": ["block", "mining", "ore", "lapis"]
+    "description": "Lapis ore is found underground. Requires a stone pickaxe or better. Drops lapis lazuli.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "lapis"
+    ]
   },
   {
     "id": "minecraft:copper_ore",
     "category": "block",
     "name": "Copper Ore",
     "description": "Copper ore generates in larger ore blobs underground. Requires a stone pickaxe or better. Smelt into copper ingots.",
-    "tags": ["block", "mining", "ore", "copper"]
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "copper"
+    ]
   },
   {
     "id": "minecraft:emerald_ore",
     "category": "block",
     "name": "Emerald Ore",
-    "description": "Emerald ore is found in mountain biomes. Requires an iron pickaxe or better. Drops emeralds for trading.",
-    "tags": ["block", "mining", "ore", "emerald"]
+    "description": "Emerald ore is found in mountain biomes. Requires an iron pickaxe or better. Drops emeralds.",
+    "tags": [
+      "block",
+      "mining",
+      "ore",
+      "emerald"
+    ]
   },
   {
     "id": "minecraft:obsidian",
     "category": "block",
     "name": "Obsidian",
-    "description": "Obsidian is created when water touches a lava source block. It requires a diamond or netherite pickaxe to mine. Used for nether portals and enchanting tables.",
-    "tags": ["block", "mining", "portal", "enchanting"]
+    "description": "Created when water touches a lava source. Requires a diamond or netherite pickaxe. Used for nether portals and enchanting tables.",
+    "tags": [
+      "block",
+      "mining",
+      "portal",
+      "enchanting"
+    ]
   },
   {
     "id": "minecraft:crafting_table",
     "category": "block",
     "name": "Crafting Table",
-    "description": "A crafting table expands the player's crafting grid to 3x3, allowing more complex recipes. Crafted from 4 wooden planks.",
-    "tags": ["block", "crafting"]
+    "description": "Expands the crafting grid to 3x3. Crafted from 4 wooden planks.",
+    "tags": [
+      "block",
+      "crafting"
+    ]
   },
   {
     "id": "minecraft:furnace",
     "category": "block",
     "name": "Furnace",
-    "description": "A furnace smelts ores and cooks food. Crafted from 8 cobblestone in a ring. Requires fuel such as coal or wood.",
-    "tags": ["block", "smelting", "cooking"]
+    "description": "Smelts ores, food, and other items using fuel. Crafted from 8 cobblestone.",
+    "tags": [
+      "block",
+      "smelting",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:blast_furnace",
+    "category": "block",
+    "name": "Blast Furnace",
+    "description": "Smelts ores and metal items twice as fast as a furnace. Crafted from a furnace, iron ingots, and smooth stone.",
+    "tags": [
+      "block",
+      "smelting",
+      "ore"
+    ]
+  },
+  {
+    "id": "minecraft:smoker",
+    "category": "block",
+    "name": "Smoker",
+    "description": "Cooks food twice as fast as a furnace. Crafted from a furnace and logs.",
+    "tags": [
+      "block",
+      "smelting",
+      "food"
+    ]
   },
   {
     "id": "minecraft:chest",
     "category": "block",
     "name": "Chest",
-    "description": "A chest stores up to 27 item stacks. Crafted from 8 wooden planks in a ring. Two chests placed side by side form a double chest.",
-    "tags": ["block", "storage"]
+    "description": "Stores up to 27 stacks of items. Crafted from 8 wooden planks.",
+    "tags": [
+      "block",
+      "storage"
+    ]
   },
   {
-    "id": "minecraft:torch",
+    "id": "minecraft:barrel",
     "category": "block",
-    "name": "Torch",
-    "description": "Torches provide light and prevent hostile mob spawning in a small radius. Crafted from coal or charcoal above a stick.",
-    "tags": ["block", "light", "mob spawn"]
+    "name": "Barrel",
+    "description": "A storage block that can be opened even when blocks are placed on top. Crafted from wood slabs and planks.",
+    "tags": [
+      "block",
+      "storage"
+    ]
   },
   {
-    "id": "minecraft:oak_log",
+    "id": "minecraft:ender_chest",
     "category": "block",
-    "name": "Oak Log",
-    "description": "Oak logs are obtained from oak trees. Break with an axe or by hand. Craft into planks or use as building material.",
-    "tags": ["block", "wood", "building"]
+    "name": "Ender Chest",
+    "description": "A chest whose contents are shared across all ender chests. Crafted from obsidian and an eye of ender.",
+    "tags": [
+      "block",
+      "storage",
+      "end"
+    ]
   },
   {
     "id": "minecraft:bedrock",
     "category": "block",
     "name": "Bedrock",
-    "description": "Bedrock is an unbreakable block found at the bottom of the world and on top of the Nether. Cannot be mined in survival.",
-    "tags": ["block", "unbreakable"]
+    "description": "An indestructible block found at the bottom of the world and in the End and Nether roofs.",
+    "tags": [
+      "block",
+      "indestructible"
+    ]
   },
   {
-    "id": "minecraft:spawner",
+    "id": "minecraft:dirt",
     "category": "block",
-    "name": "Spawner",
-    "description": "Monster spawners spawn mobs when a player is nearby. Found in dungeons, mineshafts, strongholds, and Nether fortresses.",
-    "tags": ["block", "mob", "dungeon"]
+    "name": "Dirt",
+    "description": "A common surface block. Can be tilled into farmland with a hoe.",
+    "tags": [
+      "block",
+      "dirt",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:grass_block",
+    "category": "block",
+    "name": "Grass Block",
+    "description": "Dirt covered in grass. Common in the Overworld surface. Can be silk-touched.",
+    "tags": [
+      "block",
+      "dirt",
+      "grass"
+    ]
+  },
+  {
+    "id": "minecraft:farmland",
+    "category": "block",
+    "name": "Farmland",
+    "description": "Dirt tilled with a hoe. Required for growing crops. Turns back to dirt if jumped on.",
+    "tags": [
+      "block",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:sand",
+    "category": "block",
+    "name": "Sand",
+    "description": "A gravity-affected block found in deserts and beaches. Smelt into glass.",
+    "tags": [
+      "block",
+      "sand",
+      "glass"
+    ]
+  },
+  {
+    "id": "minecraft:red_sand",
+    "category": "block",
+    "name": "Red Sand",
+    "description": "A red variant of sand found in Badlands biomes. Can be smelted into glass.",
+    "tags": [
+      "block",
+      "sand",
+      "badlands"
+    ]
+  },
+  {
+    "id": "minecraft:gravel",
+    "category": "block",
+    "name": "Gravel",
+    "description": "A gravity-affected block found underground and on beaches. Drops flint occasionally.",
+    "tags": [
+      "block",
+      "gravel",
+      "flint"
+    ]
+  },
+  {
+    "id": "minecraft:clay",
+    "category": "block",
+    "name": "Clay",
+    "description": "Found underwater in rivers and lakes. Smelt into bricks or terracotta.",
+    "tags": [
+      "block",
+      "clay",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:terracotta",
+    "category": "block",
+    "name": "Terracotta",
+    "description": "A hardened clay block found in Badlands. Can be dyed into colored variants.",
+    "tags": [
+      "block",
+      "building",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:white_wool",
+    "category": "block",
+    "name": "Wool",
+    "description": "Dropped from sheep or crafted from string. Used for beds and decorative blocks.",
+    "tags": [
+      "block",
+      "wool",
+      "bed"
+    ]
+  },
+  {
+    "id": "minecraft:oak_log",
+    "category": "block",
+    "name": "Oak Log",
+    "description": "Wood from oak trees. Can be crafted into planks and sticks.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:spruce_log",
+    "category": "block",
+    "name": "Spruce Log",
+    "description": "Wood from spruce trees. Crafted into dark-colored planks.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:birch_log",
+    "category": "block",
+    "name": "Birch Log",
+    "description": "Light-colored wood from birch trees. Crafted into planks.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:jungle_log",
+    "category": "block",
+    "name": "Jungle Log",
+    "description": "Wood from jungle trees. Crafted into planks.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:acacia_log",
+    "category": "block",
+    "name": "Acacia Log",
+    "description": "Wood from acacia trees. Crafted into reddish planks.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:dark_oak_log",
+    "category": "block",
+    "name": "Dark Oak Log",
+    "description": "Wood from dark oak trees. Crafted into dark planks.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:mangrove_log",
+    "category": "block",
+    "name": "Mangrove Log",
+    "description": "Wood from mangrove trees found in mangrove swamps.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:cherry_log",
+    "category": "block",
+    "name": "Cherry Log",
+    "description": "Pink-tinted wood from cherry trees. Crafted into pink planks.",
+    "tags": [
+      "block",
+      "wood",
+      "building",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:oak_planks",
+    "category": "block",
+    "name": "Oak Planks",
+    "description": "Basic wooden planks. Used for crafting, sticks, and building.",
+    "tags": [
+      "block",
+      "wood",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:glass",
+    "category": "block",
+    "name": "Glass",
+    "description": "Transparent block made by smelting sand. Used for windows and bottles.",
+    "tags": [
+      "block",
+      "glass",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:torch",
+    "category": "block",
+    "name": "Torch",
+    "description": "Provides light and melts snow nearby. Crafted from coal and a stick.",
+    "tags": [
+      "block",
+      "light",
+      "torch"
+    ]
+  },
+  {
+    "id": "minecraft:lantern",
+    "category": "block",
+    "name": "Lantern",
+    "description": "A brighter light source than a torch. Crafted from iron nuggets and a torch.",
+    "tags": [
+      "block",
+      "light"
+    ]
+  },
+  {
+    "id": "minecraft:glowstone",
+    "category": "block",
+    "name": "Glowstone",
+    "description": "A bright light source found in the Nether. Drops glowstone dust.",
+    "tags": [
+      "block",
+      "light",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:sea_lantern",
+    "category": "block",
+    "name": "Sea Lantern",
+    "description": "A bright underwater light source found in ocean monuments.",
+    "tags": [
+      "block",
+      "light",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:enchanting_table",
+    "category": "block",
+    "name": "Enchanting Table",
+    "description": "Used to enchant tools, weapons, and armor. Requires obsidian, diamonds, and a book.",
+    "tags": [
+      "block",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:anvil",
+    "category": "block",
+    "name": "Anvil",
+    "description": "Used to repair, rename, and combine enchanted items. Crafted from iron blocks and ingots.",
+    "tags": [
+      "block",
+      "repair",
+      "enchanting"
+    ]
   },
   {
     "id": "minecraft:netherrack",
     "category": "block",
     "name": "Netherrack",
-    "description": "Netherrack is the most common block in the Nether. It breaks quickly and burns indefinitely if ignited.",
-    "tags": ["block", "nether"]
+    "description": "The main stone of the Nether. Burns indefinitely when lit.",
+    "tags": [
+      "block",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:soul_sand",
+    "category": "block",
+    "name": "Soul Sand",
+    "description": "Slows movement and is used for nether wart farms and soul fire. Found in the Nether.",
+    "tags": [
+      "block",
+      "nether",
+      "soul_fire"
+    ]
+  },
+  {
+    "id": "minecraft:soul_soil",
+    "category": "block",
+    "name": "Soul Soil",
+    "description": "Found in soul sand valleys. Used to create soul fire and soul torches.",
+    "tags": [
+      "block",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:blackstone",
+    "category": "block",
+    "name": "Blackstone",
+    "description": "A dark stone found in Bastion Remnants. Can be used as a substitute for stone recipes.",
+    "tags": [
+      "block",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:basalt",
+    "category": "block",
+    "name": "Basalt",
+    "description": "A dark pillar-like block found in the Nether. Can be polished.",
+    "tags": [
+      "block",
+      "nether",
+      "building"
+    ]
   },
   {
     "id": "minecraft:end_stone",
     "category": "block",
     "name": "End Stone",
-    "description": "End stone makes up most of the End islands. It is found in the End dimension. Requires a pickaxe to mine.",
-    "tags": ["block", "end"]
+    "description": "The main block of the End islands. Requires a pickaxe to mine.",
+    "tags": [
+      "block",
+      "end",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_block",
+    "category": "block",
+    "name": "Purpur Block",
+    "description": "A decorative block found in End cities. Crafted from popped chorus fruit.",
+    "tags": [
+      "block",
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:prismarine",
+    "category": "block",
+    "name": "Prismarine",
+    "description": "A sea-themed block found in ocean monuments. Crafted from prismarine shards.",
+    "tags": [
+      "block",
+      "water",
+      "ocean"
+    ]
+  },
+  {
+    "id": "minecraft:sponge",
+    "category": "block",
+    "name": "Sponge",
+    "description": "Absorbs water in a 7-block radius. Wet sponge can be dried in a furnace.",
+    "tags": [
+      "block",
+      "water",
+      "sponge"
+    ]
   }
 ]
