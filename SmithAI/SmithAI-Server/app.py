@@ -274,6 +274,10 @@ class FeedbackRequest(BaseModel):
     context: Optional[Dict[str, Any]] = {}
 
 
+class EmbedRequest(BaseModel):
+    query: str
+
+
 class VersionContext:
     """Minecraft version context extracted from the plugin so the server can give accurate advice."""
     def __init__(self, context: Dict[str, Any]):
@@ -548,8 +552,54 @@ def list_skills(token: str = Depends(verify_token)):
 
 
 @app.post("/embed")
-def embed(query: str, token: str = Depends(verify_token)):
-    return {"query": query, "results": []}
+def embed_ep(req: EmbedRequest, token: str = Depends(verify_token)):
+    query = req.query
+    """Keyword-based knowledge embedding. Returns relevant knowledge entries matching the query."""
+    q = query.lower().strip()
+    if not q:
+        return {"query": query, "results": [], "count": 0}
+
+    query_words = set(re.findall(r'\w+', q))
+    if not query_words:
+        return {"query": query, "results": [], "count": 0}
+
+    # Load embedded knowledge
+    kb_path = os.path.join(os.path.dirname(__file__) or ".", "knowledge")
+    if not os.path.exists(kb_path):
+        os.makedirs(kb_path, exist_ok=True)
+
+    results = []
+    if os.path.exists(kb_path):
+        for fname in os.listdir(kb_path):
+            if fname.endswith(".json"):
+                try:
+                    with open(os.path.join(kb_path, fname)) as f:
+                        data = json.load(f)
+                    if isinstance(data, list):
+                        for entry in data:
+                            text = f"{entry.get('name','')} {entry.get('description','')} {entry.get('category','')}"
+                            words = set(re.findall(r'\w+', text.lower()))
+                            overlap = len(query_words & words)
+                            if overlap > 0:
+                                results.append((overlap, {
+                                    "id": entry.get("id", ""),
+                                    "name": entry.get("name", ""),
+                                    "description": entry.get("description", ""),
+                                    "category": entry.get("category", ""),
+                                    "match_score": overlap
+                                }))
+                except Exception:
+                    continue
+
+    results.sort(key=lambda x: -x[0])
+    top = [r for _, r in results[:5]]
+
+    return {
+        "query": query,
+        "results": top,
+        "count": len(top),
+        "method": "keyword_overlap"
+    }
 
 
 # Simple task planner mapping: map common goals to a step list.

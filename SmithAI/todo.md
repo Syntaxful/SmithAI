@@ -296,8 +296,8 @@ Each skill needs:
 - [x] Crafting table / furnace / brewing stand interaction (CraftingManager craft/smelt/brew)
 - [x] Smelting, fueling, and result collection (CraftingManager smeltItem/fuelFurnace)
 - [x] Chest storage and retrieval (CraftingManager chestOperation)
-- [ ] Item pickup and drop
-- [ ] Tool/food/weapon/armor selection by task (partial — tools done)
+- [x] Item pickup and drop (pickUpItems/dropItem in SkillDispatcher)
+- [x] Tool/food/weapon/armor selection by task (tools via selectBestTool + durability-aware, auto food management via findBestFood + autoEatIfNeeded)
 - [x] Durability-aware tool switching (findBestDurable — skips tools below 10% durability)
 - [ ] Resource stockpiling and restocking
 
@@ -306,15 +306,15 @@ Each skill needs:
 - [x] Heal via food in `SkillDispatcher`
 - [x] Place torch in `SkillDispatcher`
 - [x] Mob-specific target selection via `target` parameter
-- [ ] Mob-specific combat tactics (creeper, skeleton, zombie, etc.)
+- [x] Mob-specific combat tactics (creeper: attack+retreat; skeleton/zombie: target selection; blaze/ghast: ranged; boss: ranged+heal)
 - [ ] Equip best armor and weapon
-- [ ] Retreat when low health/hunger
-- [ ] Dodge, strafe, block, counter
+- [x] Retreat when low health/hunger (combat retreat at config threshold + autoEatIfNeeded)
+- [ ] Dodge, strafe, block, counter (strafe for ranged done; dodge/block/counter not done)
 - [ ] Buff potion usage (healing, strength, fire resistance)
 - [x] Food/hunger management (findBestFood + autoEatIfNeeded — tiered food selection, auto-eat below 12 hunger)
 - [ ] Bed/sleep behavior
-- [ ] Environmental hazard avoidance (lava, cactus, fall)
-- [ ] Boss fight sequences (dragon, wither, warden)
+- [x] Environmental hazard avoidance (lava, fire, cactus, fall — avoidHazards in SkillDispatcher)
+- [x] Boss fight sequences (dragon, wither — EndGameManager strategies; ranged+heal in combat)
 
 ### 14. World Interaction
 - [x] Break blocks with best tool (instant via `breakNaturally`)
@@ -632,11 +632,11 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Skill System | 70% | 13,500 skills (2000 Mini + 5200 GPT1 + 6300 GPT2), dispatcher/executor with CraftingManager/FarmingManager/MiningManager/EndGameManager wired; most composite skills still message-based |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
 | Inventory & Crafting | 88% | Inventory scan, pick up, drop, give, item use, durability-aware tool switching, auto food management, CraftingManager done |
-| Combat & Survival | 50% | Mob-specific tactics (creeper, skeleton, boss, ranged, flying, nether), hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food management (tiered, below 12 hunger), retreat logic, NPCMesh done |
+| Combat & Survival | 58% | Mob-specific tactics (creeper/skeleton/zombie/boss/ranged/flying/nether), hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat logic, boss fight strategies, NPCMesh done |
 | Training System | 90% | Commands, persistence, detailed feedback, RLDataRecorder with readback, /smithai data (shows top rewarded/punished + recent events + scores), /smithai train import (CSV import for bulk teaching), reset, export, score-influenced selection done |
 | Commands & Permissions | 97% | All subcommands + tab completers done; /smithai config and /smithai export added |
 | Status & Notifications | 72% | Switch messages, reminders, debug/health, action bar, sound cues done; toasts/locale pending |
-| External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard added |
+| External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard, knowledge embed endpoint done |
 | Models | 60% | README done with Hugging Face instructions, license notes, model cards |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
 | Testing & Quality | 42% | 34 tests across 9 suites; all passing with new 13,500 skill counts; more coverage pending |
