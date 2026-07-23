@@ -452,9 +452,9 @@ Each skill needs:
 - [x] Unit tests for task planner (`TaskPlannerTest`)
 - [x] Unit tests for subsystem health (`SubsystemHealthTest`)
 - [x] Unit tests for knowledge lookup (`KnowledgeBaseTest`)
-- [ ] Unit tests for memory system
+- [x] Unit tests for memory system (`MemoryManagerTest`)
 - [x] Unit tests for training manager (`TrainingManagerTest`)
-- [ ] Unit tests for config parsing
+- [x] Unit tests for config parsing (`ConfigTest`)
 - [ ] Integration test for external AI connector
 - [ ] Manual in-game test checklist
 - [ ] Performance profiling under load
