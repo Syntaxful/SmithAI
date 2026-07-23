@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Download and configure SmithGPT 2.0 (7.5GB) model.
+# Usage: ./BuildGPT2.0
+# The model uses ~7.5GB RAM. Requires llama-cpp-python.
+
+set -euo pipefail
+cd "$(dirname "$0")"
+
+echo "=== SmithGPT 2.0 (7.5GB) ==="
+echo "Target: $(pwd)/SmithAI-Server/models/smithgpt-2.0-7.gguf"
+echo ""
+
+# Install llama-cpp-python if not present
+if ! python3 -c "import llama_cpp" 2>/dev/null; then
+    echo "[1/3] Installing llama-cpp-python..."
+    pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu 2>/dev/null || \
+    pip install llama-cpp-python 2>/dev/null || \
+    CMAKE_ARGS="-DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python
+fi
+
+# Ensure model directory
+mkdir -p SmithAI-Server/models
+
+# Download SmithGPT 2.0 model
+echo "[2/3] Downloading SmithGPT 2.0 (7.5GB) — this may take a while..."
+cd SmithAI-Server
+python3 download_model.py \
+  --url "https://huggingface.co/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/main/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf" \
+  --name "smithgpt-2.0-7.gguf"
+
+# Update config
+echo "[3/3] Updating config.yml..."
+cat > config.yml << 'CONF'
+model:
+  context_size: 8192
+  max_tokens: 300
+  n_threads: 4
+  name: SmithGPT 2.0 7.5GB
+  path: models/smithgpt-2.0-7.gguf
+security:
+  api_key: SMA-dQdZM9NrHjSr2KEJc8mOkgY4NOEzVBoS
+server:
+  host: 0.0.0.0
+  port: 8000
+CONF
+
+echo ""
+echo "✅ SmithGPT 2.0 ready!"
+echo "Start the server: cd SmithAI-Server && python3 app.py"
+echo "Or with Docker: docker-compose up -d"
