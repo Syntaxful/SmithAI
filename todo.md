@@ -49,7 +49,7 @@ This file is the single source of truth for what is finished and what remains. I
 - SmithGPT model sizes reduced: SmithGPT 1.0 → 4GB, SmithGPT 2.0 → 7.5GB, with updated docs, configs, and tier detection
 - Server startup scripts (`start.sh`, `start.bat`) and model download helper (`download_model.py`, `.sh`, `.bat`)
 - Workspace environment fixed: `.replit` module + `replit.nix` provide Maven and JDK 17 alongside Python 3.11, server has a public `/` status endpoint, and `SmithAI-Server/requirements-server.txt` is the lightweight runtime dependency list
-- Pathfinding improvements: hazard avoidance, water swimming, terrain costs, stuck detection/recovery, ladder/vine climbing, multi-world teleport, and variable movement speed
+- Pathfinding improvements: hazard avoidance, water swimming, terrain costs, stuck detection/recovery, ladder/vine climbing, multi-world teleport, variable movement speed, and bridge/speedbridge across gaps
 - GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is used only with explicit authorization
 
 ---
@@ -276,6 +276,7 @@ Each skill needs:
 - [x] Step-up and jump logic for small obstacles
 - [x] Real walking pathfinding to player/target block (A* or Bukkit navigator)
 - [x] Navigation around obstacles, water, lava, and basic hazards
+- [x] Bridge / speedbridge across gaps using inventory blocks
 - [ ] Sprint/sneak/cliff-edge avoidance
 - [ ] Follow distance and leash behavior
 - [x] Stuck detection and recovery
@@ -612,7 +613,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
 | Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
 | Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
-| Pathfinding & Movement | 75% | A* pathfinding with hazard avoidance, water/climb support, terrain costs, and stuck recovery; sprint/sneak/cliff-edge behavior pending |
+| Pathfinding & Movement | 85% | A* pathfinding with hazard avoidance, water/climb/bridge support, terrain costs, and stuck recovery; sprint/sneak/cliff-edge behavior and follow leash pending |
 | Inventory & Crafting | 35% | Inventory scan, pick up, drop, and item use done; crafting automation pending |
 | Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
 | Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |

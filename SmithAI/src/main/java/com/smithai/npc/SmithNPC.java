@@ -7,6 +7,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
 import java.util.Collections;
@@ -32,6 +34,15 @@ public class SmithNPC {
     private int stuckTicks = 0;
     private static final int STUCK_TICK_THRESHOLD = 3;
     private static final double STUCK_DISTANCE_SQ = 0.15 * 0.15;
+    private long lastBridgeTime = 0;
+    private static final long BRIDGE_COOLDOWN_MS = 250;
+
+    private static final Material[] BRIDGE_MATERIALS = {
+        Material.COBBLESTONE, Material.STONE, Material.DIRT, Material.OAK_PLANKS,
+        Material.SPRUCE_PLANKS, Material.BIRCH_PLANKS, Material.JUNGLE_PLANKS,
+        Material.ACACIA_PLANKS, Material.DARK_OAK_PLANKS, Material.MANGROVE_PLANKS,
+        Material.CRIMSON_PLANKS, Material.WARPED_PLANKS, Material.NETHERRACK
+    };
 
     public SmithNPC(UUID id, Entity entity, String name) {
         this.id = id;
@@ -294,11 +305,83 @@ public class SmithNPC {
         }
 
         entity.setVelocity(velocity);
+
+        // Bridge / speedbridge: place blocks ahead or below when crossing gaps.
+        tryBridge(current, direction);
     }
 
     private boolean isClimbable(Block block) {
         Material type = block.getType();
         return type == Material.LADDER || type == Material.VINE || type == Material.TWISTING_VINES || type == Material.WEEPING_VINES;
+    }
+
+    private boolean isLiquidPassable(Block block) {
+        return block.getType() == Material.WATER;
+    }
+
+    private void tryBridge(Location current, Vector direction) {
+        long now = System.currentTimeMillis();
+        if (now - lastBridgeTime < BRIDGE_COOLDOWN_MS) return;
+        if (direction.lengthSquared() < 0.0001) return;
+
+        Vector horizontal = direction.clone().setY(0);
+        if (horizontal.lengthSquared() < 0.0001) return;
+        horizontal.normalize();
+
+        Material mat = findBridgeMaterial();
+        if (mat == null) return;
+
+        // Speedbridge: place a block one step ahead in the direction of travel.
+        Location ahead = current.clone().add(horizontal);
+        Block aheadGround = ahead.clone().add(0, -1, 0).getBlock();
+        if (aheadGround.isPassable() && !isLiquidPassable(aheadGround)) {
+            placeBlockAt(aheadGround.getLocation(), mat);
+            lastBridgeTime = now;
+            return;
+        }
+
+        // Fallback: place a block under the current position to catch a fall.
+        Block currentGround = current.clone().add(0, -1, 0).getBlock();
+        if (currentGround.isPassable() && !isLiquidPassable(currentGround)) {
+            placeBlockAt(currentGround.getLocation(), mat);
+            lastBridgeTime = now;
+        }
+    }
+
+    private Material findBridgeMaterial() {
+        if (entity instanceof Player) {
+            PlayerInventory inv = ((Player) entity).getInventory();
+            for (Material mat : BRIDGE_MATERIALS) {
+                if (inv.contains(mat)) return mat;
+            }
+        }
+        return Material.COBBLESTONE;
+    }
+
+    private void placeBlockAt(Location loc, Material mat) {
+        Block block = loc.getBlock();
+        if (!block.getType().isAir()) return;
+        block.setType(mat);
+        if (entity instanceof Player) {
+            removeOne((Player) entity, mat);
+        }
+    }
+
+    private void removeOne(Player player, Material mat) {
+        PlayerInventory inv = player.getInventory();
+        ItemStack[] contents = inv.getContents();
+        for (int i = 0; i < contents.length; i++) {
+            ItemStack stack = contents[i];
+            if (stack != null && stack.getType() == mat) {
+                if (stack.getAmount() <= 1) {
+                    inv.setItem(i, null);
+                } else {
+                    stack.setAmount(stack.getAmount() - 1);
+                    inv.setItem(i, stack);
+                }
+                return;
+            }
+        }
     }
 
     public void jump() {
