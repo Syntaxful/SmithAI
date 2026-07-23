@@ -30,11 +30,24 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <command>");
+            sender.sendMessage("§7Or ask me: §f/smithai what command spawns you §7/ §f/smithai how do I see your inventory");
             return true;
         }
 
         String sub = args[0].toLowerCase();
+
+        // Natural language command lookup — if first word isn't a known command, treat as query
+        if (!isKnownCommand(sub)) {
+            String query = String.join(" ", args);
+            String matched = lookupCommand(query);
+            if (matched != null) {
+                sender.sendMessage("§e" + matched);
+            } else {
+                sender.sendMessage("§7I didn't understand that. Try /smithai help to see all commands.");
+            }
+            return true;
+        }
 
         switch (sub) {
             case "spawn":
@@ -660,9 +673,139 @@ public class SmithAICommand implements CommandExecutor {
                 return true;
 
             default:
-                sender.sendMessage("§eUnknown subcommand. Use /smithai help.");
+                // This shouldn't be reached since isKnownCommand handles it, but just in case
+                String fallbackQuery = String.join(" ", args);
+                String fallback = lookupCommand(fallbackQuery);
+                if (fallback != null) {
+                    sender.sendMessage("§e" + fallback);
+                } else {
+                    sender.sendMessage("§eUnknown subcommand. Use /smithai help.");
+                }
                 return true;
         }
+    }
+
+    /**
+     * Check if the given word is a known smithai subcommand.
+     */
+    private boolean isKnownCommand(String word) {
+        switch (word) {
+            case "spawn": case "despawn": case "follow": case "stay": case "goto": case "do":
+            case "stop": case "debug": case "health": case "status": case "model": case "version":
+            case "reload": case "train": case "feedback": case "feedback-list": case "report":
+            case "reports": case "memory": case "inventory": case "give": case "list":
+            case "help": case "teleport": case "skin": case "data": case "config": case "export":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Natural language command lookup. Maps phrases like "how do I see your inventory"
+     * to command descriptions like "/smithai inventory - view nearby Smith_AI inventory".
+     */
+    private String lookupCommand(String query) {
+        String q = query.toLowerCase().trim();
+        if (q.isEmpty()) return null;
+
+        // Remove common filler words at start
+        String clean = q.replaceAll("^(what|how|which|where|tell me|can you|does|is there|i want|i need|show me|find|give me|whats|what's|command to|command for|how to|how do i|how can i|way to|way of) +", "");
+
+        // ── Command intent mapping ──
+        if (matches(clean, "spawn", "create", "summon", "make new", "bring out", "get a new")) {
+            return "/smithai spawn - Spawn a new Smith_AI NPC at your location";
+        }
+        if (matches(clean, "despawn", "remove", "delete", "destroy", "kill npc", "get rid")) {
+            return "/smithai despawn - Remove all Smith_AI NPCs";
+        }
+        if (matches(clean, "follow", "come with", "follow me", "walk with")) {
+            return "/smithai follow - Make nearby Smith_AI follow you";
+        }
+        if (matches(clean, "stay", "stop follow", "wait", "stay put", "don't move")) {
+            return "/smithai stay - Make nearby Smith_AI stop following and stay put";
+        }
+        if (matches(clean, "goto", "go to", "move to", "send to", "teleport to")) {
+            return "/smithai goto <x> <y> <z> - Send Smith_AI to specific coordinates";
+        }
+        if (matches(clean, "do", "task", "execute", "perform", "make them", "tell them to")) {
+            return "/smithai do <task> - Plan and execute a task (e.g. 'mine diamonds', 'build base')";
+        }
+        if (matches(clean, "stop", "cancel", "halt", "abort", "quit", "cease")) {
+            return "/smithai stop - Cancel all queued tasks";
+        }
+        if (matches(clean, "inventory", "what do you have", "your items", "holding", "carrying", "pov", "your pov", "from your perspective", "what are you holding", "whats in your")) {
+            return "/smithai inventory - View nearby Smith_AI's inventory and items";
+        }
+        if (matches(clean, "give", "hand", "transfer", "give item", "give them")) {
+            return "/smithai give <item> [amount] - Give an item to Smith_AI";
+        }
+        if (matches(clean, "list", "all npcs", "active", "how many", "where are")) {
+            return "/smithai list - List all active Smith_AI NPCs";
+        }
+        if (matches(clean, "teleport", "tp", "bring here", "come here", "bring them")) {
+            return "/smithai teleport - Teleport nearby Smith_AI to your location";
+        }
+        if (matches(clean, "train", "train good", "train bad", "reward", "punish", "teach", "good", "bad", "praise", "scold", "training data")) {
+            return "/smithai train good|bad [action] - Reward or punish the AI for a specific action";
+        }
+        if (matches(clean, "import", "bulk teach", "load training", "from file", "csv")) {
+            return "/smithai train import <R|P>,<action>,<score> - Import training data from CSV to teach the AI";
+        }
+        if (matches(clean, "feedback", "tell what wrong", "report mistake", "complain", "what i think")) {
+            return "/smithai feedback <message> - Report a specific mistake the AI made";
+        }
+        if (matches(clean, "report", "bug", "issue", "github", "problem")) {
+            return "/smithai report <description> - Open a prefilled GitHub issue for bugs";
+        }
+        if (matches(clean, "data", "training stats", "scores", "learning", "what learned", "top actions", "rl data")) {
+            return "/smithai data - Show detailed training data: scores, top rewarded/punished actions, recent RL events";
+        }
+        if (matches(clean, "config", "configuration", "settings", "setup")) {
+            return "/smithai config - Show current configuration (admin only)";
+        }
+        if (matches(clean, "export", "backup", "save data", "download training")) {
+            return "/smithai export - Export memory, training data, and RL data to files";
+        }
+        if (matches(clean, "memory", "remember", "conversation", "chat history", "recent chat", "what we talked")) {
+            return "/smithai memory - Show the most recent conversation with Smith_AI";
+        }
+        if (matches(clean, "status", "active brain", "current model", "what model", "what brain")) {
+            return "/smithai status - Show the active brain/model and connection status";
+        }
+        if (matches(clean, "version", "what version", "whats new", "plugin version")) {
+            return "/smithai version - Show detected server version and SmithAI plugin version";
+        }
+        if (matches(clean, "reload", "refresh", "restart config", "reload config")) {
+            return "/smithai reload - Reload the configuration file (admin only)";
+        }
+        if (matches(clean, "health", "subsystem", "all good", "diagnostics", "system health")) {
+            return "/smithai health - Show subsystem health status (admin only)";
+        }
+        if (matches(clean, "debug", "debug mode", "verbose", "logs")) {
+            return "/smithai debug [global] - Toggle debug mode for yourself or globally (admin)";
+        }
+        if (matches(clean, "model", "switch model", "change brain", "change model", "mini", "gpt", "external")) {
+            return "/smithai model <brain> - Switch between Smith-Mini 1.0, SmithGPT 1.0, or SmithGPT 2.0";
+        }
+        if (matches(clean, "skin", "appearance", "look", "change look", "change skin")) {
+            return "/smithai skin <url> - Change the NPC's skin (placeholder)";
+        }
+        if (matches(clean, "help", "commands", "what can you do", "capabilities", "all commands", "list commands", "usage")) {
+            return "/smithai help - Show all available commands";
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns true if any of the keywords appear in the cleaned query.
+     */
+    private boolean matches(String clean, String... keywords) {
+        for (String kw : keywords) {
+            if (clean.contains(kw)) return true;
+        }
+        return false;
     }
 
     private SmithNPC nearest(Player player) {
