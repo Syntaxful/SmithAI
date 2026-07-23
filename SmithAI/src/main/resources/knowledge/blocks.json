@@ -7,6 +7,13 @@
     "tags": ["block", "mining", "building"]
   },
   {
+    "id": "minecraft:cobblestone",
+    "category": "block",
+    "name": "Cobblestone",
+    "description": "Dropped when mining stone without Silk Touch. Used for tools, furnaces, and building.",
+    "tags": ["block", "mining", "building"]
+  },
+  {
     "id": "minecraft:iron_ore",
     "category": "block",
     "name": "Iron Ore",
@@ -14,11 +21,53 @@
     "tags": ["block", "mining", "ore", "iron"]
   },
   {
+    "id": "minecraft:gold_ore",
+    "category": "block",
+    "name": "Gold Ore",
+    "description": "Gold ore is found underground around Y=-16 and abundantly in Badlands. Requires an iron pickaxe or better. Smelt to get gold ingots.",
+    "tags": ["block", "mining", "ore", "gold"]
+  },
+  {
     "id": "minecraft:diamond_ore",
     "category": "block",
     "name": "Diamond Ore",
     "description": "Diamond ore is found deep underground, most commonly around Y=-59. It requires an iron pickaxe or better. Drops diamonds when mined.",
     "tags": ["block", "mining", "ore", "diamond"]
+  },
+  {
+    "id": "minecraft:coal_ore",
+    "category": "block",
+    "name": "Coal Ore",
+    "description": "Coal ore is common underground and in mountains. Mined with any pickaxe. Drops coal for torches and fuel.",
+    "tags": ["block", "mining", "ore", "coal", "fuel"]
+  },
+  {
+    "id": "minecraft:redstone_ore",
+    "category": "block",
+    "name": "Redstone Ore",
+    "description": "Redstone ore is found deep underground. Requires an iron pickaxe or better. Drops redstone dust for circuits.",
+    "tags": ["block", "mining", "ore", "redstone"]
+  },
+  {
+    "id": "minecraft:lapis_ore",
+    "category": "block",
+    "name": "Lapis Lazuli Ore",
+    "description": "Lapis ore is found underground. Requires a stone pickaxe or better. Drops lapis lazuli, used for enchanting and blue dye.",
+    "tags": ["block", "mining", "ore", "lapis"]
+  },
+  {
+    "id": "minecraft:copper_ore",
+    "category": "block",
+    "name": "Copper Ore",
+    "description": "Copper ore generates in larger ore blobs underground. Requires a stone pickaxe or better. Smelt into copper ingots.",
+    "tags": ["block", "mining", "ore", "copper"]
+  },
+  {
+    "id": "minecraft:emerald_ore",
+    "category": "block",
+    "name": "Emerald Ore",
+    "description": "Emerald ore is found in mountain biomes. Requires an iron pickaxe or better. Drops emeralds for trading.",
+    "tags": ["block", "mining", "ore", "emerald"]
   },
   {
     "id": "minecraft:obsidian",
@@ -33,5 +82,61 @@
     "name": "Crafting Table",
     "description": "A crafting table expands the player's crafting grid to 3x3, allowing more complex recipes. Crafted from 4 wooden planks.",
     "tags": ["block", "crafting"]
+  },
+  {
+    "id": "minecraft:furnace",
+    "category": "block",
+    "name": "Furnace",
+    "description": "A furnace smelts ores and cooks food. Crafted from 8 cobblestone in a ring. Requires fuel such as coal or wood.",
+    "tags": ["block", "smelting", "cooking"]
+  },
+  {
+    "id": "minecraft:chest",
+    "category": "block",
+    "name": "Chest",
+    "description": "A chest stores up to 27 item stacks. Crafted from 8 wooden planks in a ring. Two chests placed side by side form a double chest.",
+    "tags": ["block", "storage"]
+  },
+  {
+    "id": "minecraft:torch",
+    "category": "block",
+    "name": "Torch",
+    "description": "Torches provide light and prevent hostile mob spawning in a small radius. Crafted from coal or charcoal above a stick.",
+    "tags": ["block", "light", "mob spawn"]
+  },
+  {
+    "id": "minecraft:oak_log",
+    "category": "block",
+    "name": "Oak Log",
+    "description": "Oak logs are obtained from oak trees. Break with an axe or by hand. Craft into planks or use as building material.",
+    "tags": ["block", "wood", "building"]
+  },
+  {
+    "id": "minecraft:bedrock",
+    "category": "block",
+    "name": "Bedrock",
+    "description": "Bedrock is an unbreakable block found at the bottom of the world and on top of the Nether. Cannot be mined in survival.",
+    "tags": ["block", "unbreakable"]
+  },
+  {
+    "id": "minecraft:spawner",
+    "category": "block",
+    "name": "Spawner",
+    "description": "Monster spawners spawn mobs when a player is nearby. Found in dungeons, mineshafts, strongholds, and Nether fortresses.",
+    "tags": ["block", "mob", "dungeon"]
+  },
+  {
+    "id": "minecraft:netherrack",
+    "category": "block",
+    "name": "Netherrack",
+    "description": "Netherrack is the most common block in the Nether. It breaks quickly and burns indefinitely if ignited.",
+    "tags": ["block", "nether"]
+  },
+  {
+    "id": "minecraft:end_stone",
+    "category": "block",
+    "name": "End Stone",
+    "description": "End stone makes up most of the End islands. It is found in the End dimension. Requires a pickaxe to mine.",
+    "tags": ["block", "end"]
   }
 ]

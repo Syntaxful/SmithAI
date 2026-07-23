@@ -11,8 +11,14 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
   - `SmithGPT 2.0` — 15GB external model
 - **Robot skin** for `Smith_AI`
 - **Chat, memory, tasks, skills, and training**
+- **Specific feedback system** — tell the AI exactly what it did wrong with `/smithai feedback`
+- **GitHub issue reporting** — `/smithai report` opens a prefilled issue with context
 - **API key authentication** for external servers (keys start with `SMA-`)
+- **Subsystem health monitoring** and in-game debug mode
 - **Hosting guide** for Replit, GitHub Codespaces, Linux, Windows, and VPS
+- **Docker support** for the Python server
+- **CI workflow** for GitHub Actions
+- **Build script** (`build.sh`) and **release packaging** (`package-release.sh`) for non-Maven users
 
 ## How the brains work
 
@@ -35,7 +41,9 @@ You choose which model to run on your external server. The plugin only connects 
 
 ## Quick start
 
-1. Build the plugin with Maven: `cd SmithAI && mvn clean package`
+1. Build the plugin:
+   - With Maven: `cd SmithAI && mvn clean package`
+   - Or use the build script: `./build.sh`
 2. Copy `SmithAI/target/SmithAI-2.0.0.jar` to your server's `plugins/` folder
 3. Start the server
 4. Spawn `Smith_AI` with `/smithai spawn`
@@ -47,6 +55,7 @@ For SmithGPT 1.0 or 2.0, see:
 - `SmithAI-Server/README.md` — how to run the server
 - `HOSTING.md` — how to host on Replit, Codespaces, Linux, Windows, VPS
 - `models/README.md` — which model files to download
+- `Dockerfile` and `docker-compose.yml` — Docker deployment
 
 ## Commands
 
@@ -54,15 +63,25 @@ For SmithGPT 1.0 or 2.0, see:
 - `/smithai despawn` — remove all `Smith_AI` NPCs
 - `/smithai follow` — nearby `Smith_AI` will follow you
 - `/smithai stay` — nearby `Smith_AI` will stop following
+- `/smithai goto <x> <y> <z>` — send nearby `Smith_AI` to coordinates
 - `/smithai do <task>` — ask it to do something (e.g., `get diamonds`, `build nether portal`, `beat the game`)
 - `/smithai stop` — cancel all queued tasks
 - `/smithai status` — show which brain is active
 - `/smithai model` — show available models and active model
 - `/smithai reload` — reload config
 - `/smithai train good|bad` — reward or punish the AI
+- `/smithai feedback <what it did wrong>` — tell the AI exactly what it did wrong
+- `/smithai feedback-list` — show recent feedback (admin only)
+- `/smithai report <short description>` — open a prefilled GitHub issue
+- `/smithai reports` — show recent saved issue reports (admin only)
 - `/smithai memory` — show recent conversation
+- `/smithai debug` — toggle debug messages for you (admin only)
+- `/smithai debug global` — toggle debug messages for all online players (admin only)
+- `/smithai health` — show subsystem health summary (admin only)
 - `/SmithAPI set <key>` — set the API key for the external server
-- `/SmithAPI` — show current API key status (masked)
+- `/SmithAPI status` — show current API key and connection status (masked)
+
+You can also tell the AI directly in chat: `don't do that`, `that was wrong`, `never do that`, etc. It will remember it as feedback.
 
 ## Skill Library
 
@@ -99,7 +118,30 @@ ai:
     enabled: true
     minSeconds: 10
     maxSeconds: 50
+
+debug:
+  enabled: false
+
+metrics:
+  bstats: false
 ```
+
+## Building and packaging
+
+```bash
+# Build the plugin JAR
+./build.sh
+
+# Or with Maven
+cd SmithAI && mvn clean package
+
+# Package a full release bundle
+./package-release.sh 2.0.0
+```
+
+Output:
+- `SmithAI/target/SmithAI-2.0.0.jar` — plugin JAR
+- `release/SmithAI-v2.0.0.zip` — full release bundle with docs, server, and checksums
 
 ## Requirements
 

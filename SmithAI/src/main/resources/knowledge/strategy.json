@@ -7,6 +7,20 @@
     "tags": ["strategy", "mining", "diamond"]
   },
   {
+    "id": "strategy:find_iron",
+    "category": "strategy",
+    "name": "Finding Iron",
+    "description": "Iron ore generates from Y=-64 to Y=72, with large blobs above ground in mountains. Use a stone pickaxe or better. Smelt raw iron into ingots.",
+    "tags": ["strategy", "mining", "iron"]
+  },
+  {
+    "id": "strategy:find_coal",
+    "category": "strategy",
+    "name": "Finding Coal",
+    "description": "Coal ore is common from Y=0 to Y=128 and exposed in mountains. Mine with any pickaxe. Use coal for torches and furnace fuel.",
+    "tags": ["strategy", "mining", "coal"]
+  },
+  {
     "id": "strategy:beat_game",
     "category": "strategy",
     "name": "Beating the Game",
@@ -33,5 +47,61 @@
     "name": "Defeating the Ender Dragon",
     "description": "Destroy the obsidian towers with end crystals first. Use a bow or bed explosions to damage the dragon when it perches. Avoid dragon breath and stay away from the dragon's head when it charges.",
     "tags": ["strategy", "end", "dragon", "boss"]
+  },
+  {
+    "id": "strategy:strip_mining",
+    "category": "strategy",
+    "name": "Strip Mining",
+    "description": "Dig long horizontal tunnels at the target Y level, leaving 2 blocks between tunnels to expose the maximum number of blocks. Use a pickaxe and carry plenty of torches and food.",
+    "tags": ["strategy", "mining"]
+  },
+  {
+    "id": "strategy:surviving_first_night",
+    "category": "strategy",
+    "name": "Surviving the First Night",
+    "description": "Punch wood, craft a crafting table and wooden pickaxe, mine stone for tools, gather coal or make charcoal, build a small shelter or dig into a wall, and place torches to survive until morning.",
+    "tags": ["strategy", "survival", "early_game"]
+  },
+  {
+    "id": "strategy:farming",
+    "category": "strategy",
+    "name": "Farming",
+    "description": "Till dirt near water with a hoe, plant seeds, and wait for crops to grow. Bonemeal speeds growth. Harvest fully grown crops and replant. Light the farm to prevent mob trampling.",
+    "tags": ["strategy", "farming", "food"]
+  },
+  {
+    "id": "strategy:villager_trading",
+    "category": "strategy",
+    "name": "Villager Trading",
+    "description": "Assign villagers a workstation to set their profession. Trade emeralds for items. Protect villagers with walls, lights, and iron golems. Refresh trades by breaking and replacing workstations.",
+    "tags": ["strategy", "trading", "villager"]
+  },
+  {
+    "id": "strategy:enchanting",
+    "category": "strategy",
+    "name": "Enchanting",
+    "description": "Build an enchanting table from 2 diamonds, 4 obsidian, and 1 book. Place bookshelves around it for higher level enchantments. Lapis lazuli is required for enchanting.",
+    "tags": ["strategy", "enchanting", "endgame"]
+  },
+  {
+    "id": "strategy:netherite",
+    "category": "strategy",
+    "name": "Getting Netherite",
+    "description": "Mine ancient debris in the Nether at Y=15 using a diamond or netherite pickaxe. Smelt it into netherite scrap. Combine 4 scrap with 4 gold ingots to make a netherite ingot. Upgrade diamond gear at a smithing table.",
+    "tags": ["strategy", "nether", "netherite", "endgame"]
+  },
+  {
+    "id": "strategy:breeding_animals",
+    "category": "strategy",
+    "name": "Breeding Animals",
+    "description": "Feed two animals their preferred food (wheat for cows, carrots for pigs, seeds for chickens) to make them breed and produce a baby. Build a pen to keep them contained.",
+    "tags": ["strategy", "farming", "animals"]
+  },
+  {
+    "id": "strategy:mining_safety",
+    "category": "strategy",
+    "name": "Mining Safety",
+    "description": "Never dig straight down. Carry water to turn lava into obsidian. Place torches to prevent mobs. Keep food and spare tools. Watch for gravel and sand that can suffocate you.",
+    "tags": ["strategy", "mining", "survival"]
   }
 ]

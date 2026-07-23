@@ -28,10 +28,150 @@
     "tags": ["recipe", "crafting", "tool"]
   },
   {
+    "id": "recipe:diamond_pickaxe",
+    "category": "recipe",
+    "name": "Diamond Pickaxe",
+    "description": "In a crafting table, place 3 diamonds across the top row and 2 sticks in the middle column.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:wooden_axe",
+    "category": "recipe",
+    "name": "Wooden Axe",
+    "description": "In a crafting table, place 3 wooden planks in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:stone_axe",
+    "category": "recipe",
+    "name": "Stone Axe",
+    "description": "In a crafting table, place 3 cobblestone in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:iron_axe",
+    "category": "recipe",
+    "name": "Iron Axe",
+    "description": "In a crafting table, place 3 iron ingots in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:diamond_axe",
+    "category": "recipe",
+    "name": "Diamond Axe",
+    "description": "In a crafting table, place 3 diamonds in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:iron_sword",
+    "category": "recipe",
+    "name": "Iron Sword",
+    "description": "In a crafting table, place 2 iron ingots vertically in the middle column and 1 stick below them.",
+    "tags": ["recipe", "crafting", "weapon"]
+  },
+  {
+    "id": "recipe:diamond_sword",
+    "category": "recipe",
+    "name": "Diamond Sword",
+    "description": "In a crafting table, place 2 diamonds vertically in the middle column and 1 stick below them.",
+    "tags": ["recipe", "crafting", "weapon"]
+  },
+  {
+    "id": "recipe:furnace",
+    "category": "recipe",
+    "name": "Furnace",
+    "description": "In a crafting table, place 8 cobblestone in a ring, leaving the center empty.",
+    "tags": ["recipe", "crafting", "smelting"]
+  },
+  {
+    "id": "recipe:chest",
+    "category": "recipe",
+    "name": "Chest",
+    "description": "In a crafting table, place 8 wooden planks in a ring, leaving the center empty.",
+    "tags": ["recipe", "crafting", "storage"]
+  },
+  {
+    "id": "recipe:torch",
+    "category": "recipe",
+    "name": "Torch",
+    "description": "Place coal or charcoal above a stick in the crafting grid. Makes 4 torches.",
+    "tags": ["recipe", "crafting", "light"]
+  },
+  {
+    "id": "recipe:stick",
+    "category": "recipe",
+    "name": "Stick",
+    "description": "Place 2 wooden planks vertically in the crafting grid. Makes 4 sticks.",
+    "tags": ["recipe", "crafting", "material"]
+  },
+  {
+    "id": "recipe:bucket",
+    "category": "recipe",
+    "name": "Bucket",
+    "description": "In a crafting table, place 3 iron ingots in a V shape. Used to collect and place liquids.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:flint_and_steel",
+    "category": "recipe",
+    "name": "Flint and Steel",
+    "description": "Place 1 iron ingot and 1 flint diagonally in the crafting grid. Used to ignite portals and TNT.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
     "id": "recipe:nether_portal",
     "category": "recipe",
     "name": "Nether Portal",
     "description": "Build a rectangular frame of obsidian at least 4 blocks wide and 5 blocks tall, leaving a 2x3 hole. Ignite the inside with flint and steel.",
     "tags": ["recipe", "structure", "nether", "portal"]
+  },
+  {
+    "id": "recipe:iron_ingot",
+    "category": "recipe",
+    "name": "Iron Ingot",
+    "description": "Smelt raw iron or iron ore in a furnace with fuel such as coal or charcoal.",
+    "tags": ["recipe", "smelting", "iron"]
+  },
+  {
+    "id": "recipe:gold_ingot",
+    "category": "recipe",
+    "name": "Gold Ingot",
+    "description": "Smelt raw gold or gold ore in a furnace with fuel such as coal or charcoal.",
+    "tags": ["recipe", "smelting", "gold"]
+  },
+  {
+    "id": "recipe:glass",
+    "category": "recipe",
+    "name": "Glass",
+    "description": "Smelt sand in a furnace. Glass is transparent and used for windows and bottles.",
+    "tags": ["recipe", "smelting", "building"]
+  },
+  {
+    "id": "recipe:stone_bricks",
+    "category": "recipe",
+    "name": "Stone Bricks",
+    "description": "Place 4 stone blocks in a 2x2 square in the crafting grid. Used for strong building blocks.",
+    "tags": ["recipe", "crafting", "building"]
+  },
+  {
+    "id": "recipe:planks",
+    "category": "recipe",
+    "name": "Wooden Planks",
+    "description": "Place any log in the crafting grid to get 4 matching planks. Used for crafting and building.",
+    "tags": ["recipe", "crafting", "wood"]
+  },
+  {
+    "id": "recipe:paper",
+    "category": "recipe",
+    "name": "Paper",
+    "description": "Place 3 sugar canes horizontally in the crafting grid. Used for books, maps, and banners.",
+    "tags": ["recipe", "crafting", "material"]
+  },
+  {
+    "id": "recipe:book",
+    "category": "recipe",
+    "name": "Book",
+    "description": "Place 3 paper and 1 leather in the crafting grid in a 2x2 pattern with leather in the bottom-right. Used for bookshelves and enchanting.",
+    "tags": ["recipe", "crafting", "material"]
   }
 ]

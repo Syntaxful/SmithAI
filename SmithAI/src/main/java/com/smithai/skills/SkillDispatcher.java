@@ -4,10 +4,13 @@ import com.smithai.SmithAIPlugin;
 import com.smithai.npc.SmithNPC;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Map;
 
@@ -24,10 +27,66 @@ public class SkillDispatcher {
     }
 
     public void execute(SmithNPC npc, String skillName, Map<String, Object> params, Player contextPlayer) {
+        if (npc == null || npc.getEntity() == null || npc.getEntity().isDead()) {
+            return;
+        }
         String lower = skillName.toLowerCase();
 
         // Chat / social
-        if (lower.startsWith("chat_") || lower.startsWith("say_") || lower.startsWith("ask_") || lower.startsWith("tell_") ||
+        if (isChatSkill(lower)) {
+            executeChat(npc, lower, contextPlayer);
+            return;
+        }
+
+        // Movement
+        if (lower.startsWith("follow") || lower.equals("move_to_player") || lower.equals("teleport_to_player")) {
+            if (contextPlayer != null) npc.follow(contextPlayer);
+            return;
+        }
+        if (lower.startsWith("stay") || lower.equals("stay")) {
+            npc.stay();
+            return;
+        }
+        if (lower.startsWith("teleport_to_spawn") || lower.equals("go_home") || lower.equals("teleport_home") || lower.equals("spawn")) {
+            Location spawn = npc.getLocation() != null ? npc.getLocation().getWorld().getSpawnLocation() : null;
+            if (spawn != null) npc.teleport(spawn);
+            return;
+        }
+        if (lower.startsWith("look") || lower.startsWith("turn") || lower.startsWith("inspect") || lower.startsWith("check_")) {
+            if (contextPlayer != null) npc.lookAt(contextPlayer.getLocation());
+            return;
+        }
+        if (lower.startsWith("move") || lower.startsWith("jump") || lower.startsWith("sneak") || lower.startsWith("sprint") ||
+            lower.startsWith("climb") || lower.startsWith("swim") || lower.startsWith("explore_random") || lower.startsWith("wander") ||
+            lower.startsWith("walk") || lower.startsWith("run") || lower.startsWith("go_to") || lower.startsWith("goto")) {
+            executeMovement(npc, lower, contextPlayer, params);
+            return;
+        }
+
+        // Basic interaction
+        if (isInteractionSkill(lower)) {
+            executeInteraction(npc, lower, contextPlayer, params);
+            return;
+        }
+
+        // Combat / survival / attack
+        if (isCombatSkill(lower)) {
+            executeCombat(npc, lower, contextPlayer, params);
+            return;
+        }
+
+        // Gather / resource / farming / crafting / building
+        if (isResourceSkill(lower)) {
+            executeResource(npc, lower, contextPlayer, params);
+            return;
+        }
+
+        // Advanced / progression / strategy
+        executeComposite(npc, lower, contextPlayer, "I'll plan and execute that advanced objective: " + humanize(skillName));
+    }
+
+    private boolean isChatSkill(String lower) {
+        return lower.startsWith("chat_") || lower.startsWith("say_") || lower.startsWith("ask_") || lower.startsWith("tell_") ||
             lower.startsWith("greet") || lower.startsWith("farewell") || lower.startsWith("thank") || lower.startsWith("apologize") ||
             lower.startsWith("compliment") || lower.startsWith("tease") || lower.startsWith("warn") || lower.startsWith("encourage") ||
             lower.startsWith("praise") || lower.startsWith("scold") || lower.startsWith("narrate") || lower.startsWith("describe") ||
@@ -42,63 +101,34 @@ public class SkillDispatcher {
             lower.startsWith("celebrate") || lower.startsWith("calm") || lower.startsWith("alert") || lower.startsWith("relax") ||
             lower.startsWith("focus") || lower.startsWith("remember") || lower.startsWith("recall") || lower.startsWith("forget") ||
             lower.startsWith("list_memory") || lower.startsWith("report_status") || lower.startsWith("report_location") || lower.startsWith("think") ||
-            lower.startsWith("noop") || lower.startsWith("wait")) {
-            executeChat(npc, lower, contextPlayer);
-            return;
-        }
+            lower.startsWith("noop") || lower.startsWith("wait");
+    }
 
-        // Movement
-        if (lower.startsWith("follow") || lower.equals("move_to_player") || lower.equals("teleport_to_player")) {
-            if (contextPlayer != null) npc.follow(contextPlayer);
-            return;
-        }
-        if (lower.startsWith("stay") || lower.equals("stay")) {
-            npc.stay();
-            return;
-        }
-        if (lower.startsWith("teleport_to_spawn") || lower.equals("go_home") || lower.equals("teleport_home")) {
-            Location spawn = npc.getLocation() != null ? npc.getLocation().getWorld().getSpawnLocation() : null;
-            if (spawn != null) npc.teleport(spawn);
-            return;
-        }
-        if (lower.startsWith("look") || lower.startsWith("turn") || lower.startsWith("inspect") || lower.startsWith("check_")) {
-            if (contextPlayer != null) npc.lookAt(contextPlayer.getLocation());
-            return;
-        }
-        if (lower.startsWith("move") || lower.startsWith("jump") || lower.startsWith("sneak") || lower.startsWith("sprint") ||
-            lower.startsWith("climb") || lower.startsWith("swim") || lower.startsWith("explore_random") || lower.startsWith("wander") ||
-            lower.startsWith("walk") || lower.startsWith("run") || lower.startsWith("turn")) {
-            executeMovement(npc, lower, contextPlayer);
-            return;
-        }
-
-        // Basic interaction
-        if (lower.startsWith("use") || lower.startsWith("interact") || lower.startsWith("open") || lower.startsWith("close") ||
+    private boolean isInteractionSkill(String lower) {
+        return lower.startsWith("use") || lower.startsWith("interact") || lower.startsWith("open") || lower.startsWith("close") ||
             lower.startsWith("equip") || lower.startsWith("select") || lower.startsWith("pick_up") || lower.startsWith("drop") ||
             lower.startsWith("sleep") || lower.startsWith("wake") || lower.startsWith("eat") || lower.startsWith("heal") ||
             lower.startsWith("avoid") || lower.startsWith("retreat") || lower.startsWith("set_home") || lower.startsWith("save_favorite") ||
             lower.startsWith("load_favorite") || lower.startsWith("clear_favorite") || lower.startsWith("set_nickname") || lower.startsWith("get_nickname") ||
             lower.startsWith("begin_task") || lower.startsWith("end_task") || lower.startsWith("pause_task") || lower.startsWith("resume_task") ||
             lower.startsWith("cancel_task") || lower.startsWith("retry_task") || lower.startsWith("skip_step") || lower.startsWith("repeat_step") ||
-            lower.startsWith("mark_done") || lower.startsWith("mark_failed") || lower.startsWith("place_torch") || lower.startsWith("strip_mine_safe")) {
-            executeInteraction(npc, lower, contextPlayer);
-            return;
-        }
+            lower.startsWith("mark_done") || lower.startsWith("mark_failed") || lower.startsWith("place_torch") || lower.startsWith("strip_mine_safe") ||
+            lower.startsWith("place_") || lower.startsWith("break_") || lower.startsWith("mine_") || lower.startsWith("chop_") || lower.startsWith("dig_") ||
+            lower.startsWith("farm_") || lower.startsWith("plant_") || lower.startsWith("water_") || lower.startsWith("harvest_") || lower.startsWith("replant_");
+    }
 
-        // Combat / survival / attack
-        if (lower.startsWith("attack") || lower.startsWith("defend") || lower.startsWith("fight_") || lower.startsWith("hunt_") ||
+    private boolean isCombatSkill(String lower) {
+        return lower.startsWith("attack") || lower.startsWith("defend") || lower.startsWith("fight_") || lower.startsWith("hunt_") ||
             lower.startsWith("auto_equip") || lower.startsWith("auto_eat") || lower.startsWith("auto_heal") || lower.startsWith("retreat_from_combat") ||
             lower.startsWith("ambush") || lower.startsWith("block") || lower.startsWith("dodge") || lower.startsWith("counter") ||
             lower.startsWith("raid_") || lower.startsWith("siege_") || lower.startsWith("storm_") || lower.startsWith("invade_") ||
             lower.startsWith("fortify_") || lower.startsWith("guard_") || lower.startsWith("patrol_") || lower.startsWith("protect_") ||
             lower.startsWith("suppress_") || lower.startsWith("secure_") || lower.startsWith("track_") || lower.startsWith("stalk_") ||
-            lower.startsWith("tame_") || lower.startsWith("befriend") || lower.startsWith("recruit") || lower.startsWith("train_elite")) {
-            executeCombat(npc, lower, contextPlayer);
-            return;
-        }
+            lower.startsWith("tame_") || lower.startsWith("befriend") || lower.startsWith("recruit") || lower.startsWith("train_elite");
+    }
 
-        // Gather / resource / farming / crafting / building
-        if (lower.startsWith("gather_") || lower.startsWith("collect_") || lower.startsWith("harvest_") || lower.startsWith("mine_") ||
+    private boolean isResourceSkill(String lower) {
+        return lower.startsWith("gather_") || lower.startsWith("collect_") || lower.startsWith("harvest_") || lower.startsWith("mine_") ||
             lower.startsWith("chop_") || lower.startsWith("dig_") || lower.startsWith("quarry_") || lower.startsWith("excavate_") ||
             lower.startsWith("farm_") || lower.startsWith("fish") || lower.startsWith("hunt_") || lower.startsWith("shear_") ||
             lower.startsWith("milk_") || lower.startsWith("pick_") || lower.startsWith("forage_") || lower.startsWith("scavenge_") ||
@@ -115,13 +145,7 @@ public class SkillDispatcher {
             lower.startsWith("travel_") || lower.startsWith("venture_") || lower.startsWith("store_") || lower.startsWith("sort_") ||
             lower.startsWith("organize_") || lower.startsWith("deposit_") || lower.startsWith("withdraw_") || lower.startsWith("stack_") ||
             lower.startsWith("transfer_") || lower.startsWith("stock_") || lower.startsWith("manage_") || lower.startsWith("fuel_") ||
-            lower.startsWith("configure_") || lower.startsWith("prepare_") || lower.startsWith("use_")) {
-            executeComposite(npc, lower, contextPlayer, "I'll work on that task: " + humanize(skillName));
-            return;
-        }
-
-        // Advanced / progression / strategy
-        executeComposite(npc, lower, contextPlayer, "I'll plan and execute that advanced objective: " + humanize(skillName));
+            lower.startsWith("configure_") || lower.startsWith("prepare_") || lower.startsWith("use_");
     }
 
     private void executeChat(SmithNPC npc, String skill, Player player) {
@@ -135,11 +159,11 @@ public class SkillDispatcher {
 
     private String generateChatReply(String skill, Player player) {
         String name = player != null ? player.getName() : "there";
-        if (skill.contains("greet") || skill.contains("hello")) return "Hello, " + name + "!";
-        if (skill.contains("farewell") || skill.contains("goodbye")) return "See you later, " + name + "!";
-        if (skill.contains("thank")) return "You're welcome!";
-        if (skill.contains("apologize") || skill.contains("sorry")) return "No worries.";
-        if (skill.contains("joke")) return "Why did the creeper cross the road? To get to the other side... boom!";
+        if (skill.contains("greet") || skill.contains("hello") || skill.contains("say_hello")) return "Hello, " + name + "!";
+        if (skill.contains("farewell") || skill.contains("goodbye") || skill.contains("say_goodbye")) return "See you later, " + name + "!";
+        if (skill.contains("thank") || skill.contains("say_thanks")) return "You're welcome!";
+        if (skill.contains("apologize") || skill.contains("sorry") || skill.contains("say_sorry")) return "No worries.";
+        if (skill.contains("joke") || skill.contains("tell_joke")) return "Why did the creeper cross the road? To get to the other side... boom!";
         if (skill.contains("warn")) return "Be careful!";
         if (skill.contains("encourage")) return "You can do it!";
         if (skill.contains("praise") || skill.contains("compliment")) return "Great job!";
@@ -148,20 +172,32 @@ public class SkillDispatcher {
         return "Got it.";
     }
 
-    private void executeMovement(SmithNPC npc, String skill, Player player) {
-        if (player == null || npc.getLocation() == null) return;
-        Location loc = player.getLocation();
-        if (skill.contains("look") || skill.contains("turn") || skill.contains("inspect")) {
-            npc.lookAt(loc);
-        } else if (skill.contains("jump")) {
-            Entity entity = npc.getEntity();
-            if (entity != null) entity.setVelocity(entity.getVelocity().setY(0.5));
-        } else {
-            npc.lookAt(loc);
+    private void executeMovement(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
+        Location target = null;
+        if (player != null && (skill.contains("player") || skill.contains("follow"))) {
+            target = player.getLocation();
+        } else if (params != null && params.containsKey("x") && params.containsKey("z")) {
+            try {
+                double x = ((Number) params.get("x")).doubleValue();
+                double z = ((Number) params.get("z")).doubleValue();
+                double y = params.containsKey("y") ? ((Number) params.get("y")).doubleValue() : npc.getLocation().getY();
+                target = new Location(npc.getLocation().getWorld(), x, y, z);
+            } catch (Exception ignored) {}
+        }
+        if (skill.contains("jump")) {
+            npc.jump();
+            return;
+        }
+        if (target != null) {
+            npc.setMoveTarget(target);
+            return;
+        }
+        if (player != null) {
+            npc.lookAt(player.getLocation());
         }
     }
 
-    private void executeInteraction(SmithNPC npc, String skill, Player player) {
+    private void executeInteraction(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
         if (skill.startsWith("eat") || skill.startsWith("heal")) {
             Entity entity = npc.getEntity();
             if (entity instanceof LivingEntity) {
@@ -171,30 +207,156 @@ public class SkillDispatcher {
             return;
         }
         if (skill.startsWith("equip") || skill.startsWith("select")) {
-            // Placeholder: in a full implementation this would select the right hotbar slot.
+            selectBestTool(npc, skill);
             return;
         }
-        if (skill.startsWith("place_torch") && player != null) {
-            Location loc = npc.getLocation();
-            if (loc != null) {
-                Location place = loc.clone().add(0, -1, 0);
-                place.getBlock().setType(Material.TORCH);
-            }
+        if (skill.contains("place_torch")) {
+            placeTorch(npc);
+            return;
+        }
+        if (skill.contains("place_") && params != null && params.containsKey("material")) {
+            placeBlock(npc, params);
+            return;
+        }
+        if (skill.contains("break_") || skill.contains("mine_") || skill.contains("chop_") || skill.contains("dig_")) {
+            breakBlock(npc, skill, params);
             return;
         }
         npc.sendMessage(player, "Working on: " + humanize(skill));
     }
 
-    private void executeCombat(SmithNPC npc, String skill, Player player) {
-        npc.sendMessage(player, "Engaging target: " + humanize(skill));
-        // Placeholder: attack nearest hostile entity within range.
+    private void selectBestTool(SmithNPC npc, String skill) {
         Entity entity = npc.getEntity();
-        if (entity instanceof LivingEntity) {
-            LivingEntity self = (LivingEntity) entity;
-            LivingEntity target = findNearestHostile(self, 8);
-            if (target != null) {
-                self.attack(target);
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Material preferred = Material.AIR;
+        if (skill.contains("pickaxe") || skill.contains("mine") || skill.contains("dig") || skill.contains("break_stone") || skill.contains("ore") || skill.contains("obsidian")) {
+            preferred = Material.DIAMOND_PICKAXE;
+            if (!inv.contains(preferred)) preferred = Material.IRON_PICKAXE;
+            if (!inv.contains(preferred)) preferred = Material.STONE_PICKAXE;
+            if (!inv.contains(preferred)) preferred = Material.WOODEN_PICKAXE;
+        } else if (skill.contains("axe") || skill.contains("chop") || skill.contains("break_wood") || skill.contains("log")) {
+            preferred = Material.DIAMOND_AXE;
+            if (!inv.contains(preferred)) preferred = Material.IRON_AXE;
+            if (!inv.contains(preferred)) preferred = Material.STONE_AXE;
+            if (!inv.contains(preferred)) preferred = Material.WOODEN_AXE;
+        } else if (skill.contains("sword") || skill.contains("fight") || skill.contains("attack") || skill.contains("combat") || skill.contains("hostile") || skill.contains("mob")) {
+            preferred = Material.DIAMOND_SWORD;
+            if (!inv.contains(preferred)) preferred = Material.IRON_SWORD;
+            if (!inv.contains(preferred)) preferred = Material.STONE_SWORD;
+            if (!inv.contains(preferred)) preferred = Material.WOODEN_SWORD;
+        } else if (skill.contains("shovel") || skill.contains("dirt") || skill.contains("sand") || skill.contains("gravel") || skill.contains("soil")) {
+            preferred = Material.DIAMOND_SHOVEL;
+            if (!inv.contains(preferred)) preferred = Material.IRON_SHOVEL;
+            if (!inv.contains(preferred)) preferred = Material.STONE_SHOVEL;
+            if (!inv.contains(preferred)) preferred = Material.WOODEN_SHOVEL;
+        }
+        if (preferred != Material.AIR && inv.contains(preferred)) {
+            int slot = inv.first(preferred);
+            if (slot >= 0 && slot < 9) {
+                inv.setHeldItemSlot(slot);
             }
+        }
+    }
+
+    private void placeTorch(SmithNPC npc) {
+        Location loc = npc.getLocation();
+        if (loc == null) return;
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        if (!inv.contains(Material.TORCH)) return;
+        Block target = loc.getBlock();
+        Block placeOn = target.getRelative(BlockFace.DOWN);
+        if (placeOn.getType().isSolid() && target.getType().isAir()) {
+            target.setType(Material.TORCH);
+            removeOne(fake, Material.TORCH);
+        }
+    }
+
+    private void placeBlock(SmithNPC npc, Map<String, Object> params) {
+        Location loc = npc.getLocation();
+        if (loc == null) return;
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        String matName = String.valueOf(params.get("material")).toUpperCase();
+        Material mat = Material.matchMaterial(matName);
+        if (mat == null || !mat.isBlock()) mat = Material.DIRT;
+        PlayerInventory inv = fake.getInventory();
+        if (!inv.contains(mat)) return;
+        Block target = loc.getBlock();
+        if (target.getType().isAir()) {
+            target.setType(mat);
+            removeOne(fake, mat);
+        }
+    }
+
+    private void breakBlock(SmithNPC npc, String skill, Map<String, Object> params) {
+        Location loc = npc.getLocation();
+        if (loc == null) return;
+        Block target = loc.getBlock();
+        if (params != null && params.containsKey("x") && params.containsKey("y") && params.containsKey("z")) {
+            try {
+                int x = ((Number) params.get("x")).intValue();
+                int y = ((Number) params.get("y")).intValue();
+                int z = ((Number) params.get("z")).intValue();
+                target = loc.getWorld().getBlockAt(x, y, z);
+            } catch (Exception ignored) {}
+        }
+        if (target.getType() == Material.AIR || target.getType() == Material.BEDROCK || target.getType() == Material.WATER || target.getType() == Material.LAVA) {
+            return;
+        }
+        selectBestTool(npc, skill);
+        target.breakNaturally();
+    }
+
+    private void removeOne(Player player, Material mat) {
+        PlayerInventory inv = player.getInventory();
+        ItemStack[] contents = inv.getContents();
+        for (int i = 0; i < contents.length; i++) {
+            ItemStack stack = contents[i];
+            if (stack != null && stack.getType() == mat) {
+                if (stack.getAmount() <= 1) {
+                    inv.setItem(i, null);
+                } else {
+                    stack.setAmount(stack.getAmount() - 1);
+                    inv.setItem(i, stack);
+                }
+                return;
+            }
+        }
+    }
+
+    private void executeCombat(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof LivingEntity)) return;
+        LivingEntity self = (LivingEntity) entity;
+
+        LivingEntity target = null;
+        if (params != null && params.containsKey("target")) {
+            String targetName = String.valueOf(params.get("target")).toLowerCase();
+            for (Entity e : self.getWorld().getNearbyEntities(self.getLocation(), 8, 8, 8)) {
+                if (e instanceof LivingEntity && e != self && !(e instanceof Player)) {
+                    String type = e.getType().name().toLowerCase();
+                    if (type.contains(targetName)) {
+                        target = (LivingEntity) e;
+                        break;
+                    }
+                }
+            }
+        }
+        if (target == null) {
+            target = findNearestHostile(self, 8);
+        }
+        if (target != null) {
+            selectBestTool(npc, "sword");
+            self.attack(target);
+            npc.sendMessage(player, "Attacking " + humanize(target.getType().name().toLowerCase()) + ".");
+        } else {
+            npc.sendMessage(player, "No hostile target found.");
         }
     }
 
@@ -212,6 +374,23 @@ public class SkillDispatcher {
             }
         }
         return nearest;
+    }
+
+    private void executeResource(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
+        if (skill.contains("place_torch") || skill.contains("light_") || skill.contains("torch")) {
+            placeTorch(npc);
+            return;
+        }
+        if (skill.contains("break_") || skill.contains("mine_") || skill.contains("chop_") || skill.contains("dig_") ||
+            skill.contains("harvest_") || skill.contains("gather_wood") || skill.contains("gather_stone") || skill.contains("gather_ore")) {
+            breakBlock(npc, skill, params);
+            return;
+        }
+        if (skill.contains("place_") || skill.contains("build_") || skill.contains("expand_") || skill.contains("make_") || skill.contains("wall")) {
+            placeBlock(npc, params);
+            return;
+        }
+        executeComposite(npc, skill, player, "I'll work on that task: " + humanize(skill));
     }
 
     private void executeComposite(SmithNPC npc, String skill, Player player, String defaultMessage) {

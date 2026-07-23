@@ -112,3 +112,4 @@ The `SmithAI-Server` is the external AI host for the SmithGPT models. This guide
 - Never share your `SMA-...` API key publicly.
 - Players do not need the key. Only the Minecraft server admin needs it.
 - If you think the key is compromised, restart the server to generate a new one, or delete the key from `config.yml` and let it regenerate.
+- The server now includes a health endpoint that shows whether the model is loaded. Use `GET /health` to check status.

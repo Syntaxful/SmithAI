@@ -4,12 +4,12 @@ This file is the single source of truth for what is finished and what remains. I
 
 ## Current Snapshot (as of this commit)
 
-- Plugin builds successfully with Maven: `SmithAI/target/SmithAI-2.0.0.jar` (115KB shaded JAR)
+- Plugin builds successfully with Maven: `SmithAI/target/SmithAI-2.0.0.jar` (~138KB shaded JAR)
 - SmithAI-Server Python FastAPI server exists and can run with `python app.py`
 - API key generation, console spam, and "Connected to ..." messages are implemented
 - External AI failover to Smith-Mini 1.0 is implemented
-- Built-in knowledge base loader exists with 25 sample entries across blocks, mobs, items, recipes, strategy
-- Chat, memory, commands, tab completers exist
+- Built-in knowledge base loader exists with expanded entries across blocks, mobs, items, recipes, strategy, biomes
+- Chat, memory, commands, listeners, tab completers exist
 - **9000-core-skill library implemented** with runtime generation to keep the JAR small
   - 900 skills for Smith-Mini 1.0
   - 1800 skills for SmithGPT 1.0 (includes all Mini skills)
@@ -18,9 +18,31 @@ This file is the single source of truth for what is finished and what remains. I
 - Task planner updated with broad, non-specific goals: beat the game, get diamonds, build nether portal, build base, defend, farm, etc.
 - `/smithai do <task>` now queues skills into the executor
 - `/smithai stop` added to cancel the active skill queue
+- `/smithai goto <x> <y> <z>` added to send an NPC to coordinates
+- `/smithai feedback <message>` added so players can describe exactly what the AI did wrong
+- `/smithai report <description>` opens a prefilled GitHub issue; reports are also saved to `issue_reports.yml` if the URL is too long
+- `/smithai reports` and `/smithai feedback-list` added for admins to review submissions
+- `/smithai debug` and `/smithai debug global` added for in-game diagnostics
+- `/smithai health` added to show subsystem health summary
+- `/SmithAPI status` added to show key, server URL, model, and connection status
 - Training manager persists good/bad feedback to disk
-- NPC follow/stay/movement exists as teleport-based stubs
-- README and SKILLS.md document the new 9000-skill system
+- Feedback manager persists detailed written feedback with context to disk
+- Issue report manager persists bug reports to disk
+- NPC follow/stay/teleport exists, plus velocity-based movement with step-up/jump and `goto` target support
+- Real block breaking, block placing, and torch placing implemented in the skill dispatcher
+- Tool selection by task (pickaxe, axe, sword, shovel) implemented
+- Basic combat against nearest hostile or targeted mob type implemented
+- Subsystem health tracking and graceful degradation implemented
+- Debug manager for per-player and global debug toggles implemented
+- CI workflow (`.github/workflows/build.yml`) builds the plugin and checks the server on every push
+- `build.sh` script for non-Maven users; runs tests during build
+- `package-release.sh` bundles plugin JAR, server, docs, and SHA-256 checksums into a zip
+- `bump-version.sh` updates the project version in `pom.xml`
+- `Makefile` with common build/test/release/docker targets
+- Docker support for SmithAI-Server: `Dockerfile`, `docker-compose.yml`, `.dockerignore`
+- Unit tests added: `SkillGeneratorTest`, `TaskPlannerTest`, `SubsystemHealthTest`
+- Server-side test added: `SmithAI-Server/test_app.py`
+- README, SKILLS.md, FAQ.md, HOSTING.md, CONTRIBUTING.md, REPORT_TEMPLATE.md, and models README updated
 - GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is not used for commits without explicit authorization
 
 ---
@@ -40,7 +62,7 @@ Each brain has a fixed set of core skills it can execute. Higher brains can use 
 - **SmithGPT 2.0** — 6300 core skills (external, 15GB model)
 - **Total core skills** — 9000 (overlapping tiers)
 
-Skills are generated at runtime by `SkillGenerator` into `plugins/SmithAI/skills.yml` so the plugin JAR stays small (~115KB). Higher-tier models include all lower-tier skills.
+Skills are generated at runtime by `SkillGenerator` into `plugins/SmithAI/skills.yml` so the plugin JAR stays small (~138KB). Higher-tier models include all lower-tier skills.
 
 Each skill needs:
 1. A unique ID
@@ -59,18 +81,20 @@ Each skill needs:
 ## DONE vs TODO Matrix
 
 ### 1. Build & Packaging
-- [x] Maven project structure under `SmithAI-MinecraftLLM/SmithAI/`
+- [x] Maven project structure under `SmithAI/`
 - [x] `pom.xml` with Bukkit/Paper API dependency
 - [x] `plugin.yml` with `api-version: 1.21`, commands, permissions
 - [x] `config.yml` default configuration
 - [x] Maven shade plugin producing shaded JAR
-- [x] Build produces `SmithAI/target/SmithAI-2.0.0.jar` (115KB)
+- [x] Build produces `SmithAI/target/SmithAI-2.0.0.jar` (~138KB)
 - [x] Runtime skill generation keeps JAR small
-- [ ] Automated build script for non-Maven users
-- [ ] CI workflow (GitHub Actions) to build on push
-- [ ] Release packaging script that bundles plugin JAR, server, and docs
-- [ ] Signed releases or checksums
-- [ ] Version bumping automation
+- [x] Automated build script for non-Maven users (`build.sh`)
+- [x] CI workflow (GitHub Actions) to build on push (`.github/workflows/build.yml`)
+- [x] Release packaging script that bundles plugin JAR, server, and docs (`package-release.sh`)
+- [x] Signed releases or checksums (SHA-256 generated in `package-release.sh`)
+- [x] Version bumping automation (`bump-version.sh`)
+- [ ] Maven release plugin / GitHub Releases integration
+- [ ] Automated artifact upload to GitHub Releases
 
 ### 2. Plugin Lifecycle
 - [x] `SmithAIPlugin` main class with `onEnable` and `onDisable`
@@ -79,9 +103,9 @@ Each skill needs:
 - [x] Graceful shutdown: despawn NPCs, save memory, cancel tasks
 - [x] Reload command that re-inits config, AI manager, reminder task
 - [x] Skill executor stops on shutdown
-- [ ] Proper error recovery when a subsystem fails to initialize
-- [ ] Plugin metrics / bStats integration (optional, off by default)
-- [ ] In-game debug mode toggle
+- [x] Proper error recovery when a subsystem fails to initialize (`SubsystemHealth`)
+- [x] In-game debug mode toggle (`/smithai debug`, `DebugManager`)
+- [ ] Plugin metrics / bStats integration (config key exists, integration not wired)
 
 ### 3. Configuration System
 - [x] `Config` wrapper class with all current keys
@@ -101,6 +125,12 @@ Each skill needs:
 - [x] `ai.reminder.enabled`
 - [x] `ai.reminder.minSeconds` and `ai.reminder.maxSeconds`
 - [x] `ai.followDistance`
+- [x] `skills.maxQueueSize`
+- [x] `skills.stepDelay`
+- [x] `training.chatFeedback`
+- [x] `training.persist`
+- [x] `debug.enabled`
+- [x] `metrics.bstats`
 - [ ] `ai.pathfinding.maxDistance`
 - [ ] `ai.pathfinding.maxNodes`
 - [ ] `ai.pathfinding.tickRate`
@@ -118,16 +148,23 @@ Each skill needs:
 - [x] `/smithai despawn` — despawn all Smith_AI NPCs
 - [x] `/smithai follow` — nearby Smith_AI follows the player
 - [x] `/smithai stay` — nearby Smith_AI stops following
+- [x] `/smithai goto <x> <y> <z>` — send nearby Smith_AI to coordinates
 - [x] `/smithai do <task>` — plan and execute a task via the skill queue
 - [x] `/smithai stop` — cancel all queued tasks
 - [x] `/smithai status` — show active brain/model
 - [x] `/smithai model` — show model information
 - [x] `/smithai reload` — reload config and restart connector
 - [x] `/smithai train good|bad` — reward or punish recent action
+- [x] `/smithai feedback <message>` — describe exactly what the AI did wrong
+- [x] `/smithai feedback-list` — show recent feedback (admin only)
+- [x] `/smithai report <description>` — open prefilled GitHub issue or save to disk
+- [x] `/smithai reports` — show recent saved issue reports (admin only)
 - [x] `/smithai memory` — show last 17 messages
-- [x] `/SmithAPI` — show current API key status (masked)
+- [x] `/smithai debug` — toggle debug messages for the sender (admin only)
+- [x] `/smithai debug global` — toggle debug messages for all online players (admin only)
+- [x] `/smithai health` — show subsystem health summary (admin only)
 - [x] `/SmithAPI set <key>` — save the external server key
-- [x] `/SmithAPI clear` — remove saved key
+- [x] `/SmithAPI status` — show current API key and connection status (masked)
 - [x] Tab completion for both commands
 - [ ] `/smithai inventory` — inspect NPC inventory
 - [ ] `/smithai give <item>` — give item to NPC
@@ -142,6 +179,8 @@ Each skill needs:
 - [x] Memory manager holds 17 messages per NPC
 - [x] Memory persistence to YAML
 - [x] Training feedback detection ("good bot", "bad bot")
+- [x] Automatic negative feedback detection in chat ("don't do that", "wrong", etc.)
+- [x] Automatic report request detection in chat ("report", "bug", "broken", etc.)
 - [ ] Long-term memory summarization
 - [ ] Player-specific preference memory
 - [ ] Emotion/mood tracking
@@ -155,16 +194,18 @@ Each skill needs:
 - [x] Automatic fallback to Smith-Mini when external is offline
 - [x] Reconnection loop with status messages
 - [x] API key reminder every 10-50 seconds when external is enabled but no key is set
+- [x] Parse `action`/`target` from external server response
 - [ ] Real GGUF inference for Smith-Mini (currently rule-based)
 - [ ] Streaming responses from external model
 - [ ] Server-side prompt templates per model tier
-- [ ] Skill-aware response generation with action parsing
+- [ ] Skill-aware response generation with action parsing (partial — parsing exists, not fully integrated into chat flow)
 - [ ] Model performance telemetry
 
 ### 7. Local AI / Smith-Mini 1.0
 - [x] `LocalMiniAI` rule-based fallback for chat
 - [x] Config `ai.local.fallbackToRules`
 - [x] Config `ai.local.modelPath`
+- [x] Action tag emission for common commands (follow, stay, mine, build, fight, etc.)
 - [ ] Real GGUF model loading (llama.cpp or llama-cpp-java)
 - [ ] Prompt template for local model
 - [ ] Skill-aware local inference
@@ -172,10 +213,11 @@ Each skill needs:
 - [ ] Local model cache and warmup
 
 ### 8. Knowledge Base
-- [x] `KnowledgeBase` loader with 25 sample entries
+- [x] `KnowledgeBase` loader with expanded sample entries
 - [x] Knowledge entries stored in `knowledge/*.json`
-- [x] JSON format: category, topic, content, tags
+- [x] JSON format: id, category, name, description, tags
 - [x] Knowledge lookup by keyword/tag
+- [x] Biome category added
 - [ ] Expand to 29,000 entries
 - [ ] Category index for fast lookup
 - [ ] Knowledge versioning and updates
@@ -192,9 +234,13 @@ Each skill needs:
 - [x] `/smithai stop` cancels the queue
 - [x] `skills.yml` generated on first run if missing
 - [x] 900/1800/6300 split verified by generator test
+- [x] Real block breaking, placing, and torch placing
+- [x] Tool selection by task (pickaxe, axe, sword, shovel)
+- [x] Basic combat with nearest hostile or targeted mob type
+- [x] Action tag parsing from LLM/chat responses
 - [ ] Full primitive executors for all 9000 skills
 - [ ] Skill preconditions and success/failure detection
-- [ ] Skill parameters from LLM responses
+- [ ] Skill parameters from LLM responses fully wired
 - [ ] Skill retry and recovery policies
 - [ ] Skill usage analytics and training feedback
 
@@ -203,6 +249,8 @@ Each skill needs:
 - [x] `SmithNPC` wrapper with follow/stay/message/teleport methods
 - [x] `NPCSpawner` spawns an entity (currently a villager)
 - [x] `Conversation` ties NPC to a player and memory
+- [x] Velocity-based movement with step-up/jump logic
+- [x] `goto` target support via `setMoveTarget`
 - [ ] Real player-model NPC with robot skin and limbs
 - [ ] Real pathfinding using Bukkit pathfinders or custom A*
 - [ ] NPC inventory and equipment mirroring
@@ -212,10 +260,12 @@ Each skill needs:
 - [ ] Eaglercraft-compatible player model rendering
 
 ### 11. Movement & Pathfinding
-- [x] `follow` method teleports NPC to player
+- [x] `follow` method with velocity-based movement toward player
 - [x] `stay` and `teleport` methods
 - [x] `lookAt` rotates NPC toward target
-- [ ] Real walking pathfinding to player/target block
+- [x] `goto` coordinates command
+- [x] Step-up and jump logic for small obstacles
+- [ ] Real walking pathfinding to player/target block (A* or Bukkit navigator)
 - [ ] Navigation around obstacles, water, lava, cliffs
 - [ ] Sprint/jump/sneak/climb/swim integration
 - [ ] Follow distance and leash behavior
@@ -225,14 +275,14 @@ Each skill needs:
 
 ### 12. Inventory & Crafting Automation
 - [x] Check inventory stub
-- [x] Select/equip item stubs
+- [x] Select/equip item by task (tool, weapon)
 - [ ] Real inventory scanning and item selection
 - [ ] Crafting recipes by name and available ingredients
 - [ ] Crafting table / furnace / brewing stand interaction
 - [ ] Smelting, fueling, and result collection
 - [ ] Chest storage and retrieval
 - [ ] Item pickup and drop
-- [ ] Tool/food/weapon/armor selection by task
+- [ ] Tool/food/weapon/armor selection by task (partial — tools done)
 - [ ] Durability-aware tool switching
 - [ ] Resource stockpiling and restocking
 
@@ -240,6 +290,7 @@ Each skill needs:
 - [x] Attack nearest hostile mob in `SkillDispatcher`
 - [x] Heal via food in `SkillDispatcher`
 - [x] Place torch in `SkillDispatcher`
+- [x] Mob-specific target selection via `target` parameter
 - [ ] Mob-specific combat tactics (creeper, skeleton, zombie, etc.)
 - [ ] Equip best armor and weapon
 - [ ] Retreat when low health/hunger
@@ -251,7 +302,10 @@ Each skill needs:
 - [ ] Boss fight sequences (dragon, wither, warden)
 
 ### 14. World Interaction
-- [ ] Break blocks with correct tool and timing
+- [x] Break blocks with best tool (instant via `breakNaturally`)
+- [x] Place blocks with material parameter
+- [x] Place torches
+- [ ] Break blocks with correct timing and drops
 - [ ] Place blocks with correct facing and support
 - [ ] Interact with doors, levers, buttons, chests, furnaces, etc.
 - [ ] Use buckets, flint and steel, ender pearls, etc.
@@ -279,6 +333,7 @@ Each skill needs:
 - [x] `good bot` and `bad bot` chat detection
 - [x] Training manager with YAML persistence
 - [x] Good/bad feedback scores per action
+- [x] Detailed written feedback via `/smithai feedback` and chat detection
 - [ ] Demonstration learning: player performs action, AI copies
 - [ ] Per-player preference memory
 - [ ] Per-NPC learned behavior profiles
@@ -295,15 +350,22 @@ Each skill needs:
 - [x] `/smithai despawn`
 - [x] `/smithai follow`
 - [x] `/smithai stay`
+- [x] `/smithai goto`
 - [x] `/smithai do <task>`
-- [x] `/smithai stop` (NEW this commit)
+- [x] `/smithai stop`
 - [x] `/smithai status`
 - [x] `/smithai model`
 - [x] `/smithai reload`
 - [x] `/smithai train good|bad`
+- [x] `/smithai feedback <message>`
+- [x] `/smithai feedback-list`
+- [x] `/smithai report <description>`
+- [x] `/smithai reports`
 - [x] `/smithai memory`
+- [x] `/smithai debug`
+- [x] `/smithai health`
 - [x] `/SmithAPI set <key>`
-- [x] `/SmithAPI` (status check)
+- [x] `/SmithAPI status`
 - [x] Tab completers for `/smithai` and `/smithapi`
 - [x] Permissions: `smithai.admin`, `smithai.use`, `smithai.spawn`, `smithai.api`
 - [ ] `/smithai inventory` — view/inspect NPC inventory
@@ -329,7 +391,8 @@ Each skill needs:
 ### 19. External AI Server (SmithAI-Server)
 - [x] Python FastAPI server
 - [x] `/chat` endpoint
-- [x] `/health` endpoint
+- [x] `/health` endpoint with model info and load status
+- [x] `/skills` endpoint returning tier-appropriate broad skill list
 - [x] API key generation (`SMA-...`)
 - [x] API key console spam until plugin connects
 - [x] `Connected to ...` message on successful auth
@@ -339,11 +402,13 @@ Each skill needs:
 - [x] Uses `PORT` environment variable when available (Replit/Codespaces)
 - [x] `requirements.txt`
 - [x] Server README
-- [x] `/skills` endpoint returning tier-appropriate broad skill list
+- [x] Rule-based fallback when model is not loaded
+- [x] Action tag parsing from LLM responses
+- [x] Docker support (`Dockerfile` + `docker-compose.yml` + `.dockerignore`)
+- [x] Server test script (`test_app.py`)
 - [ ] `/embed` endpoint for knowledge retrieval
 - [ ] `/task` endpoint for task planning
 - [ ] `/feedback` endpoint to receive training data
-- [ ] Docker support (`Dockerfile` + `docker-compose.yml`)
 - [ ] Server startup script for Windows and Linux
 - [ ] Auto-download missing model files (with user consent)
 - [ ] Model warmup on first request
@@ -382,7 +447,9 @@ Each skill needs:
 - [ ] Graceful degradation on unsupported versions
 
 ### 22. Testing & Quality
-- [ ] Unit tests for skill planner
+- [x] Unit tests for skill generator (`SkillGeneratorTest`)
+- [x] Unit tests for task planner (`TaskPlannerTest`)
+- [x] Unit tests for subsystem health (`SubsystemHealthTest`)
 - [ ] Unit tests for knowledge lookup
 - [ ] Unit tests for memory system
 - [ ] Unit tests for training manager
@@ -398,14 +465,15 @@ Each skill needs:
 - [ ] Test on low-end hardware (2GB server)
 
 ### 23. Documentation
-- [x] README.md (overview, install, config, commands, skill library summary)
-- [x] HOSTING.md (Replit, Codespaces, Linux, Windows, VPS)
-- [x] FAQ.md
+- [x] README.md (overview, install, config, commands, skill library summary, new commands)
+- [x] HOSTING.md (Replit, Codespaces, Linux, Windows, VPS, Docker, health endpoint)
+- [x] FAQ.md (feedback, reporting, skills, models)
 - [x] LICENSE
-- [x] SKILLS.md (overview of 9000 skills, how to add)
+- [x] SKILLS.md (overview of 9000 skills, how to add, implementation status)
+- [x] CONTRIBUTING.md (coding style, build instructions, rules)
+- [x] REPORT_TEMPLATE.md (bug report template)
 - [ ] MODELS.md (detailed model cards and downloads)
 - [ ] API.md (SmithAI-Server API reference)
-- [ ] CONTRIBUTING.md (coding style, how to add skills/knowledge)
 - [ ] CHANGELOG.md
 - [ ] In-game help system (`/smithai help`)
 - [ ] Video tutorial script (optional)
@@ -416,7 +484,7 @@ Each skill needs:
 
 ## Skill Library (9000 core skills)
 
-The library is generated at runtime by `com.smithai.skills.SkillGenerator` into `plugins/SmithAI/skills.yml`. The plugin JAR only contains the generator code, so it stays small (~115KB). The full list and category breakdown are in `SKILLS.md`.
+The library is generated at runtime by `com.smithai.skills.SkillGenerator` into `plugins/SmithAI/skills.yml`. The plugin JAR only contains the generator code, so it stays small (~138KB). The full list and category breakdown are in `SKILLS.md`.
 
 ### Tier 1: Smith-Mini 1.0 (900 skills)
 Generated from 100 base verbs + 30 topics, producing 900 unique broad skills. Categories include:
@@ -463,15 +531,15 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 
 ### Phase 2: AI Brains — PARTIAL
 - [x] External AI connector + health check
-- [x] Smith-Mini rule-based fallback
+- [x] Smith-Mini rule-based fallback with action tags
 - [x] Auto-failover and reconnection
 - [x] Status notifications
 - [x] API key auth flow
 - [x] SmithAI-Server with console spam + connected message
 - [x] Server-side broad skill list by tier
+- [x] Server action tag parsing from LLM responses
 - [ ] Real Smith-Mini GGUF inference
 - [ ] Server-side prompt templates per model
-- [ ] Skill-aware response generation
 - [ ] Streaming responses
 
 ### Phase 3: Chat & Memory — PARTIAL
@@ -480,26 +548,32 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 - [x] Memory persistence
 - [x] Basic responses
 - [x] Training feedback detection
+- [x] Negative feedback and report detection in chat
 - [ ] Long-term memory summarization
 - [ ] Player-specific preferences
 - [ ] Emotion/mood tracking
 
 ### Phase 4: Knowledge & Skills — IN PROGRESS
-- [x] Knowledge base loader + 25 sample entries
+- [x] Knowledge base loader + expanded sample entries
 - [x] Skill registry skeleton
-- [x] Task planner
+- [x] Task planner expanded with common goals
 - [x] 9000 Smith-Mini + SmithGPT skills generated at runtime
 - [x] Tier-aware skill registry
-- [x] Skill dispatcher and executor
+- [x] Skill dispatcher and executor with real block/place/torch/tool/combat actions
 - [x] `/smithai do` queues skill plans
 - [x] `/smithai stop` cancels queue
-- [ ] Primitive skill executors for most common skills
-- [ ] Composite skill execution with real world effects
+- [x] `/smithai goto` coordinates command
+- [ ] Primitive skill executors for most common skills (partial)
+- [ ] Composite skill execution with real world effects (partial)
 - [ ] Skill preconditions and failure handling
-- [ ] Skill parameters from LLM
+- [ ] Skill parameters from LLM fully wired
 
-### Phase 5: Advanced Gameplay — NOT STARTED
-- [ ] Pathfinding
+### Phase 5: Advanced Gameplay — IN PROGRESS
+- [x] Basic velocity-based movement and step-up/jump
+- [x] Basic block breaking/placing/torch placing
+- [x] Tool selection by task
+- [x] Basic mob combat with target selection
+- [ ] Pathfinding (A* or navigator)
 - [ ] Inventory/crafting automation
 - [ ] Combat/survival automation
 - [ ] Endgame task sequences
@@ -508,10 +582,10 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 ### Phase 6: Scale & Polish — NOT STARTED
 - [ ] Expand knowledge to 29,000 entries
 - [ ] Complete training system
-- [ ] Docker/server packaging
+- [ ] Docker/server packaging (partial — Docker files exist)
 - [ ] Documentation finalization
 - [ ] Eaglercraft testing
-- [ ] Unit tests and QA
+- [ ] Unit tests and QA (partial)
 
 ---
 
@@ -519,41 +593,41 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 
 | System | Status | Notes |
 |--------|--------|-------|
-| Build & Packaging | 80% | Maven works, JAR produced, runtime skill generation keeps size small, no CI yet |
-| Plugin Lifecycle | 90% | Enable/disable/reload done, skill executor stops cleanly, metrics not added |
-| Config System | 80% | Core keys done, missing advanced model/skill configs |
-| NPC System | 40% | Spawn/follow/stay done, no real player model or pathfinding |
-| External AI Connector | 75% | Chat/health/failover done, missing skill response parsing |
-| Local AI (Smith-Mini) | 35% | Rule-based fallback done, no real GGUF inference |
-| Chat & Memory | 70% | 17-message memory, persistence, basic chat done |
-| Knowledge Base | 5% | 25 sample entries, 29,000 target |
-| Skill System | 40% | 9000 skills generated, tier registry, dispatcher, executor, task planner; executors are mostly stubs |
-| Pathfinding & Movement | 10% | Teleport follow stub only |
-| Inventory & Crafting | 5% | Inspect own inventory stub only |
-| Combat & Survival | 10% | Basic attack and heal, no tactics |
-| Training System | 50% | Good/bad commands and persistence done, no demo learning |
-| Commands & Permissions | 85% | Core commands + stop done, some advanced commands missing |
-| Status & Notifications | 60% | Switch messages and reminders done, no action bar |
-| External AI Server | 75% | Chat/health/key auth/skills done, missing /embed /task /feedback |
-| Models | 30% | README done, no specific download scripts |
-| Eaglercraft Compatibility | 10% | API usage correct, no live testing |
-| Testing & Quality | 5% | No unit tests yet |
-| Documentation | 75% | README, HOSTING, FAQ, LICENSE, SKILLS done; missing MODELS, API, CONTRIBUTING |
+| Build & Packaging | 95% | Maven, build script, CI, release packaging, checksums, version bump all done |
+| Plugin Lifecycle | 95% | Enable/disable/reload, subsystem health, debug mode done; bStats config only |
+| Config System | 85% | Core keys done; some advanced pathfinding/combat/crafting keys missing |
+| NPC System | 45% | Spawn/follow/stay/goto done; real player model and pathfinding pending |
+| External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
+| Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
+| Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
+| Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
+| Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
+| Pathfinding & Movement | 20% | Velocity follow/goto/step-up done; real pathfinding pending |
+| Inventory & Crafting | 10% | Tool selection done; full inventory/crafting pending |
+| Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
+| Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
+| Commands & Permissions | 90% | Core commands + feedback/report/debug/health done; some advanced commands missing |
+| Status & Notifications | 65% | Switch messages, reminders, debug/health done; action bar pending |
+| External AI Server | 85% | Chat/health/key auth/skills/Docker/tests done; /embed/task/feedback pending |
+| Models | 30% | README done; no specific download scripts |
+| Eaglercraft Compatibility | 10% | API usage correct; no live testing |
+| Testing & Quality | 20% | Generator, planner, health tests done; many areas still untested |
+| Documentation | 85% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE done; MODELS/API/CHANGELOG pending |
 
 ---
 
 ## Next Actions (High Priority)
 
-1. Implement real primitive skill executors for the most common 100 skills (chat, follow, stay, place_torch, attack, eat, jump, look, inspect, etc.).
-2. Add basic pathfinding movement so the NPC can walk to a player or block instead of teleporting.
-3. Add real block-breaking and block-placing for tasks like "build shelter" or "get diamonds".
-4. Add inventory scanning and tool selection for mining/crafting/combat.
-5. Implement endgame task sequence: nether portal, blaze rods, eyes of ender, end portal, dragon fight.
-6. Add action bar or boss bar progress reporting for the active task.
-7. Expand the knowledge base from 25 samples to a few hundred core entries.
-8. Implement `/smithai inventory`, `/smithai give`, and `/smithai list` commands.
-9. Add unit tests for the skill planner and task planner.
-10. Build and test after each batch.
+1. Implement real pathfinding (A* or Bukkit navigator) so NPCs can walk to players/blocks without teleporting.
+2. Expand inventory automation beyond tool selection: scan items, pick up, drop, craft simple recipes.
+3. Add real block-breaking timing and drop collection instead of instant `breakNaturally`.
+4. Add mob-specific combat tactics and environmental hazard avoidance.
+5. Implement the endgame sequence with real world effects: nether portal, blaze rods, eyes of ender, end portal, dragon fight.
+6. Expand the knowledge base from sample entries to a few hundred core blocks/mobs/items/recipes/strategies/biomes.
+7. Add `/smithai inventory`, `/smithai give`, and `/smithai list` commands.
+8. Add `/smithai help` in-game help system.
+9. Add more unit tests: knowledge lookup, memory system, training manager, config parsing.
+10. Continue live testing on Spigot/Paper/Eaglercraft when possible.
 
 ---
 
@@ -565,23 +639,59 @@ User triggered a commit with the message `COMMIT!`. This section records every d
 
 #### New and Changed Files
 
-- `todo.md` — this file, updated with 9000-skill changes, status, and next actions.
-- `README.md` — added skill library summary and `/smithai stop` command documentation.
-- `SKILLS.md` — new file documenting the 9000-skill tier system and how to add custom skills.
-- `SmithAI/src/main/java/com/smithai/skills/SkillGenerator.java` — rewritten to generate 9000 broad skills at runtime using plain YAML output; does not depend on Bukkit so it can be tested standalone.
-- `SmithAI/src/main/java/com/smithai/skills/SkillRegistry.java` — already loaded generated skills with tier support; unchanged this commit but now used by the 9000 generator.
-- `SmithAI/src/main/java/com/smithai/skills/SkillDispatcher.java` — new class that maps broad skill categories to concrete Bukkit actions.
-- `SmithAI/src/main/java/com/smithai/skills/SkillExecutor.java` — updated to own a `SkillDispatcher`, queue tasks, and execute them on a scheduler tick.
-- `SmithAI/src/main/java/com/smithai/skills/TaskPlanner.java` — rewritten with broad, non-specific goal mappings for "beat the game", "get diamonds", "build nether portal", "build base", "defend", "farm", "fight", etc.
-- `SmithAI/src/main/java/com/smithai/commands/SmithAICommand.java` — updated `/smithai do` to queue the planned skill list; added `/smithai stop` subcommand.
-- `SmithAI/src/main/java/com/smithai/SmithAIPlugin.java` — added `SkillExecutor` field, initialization, shutdown, and getter.
-- `SmithAI-Server/app.py` — `available_skills()` updated to return realistic broad skill lists by tier instead of repeated placeholders.
+- `todo.md` — updated DONE vs TODO matrix, current snapshot, status summary, and next actions.
+- `README.md` — documented new commands (`goto`, `feedback`, `report`, `reports`, `debug`, `health`), Docker support, build/test/release scripts.
+- `SKILLS.md` — updated implementation status and added `goto` usage example.
+- `FAQ.md` — added feedback and reporting sections.
+- `HOSTING.md` — added Docker and health endpoint notes.
+- `CONTRIBUTING.md` — new file with build instructions, project rules, and style guide.
+- `REPORT_TEMPLATE.md` — new bug report template.
+- `build.sh` — updated to run Maven tests during build.
+- `package-release.sh` — new release bundling script with SHA-256 checksums.
+- `bump-version.sh` — new version-bumping script.
+- `Makefile` — new convenience targets for build/test/release/docker.
+- `.gitattributes` — new file for consistent line endings.
+- `.github/workflows/build.yml` — new CI workflow that builds the plugin and checks the Python server.
+- `docker-compose.yml` — new Docker Compose setup for SmithAI-Server.
+- `SmithAI-Server/Dockerfile` — new Dockerfile for the Python server.
+- `SmithAI-Server/.dockerignore` — new ignore file for Docker builds.
+- `SmithAI-Server/requirements.txt` — marked `llama-cpp-python` as optional and added explanatory comment.
+- `SmithAI-Server/app.py` — added rule-based fallback, action tag parsing, skill prompting, health response model info, better error handling.
+- `SmithAI-Server/test_app.py` — new Python sanity test for action tag parsing.
+- `SmithAI-Server/README.md` — updated with endpoint and config details.
+- `SmithAI/pom.xml` — added JUnit 5 and Surefire for testing.
+- `SmithAI/src/main/java/com/smithai/SmithAIPlugin.java` — added `DebugManager`, `IssueReportManager`, `SubsystemHealth`, subsystem init with error recovery.
+- `SmithAI/src/main/java/com/smithai/config/Config.java` — added `debug.enabled` and `metrics.bstats` keys.
+- `SmithAI/src/main/java/com/smithai/commands/SmithAICommand.java` — added `goto`, `debug`, `health`, `feedback`, `feedback-list`, `report`, `reports` subcommands; fixed report URL truncation.
+- `SmithAI/src/main/java/com/smithai/commands/SmithAITabCompleter.java` — added tab completions for new commands.
+- `SmithAI/src/main/java/com/smithai/commands/SmithAPICommand.java` — added `status` subcommand with connection details.
+- `SmithAI/src/main/java/com/smithai/ai/ExternalAIConnector.java` — parses `action`/`target` from server response and appends action tag to reply.
+- `SmithAI/src/main/java/com/smithai/ai/LocalMiniAI.java` — expanded rule-based responses and added action tag emission.
+- `SmithAI/src/main/java/com/smithai/chat/ChatManager.java` — added automatic negative feedback and report detection.
+- `SmithAI/src/main/java/com/smithai/knowledge/KnowledgeBase.java` — loads biomes.json and expanded knowledge entries.
+- `SmithAI/src/main/java/com/smithai/npc/SmithNPC.java` — replaced teleport stubs with velocity-based movement, step-up/jump logic, and pathfinding target support.
+- `SmithAI/src/main/java/com/smithai/skills/SkillDispatcher.java` — added real executors for block break/place, torch placing, tool selection, targeted combat, and movement.
+- `SmithAI/src/main/java/com/smithai/skills/SkillExecutor.java` — added `cancel()` to tasks, adjusted durations, action tag parsing.
+- `SmithAI/src/main/java/com/smithai/skills/TaskPlanner.java` — greatly expanded common goal mappings (biomes, farming, combat, exploration, etc.).
+- `SmithAI/src/main/java/com/smithai/training/FeedbackManager.java` — new class storing detailed written feedback with context.
+- `SmithAI/src/main/java/com/smithai/training/IssueReportManager.java` — new class persisting bug reports to YAML.
+- `SmithAI/src/main/java/com/smithai/debug/DebugManager.java` — new debug toggle and broadcast helper.
+- `SmithAI/src/main/java/com/smithai/health/SubsystemHealth.java` — new subsystem health tracker.
+- `SmithAI/src/main/resources/config.yml` — added `debug.enabled` and `metrics.bstats` defaults.
+- `SmithAI/src/main/resources/plugin.yml` — updated usage string and aliases.
+- `SmithAI/src/main/resources/knowledge/` — expanded `blocks.json`, `items.json`, `mobs.json`, `recipes.json`, `strategy.json`, and added `biomes.json` and `README.md`.
+- `SmithAI/src/test/java/com/smithai/skills/SkillGeneratorTest.java` — new test verifying skill counts.
+- `SmithAI/src/test/java/com/smithai/skills/TaskPlannerTest.java` — new test verifying task plans.
+- `SmithAI/src/test/java/com/smithai/health/SubsystemHealthTest.java` — new test verifying health states.
+- `models/README.md` — updated with Docker and local/server model notes.
 
 #### Build & Verification
 
-- `mvn clean package` succeeds and produces `SmithAI-2.0.0.jar` (~115KB).
-- Standalone `SkillGenerator.main()` run verified: `java -cp SmithAI-2.0.0.jar com.smithai.skills.SkillGenerator /tmp/skills-test.yml` produced a 45,004-line YAML file with exactly 900 `mini`, 1800 `gpt1`, and 6300 `gpt2` skills.
-- `python3 -m py_compile SmithAI-Server/app.py` passed (syntax check).
+- `mvn -f SmithAI/pom.xml clean test package` succeeds and produces `SmithAI/target/SmithAI-2.0.0.jar` (~138KB).
+- JUnit 5 tests pass: `SkillGeneratorTest` (2 tests), `TaskPlannerTest` (6 tests), `SubsystemHealthTest` (3 tests).
+- `python3 -m py_compile SmithAI-Server/app.py` passes.
+- `python3 SmithAI-Server/test_app.py` passes.
+- `package-release.sh` can be run to bundle a full release with checksums.
 
 #### Skill Counts
 
@@ -592,23 +702,23 @@ User triggered a commit with the message `COMMIT!`. This section records every d
 
 #### Design Decisions This Commit
 
-1. Skills are generated at runtime rather than shipped as a 9000-entry YAML file. This keeps the plugin JAR small (~115KB) and makes the library easy to extend by changing the generator templates.
+1. Skills are generated at runtime rather than shipped as a 9000-entry YAML file. This keeps the plugin JAR small (~138KB) and makes the library easy to extend by changing the generator templates.
 2. Skills are broad (e.g., `conquer_dragon`, `build_base`, `gather_diamonds`) rather than item-specific. This lets the LLM reason about goals and lets the dispatcher decide the concrete steps.
-3. The `SkillDispatcher` categorizes skills by prefix rather than trying to implement 9000 individual methods. This is a practical starter approach while real executors are built out.
-4. The `/smithai do` command now pushes the planned skill sequence into the executor queue, so the NPC will attempt to execute each step in order.
-5. `/smithai stop` clears the queue and stops the current task, giving players a way to cancel misinterpreted requests.
+3. The `SkillDispatcher` categorizes skills by prefix and implements real basic actions for the most common categories (movement, block break/place, torch placing, tool selection, combat). It is still a starter implementation for the full 9000-skill surface.
+4. Player feedback is stored as free-text plus context (active task or chat), so future training can learn from specific mistakes rather than just thumbs-up/down scores.
+5. Issue reports are saved to `plugins/SmithAI/issue_reports.yml` as a fallback when the GitHub issue URL is too long for chat, so bug reports are never lost.
+6. Subsystem health is tracked so non-critical failures can degrade gracefully instead of crashing the entire plugin on startup.
+7. The SmithAI-Server falls back to rule-based responses when the GGUF model is not present, so the plugin/server integration can be tested and used without downloading multi-gigabyte models.
 
 #### Known Limitations / Outstanding Work
 
-- Most skill executors are still stubs or chat placeholders. Real world interaction (mining, placing, crafting, pathfinding) is not yet implemented.
+- Most skill executors are still stubs or chat placeholders. Real world interaction (timed mining, crafting, pathfinding, farming) is only partially implemented.
 - The NPC is still a generic villager; a real player model with robot skin and limbs is pending.
 - Smith-Mini 1.0 is still rule-based; real GGUF inference is pending.
-- The external server does not yet parse skill responses from the LLM or return structured actions.
-- Pathfinding is teleport-based only.
-- The knowledge base has 25 samples; the 29,000-entry target is pending.
-- No unit tests or automated in-game tests yet.
-- No CI/release scripts yet.
-- Eaglercraft and Paper/Spigot 1.21.x live testing is pending.
+- Pathfinding is velocity-based follow/goto; true A* navigation around obstacles is pending.
+- The knowledge base has expanded samples but the 29,000-entry target is pending.
+- Live testing on Spigot/Paper/Eaglercraft is pending.
+- Some external server endpoints (`/embed`, `/task`, `/feedback`) are not yet implemented.
 
 #### Git & Commit Rules
 
@@ -621,11 +731,9 @@ User triggered a commit with the message `COMMIT!`. This section records every d
 
 #### Notes for Next Build
 
-- Focus on the top 10 next actions listed above.
-- The most impactful next step is real pathfinding and movement, because without it the skill queue cannot execute physical tasks like "get diamonds" or "build a base".
-- After movement, implement basic block breaking/placing and inventory/tool selection.
-- Keep testing the build after each batch of changes.
+- Focus on real pathfinding and navigation so the skill queue can execute physical tasks reliably.
+- After movement, expand inventory/crafting automation and timed block breaking with drop collection.
+- Continue adding unit tests for knowledge, memory, training, and config.
 - Update this TODO again when the user says `commit` or `STOP WORK`.
 
 ---
-

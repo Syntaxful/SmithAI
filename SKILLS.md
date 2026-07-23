@@ -65,6 +65,7 @@ Or use commands:
 /smithai do get diamonds
 /smithai do beat the game
 /smithai stop
+/smithai goto 100 64 -200
 ```
 
 ## Adding custom skills
@@ -88,9 +89,12 @@ Then add handling in `com/smithai/skills/SkillDispatcher.java` or a custom plugi
 - [x] Skill dispatcher for broad categories
 - [x] Skill executor queue
 - [x] Task planner for common goals
+- [x] Basic movement (follow, stay, goto coordinates)
+- [x] Basic block breaking and placing
+- [x] Tool selection logic
+- [x] Feedback and issue reporting
 - [ ] Full primitive execution for every skill (in progress)
-- [ ] Pathfinding-based movement
+- [ ] Pathfinding-based movement (navmesh/raycast)
 - [ ] Inventory-aware crafting
-- [ ] Real block-breaking and placing
 - [ ] Mob combat with tactics
 - [ ] Full endgame task sequences

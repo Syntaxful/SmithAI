@@ -29,6 +29,8 @@ public class Config {
     private boolean persistTraining;
     private double followDistance;
     private int pathfinderTimeout;
+    private boolean debugEnabled;
+    private boolean bstatsEnabled;
 
     public Config(FileConfiguration config) {
         this.config = config;
@@ -60,6 +62,8 @@ public class Config {
         this.persistTraining = config.getBoolean("training.persist", true);
         this.followDistance = config.getDouble("npc.followDistance", 3.0);
         this.pathfinderTimeout = config.getInt("npc.pathfinderTimeout", 30);
+        this.debugEnabled = config.getBoolean("debug.enabled", false);
+        this.bstatsEnabled = config.getBoolean("metrics.bstats", false);
     }
 
     public void setExternalApiKey(String apiKey) {
@@ -90,4 +94,6 @@ public class Config {
     public boolean isPersistTraining() { return persistTraining; }
     public double getFollowDistance() { return followDistance; }
     public int getPathfinderTimeout() { return pathfinderTimeout; }
+    public boolean isDebugEnabled() { return debugEnabled; }
+    public boolean isBstatsEnabled() { return bstatsEnabled; }
 }

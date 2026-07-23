@@ -6,10 +6,14 @@ import com.smithai.commands.SmithAICommand;
 import com.smithai.commands.SmithAITabCompleter;
 import com.smithai.commands.SmithAPICommand;
 import com.smithai.config.Config;
+import com.smithai.debug.DebugManager;
+import com.smithai.health.SubsystemHealth;
 import com.smithai.memory.MemoryManager;
 import com.smithai.npc.NPCManager;
 import com.smithai.skills.SkillExecutor;
 import com.smithai.skills.SkillRegistry;
+import com.smithai.training.FeedbackManager;
+import com.smithai.training.IssueReportManager;
 import com.smithai.training.TrainingManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -30,6 +34,10 @@ public class SmithAIPlugin extends JavaPlugin {
     private SkillRegistry skillRegistry;
     private SkillExecutor skillExecutor;
     private TrainingManager trainingManager;
+    private FeedbackManager feedbackManager;
+    private IssueReportManager issueReportManager;
+    private DebugManager debugManager;
+    private SubsystemHealth subsystemHealth;
     private int reminderTaskId = -1;
     private final Random random = ThreadLocalRandom.current();
 
@@ -39,16 +47,20 @@ public class SmithAIPlugin extends JavaPlugin {
         long startTime = System.currentTimeMillis();
 
         saveDefaultConfig();
+        subsystemHealth = new SubsystemHealth(this);
 
         try {
-            this.pluginConfig = new Config(getConfig());
-            this.memoryManager = new MemoryManager(this);
-            this.skillRegistry = new SkillRegistry(this);
-            this.skillExecutor = new SkillExecutor(this);
-            this.trainingManager = new TrainingManager(this);
-            this.aiManager = new AIManager(this);
-            this.npcManager = new NPCManager(this);
-            this.chatManager = new ChatManager(this);
+            this.pluginConfig = initSubsystem(SubsystemHealth.Subsystem.AI, () -> new Config(getConfig()), "Configuration loaded");
+            this.memoryManager = initSubsystem(SubsystemHealth.Subsystem.MEMORY, () -> new MemoryManager(this), "Memory manager ready");
+            this.skillRegistry = initSubsystem(SubsystemHealth.Subsystem.SKILLS, () -> new SkillRegistry(this), "Skill registry ready");
+            this.skillExecutor = initSubsystem(SubsystemHealth.Subsystem.SKILLS, () -> new SkillExecutor(this), "Skill executor ready");
+            this.trainingManager = initSubsystem(SubsystemHealth.Subsystem.TRAINING, () -> new TrainingManager(this), "Training manager ready");
+            this.feedbackManager = initSubsystem(SubsystemHealth.Subsystem.FEEDBACK, () -> new FeedbackManager(this), "Feedback manager ready");
+            this.issueReportManager = initSubsystem(SubsystemHealth.Subsystem.FEEDBACK, () -> new IssueReportManager(this), "Issue report manager ready");
+            this.debugManager = new DebugManager(this);
+            this.aiManager = initSubsystem(SubsystemHealth.Subsystem.AI, () -> new AIManager(this), "AI manager ready");
+            this.npcManager = initSubsystem(SubsystemHealth.Subsystem.NPC, () -> new NPCManager(this), "NPC manager ready");
+            this.chatManager = initSubsystem(SubsystemHealth.Subsystem.CHAT, () -> new ChatManager(this), "Chat manager ready");
 
             getCommand("smithai").setExecutor(new SmithAICommand(this));
             getCommand("smithai").setTabCompleter(new SmithAITabCompleter());
@@ -67,9 +79,32 @@ public class SmithAIPlugin extends JavaPlugin {
             if (pluginConfig.isExternalEnabled()) {
                 getLogger().info("External AI configured: " + pluginConfig.getExternalUrl());
             }
+            if (!subsystemHealth.isHealthy()) {
+                getLogger().warning("One or more subsystems are not healthy. Check /smithai status for admins.");
+            }
         } catch (Exception e) {
             getLogger().log(Level.SEVERE, "Failed to enable SmithAI", e);
             getServer().getPluginManager().disablePlugin(this);
+        }
+    }
+
+    @FunctionalInterface
+    private interface Initializer<T> {
+        T init() throws Exception;
+    }
+
+    private <T> T initSubsystem(SubsystemHealth.Subsystem subsystem, Initializer<T> initializer, String successMessage) {
+        try {
+            T result = initializer.init();
+            subsystemHealth.markHealthy(subsystem, successMessage);
+            return result;
+        } catch (Exception e) {
+            getLogger().log(Level.WARNING, "Subsystem " + subsystem + " failed to initialize: " + e.getMessage(), e);
+            subsystemHealth.markDegraded(subsystem, e.getMessage());
+            if (subsystem == SubsystemHealth.Subsystem.AI || subsystem == SubsystemHealth.Subsystem.NPC || subsystem == SubsystemHealth.Subsystem.CHAT) {
+                throw new RuntimeException("Critical subsystem failed: " + subsystem, e);
+            }
+            return null;
         }
     }
 
@@ -90,6 +125,12 @@ public class SmithAIPlugin extends JavaPlugin {
         }
         if (memoryManager != null) {
             memoryManager.saveAll();
+        }
+        if (feedbackManager != null) {
+            feedbackManager.save();
+        }
+        if (issueReportManager != null) {
+            issueReportManager.save();
         }
         saveConfig();
         getLogger().info("SmithAI disabled");
@@ -186,5 +227,21 @@ public class SmithAIPlugin extends JavaPlugin {
 
     public TrainingManager getTrainingManager() {
         return trainingManager;
+    }
+
+    public FeedbackManager getFeedbackManager() {
+        return feedbackManager;
+    }
+
+    public IssueReportManager getIssueReportManager() {
+        return issueReportManager;
+    }
+
+    public DebugManager getDebugManager() {
+        return debugManager;
+    }
+
+    public SubsystemHealth getSubsystemHealth() {
+        return subsystemHealth;
     }
 }

@@ -49,31 +49,7 @@ public class ExternalAIConnector {
         Config config = plugin.getPluginConfig();
         String url = normalizeUrl(config.getExternalUrl());
 
-        JSONObject body = new JSONObject();
-        JSONArray messages = new JSONArray();
-        for (Conversation.Message msg : conversation.getMessages()) {
-            JSONObject m = new JSONObject();
-            m.put("role", msg.getRole());
-            m.put("content", msg.getContent());
-            messages.put(m);
-        }
-        JSONObject userMsg = new JSONObject();
-        userMsg.put("role", "user");
-        userMsg.put("content", message);
-        messages.put(userMsg);
-
-        body.put("messages", messages);
-        body.put("model", config.getExternalModel());
-        if (task != null) {
-            body.put("task", task);
-        }
-        if (knowledge != null && !knowledge.isEmpty()) {
-            body.put("knowledge", new JSONArray(knowledge));
-        }
-        if (skills != null && !skills.isEmpty()) {
-            body.put("skills", new JSONArray(skills));
-        }
-        body.put("context", new JSONObject().put("player", player.getName()));
+        JSONObject body = buildChatBody(player, message, conversation, task, knowledge, skills);
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
             .uri(URI.create(url + "/chat"))
@@ -95,8 +71,45 @@ public class ExternalAIConnector {
                     throw new RuntimeException("External AI returned status " + response.statusCode());
                 }
                 JSONObject json = new JSONObject(response.body());
-                return json.optString("reply", "No response from SmithGPT.");
+                String reply = json.optString("reply", "No response from SmithGPT.");
+                if (json.has("action")) {
+                    String action = json.optString("action", "");
+                    String actionTarget = json.optString("target", "");
+                    if (!action.isEmpty()) {
+                        reply += " [action:" + action + "," + actionTarget + "]";
+                    }
+                }
+                return reply;
             });
+    }
+
+    private JSONObject buildChatBody(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills) {
+        JSONObject body = new JSONObject();
+        JSONArray messages = new JSONArray();
+        for (Conversation.Message msg : conversation.getMessages()) {
+            JSONObject m = new JSONObject();
+            m.put("role", msg.getRole());
+            m.put("content", msg.getContent());
+            messages.put(m);
+        }
+        JSONObject userMsg = new JSONObject();
+        userMsg.put("role", "user");
+        userMsg.put("content", message);
+        messages.put(userMsg);
+
+        body.put("messages", messages);
+        body.put("model", plugin.getPluginConfig().getExternalModel());
+        if (task != null) {
+            body.put("task", task);
+        }
+        if (knowledge != null && !knowledge.isEmpty()) {
+            body.put("knowledge", new JSONArray(knowledge));
+        }
+        if (skills != null && !skills.isEmpty()) {
+            body.put("skills", new JSONArray(skills));
+        }
+        body.put("context", new JSONObject().put("player", player.getName()));
+        return body;
     }
 
     private String normalizeUrl(String url) {

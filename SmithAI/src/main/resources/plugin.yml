@@ -8,7 +8,7 @@ description: Official SmithAI plugin - trainable AI companion with Smith-Mini, S
 commands:
   smithai:
     description: Main SmithAI command.
-    usage: /smithai <spawn|despawn|follow|stay|do|status|reload|train|memory|model>
+    usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|reload|train|feedback|report|reports|memory>
     aliases: [sai]
   smithapi:
     description: Set the API key for the external SmithGPT server.

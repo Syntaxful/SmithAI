@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  smithai-server:
+    build: ./SmithAI-Server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./SmithAI-Server/models:/app/models:ro
+      - ./SmithAI-Server/config.yml:/app/config.yml:ro
+    environment:
+      - SMITHAI_CONFIG=/app/config.yml
+    restart: unless-stopped

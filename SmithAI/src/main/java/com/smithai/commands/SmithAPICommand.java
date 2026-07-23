@@ -23,7 +23,7 @@ public class SmithAPICommand implements CommandExecutor {
 
         Config config = plugin.getPluginConfig();
 
-        if (args.length == 0) {
+        if (args.length == 0 || args[0].equalsIgnoreCase("status")) {
             String key = config.getExternalApiKey();
             if (key == null || key.isEmpty()) {
                 sender.sendMessage("§eNo API key is set. Use §f/SmithAPI set SMA-... §eto set one.");
@@ -32,6 +32,9 @@ public class SmithAPICommand implements CommandExecutor {
                 String masked = maskKey(key);
                 sender.sendMessage("§aSmithAI API key is set: §f" + masked);
                 sender.sendMessage("§eExternal server: §f" + config.getExternalUrl());
+                sender.sendMessage("§eExternal model: §f" + config.getExternalModel());
+                sender.sendMessage("§eConnected: §f" + plugin.getAiManager().isExternalConnected());
+                sender.sendMessage("§eActive brain: §f" + plugin.getAiManager().getActiveModelName());
             }
             return true;
         }
@@ -52,7 +55,7 @@ public class SmithAPICommand implements CommandExecutor {
             return true;
         }
 
-        sender.sendMessage("§eUsage: §f/SmithAPI set <SMA-...> §eor §f/SmithAPI");
+        sender.sendMessage("§eUsage: §f/SmithAPI set <SMA-...> §eor §f/SmithAPI status");
         return true;
     }
 

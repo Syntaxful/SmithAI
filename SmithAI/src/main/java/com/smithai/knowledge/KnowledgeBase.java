@@ -8,7 +8,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class KnowledgeBase {
@@ -27,6 +28,7 @@ public class KnowledgeBase {
         loadResource("knowledge/items.json");
         loadResource("knowledge/recipes.json");
         loadResource("knowledge/strategy.json");
+        loadResource("knowledge/biomes.json");
     }
 
     private void loadResource(String path) {
@@ -94,6 +96,7 @@ public class KnowledgeBase {
         public boolean matches(String query) {
             if (name.toLowerCase().contains(query)) return true;
             if (description.toLowerCase().contains(query)) return true;
+            if (category.toLowerCase().contains(query)) return true;
             for (String tag : tags) {
                 if (tag.toLowerCase().contains(query)) return true;
             }

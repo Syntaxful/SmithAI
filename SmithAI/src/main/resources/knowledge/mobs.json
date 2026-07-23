@@ -21,6 +21,34 @@
     "tags": ["mob", "hostile", "overworld", "explosive"]
   },
   {
+    "id": "minecraft:spider",
+    "category": "mob",
+    "name": "Spider",
+    "description": "Spiders are hostile at night and neutral in daylight. They can climb walls and drop string and spider eyes.",
+    "tags": ["mob", "hostile", "overworld"]
+  },
+  {
+    "id": "minecraft:enderman",
+    "category": "mob",
+    "name": "Enderman",
+    "description": "A tall hostile mob that teleports and picks up blocks. It becomes aggressive if looked at directly. Drops ender pearls.",
+    "tags": ["mob", "hostile", "overworld", "end"]
+  },
+  {
+    "id": "minecraft:witch",
+    "category": "mob",
+    "name": "Witch",
+    "description": "Witches throw splash potions at players. They spawn in swamps and during raids. Drop potion ingredients.",
+    "tags": ["mob", "hostile", "overworld", "ranged"]
+  },
+  {
+    "id": "minecraft:slime",
+    "category": "mob",
+    "name": "Slime",
+    "description": "Slimes spawn in swamp biomes and slime chunks. They split into smaller slimes when killed. Drop slime balls.",
+    "tags": ["mob", "hostile", "overworld"]
+  },
+  {
     "id": "minecraft:blaze",
     "category": "mob",
     "name": "Blaze",
@@ -28,10 +56,94 @@
     "tags": ["mob", "hostile", "nether", "blaze"]
   },
   {
+    "id": "minecraft:ghast",
+    "category": "mob",
+    "name": "Ghast",
+    "description": "A flying hostile mob in the Nether that shoots explosive fireballs. Drops ghast tears and gunpowder.",
+    "tags": ["mob", "hostile", "nether", "ranged"]
+  },
+  {
     "id": "minecraft:ender_dragon",
     "category": "mob",
     "name": "Ender Dragon",
     "description": "The final boss of Minecraft. It lives in the End and is defeated by destroying the end crystals, then attacking the dragon when it perches.",
     "tags": ["mob", "boss", "end", "dragon"]
+  },
+  {
+    "id": "minecraft:wither",
+    "category": "mob",
+    "name": "Wither",
+    "description": "A boss mob spawned by placing 4 soul sand in a T shape and 3 wither skeleton skulls on top. Drops a nether star.",
+    "tags": ["mob", "boss", "nether"]
+  },
+  {
+    "id": "minecraft:wither_skeleton",
+    "category": "mob",
+    "name": "Wither Skeleton",
+    "description": "Wither skeletons spawn in Nether fortresses. They inflict the Wither effect and drop coal, bones, and rarely skulls.",
+    "tags": ["mob", "hostile", "nether"]
+  },
+  {
+    "id": "minecraft:piglin",
+    "category": "mob",
+    "name": "Piglin",
+    "description": "Piglins are neutral if the player wears gold armor. They become hostile if attacked or if gold is not worn. They barter with gold ingots.",
+    "tags": ["mob", "neutral", "nether"]
+  },
+  {
+    "id": "minecraft:hoglin",
+    "category": "mob",
+    "name": "Hoglin",
+    "description": "Hoglins are hostile mobs found in Crimson Forests. They drop pork and leather. They are scared of warped fungi.",
+    "tags": ["mob", "hostile", "nether"]
+  },
+  {
+    "id": "minecraft:zombified_piglin",
+    "category": "mob",
+    "name": "Zombified Piglin",
+    "description": "Zombified piglins are neutral unless attacked. They spawn in the Nether and drop gold nuggets and rotten flesh.",
+    "tags": ["mob", "neutral", "nether"]
+  },
+  {
+    "id": "minecraft:cow",
+    "category": "mob",
+    "name": "Cow",
+    "description": "Cows are passive mobs that spawn in grasslands. They drop leather and raw beef, and can be milked with a bucket.",
+    "tags": ["mob", "passive", "overworld", "food"]
+  },
+  {
+    "id": "minecraft:pig",
+    "category": "mob",
+    "name": "Pig",
+    "description": "Pigs are passive mobs that spawn in grasslands. They drop raw porkchops and can be ridden with a saddle and carrot on a stick.",
+    "tags": ["mob", "passive", "overworld", "food"]
+  },
+  {
+    "id": "minecraft:sheep",
+    "category": "mob",
+    "name": "Sheep",
+    "description": "Sheep are passive mobs that drop wool and mutton. They can be sheared for wool and dyed different colors.",
+    "tags": ["mob", "passive", "overworld"]
+  },
+  {
+    "id": "minecraft:chicken",
+    "category": "mob",
+    "name": "Chicken",
+    "description": "Chickens are passive birds that drop feathers and raw chicken. They lay eggs periodically.",
+    "tags": ["mob", "passive", "overworld", "food"]
+  },
+  {
+    "id": "minecraft:villager",
+    "category": "mob",
+    "name": "Villager",
+    "description": "Villagers live in villages and trade items for emeralds. They have professions based on their workstation block.",
+    "tags": ["mob", "passive", "overworld", "trading"]
+  },
+  {
+    "id": "minecraft:iron_golem",
+    "category": "mob",
+    "name": "Iron Golem",
+    "description": "Iron golems are neutral mobs that protect villagers. They can be crafted from iron blocks and a carved pumpkin. Drop iron ingots and poppies.",
+    "tags": ["mob", "neutral", "overworld"]
   }
 ]

@@ -1,8 +1,11 @@
 package com.smithai.npc;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
@@ -12,6 +15,10 @@ public class SmithNPC {
     private final Entity entity;
     private final String name;
     private Player following = null;
+    private Location moveTarget = null;
+    private boolean pathfinding = false;
+    private long pathStartTime = 0;
+    private long lastMoveTime = 0;
 
     public SmithNPC(UUID id, Entity entity, String name) {
         this.id = id;
@@ -55,6 +62,9 @@ public class SmithNPC {
         Location loc = getLocation();
         if (loc != null && target != null && target.getWorld().equals(loc.getWorld())) {
             loc.setDirection(target.clone().subtract(loc).toVector());
+            if (entity instanceof LivingEntity) {
+                ((LivingEntity) entity).setAI(false);
+            }
             entity.teleport(loc);
         }
     }
@@ -67,10 +77,14 @@ public class SmithNPC {
 
     public void follow(Player player) {
         this.following = player;
+        this.moveTarget = null;
+        this.pathfinding = false;
     }
 
     public void stay() {
         this.following = null;
+        this.moveTarget = null;
+        this.pathfinding = false;
     }
 
     public boolean isFollowing() {
@@ -81,21 +95,101 @@ public class SmithNPC {
         return following;
     }
 
+    public void setMoveTarget(Location target) {
+        this.moveTarget = target != null ? target.clone() : null;
+        this.pathfinding = target != null;
+        this.pathStartTime = System.currentTimeMillis();
+        this.lastMoveTime = System.currentTimeMillis();
+    }
+
+    public Location getMoveTarget() {
+        return moveTarget;
+    }
+
+    public boolean isPathfinding() {
+        return pathfinding;
+    }
+
+    public void cancelPathfinding() {
+        this.moveTarget = null;
+        this.pathfinding = false;
+    }
+
     public void tick(double followDistance) {
-        if (following == null || !following.isOnline()) {
+        if (following != null && following.isOnline()) {
+            tickFollow(followDistance);
             return;
         }
+        if (pathfinding && moveTarget != null) {
+            tickPathfinding();
+        }
+    }
+
+    private void tickFollow(double followDistance) {
         Location target = following.getLocation();
         Location current = getLocation();
         if (current == null || !current.getWorld().equals(target.getWorld())) {
             return;
         }
-        if (current.distanceSquared(target) > followDistance * followDistance) {
+        double distSq = current.distanceSquared(target);
+        if (distSq <= followDistance * followDistance) {
             lookAt(target);
-            // Simple teleport follow; a full implementation would use pathfinding.
-            Location moveTo = target.clone().subtract(current.toVector().subtract(target.toVector()).normalize().multiply(followDistance));
-            moveTo.setY(target.getY());
-            teleport(moveTo);
+            return;
+        }
+        if (distSq > 64 * 64) {
+            teleport(target);
+            return;
+        }
+        moveToward(target, 0.25);
+        lookAt(target);
+    }
+
+    private void tickPathfinding() {
+        Location current = getLocation();
+        if (current == null || moveTarget == null || !current.getWorld().equals(moveTarget.getWorld())) {
+            cancelPathfinding();
+            return;
+        }
+        if (current.distanceSquared(moveTarget) <= 2.5 * 2.5) {
+            cancelPathfinding();
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (now - lastMoveTime > 150) {
+            moveToward(moveTarget, 0.25);
+            lastMoveTime = now;
+        }
+        lookAt(moveTarget);
+    }
+
+    private void moveToward(Location target, double speed) {
+        if (entity == null || entity.isDead()) return;
+        Location current = getLocation();
+        if (current == null) return;
+
+        Vector direction = target.toVector().subtract(current.toVector()).normalize();
+        Vector velocity = direction.multiply(speed).setY(entity.getVelocity().getY());
+
+        Block blockAhead = current.clone().add(direction.getX(), 0, direction.getZ()).getBlock();
+        Block blockAboveAhead = blockAhead.getRelative(0, 1, 0);
+        Block blockFeet = current.getBlock();
+        Block blockGround = current.clone().add(0, -1, 0).getBlock();
+
+        // Simple step-up / jump logic
+        if (!blockAhead.isPassable() && blockAboveAhead.isPassable() && blockFeet.isPassable()) {
+            velocity.setY(0.45);
+        } else if (blockGround.isPassable() && blockFeet.isPassable()) {
+            // falling, keep gravity
+        } else {
+            velocity.setY(Math.min(0.0, velocity.getY()));
+        }
+
+        entity.setVelocity(velocity);
+    }
+
+    public void jump() {
+        if (entity != null && !entity.isDead()) {
+            entity.setVelocity(entity.getVelocity().setY(0.5));
         }
     }
 }

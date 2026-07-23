@@ -1,0 +1,93 @@
+[
+  {
+    "id": "biome:plains",
+    "category": "biome",
+    "name": "Plains",
+    "description": "A flat biome with grass and flowers. Villages and passive mobs are common here. Good for building and early farms.",
+    "tags": ["biome", "overworld", "village", "farming"]
+  },
+  {
+    "id": "biome:forest",
+    "category": "biome",
+    "name": "Forest",
+    "description": "A biome with many oak and birch trees. Good for wood. Wolves and foxes can spawn here.",
+    "tags": ["biome", "overworld", "wood"]
+  },
+  {
+    "id": "biome:desert",
+    "category": "biome",
+    "name": "Desert",
+    "description": "A dry biome with sand and cacti. Desert villages and desert temples can spawn here. It does not rain.",
+    "tags": ["biome", "overworld", "sand", "village"]
+  },
+  {
+    "id": "biome:mountains",
+    "category": "biome",
+    "name": "Mountains",
+    "description": "A tall biome with exposed stone and ores. Emerald ore and silverfish blocks can be found here. Goats spawn here.",
+    "tags": ["biome", "overworld", "ore", "emerald"]
+  },
+  {
+    "id": "biome:swamp",
+    "category": "biome",
+    "name": "Swamp",
+    "description": "A wetland biome with shallow water, lily pads, and mangroves. Witches and slimes spawn here. Witch huts can be found.",
+    "tags": ["biome", "overworld", "slime", "witch"]
+  },
+  {
+    "id": "biome:jungle",
+    "category": "biome",
+    "name": "Jungle",
+    "description": "A dense biome with tall trees and vines. Ocelots, parrots, and pandas spawn here. Jungle temples can be found.",
+    "tags": ["biome", "overworld", "wood", "temple"]
+  },
+  {
+    "id": "biome:ocean",
+    "category": "biome",
+    "name": "Ocean",
+    "description": "A large body of water. Squid, fish, dolphins, and drowned spawn here. Ocean monuments and shipwrecks can be found.",
+    "tags": ["biome", "overworld", "water", "shipwreck"]
+  },
+  {
+    "id": "biome:nether_wastes",
+    "category": "biome",
+    "name": "Nether Wastes",
+    "description": "The most common Nether biome. It is made of netherrack and has lava oceans. Piglins and ghasts spawn here.",
+    "tags": ["biome", "nether"]
+  },
+  {
+    "id": "biome:crimson_forest",
+    "category": "biome",
+    "name": "Crimson Forest",
+    "description": "A red Nether biome with huge crimson fungi. Hoglins and piglins spawn here. Good for crimson wood and pork.",
+    "tags": ["biome", "nether", "wood", "hoglin"]
+  },
+  {
+    "id": "biome:warped_forest",
+    "category": "biome",
+    "name": "Warped Forest",
+    "description": "A blue Nether biome with huge warped fungi. Endermen are very common here. Good for warped wood and ender pearls.",
+    "tags": ["biome", "nether", "wood", "enderman"]
+  },
+  {
+    "id": "biome:soul_sand_valley",
+    "category": "biome",
+    "name": "Soul Sand Valley",
+    "description": "A Nether biome made of soul sand and soul soil. Skeletons and ghasts spawn here. Movement is slowed by soul sand.",
+    "tags": ["biome", "nether", "soul_sand"]
+  },
+  {
+    "id": "biome:basalt_deltas",
+    "category": "biome",
+    "name": "Basalt Deltas",
+    "description": "A volcanic Nether biome with basalt and blackstone. Magma cubes and ghasts spawn here. Dangerous terrain.",
+    "tags": ["biome", "nether", "blackstone", "magmacube"]
+  },
+  {
+    "id": "biome:end_highlands",
+    "category": "biome",
+    "name": "End Highlands",
+    "description": "The main End biome where chorus plants and end cities generate. Shulkers and endermen are common. Elytra can be found in end cities.",
+    "tags": ["biome", "end", "chorus", "end_city"]
+  }
+]

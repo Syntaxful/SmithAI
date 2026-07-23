@@ -1,0 +1,57 @@
+name: Build SmithAI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-plugin:
+    name: Build Minecraft Plugin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build and test with Maven
+        run: mvn -f SmithAI/pom.xml clean test package
+
+      - name: Upload plugin JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmithAI-plugin
+          path: SmithAI/target/SmithAI-*.jar
+
+  check-server:
+    name: Check SmithAI-Server Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r SmithAI-Server/requirements.txt
+
+      - name: Check Python syntax and run tests
+        run: |
+          python -m py_compile SmithAI-Server/app.py
+          python SmithAI-Server/test_app.py

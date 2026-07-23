@@ -40,13 +40,14 @@ public class SkillExecutor {
         if (taskId != -1) {
             plugin.getServer().getScheduler().cancelTask(taskId);
         }
-        queue.clear();
-        current = null;
+        cancelAll();
     }
 
     public void queue(SmithNPC npc, String skillName, Map<String, Object> parameters, Player contextPlayer) {
         if (queue.size() >= plugin.getPluginConfig().getMaxSkillQueueSize()) {
-            plugin.getLogger().warning("Skill queue full; dropping task: " + skillName);
+            if (contextPlayer != null) {
+                npc.sendMessage(contextPlayer, "Skill queue is full.");
+            }
             return;
         }
         queue.add(new SkillTask(npc, skillName, parameters, contextPlayer));
@@ -54,12 +55,15 @@ public class SkillExecutor {
 
     public void queuePlan(SmithNPC npc, List<String> plan, Player contextPlayer) {
         for (String skill : plan) {
-            queue(npc, skill, Collections.emptyMap(), contextPlayer);
+            queue.add(new SkillTask(npc, skill, Collections.emptyMap(), contextPlayer));
         }
     }
 
     public void cancelAll() {
         queue.clear();
+        if (current != null) {
+            current.cancel();
+        }
         current = null;
     }
 
@@ -95,8 +99,8 @@ public class SkillExecutor {
 
         public void tick() {
             ticks++;
-            // Simple skills finish quickly; composite skills stay active longer.
-            int duration = skillName.contains("conquer") || skillName.contains("master") || skillName.contains("build") || skillName.contains("raid") ? 60 : 20;
+            int duration = skillName.contains("conquer") || skillName.contains("master") || skillName.contains("build") || skillName.contains("raid") || skillName.contains("explore")
+                ? 80 : 25;
             if (ticks >= duration) {
                 done = true;
             }
@@ -104,6 +108,10 @@ public class SkillExecutor {
 
         public boolean isDone() {
             return done;
+        }
+
+        public void cancel() {
+            done = true;
         }
     }
 }

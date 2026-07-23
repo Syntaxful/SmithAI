@@ -15,6 +15,7 @@ public class TaskPlanner {
         ));
         TASKS.put("get diamonds", TASKS.get("diamonds"));
         TASKS.put("find diamonds", TASKS.get("diamonds"));
+        TASKS.put("mine diamonds", TASKS.get("diamonds"));
 
         TASKS.put("nether portal", Arrays.asList(
             "mine_obsidian", "gather_obsidian", "craft_flint_and_steel", "make_obsidian_portal_frame",
@@ -23,6 +24,7 @@ public class TaskPlanner {
         TASKS.put("make nether portal", TASKS.get("nether portal"));
         TASKS.put("build portal", TASKS.get("nether portal"));
         TASKS.put("portal", TASKS.get("nether portal"));
+        TASKS.put("nether", TASKS.get("nether portal"));
 
         TASKS.put("beat the game", Arrays.asList(
             "chop_tree", "gather_wood", "craft_tool", "mine_stone", "gather_stone",
@@ -48,12 +50,15 @@ public class TaskPlanner {
             "gather_wood", "gather_stone", "craft_tool", "build_house", "build_wall", "build_chest", "place_furnace",
             "place_crafting_table", "place_lights", "secure_area", "build_defensive_wall", "patrol_area"
         ));
+        TASKS.put("make a base", TASKS.get("build base"));
         TASKS.put("secure base", Arrays.asList("place_lights", "secure_area", "build_defensive_wall", "patrol_area", "defend_area"));
 
         // Farming and food
         TASKS.put("farm", Arrays.asList("prepare_soil", "plant_seeds", "water_crops", "harvest_crops", "replant_crops"));
+        TASKS.put("make a farm", TASKS.get("farm"));
         TASKS.put("get food", Arrays.asList("hunt_passive_mob", "gather_crop", "cook_food", "eat_food"));
         TASKS.put("cook food", Arrays.asList("gather_meat", "gather_coal", "craft_furnace", "smelt_food", "eat_food"));
+        TASKS.put("food", TASKS.get("get food"));
 
         // Combat and defense
         TASKS.put("defend", Arrays.asList("equip_weapon", "equip_armor", "patrol_area", "defend_area", "fight_hostile_mob"));
@@ -67,6 +72,8 @@ public class TaskPlanner {
         TASKS.put("explore cave", Arrays.asList("prepare_supplies", "place_torches", "explore_cave", "mine_resources", "avoid_mob"));
         TASKS.put("find iron", Arrays.asList("explore_cave", "mine_iron", "smelt_iron"));
         TASKS.put("get iron", TASKS.get("find iron"));
+        TASKS.put("coal", Arrays.asList("explore_cave", "mine_coal", "gather_coal"));
+        TASKS.put("get coal", TASKS.get("coal"));
 
         // Advanced automation
         TASKS.put("automate", Arrays.asList("gather_resources", "build_autonomous_mine", "build_mob_grinder", "build_crop_farm", "optimize"));
@@ -79,10 +86,38 @@ public class TaskPlanner {
         TASKS.put("follow", Arrays.asList("follow_player"));
         TASKS.put("come", Arrays.asList("teleport_to_player"));
         TASKS.put("stay", Arrays.asList("stay"));
+        TASKS.put("go home", Arrays.asList("teleport_to_spawn"));
+        TASKS.put("spawn", Arrays.asList("teleport_to_spawn"));
+
+        // Common early-game tasks
+        TASKS.put("wood", Arrays.asList("chop_tree", "gather_wood", "craft_planks"));
+        TASKS.put("get wood", TASKS.get("wood"));
+        TASKS.put("stone", Arrays.asList("chop_tree", "craft_wooden_pickaxe", "mine_stone", "gather_stone"));
+        TASKS.put("get stone", TASKS.get("stone"));
+        TASKS.put("tools", Arrays.asList("chop_tree", "gather_wood", "craft_crafting_table", "craft_wooden_pickaxe", "mine_stone", "craft_stone_tools"));
+        TASKS.put("make tools", TASKS.get("tools"));
+        TASKS.put("pickaxe", TASKS.get("tools"));
+        TASKS.put("torch", Arrays.asList("gather_coal", "craft_stick", "craft_torch"));
+        TASKS.put("make torches", TASKS.get("torch"));
+
+        // Biome-specific
+        TASKS.put("find village", Arrays.asList("explore_world", "scout_location", "find_village"));
+        TASKS.put("village", TASKS.get("find village"));
+        TASKS.put("find fortress", Arrays.asList("enter_portal", "explore_nether", "find_fortress"));
+        TASKS.put("fortress", TASKS.get("find fortress"));
+        TASKS.put("find stronghold", Arrays.asList("craft_eyes_of_ender", "locate_stronghold", "travel_to_stronghold"));
+        TASKS.put("stronghold", TASKS.get("find stronghold"));
     }
 
     public static List<String> plan(String command) {
         String lower = command.toLowerCase().trim();
+        // Try exact matches first
+        for (Map.Entry<String, List<String>> entry : TASKS.entrySet()) {
+            if (lower.equals(entry.getKey())) {
+                return new ArrayList<>(entry.getValue());
+            }
+        }
+        // Then substring matches
         for (Map.Entry<String, List<String>> entry : TASKS.entrySet()) {
             if (lower.contains(entry.getKey())) {
                 return new ArrayList<>(entry.getValue());
@@ -95,6 +130,6 @@ public class TaskPlanner {
         if (steps.isEmpty()) {
             return "I don't know how to do that yet. Try 'get diamonds', 'make nether portal', 'beat the game', 'build base', or 'fight'.";
         }
-        return "I'll handle that by doing these steps: " + String.join(" → ", steps);
+        return "I'll handle that by doing these steps: " + String.join(" -> ", steps);
     }
 }

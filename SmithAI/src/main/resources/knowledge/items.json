@@ -28,10 +28,262 @@
     "tags": ["item", "tool", "pickaxe", "diamond"]
   },
   {
+    "id": "minecraft:wooden_axe",
+    "category": "item",
+    "name": "Wooden Axe",
+    "description": "The lowest tier axe. Used to chop wood faster. Crafted from 3 planks and 2 sticks.",
+    "tags": ["item", "tool", "axe", "wood"]
+  },
+  {
+    "id": "minecraft:stone_axe",
+    "category": "item",
+    "name": "Stone Axe",
+    "description": "A basic axe made from cobblestone. Chops wood faster than wooden. Crafted from 3 cobblestone and 2 sticks.",
+    "tags": ["item", "tool", "axe", "stone"]
+  },
+  {
+    "id": "minecraft:iron_axe",
+    "category": "item",
+    "name": "Iron Axe",
+    "description": "A durable iron axe. Chops wood quickly and can be used as a weapon. Crafted from 3 iron ingots and 2 sticks.",
+    "tags": ["item", "tool", "axe", "iron"]
+  },
+  {
+    "id": "minecraft:diamond_axe",
+    "category": "item",
+    "name": "Diamond Axe",
+    "description": "A very fast, durable axe. Excellent for chopping wood and combat. Crafted from 3 diamonds and 2 sticks.",
+    "tags": ["item", "tool", "axe", "diamond"]
+  },
+  {
+    "id": "minecraft:wooden_sword",
+    "category": "item",
+    "name": "Wooden Sword",
+    "description": "The lowest tier sword. Crafted from 2 planks and 1 stick. Deals low damage.",
+    "tags": ["item", "weapon", "sword", "wood"]
+  },
+  {
+    "id": "minecraft:stone_sword",
+    "category": "item",
+    "name": "Stone Sword",
+    "description": "A basic sword made from cobblestone. Crafted from 2 cobblestone and 1 stick.",
+    "tags": ["item", "weapon", "sword", "stone"]
+  },
+  {
+    "id": "minecraft:iron_sword",
+    "category": "item",
+    "name": "Iron Sword",
+    "description": "A durable iron sword. Good damage and speed. Crafted from 2 iron ingots and 1 stick.",
+    "tags": ["item", "weapon", "sword", "iron"]
+  },
+  {
+    "id": "minecraft:diamond_sword",
+    "category": "item",
+    "name": "Diamond Sword",
+    "description": "A powerful diamond sword. High damage and durability. Crafted from 2 diamonds and 1 stick.",
+    "tags": ["item", "weapon", "sword", "diamond"]
+  },
+  {
+    "id": "minecraft:wooden_shovel",
+    "category": "item",
+    "name": "Wooden Shovel",
+    "description": "A low tier shovel for digging dirt, sand, and gravel. Crafted from 1 plank and 2 sticks.",
+    "tags": ["item", "tool", "shovel", "wood"]
+  },
+  {
+    "id": "minecraft:stone_shovel",
+    "category": "item",
+    "name": "Stone Shovel",
+    "description": "A basic shovel made from cobblestone. Digs soft blocks faster than wooden. Crafted from 1 cobblestone and 2 sticks.",
+    "tags": ["item", "tool", "shovel", "stone"]
+  },
+  {
+    "id": "minecraft:iron_shovel",
+    "category": "item",
+    "name": "Iron Shovel",
+    "description": "A durable iron shovel. Digs soft blocks quickly. Crafted from 1 iron ingot and 2 sticks.",
+    "tags": ["item", "tool", "shovel", "iron"]
+  },
+  {
+    "id": "minecraft:diamond_shovel",
+    "category": "item",
+    "name": "Diamond Shovel",
+    "description": "A very fast diamond shovel. Best for digging dirt, sand, and gravel. Crafted from 1 diamond and 2 sticks.",
+    "tags": ["item", "tool", "shovel", "diamond"]
+  },
+  {
     "id": "minecraft:flint_and_steel",
     "category": "item",
     "name": "Flint and Steel",
     "description": "Used to ignite nether portals and TNT. Crafted from 1 iron ingot and 1 flint.",
     "tags": ["item", "tool", "fire", "portal"]
+  },
+  {
+    "id": "minecraft:stick",
+    "category": "item",
+    "name": "Stick",
+    "description": "Sticks are crafted from 2 planks stacked vertically. Used to make tools, weapons, torches, and many items.",
+    "tags": ["item", "material"]
+  },
+  {
+    "id": "minecraft:iron_ingot",
+    "category": "item",
+    "name": "Iron Ingot",
+    "description": "Iron ingots are obtained by smelting iron ore. Used for tools, armor, weapons, buckets, and many blocks.",
+    "tags": ["item", "material", "iron"]
+  },
+  {
+    "id": "minecraft:gold_ingot",
+    "category": "item",
+    "name": "Gold Ingot",
+    "description": "Gold ingots are obtained by smelting gold ore. Used for powered rails, golden apples, and armor.",
+    "tags": ["item", "material", "gold"]
+  },
+  {
+    "id": "minecraft:diamond",
+    "category": "item",
+    "name": "Diamond",
+    "description": "Diamonds are rare gems found deep underground. Used for the best tools, armor, weapons, and enchanting tables.",
+    "tags": ["item", "material", "diamond"]
+  },
+  {
+    "id": "minecraft:coal",
+    "category": "item",
+    "name": "Coal",
+    "description": "Coal is mined from coal ore. Used as furnace fuel and for crafting torches.",
+    "tags": ["item", "fuel", "material"]
+  },
+  {
+    "id": "minecraft:charcoal",
+    "category": "item",
+    "name": "Charcoal",
+    "description": "Charcoal is made by smelting wood in a furnace. Functions like coal for fuel and torches.",
+    "tags": ["item", "fuel", "material"]
+  },
+  {
+    "id": "minecraft:raw_iron",
+    "category": "item",
+    "name": "Raw Iron",
+    "description": "Raw iron is dropped when mining iron ore. It must be smelted in a furnace to become iron ingots.",
+    "tags": ["item", "material", "iron"]
+  },
+  {
+    "id": "minecraft:raw_gold",
+    "category": "item",
+    "name": "Raw Gold",
+    "description": "Raw gold is dropped when mining gold ore. It must be smelted in a furnace to become gold ingots.",
+    "tags": ["item", "material", "gold"]
+  },
+  {
+    "id": "minecraft:copper_ingot",
+    "category": "item",
+    "name": "Copper Ingot",
+    "description": "Copper ingots are obtained by smelting copper ore. Used for copper blocks, lightning rods, and spyglasses.",
+    "tags": ["item", "material", "copper"]
+  },
+  {
+    "id": "minecraft:emerald",
+    "category": "item",
+    "name": "Emerald",
+    "description": "Emeralds are obtained from mountain ores and villager trading. Used for trading with villagers.",
+    "tags": ["item", "material", "emerald"]
+  },
+  {
+    "id": "minecraft:redstone_dust",
+    "category": "item",
+    "name": "Redstone Dust",
+    "description": "Redstone dust is dropped from redstone ore. Used for circuits, mechanisms, and powered blocks.",
+    "tags": ["item", "material", "redstone"]
+  },
+  {
+    "id": "minecraft:lapis_lazuli",
+    "category": "item",
+    "name": "Lapis Lazuli",
+    "description": "Lapis lazuli is used for enchanting and blue dye. Obtained from lapis ore.",
+    "tags": ["item", "material", "lapis"]
+  },
+  {
+    "id": "minecraft:blaze_rod",
+    "category": "item",
+    "name": "Blaze Rod",
+    "description": "Blaze rods are dropped by Blazes in Nether fortresses. Used for brewing stands, blaze powder, and eyes of ender.",
+    "tags": ["item", "material", "nether", "blaze"]
+  },
+  {
+    "id": "minecraft:ender_pearl",
+    "category": "item",
+    "name": "Ender Pearl",
+    "description": "Ender pearls are dropped by Endermen. Used for crafting eyes of ender and can be thrown to teleport.",
+    "tags": ["item", "material", "end"]
+  },
+  {
+    "id": "minecraft:eye_of_ender",
+    "category": "item",
+    "name": "Eye of Ender",
+    "description": "Eyes of ender are crafted from blaze powder and ender pearls. Used to locate and activate stronghold End portals.",
+    "tags": ["item", "material", "end"]
+  },
+  {
+    "id": "minecraft:nether_star",
+    "category": "item",
+    "name": "Nether Star",
+    "description": "The Nether Star is dropped by the Wither. Used to craft beacons.",
+    "tags": ["item", "boss", "material"]
+  },
+  {
+    "id": "minecraft:dragon_egg",
+    "category": "item",
+    "name": "Dragon Egg",
+    "description": "A decorative trophy dropped by the Ender Dragon upon death. Teleports when touched.",
+    "tags": ["item", "trophy", "end"]
+  },
+  {
+    "id": "minecraft:bread",
+    "category": "item",
+    "name": "Bread",
+    "description": "Bread is crafted from 3 wheat in a row. Restores hunger and is a reliable early food source.",
+    "tags": ["item", "food"]
+  },
+  {
+    "id": "minecraft:cooked_beef",
+    "category": "item",
+    "name": "Steak",
+    "description": "Steak is cooked beef. Restores a lot of hunger and saturation. A top-tier food source.",
+    "tags": ["item", "food"]
+  },
+  {
+    "id": "minecraft:apple",
+    "category": "item",
+    "name": "Apple",
+    "description": "Apples drop from oak leaves and are found in chests. Restore a small amount of hunger.",
+    "tags": ["item", "food"]
+  },
+  {
+    "id": "minecraft:golden_apple",
+    "category": "item",
+    "name": "Golden Apple",
+    "description": "Golden apples are crafted from 8 gold ingots around an apple. Give absorption and regeneration when eaten.",
+    "tags": ["item", "food", "combat"]
+  },
+  {
+    "id": "minecraft:enchanted_golden_apple",
+    "category": "item",
+    "name": "Enchanted Golden Apple",
+    "description": "The strongest food. Gives powerful absorption, regeneration, fire resistance, and resistance. Found in rare loot chests only.",
+    "tags": ["item", "food", "combat"]
+  },
+  {
+    "id": "minecraft:water_bucket",
+    "category": "item",
+    "name": "Water Bucket",
+    "description": "A water bucket is made by using a bucket on water. Used for making obsidian, farms, and fall damage protection.",
+    "tags": ["item", "tool"]
+  },
+  {
+    "id": "minecraft:lava_bucket",
+    "category": "item",
+    "name": "Lava Bucket",
+    "description": "A lava bucket is made by using a bucket on lava. Used as long-lasting furnace fuel and for making obsidian with water.",
+    "tags": ["item", "tool", "fuel"]
   }
 ]
