@@ -298,7 +298,7 @@ Each skill needs:
 - [x] Chest storage and retrieval (CraftingManager chestOperation)
 - [ ] Item pickup and drop
 - [ ] Tool/food/weapon/armor selection by task (partial — tools done)
-- [ ] Durability-aware tool switching
+- [x] Durability-aware tool switching (findBestDurable — skips tools below 10% durability)
 - [ ] Resource stockpiling and restocking
 
 ### 13. Combat & Survival
@@ -311,7 +311,7 @@ Each skill needs:
 - [ ] Retreat when low health/hunger
 - [ ] Dodge, strafe, block, counter
 - [ ] Buff potion usage (healing, strength, fire resistance)
-- [ ] Food/hunger management
+- [x] Food/hunger management (findBestFood + autoEatIfNeeded — tiered food selection, auto-eat below 12 hunger)
 - [ ] Bed/sleep behavior
 - [ ] Environmental hazard avoidance (lava, cactus, fall)
 - [ ] Boss fight sequences (dragon, wither, warden)
@@ -631,8 +631,8 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Knowledge Base | 88% | 32,581 entries across 6 categories; category index added |
 | Skill System | 70% | 13,500 skills (2000 Mini + 5200 GPT1 + 6300 GPT2), dispatcher/executor with CraftingManager/FarmingManager/MiningManager/EndGameManager wired; most composite skills still message-based |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
-| Inventory & Crafting | 85% | Inventory scan, pick up, drop, give, item use, CraftingManager (full auto-crafting for 20+ recipes), smelting, brewing, chest store/withdraw/scan, furnace fueling done |
-| Combat & Survival | 45% | Mob-specific tactics (creeper, skeleton, boss, ranged, flying, nether), hazard avoidance, auto-equip, auto-heal, food management, retreat logic, NPCMesh damage/health/death/respawn done |
+| Inventory & Crafting | 88% | Inventory scan, pick up, drop, give, item use, durability-aware tool switching, auto food management, CraftingManager done |
+| Combat & Survival | 50% | Mob-specific tactics (creeper, skeleton, boss, ranged, flying, nether), hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food management (tiered, below 12 hunger), retreat logic, NPCMesh done |
 | Training System | 90% | Commands, persistence, detailed feedback, RLDataRecorder with readback, /smithai data (shows top rewarded/punished + recent events + scores), /smithai train import (CSV import for bulk teaching), reset, export, score-influenced selection done |
 | Commands & Permissions | 97% | All subcommands + tab completers done; /smithai config and /smithai export added |
 | Status & Notifications | 72% | Switch messages, reminders, debug/health, action bar, sound cues done; toasts/locale pending |

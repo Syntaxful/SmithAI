@@ -342,30 +342,55 @@ public class SkillDispatcher {
         PlayerInventory inv = fake.getInventory();
         Material preferred = Material.AIR;
         if (skill.contains("pickaxe") || skill.contains("mine") || skill.contains("dig") || skill.contains("break_stone") || skill.contains("ore") || skill.contains("obsidian")) {
-            preferred = Material.DIAMOND_PICKAXE;
-            if (!inv.contains(preferred)) preferred = Material.IRON_PICKAXE;
-            if (!inv.contains(preferred)) preferred = Material.STONE_PICKAXE;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_PICKAXE;
+            preferred = findBestDurable(inv, Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE);
         } else if (skill.contains("axe") || skill.contains("chop") || skill.contains("break_wood") || skill.contains("log")) {
-            preferred = Material.DIAMOND_AXE;
-            if (!inv.contains(preferred)) preferred = Material.IRON_AXE;
-            if (!inv.contains(preferred)) preferred = Material.STONE_AXE;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_AXE;
+            preferred = findBestDurable(inv, Material.DIAMOND_AXE, Material.IRON_AXE, Material.STONE_AXE, Material.WOODEN_AXE);
         } else if (skill.contains("sword") || skill.contains("fight") || skill.contains("attack") || skill.contains("combat") || skill.contains("hostile") || skill.contains("mob")) {
-            preferred = Material.DIAMOND_SWORD;
-            if (!inv.contains(preferred)) preferred = Material.IRON_SWORD;
-            if (!inv.contains(preferred)) preferred = Material.STONE_SWORD;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_SWORD;
+            preferred = findBestDurable(inv, Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.STONE_SWORD, Material.WOODEN_SWORD);
         } else if (skill.contains("shovel") || skill.contains("dirt") || skill.contains("sand") || skill.contains("gravel") || skill.contains("soil")) {
-            preferred = Material.DIAMOND_SHOVEL;
-            if (!inv.contains(preferred)) preferred = Material.IRON_SHOVEL;
-            if (!inv.contains(preferred)) preferred = Material.STONE_SHOVEL;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_SHOVEL;
+            preferred = findBestDurable(inv, Material.DIAMOND_SHOVEL, Material.IRON_SHOVEL, Material.STONE_SHOVEL, Material.WOODEN_SHOVEL);
         }
         if (preferred != Material.AIR && inv.contains(preferred)) {
             int slot = inv.first(preferred);
             if (slot >= 0 && slot < 9) inv.setHeldItemSlot(slot);
         }
+    }
+
+    /**
+     * Durability-aware tool selection: picks the highest-tier tool that still has durability remaining.
+     */
+    private Material findBestDurable(PlayerInventory inv, Material best, Material good, Material ok, Material fallback) {
+        for (Material m : new Material[]{best, good, ok, fallback}) {
+            if (!inv.contains(m)) continue;
+            // Check durability of each matching item
+            int first = inv.first(m);
+            if (first < 0) continue;
+            ItemStack stack = inv.getItem(first);
+            if (stack != null && stack.getType() == m) {
+                org.bukkit.inventory.meta.Damageable dmg = null;
+                if (stack.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
+                    dmg = (org.bukkit.inventory.meta.Damageable) stack.getItemMeta();
+                }
+                // If undamageable or still has more than 10% durability, use it
+                if (dmg == null || dmg.getDamage() < stack.getType().getMaxDurability() * 0.9) {
+                    return m;
+                }
+                // If damaged, check if we have another of same type
+                for (int i = first + 1; i < inv.getSize(); i++) {
+                    ItemStack alt = inv.getItem(i);
+                    if (alt != null && alt.getType() == m) {
+                        org.bukkit.inventory.meta.Damageable altDmg = null;
+                        if (alt.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
+                            altDmg = (org.bukkit.inventory.meta.Damageable) alt.getItemMeta();
+                        }
+                        if (altDmg == null || altDmg.getDamage() < alt.getType().getMaxDurability() * 0.9) {
+                            return m;
+                        }
+                    }
+                }
+            }
+        }
+        return fallback; // last resort
     }
 
     // --- TORCH / BLOCK PLACING ---
@@ -499,7 +524,7 @@ public class SkillDispatcher {
         }
     }
 
-    // --- ITEM USE ---
+    // --- ITEM USE / FOOD MANAGEMENT ---
 
     private void useItem(SmithNPC npc, String skill, Map<String, Object> params) {
         Entity entity = npc.getEntity();
@@ -511,8 +536,7 @@ public class SkillDispatcher {
             mat = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
         }
         if (mat == null || mat == Material.AIR) {
-            Material[] foods = { Material.COOKED_BEEF, Material.COOKED_PORKCHOP, Material.COOKED_CHICKEN, Material.BREAD, Material.COOKED_MUTTON, Material.COOKED_RABBIT, Material.BAKED_POTATO, Material.GOLDEN_APPLE, Material.APPLE, Material.CARROT };
-            for (Material food : foods) { if (inv.contains(food)) { mat = food; break; } }
+            mat = findBestFood(inv);
         }
         if (mat == null || mat == Material.AIR || !inv.contains(mat)) return;
         if (mat.isEdible() && entity instanceof LivingEntity) {
@@ -522,6 +546,41 @@ public class SkillDispatcher {
         } else {
             removeOne(fake, mat);
         }
+    }
+
+    /**
+     * Food/hunger management: find best food in inventory.
+     * Prioritizes golden apples (heal) > cooked meats > bread > vegetables.
+     */
+    private Material findBestFood(PlayerInventory inv) {
+        Material[][] tiers = {
+            { Material.GOLDEN_APPLE, Material.ENCHANTED_GOLDEN_APPLE },
+            { Material.COOKED_BEEF, Material.COOKED_PORKCHOP, Material.COOKED_MUTTON, Material.COOKED_CHICKEN, Material.COOKED_RABBIT, Material.BAKED_POTATO },
+            { Material.BREAD, Material.COOKED_COD, Material.COOKED_SALMON, Material.MUSHROOM_STEW, Material.BEETROOT_SOUP, Material.RABBIT_STEW, Material.PUMPKIN_PIE },
+            { Material.APPLE, Material.CARROT, Material.BAKED_POTATO, Material.BREAD, Material.COOKIE, Material.DRIED_KELP, Material.SWEET_BERRIES, Material.GLOW_BERRIES },
+        };
+        for (Material[] tier : tiers) {
+            for (Material m : tier) {
+                if (inv.contains(m)) return m;
+            }
+        }
+        return Material.AIR;
+    }
+
+    /**
+     * Auto-feed when hunger is low. Called automatically from combat and movement.
+     */
+    private void autoEatIfNeeded(SmithNPC npc) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        if (fake.getFoodLevel() >= 20) return; // full
+        PlayerInventory inv = fake.getInventory();
+        Material food = findBestFood(inv);
+        if (food == Material.AIR || food == null) return;
+        removeOne(fake, food);
+        fake.setFoodLevel(Math.min(fake.getFoodLevel() + 6, 20));
+        fake.setSaturation(Math.min(fake.getSaturation() + 3, 10));
     }
 
     // --- DROP ITEM ---
@@ -586,6 +645,11 @@ public class SkillDispatcher {
         Entity entity = npc.getEntity();
         if (!(entity instanceof LivingEntity)) return;
         LivingEntity self = (LivingEntity) entity;
+
+        // Auto-eat if food is low before combat
+        if (self instanceof Player && ((Player) self).getFoodLevel() < 12) {
+            autoEatIfNeeded(npc);
+        }
 
         // Hazard avoidance: if standing in lava/fire/cactus, move away first
         if (avoidHazards(npc, self)) {
