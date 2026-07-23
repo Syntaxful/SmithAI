@@ -84,7 +84,11 @@ public class Config {
         this.gpt2SkillTier = config.getInt("ai.models.gpt2.skillTier", 6300);
         this.debugEnabled = config.getBoolean("debug.enabled", false);
         this.bstatsEnabled = config.getBoolean("metrics.bstats", false);
+        this.trainingDataPrivacy = config.getBoolean("training.dataPrivacy", false);
     }
+
+    private boolean trainingDataPrivacy;
+    public boolean isTrainingDataPrivacy() { return trainingDataPrivacy; }
 
     public void setExternalApiKey(String apiKey) {
         this.externalApiKey = apiKey;

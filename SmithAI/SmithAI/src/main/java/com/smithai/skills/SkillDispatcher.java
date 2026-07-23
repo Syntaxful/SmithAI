@@ -612,6 +612,90 @@ public class SkillDispatcher {
         }
     }
 
+    // --- RESOURCE STOCKPILING & RESTOCKING ---
+
+    /**
+     * Stockpile resources: move all matching items from inventory into a nearby chest.
+     */
+    private void stockpileResources(SmithNPC npc, Player player, Material itemType, int keepAmount) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        // Count how many we have
+        int total = 0;
+        for (ItemStack stack : inv.getContents()) {
+            if (stack != null && stack.getType() == itemType) total += stack.getAmount();
+        }
+        int toStore = total - keepAmount;
+        if (toStore <= 0) {
+            npc.sendMessage(player, "Not enough " + itemType.name().toLowerCase().replace("_", " ") + " to stockpile (have " + total + ", keeping " + keepAmount + ").");
+            return;
+        }
+
+        // Find nearby chest
+        Location loc = npc.getLocation();
+        if (loc == null) return;
+        org.bukkit.block.Chest chest = null;
+        double bestDist = 25;
+        for (Block block : getNearbyBlocks(loc, 5, b -> b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST)) {
+            double d = block.getLocation().distanceSquared(loc);
+            if (d < bestDist) {
+                bestDist = d;
+                if (block.getState() instanceof org.bukkit.block.Chest) {
+                    chest = (org.bukkit.block.Chest) block.getState();
+                }
+            }
+        }
+
+        if (chest == null) {
+            npc.sendMessage(player, "No chest nearby to stockpile into.");
+            return;
+        }
+
+        org.bukkit.inventory.Inventory chestInv = chest.getBlockInventory();
+        int stored = 0;
+        for (int i = 0; i < inv.getSize() && toStore > 0; i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack != null && stack.getType() == itemType) {
+                int moveAmount = Math.min(stack.getAmount(), toStore);
+                ItemStack toAdd = stack.clone();
+                toAdd.setAmount(moveAmount);
+                java.util.HashMap<Integer, ItemStack> remaining = chestInv.addItem(toAdd);
+                int placed = moveAmount;
+                if (!remaining.isEmpty()) {
+                    placed -= remaining.get(0).getAmount();
+                }
+                if (stack.getAmount() <= placed) {
+                    inv.setItem(i, null);
+                } else {
+                    stack.setAmount(stack.getAmount() - placed);
+                    inv.setItem(i, stack);
+                }
+                stored += placed;
+                toStore -= placed;
+            }
+        }
+        npc.sendMessage(player, "Stockpiled " + stored + " " + itemType.name().toLowerCase().replace("_", " ") + " into chest.");
+    }
+
+    /**
+     * Get nearby blocks matching a condition.
+     */
+    private java.util.List<Block> getNearbyBlocks(Location loc, int radius, java.util.function.Predicate<Block> filter) {
+        java.util.List<Block> results = new java.util.ArrayList<>();
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    Block b = loc.getBlock().getRelative(x, y, z);
+                    if (filter.test(b)) results.add(b);
+                }
+            }
+        }
+        return results;
+    }
+
     // --- PICK UP ITEMS ---
 
     private void pickUpItems(SmithNPC npc, Map<String, Object> params) {
@@ -683,6 +767,7 @@ public class SkillDispatcher {
         }
 
         selectBestTool(npc, "sword");
+        equipBestArmor(npc);
 
         // Mob-specific tactics
         String mobName = target.getType().name().toLowerCase();
@@ -807,6 +892,52 @@ public class SkillDispatcher {
             type.contains("squid") || type.contains("dolphin") || type.contains("turtle") || type.contains("polar_bear") ||
             type.contains("panda") || type.contains("ocelot") || type.contains("villager") || type.contains("wandering_trader") ||
             type.contains("iron_golem") || type.contains("snow_golem");
+    }
+
+    // --- ARMOR EQUIPPING ---
+
+    /**
+     * Equip the best available armor from inventory.
+     */
+    private void equipBestArmor(SmithNPC npc) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        // Armor priorities: helmet, chestplate, leggings, boots
+        Material[][] armorTiers = {
+            { Material.DIAMOND_HELMET, Material.IRON_HELMET, Material.GOLDEN_HELMET, Material.CHAINMAIL_HELMET, Material.LEATHER_HELMET, Material.TURTLE_HELMET },
+            { Material.DIAMOND_CHESTPLATE, Material.IRON_CHESTPLATE, Material.GOLDEN_CHESTPLATE, Material.CHAINMAIL_CHESTPLATE, Material.LEATHER_CHESTPLATE },
+            { Material.DIAMOND_LEGGINGS, Material.IRON_LEGGINGS, Material.GOLDEN_LEGGINGS, Material.CHAINMAIL_LEGGINGS, Material.LEATHER_LEGGINGS },
+            { Material.DIAMOND_BOOTS, Material.IRON_BOOTS, Material.GOLDEN_BOOTS, Material.CHAINMAIL_BOOTS, Material.LEATHER_BOOTS },
+        };
+
+        for (int slot = 0; slot < 4; slot++) {
+            org.bukkit.inventory.ItemStack current = inv.getArmorContents()[slot];
+            if (current != null && current.getType() != Material.AIR) continue; // already armored
+            for (Material tier : armorTiers[slot]) {
+                if (!inv.contains(tier)) continue;
+                int idx = inv.first(tier);
+                if (idx < 0) continue;
+                org.bukkit.inventory.ItemStack stack = inv.getItem(idx);
+                if (stack == null) continue;
+                // Check durability
+                if (stack.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable) {
+                    org.bukkit.inventory.meta.Damageable dmg = (org.bukkit.inventory.meta.Damageable) stack.getItemMeta();
+                    if (dmg.getDamage() > tier.getMaxDurability() * 0.85) continue;
+                }
+                // Equip using slot-specific setters
+                switch (slot) {
+                    case 0: inv.setHelmet(stack); break;
+                    case 1: inv.setChestplate(stack); break;
+                    case 2: inv.setLeggings(stack); break;
+                    case 3: inv.setBoots(stack); break;
+                }
+                inv.setItem(idx, null);
+                break;
+            }
+        }
     }
 
     // --- RESOURCE SKILLS ---

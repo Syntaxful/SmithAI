@@ -299,7 +299,7 @@ Each skill needs:
 - [x] Item pickup and drop (pickUpItems/dropItem in SkillDispatcher)
 - [x] Tool/food/weapon/armor selection by task (tools via selectBestTool + durability-aware, auto food management via findBestFood + autoEatIfNeeded)
 - [x] Durability-aware tool switching (findBestDurable — skips tools below 10% durability)
-- [ ] Resource stockpiling and restocking
+- [x] Resource stockpiling and restocking (stockpileResources — moves excess items into nearby chest)
 
 ### 13. Combat & Survival
 - [x] Attack nearest hostile mob in `SkillDispatcher`
@@ -307,7 +307,7 @@ Each skill needs:
 - [x] Place torch in `SkillDispatcher`
 - [x] Mob-specific target selection via `target` parameter
 - [x] Mob-specific combat tactics (creeper: attack+retreat; skeleton/zombie: target selection; blaze/ghast: ranged; boss: ranged+heal)
-- [ ] Equip best armor and weapon
+- [x] Equip best armor and weapon (equipBestArmor — tiered diamond>iron>gold>chain>leather, checks durability)
 - [x] Retreat when low health/hunger (combat retreat at config threshold + autoEatIfNeeded)
 - [ ] Dodge, strafe, block, counter (strafe for ranged done; dodge/block/counter not done)
 - [ ] Buff potion usage (healing, strength, fire resistance)
@@ -361,7 +361,7 @@ Each skill needs:
 - [x] Visual feedback when training is recorded (chat message from NPC)
 - [x] Reset training for a specific player or NPC (/smithai train reset [player])
 - [x] Use training scores to influence skill selection (TrainingManager.prioritizeSkills, getBestAction)
-- [ ] Training data privacy toggle
+- [x] Training data privacy toggle (Config.trainingDataPrivacy)
 
 ### 17. Commands & Permissions
 - [x] `/smithai` base command
@@ -623,7 +623,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 |--------|--------|-------|
 | Build & Packaging | 95% | Maven, build script, CI, release packaging, checksums, version bump all done |
 | Plugin Lifecycle | 96% | Enable/disable/reload, subsystem health, debug mode, bStats config done |
-| Config System | 85% | Core keys done; some advanced pathfinding/combat/crafting keys missing |
+| Config System | 87% | Core keys done; trainingDataPrivacy toggle added; some advanced keys missing |
 | NPC System | 60% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble); player model pending |
 | External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
@@ -631,15 +631,15 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Knowledge Base | 88% | 32,581 entries across 6 categories; category index added |
 | Skill System | 70% | 13,500 skills (2000 Mini + 5200 GPT1 + 6300 GPT2), dispatcher/executor with CraftingManager/FarmingManager/MiningManager/EndGameManager wired; most composite skills still message-based |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
-| Inventory & Crafting | 88% | Inventory scan, pick up, drop, give, item use, durability-aware tool switching, auto food management, CraftingManager done |
-| Combat & Survival | 58% | Mob-specific tactics (creeper/skeleton/zombie/boss/ranged/flying/nether), hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat logic, boss fight strategies, NPCMesh done |
-| Training System | 90% | Commands, persistence, detailed feedback, RLDataRecorder with readback, /smithai data (shows top rewarded/punished + recent events + scores), /smithai train import (CSV import for bulk teaching), reset, export, score-influenced selection done |
+| Inventory & Crafting | 90% | Inventory scan, pick up, drop, give, item use, durability-aware tools, auto food, stockpileResources, CraftingManager done |
+| Combat & Survival | 62% | Mob-specific tactics, hazard avoidance, auto-equip (tiered armor + durability check), durability-aware tools, auto-heal, auto-food, retreat, boss strategies, NPCMesh done |
+| Training System | 92% | Commands, persistence, detailed feedback, RLDataRecorder readback, /smithai data (scores/recent/top), /smithai train import (CSV), reset, export, score-influenced selection, privacy toggle done |
 | Commands & Permissions | 97% | All subcommands + tab completers done; /smithai config and /smithai export added |
 | Status & Notifications | 72% | Switch messages, reminders, debug/health, action bar, sound cues done; toasts/locale pending |
 | External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard, knowledge embed endpoint done |
 | Models | 60% | README done with Hugging Face instructions, license notes, model cards |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 46% | 39 tests across 10 suites; all passing; memory search, knowledge stats tests added |
+| Testing & Quality | 48% | 39 tests across 10 suites; all passing; memory search, knowledge stats, category counts tested |
 | Documentation | 93% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE, MODELS, models/README done; SmithGPT1.0/2.0 hosting scripts documented |
 
 ---
