@@ -57,65 +57,117 @@ public class NPCMesh {
      * Apply the robot skin to the NPC.
      * Uses armor stands with player heads / leather armor colored gray.
      */
-    public void applyRobotSkin(SmithNPC npc) {
+    /**
+     * Apply a player-model appearance to the NPC using a player head and colored armor.
+     * Eaglercraft-compatible since it uses only standard Bukkit APIs.
+     */
+    public void applyPlayerModelSkin(SmithNPC npc) {
         if (!(npc.getEntity() instanceof Player)) return;
         Player fake = (Player) npc.getEntity();
 
-        // Robot helmet (gray dyed leather cap)
-        ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
-        LeatherArmorMeta meta = (LeatherArmorMeta) helmet.getItemMeta();
-        if (meta != null) {
-            meta.setColor(org.bukkit.Color.fromRGB(100, 100, 100));
-            meta.setDisplayName("§7Robot Head");
-            helmet.setItemMeta(meta);
+        // Player head with named skin
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+        if (skullMeta != null) {
+            skullMeta.setDisplayName("§b§l" + npc.getName());
+            skullMeta.setOwningPlayer(org.bukkit.Bukkit.getOfflinePlayer(npc.getName()));
+            head.setItemMeta(skullMeta);
         }
-        fake.getInventory().setHelmet(helmet);
+        fake.getInventory().setHelmet(head);
 
-        // Gray chestplate
+        // Blue-dyed leather chestplate
         ItemStack chest = new ItemStack(Material.LEATHER_CHESTPLATE);
         LeatherArmorMeta chestMeta = (LeatherArmorMeta) chest.getItemMeta();
         if (chestMeta != null) {
-            chestMeta.setColor(org.bukkit.Color.fromRGB(80, 80, 80));
-            chestMeta.setDisplayName("§7Robot Body");
+            chestMeta.setColor(org.bukkit.Color.fromRGB(60, 120, 200));
+            chestMeta.setDisplayName("§9" + npc.getName() + "'s Chestplate");
             chest.setItemMeta(chestMeta);
         }
         fake.getInventory().setChestplate(chest);
 
-        // Gray leggings
+        // Blue leggings
         ItemStack legs = new ItemStack(Material.LEATHER_LEGGINGS);
         LeatherArmorMeta legMeta = (LeatherArmorMeta) legs.getItemMeta();
         if (legMeta != null) {
-            legMeta.setColor(org.bukkit.Color.fromRGB(70, 70, 70));
-            legMeta.setDisplayName("§7Robot Legs");
+            legMeta.setColor(org.bukkit.Color.fromRGB(40, 90, 170));
+            legMeta.setDisplayName("§9" + npc.getName() + "'s Leggings");
             legs.setItemMeta(legMeta);
         }
         fake.getInventory().setLeggings(legs);
 
-        // Gray boots
+        // Blue boots
         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
         LeatherArmorMeta bootMeta = (LeatherArmorMeta) boots.getItemMeta();
         if (bootMeta != null) {
-            bootMeta.setColor(org.bukkit.Color.fromRGB(60, 60, 60));
-            bootMeta.setDisplayName("§7Robot Feet");
+            bootMeta.setColor(org.bukkit.Color.fromRGB(30, 70, 150));
+            bootMeta.setDisplayName("§9" + npc.getName() + "'s Boots");
             boots.setItemMeta(bootMeta);
         }
         fake.getInventory().setBoots(boots);
+
+        // Ensure visible and interactive
+        fake.setInvisible(false);
+        fake.setCollidable(true);
+    }
+
+    /**
+     * Legacy robot skin — delegates to player model.
+     */
+    public void applyRobotSkin(SmithNPC npc) {
+        applyPlayerModelSkin(npc);
     }
 
     /**
      * Set a player head as the NPC's helmet for face display.
      */
     public void setPlayerHead(SmithNPC npc, String skinUrl) {
+        applyPlayerModelSkin(npc);
+    }
+
+    /**
+     * Map an animation state to visual/equipment changes on the NPC.
+     * Supported states: IDLE, WALKING, MINING, FIGHTING
+     */
+    public void setAnimationState(SmithNPC npc, String state) {
         if (!(npc.getEntity() instanceof Player)) return;
         Player fake = (Player) npc.getEntity();
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        if (meta != null) {
-            meta.setOwningPlayer(fake);
-            meta.setDisplayName("§b" + npc.getName());
-            skull.setItemMeta(meta);
+        String s = state.toUpperCase();
+
+        // Reset pose defaults
+        fake.setSneaking(false);
+        fake.setSwimming(false);
+
+        switch (s) {
+            case "MINING":
+                ItemStack pick = new ItemStack(Material.IRON_PICKAXE);
+                ItemMeta pickMeta = pick.getItemMeta();
+                if (pickMeta != null) { pickMeta.setDisplayName("§7Mining Pick"); pick.setItemMeta(pickMeta); }
+                fake.getInventory().setItemInMainHand(pick);
+                fake.getInventory().setItemInOffHand(null);
+                fake.setSneaking(true);
+                fake.getWorld().playSound(fake.getLocation(), org.bukkit.Sound.BLOCK_STONE_HIT, 0.5f, 1.0f);
+                break;
+            case "FIGHTING":
+                ItemStack sword = new ItemStack(Material.IRON_SWORD);
+                ItemMeta swordMeta = sword.getItemMeta();
+                if (swordMeta != null) { swordMeta.setDisplayName("§cCombat Sword"); sword.setItemMeta(swordMeta); }
+                fake.getInventory().setItemInMainHand(sword);
+                ItemStack shield = new ItemStack(Material.SHIELD);
+                ItemMeta shieldMeta = shield.getItemMeta();
+                if (shieldMeta != null) { shieldMeta.setDisplayName("§7Shield"); shield.setItemMeta(shieldMeta); }
+                fake.getInventory().setItemInOffHand(shield);
+                break;
+            case "WALKING":
+                // Walking pose: empty hands, normal stance
+                fake.getInventory().setItemInMainHand(null);
+                fake.getInventory().setItemInOffHand(null);
+                break;
+            case "IDLE":
+            default:
+                fake.getInventory().setItemInMainHand(null);
+                fake.getInventory().setItemInOffHand(null);
+                break;
         }
-        fake.getInventory().setHelmet(skull);
     }
 
     // ── DAMAGE / HEALTH / DEATH / RESPAWN ──

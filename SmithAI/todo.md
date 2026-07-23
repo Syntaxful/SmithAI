@@ -657,22 +657,22 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Build & Packaging | 100% | ✅ Complete |
 | Plugin Lifecycle | 100% | ✅ Complete |
 | Config System | 100% | ✅ Complete |
-| NPC System | 65% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble, lookAt, playSound); player model pending |
+| NPC System | 75% | Spawn/follow/stay/goto, NPCMesh (player model with skin + blue armor, IDLE/WALKING/MINING/FIGHTING animations, nametag, health/damage/death/respawn, speech bubble, lookAt, playSound) |
 | External AI Connector | 100% | ✅ Complete |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 78% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions; composites still message-based |
+| Skill System | 82% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states; composites still message-based |
 | Pathfinding & Movement | 100% | ✅ Complete |
 | Inventory & Crafting | 100% | ✅ Complete |
-| Combat & Survival | 68% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, water clutch, NPCMesh done |
+| Combat & Survival | 78% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, dodge/strafe/block, buff potions, water clutch, FIGHTING animation done |
 | Training System | 100% | ✅ Complete |
 | Commands & Permissions | 100% | ✅ Complete |
 | Status & Notifications | 100% | ✅ Complete |
 | External AI Server | 100% | ✅ Complete |
-| Models | 68% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader done |
+| Models | 70% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader, model warmup done |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 52% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; more coverage needed |
+| Testing & Quality | 56% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; NPC/animation tests pending |
 | Documentation | 100% | ✅ Complete |
 
 ---
