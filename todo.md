@@ -49,6 +49,7 @@ This file is the single source of truth for what is finished and what remains. I
 - SmithGPT model sizes reduced: SmithGPT 1.0 → 4GB, SmithGPT 2.0 → 7.5GB, with updated docs, configs, and tier detection
 - Server startup scripts (`start.sh`, `start.bat`) and model download helper (`download_model.py`, `.sh`, `.bat`)
 - Workspace environment fixed: `.replit` module + `replit.nix` provide Maven and JDK 17 alongside Python 3.11, server has a public `/` status endpoint, and `SmithAI-Server/requirements-server.txt` is the lightweight runtime dependency list
+- Pathfinding improvements: hazard avoidance, water swimming, terrain costs, stuck detection/recovery, ladder/vine climbing, multi-world teleport, and variable movement speed
 - GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is used only with explicit authorization
 
 ---
@@ -274,12 +275,12 @@ Each skill needs:
 - [x] `goto` coordinates command
 - [x] Step-up and jump logic for small obstacles
 - [x] Real walking pathfinding to player/target block (A* or Bukkit navigator)
-- [ ] Navigation around obstacles, water, lava, cliffs
-- [ ] Sprint/jump/sneak/climb/swim integration
+- [x] Navigation around obstacles, water, lava, and basic hazards
+- [ ] Sprint/sneak/cliff-edge avoidance
 - [ ] Follow distance and leash behavior
-- [ ] Stuck detection and recovery
-- [ ] Multi-world teleport handling
-- [ ] Path cost estimates (terrain, danger, distance)
+- [x] Stuck detection and recovery
+- [x] Multi-world teleport handling
+- [x] Path cost estimates (terrain, danger, distance)
 
 ### 12. Inventory & Crafting Automation
 - [x] Check inventory stub
@@ -605,13 +606,13 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Build & Packaging | 95% | Maven, build script, CI, release packaging, checksums, version bump all done |
 | Plugin Lifecycle | 95% | Enable/disable/reload, subsystem health, debug mode done; bStats config only |
 | Config System | 85% | Core keys done; some advanced pathfinding/combat/crafting keys missing |
-| NPC System | 45% | Spawn/follow/stay/goto done; real player model and pathfinding pending |
+| NPC System | 45% | Spawn/follow/stay/goto done; real player model pending |
 | External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
 | Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
 | Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
-| Pathfinding & Movement | 60% | Basic A* pathfinding implemented; obstacle handling and navigation smoothing remain |
+| Pathfinding & Movement | 75% | A* pathfinding with hazard avoidance, water/climb support, terrain costs, and stuck recovery; sprint/sneak/cliff-edge behavior pending |
 | Inventory & Crafting | 35% | Inventory scan, pick up, drop, and item use done; crafting automation pending |
 | Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
 | Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
