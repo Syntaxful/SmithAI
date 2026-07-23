@@ -1,5 +1,6 @@
 package com.smithai.npc;
 
+import com.smithai.SmithAIPlugin;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -7,6 +8,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class SmithNPC {
@@ -19,6 +22,9 @@ public class SmithNPC {
     private boolean pathfinding = false;
     private long pathStartTime = 0;
     private long lastMoveTime = 0;
+    private List<Location> path = Collections.emptyList();
+    private int pathIndex = 0;
+    private long lastPathRecalc = 0;
 
     public SmithNPC(UUID id, Entity entity, String name) {
         this.id = id;
@@ -111,6 +117,9 @@ public class SmithNPC {
         this.pathfinding = target != null;
         this.pathStartTime = System.currentTimeMillis();
         this.lastMoveTime = System.currentTimeMillis();
+        this.path = Collections.emptyList();
+        this.pathIndex = 0;
+        recalculatePath();
     }
 
     public Location getMoveTarget() {
@@ -124,6 +133,8 @@ public class SmithNPC {
     public void cancelPathfinding() {
         this.moveTarget = null;
         this.pathfinding = false;
+        this.path = Collections.emptyList();
+        this.pathIndex = 0;
     }
 
     public void tick(double followDistance) {
@@ -165,12 +176,58 @@ public class SmithNPC {
             cancelPathfinding();
             return;
         }
+
+        // Recalculate path periodically if stale or empty
+        if (path.isEmpty() || pathIndex >= path.size() || (System.currentTimeMillis() - lastPathRecalc) > 3000) {
+            recalculatePath();
+            if (path.isEmpty()) {
+                // Fallback to direct movement if no path found
+                long now = System.currentTimeMillis();
+                if (now - lastMoveTime > 150) {
+                    moveToward(moveTarget, 0.25);
+                    lastMoveTime = now;
+                }
+                lookAt(moveTarget);
+                return;
+            }
+        }
+
+        Location waypoint = path.get(pathIndex);
+        if (current.distanceSquared(waypoint) <= 1.5 * 1.5) {
+            pathIndex++;
+            if (pathIndex >= path.size()) {
+                // Reached end of path, recalculate for remaining distance
+                recalculatePath();
+            }
+            if (pathIndex < path.size()) {
+                waypoint = path.get(pathIndex);
+            } else {
+                waypoint = moveTarget;
+            }
+        }
+
         long now = System.currentTimeMillis();
         if (now - lastMoveTime > 150) {
-            moveToward(moveTarget, 0.25);
+            moveToward(waypoint, 0.25);
             lastMoveTime = now;
         }
-        lookAt(moveTarget);
+        lookAt(waypoint);
+    }
+
+    private void recalculatePath() {
+        Location current = getLocation();
+        if (current == null || moveTarget == null || !current.getWorld().equals(moveTarget.getWorld())) {
+            return;
+        }
+        SmithAIPlugin plugin = SmithAIPlugin.getInstance();
+        if (plugin == null) {
+            path = Collections.emptyList();
+            return;
+        }
+        Pathfinder pf = new Pathfinder(current.getWorld(), 2000, 64.0, 1.0, 3.0);
+        path = pf.findPath(current, moveTarget);
+        pathIndex = 0;
+        lastPathRecalc = System.currentTimeMillis();
     }
 
     private void moveToward(Location target, double speed) {

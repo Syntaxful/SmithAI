@@ -254,7 +254,7 @@ Each skill needs:
 - [x] Velocity-based movement with step-up/jump logic
 - [x] `goto` target support via `setMoveTarget`
 - [ ] Real player-model NPC with robot skin and limbs
-- [ ] Real pathfinding using Bukkit pathfinders or custom A*
+- [x] Real pathfinding using Bukkit pathfinders or custom A*
 - [ ] NPC inventory and equipment mirroring
 - [ ] NPC animation states (walking, mining, fighting)
 - [ ] NPC damage, health, death, and respawn handling
@@ -267,7 +267,7 @@ Each skill needs:
 - [x] `lookAt` rotates NPC toward target
 - [x] `goto` coordinates command
 - [x] Step-up and jump logic for small obstacles
-- [ ] Real walking pathfinding to player/target block (A* or Bukkit navigator)
+- [x] Real walking pathfinding to player/target block (A* or Bukkit navigator)
 - [ ] Navigation around obstacles, water, lava, cliffs
 - [ ] Sprint/jump/sneak/climb/swim integration
 - [ ] Follow distance and leash behavior
@@ -575,7 +575,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 - [x] Basic block breaking/placing/torch placing
 - [x] Tool selection by task
 - [x] Basic mob combat with target selection
-- [ ] Pathfinding (A* or navigator)
+- [x] Pathfinding (A* or navigator)
 - [ ] Inventory/crafting automation
 - [ ] Combat/survival automation
 - [ ] Endgame task sequences
@@ -604,7 +604,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
 | Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
 | Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
-| Pathfinding & Movement | 20% | Velocity follow/goto/step-up done; real pathfinding pending |
+| Pathfinding & Movement | 60% | Basic A* pathfinding implemented; obstacle handling and navigation smoothing remain |
 | Inventory & Crafting | 10% | Tool selection done; full inventory/crafting pending |
 | Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
 | Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
