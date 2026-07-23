@@ -407,9 +407,9 @@ Each skill needs:
 - [x] Action tag parsing from LLM responses
 - [x] Docker support (`Dockerfile` + `docker-compose.yml` + `.dockerignore`)
 - [x] Server test script (`test_app.py`)
-- [ ] `/embed` endpoint for knowledge retrieval
-- [ ] `/task` endpoint for task planning
-- [ ] `/feedback` endpoint to receive training data
+- [x] `/embed` endpoint for knowledge retrieval (stub, ready for embedding integration)
+- [x] `/task` endpoint for task planning
+- [x] `/feedback` endpoint to receive training data
 - [ ] Server startup script for Windows and Linux
 - [ ] Auto-download missing model files (with user consent)
 - [ ] Model warmup on first request

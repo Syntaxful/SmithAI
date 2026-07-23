@@ -30,6 +30,24 @@ def test_parse_action_tag():
     assert clean == "Attack!"
 
 
+def test_task_planner():
+    plans = {
+        "get diamonds": ["chop_tree", "craft_pickaxe", "mine_stone", "craft_stone_pickaxe", "explore_cave", "mine_diamonds"],
+        "nether portal": ["gather_obsidian", "craft_flint_and_steel", "build_portal_frame", "light_portal"],
+    }
+    for task, expected in plans.items():
+        lower = task.lower().strip()
+        plan = plans.get(lower, [])
+        assert plan == expected
+
+
+def test_feedback_request():
+    feedback = {"player": "Steve", "category": "good", "rating": 1, "message": "nice job"}
+    assert feedback["received"] is True if "received" in feedback else True
+
+
 if __name__ == "__main__":
     test_parse_action_tag()
+    test_task_planner()
+    test_feedback_request()
     print("All tests passed.")

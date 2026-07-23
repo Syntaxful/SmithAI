@@ -192,6 +192,25 @@ class HealthResponse(BaseModel):
     model_loaded: bool
 
 
+class TaskRequest(BaseModel):
+    task: str
+    context: Optional[Dict[str, Any]] = {}
+
+
+class TaskResponse(BaseModel):
+    task: str
+    plan: List[str]
+    model: str
+
+
+class FeedbackRequest(BaseModel):
+    player: Optional[str] = None
+    message: Optional[str] = None
+    category: Optional[str] = "general"
+    rating: Optional[int] = None
+    context: Optional[Dict[str, Any]] = {}
+
+
 @app.get("/health", response_model=HealthResponse)
 def health():
     return HealthResponse(
@@ -317,6 +336,46 @@ def list_skills(token: str = Depends(verify_token)):
 @app.post("/embed")
 def embed(query: str, token: str = Depends(verify_token)):
     return {"query": query, "results": []}
+
+
+# Simple task planner mapping: map common goals to a step list.
+TASK_PLANS = {
+    "diamonds": ["chop_tree", "craft_pickaxe", "mine_stone", "craft_stone_pickaxe", "explore_cave", "mine_diamonds"],
+    "get diamonds": ["chop_tree", "craft_pickaxe", "mine_stone", "craft_stone_pickaxe", "explore_cave", "mine_diamonds"],
+    "nether portal": ["gather_obsidian", "craft_flint_and_steel", "build_portal_frame", "light_portal"],
+    "build base": ["gather_wood", "gather_stone", "build_house", "place_chest", "place_furnace", "place_lights"],
+    "beat the game": ["get diamonds", "make armor", "make nether portal", "find fortress", "get_blaze_rods", "collect_ender_pearls", "locate_stronghold", "fill_end_portal", "defeat_ender_dragon"],
+    "fight": ["equip_sword", "equip_armor", "fight_hostile_mob"],
+    "get food": ["hunt_passive_mob", "gather_crop", "cook_food", "eat_food"],
+    "farm": ["prepare_soil", "plant_seeds", "water_crops", "harvest_crops"],
+}
+
+
+@app.post("/task", response_model=TaskResponse)
+def plan_task(req: TaskRequest, token: str = Depends(verify_token)):
+    lower = req.task.lower().strip()
+    plan = TASK_PLANS.get(lower, [])
+    if not plan:
+        # Try substring match
+        for key, steps in TASK_PLANS.items():
+            if key in lower:
+                plan = steps
+                break
+    if not plan:
+        plan = ["analyze_task", "gather_resources", "execute_task"]
+    return TaskResponse(task=req.task, plan=plan, model=MODEL_NAME)
+
+
+@app.post("/feedback")
+def receive_feedback(req: FeedbackRequest, token: str = Depends(verify_token)):
+    return {
+        "received": True,
+        "player": req.player,
+        "category": req.category,
+        "rating": req.rating,
+        "message": req.message,
+        "model": MODEL_NAME,
+    }
 
 
 if __name__ == "__main__":
