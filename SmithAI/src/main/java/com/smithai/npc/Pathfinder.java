@@ -78,7 +78,7 @@ public class Pathfinder {
                 String nKey = key(neighbor);
                 if (closed.contains(nKey)) continue;
 
-                double moveCost = current.pos.distanceSquared(neighbor.pos) + costFor(neighbor);
+                double moveCost = current.pos.distanceSquared(neighbor.pos) + costFor(current, neighbor);
                 double tentativeG = current.g + moveCost;
 
                 Node existing = allNodes.get(nKey);
@@ -130,10 +130,16 @@ public class Pathfinder {
     private List<Node> neighbors(Node node) {
         List<Node> result = new ArrayList<>();
         Vector base = node.pos.clone();
-        // Cardinal directions at same level, one up, one down
-        int[] dx = {1, -1, 0, 0};
-        int[] dz = {0, 0, 1, -1};
+        // Cardinal + diagonal directions at same level, one up, one down
+        int[] dx = {1, -1, 0, 0, 1, 1, -1, -1};
+        int[] dz = {0, 0, 1, -1, 1, -1, 1, -1};
         for (int i = 0; i < dx.length; i++) {
+            if (dx[i] != 0 && dz[i] != 0) {
+                // Diagonal moves require both adjacent cardinal cells to be clear.
+                Vector corner1 = base.clone().add(new Vector(dx[i], 0, 0));
+                Vector corner2 = base.clone().add(new Vector(0, 0, dz[i]));
+                if (!isClear(corner1) || !isClear(corner2)) continue;
+            }
             Vector same = base.clone().add(new Vector(dx[i], 0, dz[i]));
             Vector up = base.clone().add(new Vector(dx[i], 1, dz[i]));
             Vector down = base.clone().add(new Vector(dx[i], -1, dz[i]));
@@ -142,6 +148,12 @@ public class Pathfinder {
             result.add(new Node(down));
         }
         return result;
+    }
+
+    private boolean isClear(Vector pos) {
+        Block feet = world.getBlockAt(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
+        Block head = feet.getRelative(BlockFace.UP);
+        return feet.isPassable() && head.isPassable() && !isHazardous(feet) && !isHazardous(head);
     }
 
     private boolean isWalkable(Node node) {
@@ -166,12 +178,16 @@ public class Pathfinder {
         return true;
     }
 
-    private double costFor(Node node) {
-        Block feet = world.getBlockAt(node.pos.getBlockX(), node.pos.getBlockY(), node.pos.getBlockZ());
+    private double costFor(Node current, Node neighbor) {
+        Block feet = world.getBlockAt(neighbor.pos.getBlockX(), neighbor.pos.getBlockY(), neighbor.pos.getBlockZ());
         Block ground = feet.getRelative(BlockFace.DOWN);
-        if (isLiquidPassable(feet)) return 2.0;
-        if (SLOW.contains(ground.getType())) return 1.5;
-        return 0.0;
+        double extra = 0.0;
+        if (isLiquidPassable(feet)) extra += 2.0;
+        if (SLOW.contains(ground.getType())) extra += 1.5;
+        // Discourage falling unless it is the only route.
+        double drop = current.pos.getY() - neighbor.pos.getY();
+        if (drop > 0) extra += drop * 1.5;
+        return extra;
     }
 
     private boolean isHazardous(Block block) {

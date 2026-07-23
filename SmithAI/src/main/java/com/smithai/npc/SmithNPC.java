@@ -158,6 +158,8 @@ public class SmithNPC {
         this.pathfinding = false;
         this.path = Collections.emptyList();
         this.pathIndex = 0;
+        setSprinting(false);
+        setSneaking(false);
     }
 
     public void tick(double followDistance) {
@@ -170,6 +172,8 @@ public class SmithNPC {
         }
     }
 
+    private static final double LEASH_DISTANCE_SQ = 48 * 48;
+
     private void tickFollow(double followDistance) {
         Location target = following.getLocation();
         Location current = getLocation();
@@ -178,18 +182,23 @@ public class SmithNPC {
         }
         if (!current.getWorld().equals(target.getWorld())) {
             teleport(target);
+            setSprinting(false);
             return;
         }
         double distSq = current.distanceSquared(target);
         if (distSq <= followDistance * followDistance) {
+            setSprinting(false);
+            setSneaking(false);
             lookAt(target);
             return;
         }
-        if (distSq > 64 * 64) {
+        if (distSq > LEASH_DISTANCE_SQ) {
             teleport(target);
+            setSprinting(false);
             return;
         }
         double speed = distSq > 8 * 8 ? 0.45 : distSq > 4 * 4 ? 0.35 : 0.25;
+        setSprinting(speed >= 0.35);
         moveToward(target, speed);
         lookAt(target);
     }
@@ -308,6 +317,22 @@ public class SmithNPC {
 
         // Bridge / speedbridge: place blocks ahead or below when crossing gaps.
         tryBridge(current, direction);
+
+        // Sneak near an edge to avoid walking off a cliff.
+        boolean nearEdge = blockGround.isPassable() && !inWater && !climbing;
+        setSneaking(nearEdge);
+    }
+
+    private void setSprinting(boolean sprinting) {
+        if (entity instanceof Player) {
+            ((Player) entity).setSprinting(sprinting);
+        }
+    }
+
+    private void setSneaking(boolean sneaking) {
+        if (entity instanceof Player) {
+            ((Player) entity).setSneaking(sneaking);
+        }
     }
 
     private boolean isClimbable(Block block) {
