@@ -48,6 +48,7 @@ This file is the single source of truth for what is finished and what remains. I
 - `/smithai version` command showing detected server version and feature flags
 - SmithGPT model sizes reduced: SmithGPT 1.0 → 4GB, SmithGPT 2.0 → 7.5GB, with updated docs, configs, and tier detection
 - Server startup scripts (`start.sh`, `start.bat`) and model download helper (`download_model.py`, `.sh`, `.bat`)
+- Workspace environment fixed: `.replit` module + `replit.nix` provide Maven and JDK 17 alongside Python 3.11, server has a public `/` status endpoint, and `SmithAI-Server/requirements-server.txt` is the lightweight runtime dependency list
 - GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is used only with explicit authorization
 
 ---
