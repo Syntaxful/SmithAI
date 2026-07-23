@@ -965,6 +965,78 @@ public class SkillDispatcher {
         npc.sendMessage(player, defaultMessage);
     }
 
+    // ── SKILL PRECONDITIONS ──
+
+    /**
+     * Check if a skill can be executed given current conditions.
+     * Returns null if OK, or a reason string if blocked.
+     */
+    private String checkPrecondition(SmithNPC npc, String skill) {
+        Entity entity = npc.getEntity();
+        if (entity == null) return "No entity";
+        Location loc = entity.getLocation();
+        if (loc == null) return "No location";
+
+        // Health check: if skill requires work and health is very low, block
+        if (entity instanceof LivingEntity) {
+            LivingEntity le = (LivingEntity) entity;
+            double health = le.getHealth();
+            if (health < 4.0 && (skill.contains("mine_") || skill.contains("fight_") || skill.contains("build_"))) {
+                return "Health too low (" + String.format("%.1f", health) + ")";
+            }
+        }
+
+        // Tool check: if skill needs a specific tool, verify
+        if (skill.contains("mine_") || skill.contains("break_")) {
+            if (entity instanceof Player) {
+                Player fake = (Player) entity;
+                org.bukkit.inventory.ItemStack held = fake.getInventory().getItemInMainHand();
+                boolean hasPickaxe = held != null && (held.getType().name().contains("PICKAXE") ||
+                    held.getType().name().contains("SHOVEL") || held.getType().name().contains("AXE"));
+                if (!hasPickaxe && !held.getType().name().contains("SWORD")) {
+                    // Check if any tool is in inventory
+                    boolean hasAnyTool = false;
+                    for (ItemStack stack : fake.getInventory().getContents()) {
+                        if (stack != null) {
+                            String n = stack.getType().name();
+                            if (n.contains("PICKAXE") || n.contains("AXE") || n.contains("SHOVEL")) {
+                                hasAnyTool = true; break;
+                            }
+                        }
+                    }
+                    if (!hasAnyTool) {
+                        return "No suitable tool available";
+                    }
+                }
+            }
+        }
+
+        // Food check for combat
+        if (skill.contains("fight_") || skill.contains("combat_")) {
+            if (entity instanceof Player) {
+                Player fake = (Player) entity;
+                if (fake.getFoodLevel() < 6 && !invContainsFood(fake)) {
+                    return "No food available for combat";
+                }
+            }
+        }
+
+        return null; // All good
+    }
+
+    /**
+     * Check if inventory has any edible items.
+     */
+    private boolean invContainsFood(Player player) {
+        Material[] foods = { Material.COOKED_BEEF, Material.COOKED_PORKCHOP, Material.COOKED_CHICKEN, Material.BREAD,
+            Material.COOKED_MUTTON, Material.COOKED_RABBIT, Material.BAKED_POTATO, Material.GOLDEN_APPLE,
+            Material.APPLE, Material.CARROT, Material.COOKED_COD, Material.COOKED_SALMON };
+        for (Material f : foods) {
+            if (player.getInventory().contains(f)) return true;
+        }
+        return false;
+    }
+
     // ── NEW SKILL DETECTORS ──
 
     private boolean isEndgameSkill(String lower) {

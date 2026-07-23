@@ -251,7 +251,8 @@ Each skill needs:
 - [x] Basic combat with nearest hostile or targeted mob type
 - [x] Action tag parsing from LLM/chat responses
 - [ ] Full primitive executors for all 9000 skills
-- [ ] Skill preconditions and success/failure detection
+- [x] Skill preconditions (checkPrecondition — health check, tool check, food check for combat)
+- [ ] Skill success/failure detection
 - [ ] Skill parameters from LLM responses fully wired
 - [ ] Skill retry and recovery policies
 - [ ] Skill usage analytics and training feedback
@@ -481,7 +482,7 @@ Each skill needs:
 - [x] Unit tests for training manager (`TrainingManagerTest`) — 5 tests
 - [x] Unit tests for config parsing (`ConfigTest`) — 3 tests
 - [x] Unit tests for version info (`VersionInfoTest`) — 5 tests
-- [ ] Integration test for external AI connector
+- [x] Integration test for external AI connector (integration_test.py — 6 endpoint tests, auth check, health/skills/task/rl_data)
 - [ ] Manual in-game test checklist
 - [ ] Performance profiling under load
 - [ ] Thread safety review
@@ -629,7 +630,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 92% | MemoryManager (searchByTopic + getTopics) + MemoryEnhancer (summarization, preferences, mood/emotion, threading) done |
 | Knowledge Base | 88% | 32,581 entries across 6 categories; category index added |
-| Skill System | 70% | 13,500 skills (2000 Mini + 5200 GPT1 + 6300 GPT2), dispatcher/executor with CraftingManager/FarmingManager/MiningManager/EndGameManager wired; most composite skills still message-based |
+| Skill System | 72% | 13,500 skills, dispatcher with all managers, skill preconditions (health/tool/food checks) added; most composites still message-based |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
 | Inventory & Crafting | 90% | Inventory scan, pick up, drop, give, item use, durability-aware tools, auto food, stockpileResources, CraftingManager done |
 | Combat & Survival | 62% | Mob-specific tactics, hazard avoidance, auto-equip (tiered armor + durability check), durability-aware tools, auto-heal, auto-food, retreat, boss strategies, NPCMesh done |
@@ -639,7 +640,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard, knowledge embed endpoint done |
 | Models | 60% | README done with Hugging Face instructions, license notes, model cards |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 48% | 39 tests across 10 suites; all passing; memory search, knowledge stats, category counts tested |
+| Testing & Quality | 50% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing |
 | Documentation | 93% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE, MODELS, models/README done; SmithGPT1.0/2.0 hosting scripts documented |
 
 ---
