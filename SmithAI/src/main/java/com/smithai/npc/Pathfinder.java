@@ -124,7 +124,43 @@ public class Pathfinder {
             node = node.parent;
         }
         Collections.reverse(path);
-        return path;
+        return smooth(path);
+    }
+
+    private List<Location> smooth(List<Location> path) {
+        if (path.size() <= 2) return path;
+        List<Location> result = new ArrayList<>();
+        result.add(path.get(0));
+        int i = 0;
+        while (i < path.size() - 1) {
+            int furthest = i + 1;
+            for (int j = path.size() - 1; j > i; j--) {
+                if (lineClear(path.get(i), path.get(j))) {
+                    furthest = j;
+                    break;
+                }
+            }
+            result.add(path.get(furthest));
+            i = furthest;
+        }
+        return result;
+    }
+
+    private boolean lineClear(Location a, Location b) {
+        Vector dir = b.toVector().subtract(a.toVector());
+        double length = dir.length();
+        if (length < 0.01) return true;
+        dir.normalize();
+        for (double d = 0.5; d < length; d += 0.5) {
+            Location check = a.clone().add(dir.clone().multiply(d));
+            Block feet = check.getBlock();
+            Block head = feet.getRelative(BlockFace.UP);
+            if (isLiquidPassable(feet) && head.isPassable()) continue;
+            if (!feet.isPassable() || !head.isPassable() || isHazardous(feet) || isHazardous(head)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private List<Node> neighbors(Node node) {
@@ -184,9 +220,9 @@ public class Pathfinder {
         double extra = 0.0;
         if (isLiquidPassable(feet)) extra += 2.0;
         if (SLOW.contains(ground.getType())) extra += 1.5;
-        // Discourage falling unless it is the only route.
+        // Strongly discourage falling unless it is the only route.
         double drop = current.pos.getY() - neighbor.pos.getY();
-        if (drop > 0) extra += drop * 1.5;
+        if (drop > 0) extra += drop * 2.5;
         return extra;
     }
 

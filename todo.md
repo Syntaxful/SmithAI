@@ -282,7 +282,7 @@ Each skill needs:
 - [x] Stuck detection and recovery
 - [x] Multi-world teleport handling
 - [x] Path cost estimates (terrain, danger, distance)
-- [ ] Path smoothing and stricter cliff cost penalty
+- [x] Path smoothing and stricter cliff cost penalty
 
 ### 12. Inventory & Crafting Automation
 - [x] Check inventory stub
@@ -614,7 +614,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
 | Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
 | Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
-| Pathfinding & Movement | 95% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, and 48-block leash; path smoothing remains |
+| Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
 | Inventory & Crafting | 35% | Inventory scan, pick up, drop, and item use done; crafting automation pending |
 | Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
 | Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
