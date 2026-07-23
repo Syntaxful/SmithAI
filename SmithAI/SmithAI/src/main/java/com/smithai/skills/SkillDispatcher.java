@@ -71,6 +71,16 @@ public class SkillDispatcher {
             executeShieldBlock(npc, contextPlayer); return;
         }
 
+        // Flint & Steel (ignition)
+        if (lower.contains("flint") || lower.contains("ignite") || lower.contains("light_") || lower.contains("fire") || lower.contains("tnt")) {
+            executeFlintSteel(npc, contextPlayer); return;
+        }
+
+        // Ender Pearl
+        if (lower.contains("ender_pearl") || lower.contains("throw_pearl") || lower.contains("teleport_pearl") || lower.contains("pearl_throw")) {
+            executeEnderPearl(npc, contextPlayer); return;
+        }
+
         // Redstone
         if (lower.contains("redstone") || lower.contains("contraption") || lower.contains("circuit")) {
             executeRedstone(npc, contextPlayer); return;
@@ -1337,6 +1347,66 @@ public class SkillDispatcher {
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             fake.setWalkSpeed(0.2f);
         }, 100L);
+    }
+
+    // --- FLINT & STEEL ---
+
+    /**
+     * Ignite a block with flint and steel (light fires, activate TNT/nether portals).
+     */
+    private void executeFlintSteel(SmithNPC npc, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        if (!inv.contains(Material.FLINT_AND_STEEL)) {
+            npc.sendMessage(contextPlayer, "I need flint and steel!");
+            return;
+        }
+
+        // Find a block to ignite
+        Block target = loc.getBlock().getRelative(fake.getFacing());
+        if (target.getType() == Material.AIR || target.getType() == Material.TNT) {
+            if (target.getType() == Material.TNT) {
+                target.setType(Material.AIR);
+                target.getWorld().spawn(target.getLocation(), org.bukkit.entity.TNTPrimed.class);
+                npc.sendMessage(contextPlayer, "Primed TNT!");
+            } else {
+                target.setType(Material.FIRE);
+                npc.sendMessage(contextPlayer, "Lit a fire!");
+            }
+            target.getWorld().playSound(target.getLocation(), org.bukkit.Sound.ITEM_FLINTANDSTEEL_USE, 1.0f, 1.0f);
+            removeOne(fake, Material.FLINT_AND_STEEL);
+            sendAchievementToast(contextPlayer, "Flint and Steel!");
+        } else {
+            npc.sendMessage(contextPlayer, "Nothing to ignite there.");
+        }
+    }
+
+    // --- ENDER PEARL ---
+
+    /**
+     * Throw an ender pearl for teleportation.
+     */
+    @SuppressWarnings("deprecation")
+    private void executeEnderPearl(SmithNPC npc, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+
+        if (!fake.getInventory().contains(Material.ENDER_PEARL)) {
+            npc.sendMessage(contextPlayer, "I need an ender pearl!");
+            return;
+        }
+
+        removeOne(fake, Material.ENDER_PEARL);
+        org.bukkit.entity.EnderPearl pearl = fake.launchProjectile(org.bukkit.entity.EnderPearl.class);
+        pearl.setVelocity(fake.getLocation().getDirection().multiply(2.0));
+        npc.sendMessage(contextPlayer, "Threw an ender pearl!");
+        sendAchievementToast(contextPlayer, "Ender pearl!");
     }
 
     // --- REDSTONE ---
