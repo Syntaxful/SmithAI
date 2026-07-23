@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.smithai.util.VersionInfo;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -62,13 +63,21 @@ public class SkillDispatcher {
             return;
         }
 
-        // Elytra flying
+        // Elytra flying (version-aware — Eaglercraft 1.8 doesn't have elytra)
         if (lower.contains("elytra") || lower.contains("fly_") || lower.contains("glide") || lower.contains("soar")) {
+            if (!plugin.getVersionInfo().hasElytra()) {
+                npc.sendMessage(contextPlayer, "Elytra aren't available on this server version.");
+                return;
+            }
             executeElytraFly(npc, contextPlayer); return;
         }
 
-        // Shield blocking
+        // Shield blocking (version-aware — Eaglercraft 1.8 doesn't have shields)
         if (lower.contains("shield") || lower.contains("block_") || lower.contains("parry") || lower.contains("defend")) {
+            if (!plugin.getVersionInfo().hasShields()) {
+                npc.sendMessage(contextPlayer, "Shields aren't available on this server version.");
+                return;
+            }
             executeShieldBlock(npc, contextPlayer); return;
         }
 

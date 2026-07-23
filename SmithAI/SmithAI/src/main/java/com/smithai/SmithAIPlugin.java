@@ -44,6 +44,7 @@ public class SmithAIPlugin extends JavaPlugin {
     private DebugManager debugManager;
     private SubsystemHealth subsystemHealth;
     private int reminderTaskId = -1;
+    private final VersionInfo versionInfo = new VersionInfo();
     private final Random random = ThreadLocalRandom.current();
 
     @Override
@@ -257,6 +258,8 @@ public class SmithAIPlugin extends JavaPlugin {
     public DebugManager getDebugManager() {
         return debugManager;
     }
+
+    public VersionInfo getVersionInfo() { return versionInfo; }
 
     public SubsystemHealth getSubsystemHealth() {
         return subsystemHealth;

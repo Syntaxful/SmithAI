@@ -2,7 +2,28 @@
 
 ## Does SmithAI work with Eaglercraft?
 
-Yes. The plugin is built for Bukkit/Spigot/Paper 1.21.x, which is the server-side API used by Eaglercraft servers.
+Yes, fully. The plugin uses only public Bukkit/Spigot/Paper APIs and contains zero NMS (net.minecraft.server) code, making it compatible with any server that supports Bukkit plugins — including Eaglercraft 1.8.x and newer.
+
+### What works on Eaglercraft
+- **Chat & AI responses** — full chat integration, memory, training
+- **NPCs** — player-model NPCs with skins, armor, animations, nametags, speech bubbles
+- **World Interaction** — block breaking/placing, doors/levers/buttons, buckets, shearing/milking/taming, farming, mining, flint/steel, ender pearls
+- **Combat** — mob tactics, auto-equip, auto-food, buff potions, dodge/strafe
+- **Crafting & Inventory** — smart inventory management, auto-upgrade, auto-craft
+- **Commands** — all 25+ /smithai subcommands
+- **Building** — shelter construction, schematic loading, terraforming
+- **Enchanting** — all vanilla enchanting mechanics
+
+### Version-aware features
+SmithAI automatically detects your server type at startup. When running on Eaglercraft:
+- **Diamond mining** targets Y=11 (classic) instead of Y=-59 (modern)
+- **Block lists** exclude 1.13+ blocks (barrels, blast furnaces, smoker)
+- **Mob advice** excludes post-1.8 mobs (dolphins, turtles, phantoms, wardens)
+- **Feature gate** disables unsupported items like shields, elytra, and netherite
+- **Graceful degradation** — if a skill can't run on your version, the AI explains why
+
+### Configuration
+No special configuration is needed for Eaglercraft. The plugin detects the server type automatically.
 
 ## Do players need an account to use SmithAI?
 

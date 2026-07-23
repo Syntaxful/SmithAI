@@ -1,6 +1,7 @@
 package com.smithai.util;
 
 import org.bukkit.Bukkit;
+import java.util.List;
 
 /**
  * Detects the Minecraft server version at runtime so SmithAI can adapt its advice
@@ -112,6 +113,60 @@ public class VersionInfo {
 
     public boolean hasTrialChambers() {
         return isAtLeast(1, 21);
+    }
+
+    // --- GRACEFUL DEGRADATION ---
+
+    /**
+     * Whether this server supports 1.13+ blocks (barrel, blast_furnace, smoker, etc.).
+     * Eaglercraft 1.8.x does NOT support these.
+     */
+    public boolean hasModernBlocks() {
+        return isAtLeast(1, 13);
+    }
+
+    /**
+     * Whether this server supports shields (added in 1.9).
+     */
+    public boolean hasShields() {
+        return isAtLeast(1, 9);
+    }
+
+    /**
+     * Whether this server supports elytra (added in 1.9).
+     */
+    public boolean hasElytra() {
+        return isAtLeast(1, 9);
+    }
+
+    /**
+     * Whether this server supports dolphins/phantoms/turtles (added in 1.13).
+     */
+    public boolean hasModernMobs() {
+        return isAtLeast(1, 13);
+    }
+
+    /**
+     * Whether this server supports debug stick, crossbow, or fletching table.
+     */
+    public boolean hasVillagePillage() {
+        return isAtLeast(1, 14);
+    }
+
+    /**
+     * Returns a human-readable list of features NOT available on this server.
+     */
+    public String getUnsupportedFeatures() {
+        List<String> missing = new java.util.ArrayList<>();
+        if (!hasModernBlocks()) missing.add("1.13+ blocks (barrels, blast furnaces, smoker)");
+        if (!hasShields()) missing.add("shields");
+        if (!hasElytra()) missing.add("elytra");
+        if (!hasNetherite()) missing.add("netherite");
+        if (!hasWarden()) missing.add("warden/deep dark");
+        if (!hasTrialChambers()) missing.add("trial chambers");
+        if (!hasModernMobs()) missing.add("modern mobs (dolphins, turtles, phantoms)");
+        if (!hasVillagePillage()) missing.add("village & pillage features (crossbows, fletching tables)");
+        return missing.isEmpty() ? "none — all features available" : String.join(", ", missing);
     }
 
     static int[] parseVersion(String version) {
