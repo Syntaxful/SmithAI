@@ -48,6 +48,35 @@ public class SkillDispatcher {
         if (npc == null || npc.getEntity() == null || npc.getEntity().isDead()) return;
         String lower = skillName.toLowerCase();
 
+        // Precondition check
+        String reason = checkPrecondition(npc, skillName);
+        if (reason != null) {
+            sendToast(contextPlayer, "§c⚠ Skill blocked: " + reason);
+            if (contextPlayer != null) npc.sendMessage(contextPlayer, "I can't do that: " + reason);
+            return;
+        }
+
+        // Enchanting
+        if (lower.startsWith("enchant_") || lower.startsWith("enchant") || lower.startsWith("magic_")) {
+            executeEnchant(npc, lower, contextPlayer, params); return;
+        }
+
+        // Water bucket clutch
+        if (lower.startsWith("clutch_") || lower.startsWith("clutch") || lower.startsWith("water_clutch") || lower.startsWith("mlg")) {
+            executeClutch(npc, lower, contextPlayer); return;
+        }
+
+        // Building
+        if (lower.startsWith("build_") || lower.startsWith("construct_") || lower.startsWith("shelter") || lower.startsWith("wall") ||
+            lower.startsWith("floor") || lower.startsWith("roof") || lower.startsWith("house_") || lower.startsWith("make_shelter")) {
+            executeBuild(npc, lower, contextPlayer, params); return;
+        }
+
+        // Sleep / bed behavior
+        if (lower.startsWith("sleep_") || lower.startsWith("sleep") || lower.startsWith("use_bed") || lower.startsWith("bed")) {
+            executeSleep(npc, lower, contextPlayer); return;
+        }
+
         // Chat / social
         if (isChatSkill(lower)) { executeChat(npc, lower, contextPlayer); return; }
 
@@ -73,7 +102,12 @@ public class SkillDispatcher {
         if (isInteractionSkill(lower)) { executeInteraction(npc, lower, contextPlayer, params); return; }
 
         // Combat / survival / attack
-        if (isCombatSkill(lower)) { executeCombat(npc, lower, contextPlayer, params); return; }
+        if (isCombatSkill(lower)) {
+            executeCombat(npc, lower, contextPlayer, params);
+            // After combat, do smart inventory management
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> smartInventoryManagement(npc), 5L);
+            return;
+        }
 
         // Gather / resource / farming / crafting / building
         if (isResourceSkill(lower)) { executeResource(npc, lower, contextPlayer, params); return; }
@@ -88,6 +122,25 @@ public class SkillDispatcher {
         if (isCraftingSkill(lower)) { crafting.execute(npc, lower, params, contextPlayer); return; }
 
         executeComposite(npc, lower, contextPlayer, "I'll plan and execute that advanced objective: " + humanize(skillName));
+    }
+
+    /**
+     * Send a toast/notification to the player via the action bar.
+     */
+    private void sendToast(Player player, String message) {
+        if (player == null || !player.isOnline()) return;
+        player.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+            net.md_5.bungee.api.chat.TextComponent.fromLegacyText(message));
+    }
+
+    /**
+     * Show a toast for achievements/milestones (gold-colored with star prefix).
+     */
+    private void sendAchievementToast(Player player, String achievement) {
+        sendToast(player, "§6✦ §e" + achievement);
+        if (player != null && player.isOnline()) {
+            player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 0.7f, 1.2f);
+        }
     }
 
     // --- SKILL CATEGORIES ---
@@ -200,6 +253,39 @@ public class SkillDispatcher {
     }
 
     // --- INTERACTION ---
+
+    private void executeSleep(SmithNPC npc, String skill, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+
+        // Find a nearby bed
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+        Block bedBlock = null;
+        for (Block b : getNearbyBlocks(loc, 4, b -> b.getType().name().contains("BED"))) {
+            bedBlock = b;
+            break;
+        }
+        if (bedBlock == null) {
+            npc.sendMessage(contextPlayer, "No bed nearby to sleep in.");
+            return;
+        }
+
+        // Set bed spawn point and make player lie down
+        fake.setBedSpawnLocation(bedBlock.getLocation(), true);
+        fake.sleep(bedBlock.getLocation(), true);
+        npc.sendMessage(contextPlayer, "Good night! Sleeping until morning.");
+        sendAchievementToast(contextPlayer, "Smith_AI went to sleep!");
+
+        // Schedule wake up after a short time
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (!fake.isDead()) {
+                fake.wakeup(true);
+                npc.sendMessage(contextPlayer, "Good morning! Ready to work.");
+            }
+        }, 100L); // ~5 seconds
+    }
 
     private void executeInteraction(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
         // --- Inventory automation ---
@@ -892,6 +978,216 @@ public class SkillDispatcher {
             type.contains("squid") || type.contains("dolphin") || type.contains("turtle") || type.contains("polar_bear") ||
             type.contains("panda") || type.contains("ocelot") || type.contains("villager") || type.contains("wandering_trader") ||
             type.contains("iron_golem") || type.contains("snow_golem");
+    }
+
+    // --- SMART INVENTORY MANAGEMENT ---
+
+    /**
+     * Smart inventory management: auto-upgrade armor/tools, drop inferior items.
+     * Called automatically after combat and resource gathering.
+     */
+    private void smartInventoryManagement(SmithNPC npc) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        // 1. Upgrade armor (drop iron if you have diamond equipped now)
+        equipBestArmor(npc);
+
+        // 2. Remove inferior armor/tools from inventory (keep only best tier)
+        Material[][] upgradeChains = {
+            { Material.LEATHER_HELMET, Material.CHAINMAIL_HELMET, Material.GOLDEN_HELMET, Material.IRON_HELMET, Material.DIAMOND_HELMET, Material.TURTLE_HELMET },
+            { Material.LEATHER_CHESTPLATE, Material.CHAINMAIL_CHESTPLATE, Material.GOLDEN_CHESTPLATE, Material.IRON_CHESTPLATE, Material.DIAMOND_CHESTPLATE },
+            { Material.LEATHER_LEGGINGS, Material.CHAINMAIL_LEGGINGS, Material.GOLDEN_LEGGINGS, Material.IRON_LEGGINGS, Material.DIAMOND_LEGGINGS },
+            { Material.LEATHER_BOOTS, Material.CHAINMAIL_BOOTS, Material.GOLDEN_BOOTS, Material.IRON_BOOTS, Material.DIAMOND_BOOTS },
+        };
+        for (Material[] chain : upgradeChains) {
+            // Find the best tier we HAVE (not just equipped)
+            Material bestWeHave = Material.AIR;
+            for (int t = chain.length - 1; t >= 0; t--) {
+                if (inv.contains(chain[t])) { bestWeHave = chain[t]; break; }
+            }
+            if (bestWeHave == Material.AIR) continue;
+            // Remove all lower-tier items of this type
+            for (Material worse : chain) {
+                if (worse == bestWeHave) break; // stop at the best we have
+                while (inv.contains(worse)) {
+                    int idx = inv.first(worse);
+                    if (idx >= 0) inv.setItem(idx, null);
+                }
+            }
+        }
+
+        // 3. Tool upgrade: keep only best pickaxe/axe/shovel/sword
+        Material[][] toolChains = {
+            { Material.WOODEN_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE },
+            { Material.WOODEN_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.DIAMOND_AXE, Material.NETHERITE_AXE },
+            { Material.WOODEN_SHOVEL, Material.STONE_SHOVEL, Material.IRON_SHOVEL, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL },
+            { Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD },
+        };
+        for (Material[] chain : toolChains) {
+            Material bestWeHave = Material.AIR;
+            for (int t = chain.length - 1; t >= 0; t--) {
+                if (inv.contains(chain[t])) { bestWeHave = chain[t]; break; }
+            }
+            if (bestWeHave == Material.AIR) continue;
+            for (Material worse : chain) {
+                if (worse == bestWeHave) break;
+                while (inv.contains(worse)) {
+                    int idx = inv.first(worse);
+                    if (idx >= 0) inv.setItem(idx, null);
+                }
+            }
+        }
+    }
+
+    // --- ENCHANTING ---
+
+    /**
+     * Enchant the held item or a specified item using available XP and lapis.
+     */
+    private void executeEnchant(SmithNPC npc, String skill, Player contextPlayer, Map<String, Object> params) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+
+        Material target = Material.AIR;
+        if (params != null && params.containsKey("material")) {
+            target = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
+        }
+        if (target == Material.AIR || target == null) {
+            target = fake.getInventory().getItemInMainHand().getType();
+        }
+        if (target == Material.AIR || !isEnchantable(target)) {
+            npc.sendMessage(contextPlayer, "I need an enchantable item in hand or specified.");
+            return;
+        }
+
+        // Find enchanting table nearby
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+        Block table = null;
+        for (Block b : getNearbyBlocks(loc, 5, b -> b.getType() == Material.ENCHANTING_TABLE)) {
+            table = b; break;
+        }
+        if (table == null) {
+            npc.sendMessage(contextPlayer, "I need an enchanting table nearby.");
+            return;
+        }
+
+        // Open enchantment table and apply
+        fake.openEnchanting(table.getLocation(), true);
+        npc.sendMessage(contextPlayer, "Opened enchanting table. Place your item and select an enchantment.");
+        sendAchievementToast(contextPlayer, "Enchanting ready!");
+    }
+
+    private boolean isEnchantable(Material mat) {
+        String n = mat.name();
+        return n.contains("SWORD") || n.contains("PICKAXE") || n.contains("AXE") || n.contains("SHOVEL") ||
+               n.contains("HOE") || n.contains("HELMET") || n.contains("CHESTPLATE") ||
+               n.contains("LEGGINGS") || n.contains("BOOTS") || n.contains("BOW") ||
+               n.contains("CROSSBOW") || n.contains("TRIDENT") || n.contains("FISHING_ROD") ||
+               n.contains("ELYTRA");
+    }
+
+    // --- WATER BUCKET CLUTCHING ---
+
+    /**
+     * Water bucket clutch: place water below to negate fall damage.
+     */
+    private void executeClutch(SmithNPC npc, String skill, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        if (!inv.contains(Material.WATER_BUCKET)) {
+            npc.sendMessage(contextPlayer, "I need a water bucket to clutch!");
+            return;
+        }
+
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+        Block below = loc.getBlock().getRelative(BlockFace.DOWN);
+
+        // Place water below
+        below.setType(Material.WATER);
+        fake.setFallDistance(0);
+        inv.remove(Material.WATER_BUCKET);
+        // Place the empty bucket back
+        inv.addItem(new ItemStack(Material.BUCKET, 1));
+
+        npc.sendMessage(contextPlayer, "Water clutch deployed! Safe landing.");
+        sendAchievementToast(contextPlayer, "Water Bucket Clutch!");
+    }
+
+    // --- BUILDING ---
+
+    /**
+     * Build a simple structure: wall, floor, or shelter.
+     */
+    private void executeBuild(SmithNPC npc, String skill, Player contextPlayer, Map<String, Object> params) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        // Determine build material
+        Material blockMat = Material.AIR;
+        if (params != null && params.containsKey("material")) {
+            blockMat = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
+        }
+        if (blockMat == Material.AIR || blockMat == null) {
+            // Auto-detect best building block
+            Material[] candidates = { Material.STONE, Material.COBBLESTONE, Material.OAK_PLANKS, Material.DIRT, Material.OAK_LOG };
+            for (Material m : candidates) {
+                if (inv.contains(m)) { blockMat = m; break; }
+            }
+        }
+        if (blockMat == Material.AIR || !inv.contains(blockMat)) {
+            npc.sendMessage(contextPlayer, "I need building materials.");
+            return;
+        }
+
+        Location base = fake.getLocation();
+        if (base == null) return;
+
+        // Build a small shelter (3x3 floor, 3 high walls, roof)
+        int blocksPlaced = 0;
+        for (int x = -2; x <= 2; x++) {
+            for (int z = -2; z <= 2; z++) {
+                // Floor at y=0 (feet level)
+                Block floorBlock = base.clone().add(x, -1, z).getBlock();
+                if (floorBlock.getType() == Material.AIR && inv.contains(blockMat)) {
+                    floorBlock.setType(blockMat);
+                    removeOne(fake, blockMat);
+                    blocksPlaced++;
+                }
+                // Walls at y=0,1,2
+                for (int y = 0; y <= 2; y++) {
+                    boolean isEdge = Math.abs(x) == 2 || Math.abs(z) == 2;
+                    if (!isEdge) continue;
+                    Block wallBlock = base.clone().add(x, y, z).getBlock();
+                    if (wallBlock.getType() == Material.AIR && inv.contains(blockMat)) {
+                        wallBlock.setType(blockMat);
+                        removeOne(fake, blockMat);
+                        blocksPlaced++;
+                    }
+                }
+                // Roof at y=3
+                if (inv.contains(blockMat)) {
+                    Block roofBlock = base.clone().add(x, 3, z).getBlock();
+                    if (roofBlock.getType() == Material.AIR) {
+                        roofBlock.setType(blockMat);
+                        removeOne(fake, blockMat);
+                        blocksPlaced++;
+                    }
+                }
+            }
+        }
+        npc.sendMessage(contextPlayer, "Built a shelter (" + blocksPlaced + " blocks).");
+        if (blocksPlaced > 0) sendAchievementToast(contextPlayer, "Built a shelter!");
     }
 
     // --- ARMOR EQUIPPING ---
