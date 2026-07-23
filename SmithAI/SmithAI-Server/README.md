@@ -4,7 +4,6 @@ The official external AI server for the SmithAI Minecraft plugin. It hosts the l
 
 ## Run anywhere
 
-- Replit
 - GitHub Codespaces
 - Linux / Windows / macOS
 - VPS / dedicated server

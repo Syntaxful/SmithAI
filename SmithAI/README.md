@@ -15,10 +15,13 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 - **GitHub issue reporting** — `/smithai report` opens a prefilled issue with context
 - **API key authentication** for external servers (keys start with `SMA-`)
 - **Subsystem health monitoring** and in-game debug mode
-- **Hosting guide** for Replit, GitHub Codespaces, Linux, Windows, and VPS
+- **Hosting guide** for GitHub Codespaces, Linux, Windows, and VPS
 - **Docker support** for the Python server
 - **CI workflow** for GitHub Actions
-- **Build script** (`build.sh`) and **release packaging** (`package-release.sh`) for non-Maven users
+- **Pre-built JAR** (`SmithAI-2.0.0.jar` at repo root) — drop in and play
+- **Model scripts** (`./BuildBoth.sh`, `./BuildGPT1.0`, `./BuildGPT2.0`) — one-command model setup
+- **Switch scripts** (`./use-mini.sh`, `./use-gpt1.0.sh`, `./use-gpt2.0.sh`) — toggle between brains
+- **Release packaging** (`package-release.sh`) for distribution
 
 ## How the brains work
 
@@ -41,19 +44,47 @@ You choose which model to run on your external server. The plugin only connects 
 
 ## Quick start
 
-1. Build the plugin:
-   - With Maven: `cd SmithAI && mvn clean package`
-   - Or use the build script: `./build.sh`
-2. Copy `SmithAI/target/SmithAI-2.0.0.jar` to your server's `plugins/` folder
+1. Download `SmithAI-2.0.0.jar` from the repo root
+2. Copy it to your server's `plugins/` folder
 3. Start the server
 4. Spawn `Smith_AI` with `/smithai spawn`
 5. Talk to it: `Smith_AI, follow me` or `Smith_AI, get diamonds`
+
+> **No build needed** — the plugin is pre-built! Only build from source if you want to modify the code.
+
+## Model setup — three options
+
+Pick the brain size that fits your server:
+
+| Model | RAM | Setup |
+|-------|-----|-------|
+| **Smith-Mini 1.0** (built-in) | ~500MB | Nothing to do — works out of the box |
+| **SmithGPT 1.0** (4GB) | 8GB+ | `./BuildGPT1.0` then start the server |
+| **SmithGPT 2.0** (7.5GB) | 12GB+ | `./BuildGPT2.0` then start the server |
+
+### Switch between models anytime
+
+```
+./use-mini.sh       # Built-in (default, no server needed)
+./use-gpt1.0.sh     # Switch to SmithGPT 1.0 (4GB)
+./use-gpt2.0.sh     # Switch to SmithGPT 2.0 (7.5GB)
+```
+
+After switching, just restart the server to apply.
+
+### Build both models at once
+
+```
+./BuildBoth.sh      # Downloads both models (~11.5GB total)
+./BuildGPT1.0       # Download + configure SmithGPT 1.0 only
+./BuildGPT2.0       # Download + configure SmithGPT 2.0 only
+```
 
 ## External AI server (optional)
 
 For SmithGPT 1.0 or 2.0, see:
 - `SmithAI-Server/README.md` — how to run the server
-- `HOSTING.md` — how to host on Replit, Codespaces, Linux, Windows, VPS
+- `HOSTING.md` — how to host on Codespaces, Linux, Windows, VPS
 - `MODELS.md` — recommended model files and quantization guidance
 - `API.md` — full SmithAI-Server API reference
 - `models/README.md` — general model format guidance

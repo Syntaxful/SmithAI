@@ -15,7 +15,7 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 - **GitHub issue reporting** — `/smithai report` opens a prefilled issue with context
 - **API key authentication** for external servers (keys start with `SMA-`)
 - **Subsystem health monitoring** and in-game debug mode
-- **Hosting guide** for Replit, GitHub Codespaces, Linux, Windows, and VPS
+- **Hosting guide** for GitHub Codespaces, Linux, Windows, and VPS
 - **Docker support** for the Python server
 - **CI workflow** for GitHub Actions
 - **Pre-built JAR** (`SmithAI-2.0.0.jar`) — drop in and play
@@ -84,7 +84,7 @@ After switching, just restart the server to apply.
 
 For SmithGPT 1.0 or 2.0, see:
 - `SmithAI-Server/README.md` — how to run the server
-- `HOSTING.md` — how to host on Replit, Codespaces, Linux, Windows, VPS
+- `HOSTING.md` — how to host on Codespaces, Linux, Windows, VPS
 - `MODELS.md` — recommended model files and quantization guidance
 - `API.md` — full SmithAI-Server API reference
 - `models/README.md` — general model format guidance

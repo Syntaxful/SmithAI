@@ -42,13 +42,13 @@ If SmithAI is not working as expected, start here.
    curl -H "Authorization: Bearer SMA-xxxxxxxx" https://your-host.example.com/health
    ```
 5. Make sure the model file exists on the host and is in `SmithAI-Server/models/`.
-6. If the server is on Replit, make sure the deployment is public and the model file is uploaded.
+6. Make sure the model file exists on the host and the server is reachable from the Minecraft server.
 
 ## External AI is too slow or uses too much RAM
 
 1. Switch to a smaller GGUF model. For example, use a `Q4_K_M` quantization instead of `Q8_0` or `Q5_K_M`.
 2. Lower `context_size` and `max_tokens` in `SmithAI-Server/config.yml`.
-3. Lower `n_threads` if the host is shared (e.g., Replit free tier).
+3. Lower `n_threads` if the host has limited CPU cores.
 4. Use Smith-Mini 1.0 only if you do not need the external model: set `ai.external.enabled: false`.
 
 ## Wrong mining advice or version confusion

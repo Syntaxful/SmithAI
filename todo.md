@@ -48,7 +48,7 @@ This file is the single source of truth for what is finished and what remains. I
 - `/smithai version` command showing detected server version and feature flags
 - SmithGPT model sizes reduced: SmithGPT 1.0 → 4GB, SmithGPT 2.0 → 7.5GB, with updated docs, configs, and tier detection
 - Server startup scripts (`start.sh`, `start.bat`) and model download helper (`download_model.py`, `.sh`, `.bat`)
-- Workspace environment fixed: `.replit` module + `replit.nix` provide Maven and JDK 17 alongside Python 3.11, server has a public `/` status endpoint, and `SmithAI-Server/requirements-server.txt` is the lightweight runtime dependency list
+- Maven and JDK 17 + Python 3.11 available in the build environment, server has a public `/` status endpoint, and `SmithAI-Server/requirements-server.txt` is the lightweight runtime dependency list
 - Pathfinding improvements: hazard avoidance, water swimming, terrain costs, stuck detection/recovery, ladder/vine climbing, multi-world teleport, variable movement speed, bridge/speedbridge, diagonal movement, sprint/sneak, fall cost, and 48-block follow leash
 - GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is used only with explicit authorization
 
@@ -56,7 +56,7 @@ This file is the single source of truth for what is finished and what remains. I
 
 ## Project Goal (unchanged)
 
-Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-controlled NPCs (`Smith_AI`) with player-like models, natural chat, long-term memory, and a task engine. The plugin includes a built-in small model (`Smith-Mini 1.0`) and can connect to an optional external model (`SmithGPT 1.0` 4GB or `SmithGPT 2.0` 7.5GB) hosted on Replit, Codespaces, Linux, Windows, VPS, or any machine the user chooses. The user picks the model by running the matching `SmithAI-Server` and pointing the plugin at its URL/IP/port. No signup, free forever.
+Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-controlled NPCs (`Smith_AI`) with player-like models, natural chat, long-term memory, and a task engine. The plugin includes a built-in small model (`Smith-Mini 1.0`) and can connect to an optional external model (`SmithGPT 1.0` 4GB or `SmithGPT 2.0` 7.5GB) hosted on Codespaces, Linux, Windows, VPS, or any machine the user chooses. The user picks the model by running the matching `SmithAI-Server` and pointing the plugin at its URL/IP/port. No signup, free forever.
 
 ---
 
@@ -410,7 +410,7 @@ Each skill needs:
 - [x] Bearer token auth middleware
 - [x] Loads GGUF model via llama-cpp-python if present
 - [x] Configurable host, port, model path, max tokens, context size
-- [x] Uses `PORT` environment variable when available (Replit/Codespaces)
+- [x] Uses `PORT` environment variable when available (Codespaces)
 - [x] `requirements.txt`
 - [x] Server README
 - [x] Rule-based fallback when model is not loaded
@@ -477,7 +477,7 @@ Each skill needs:
 
 ### 23. Documentation
 - [x] README.md (overview, install, config, commands, skill library summary, new commands)
-- [x] HOSTING.md (Replit, Codespaces, Linux, Windows, VPS, Docker, health endpoint)
+- [x] HOSTING.md (Codespaces, Linux, Windows, VPS, Docker, health endpoint)
 - [x] FAQ.md (feedback, reporting, skills, models)
 - [x] LICENSE
 - [x] SKILLS.md (overview of 9000 skills, how to add, implementation status)

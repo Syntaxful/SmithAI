@@ -1,6 +1,6 @@
 # Hosting SmithAI-Server
 
-The `SmithAI-Server` is the external AI host for the SmithGPT models. This guide covers how to run it on **Replit**, **GitHub Codespaces**, **Linux**, **Windows**, and any **VPS**.
+The `SmithAI-Server` is the external AI host for the SmithGPT models. This guide covers how to run it on **GitHub Codespaces**, **Linux**, **Windows**, and any **VPS**.
 
 ## What you need
 
@@ -10,13 +10,6 @@ The `SmithAI-Server` is the external AI host for the SmithGPT models. This guide
   - SmithGPT 2.0 (7.5GB) → 12GB+ RAM recommended
 - The GGUF model file for the model you want to run (SmithGPT only)
 - A way to expose the server URL to the Minecraft plugin
-
-### Replit RAM limits
-
-Replit Reserved VM deployments currently top out at **16GB RAM** (4 vCPU / 16GB). That means:
-- **Smith-Mini 1.0** — no server needed; runs inside the plugin on any Replit plan.
-- **SmithGPT 1.0** — fits comfortably on the largest Replit machine (16GB) and most mid-range VPS plans.
-- **SmithGPT 2.0** — *may* fit on the largest Replit machine (16GB) but is tight; a 12GB+ VPS is more reliable.
 
 ## General setup
 
@@ -49,28 +42,15 @@ Replit Reserved VM deployments currently top out at **16GB RAM** (4 vCPU / 16GB)
 
 ---
 
-## Replit
+## Docker
 
-1. Create a new Replit project from this repo or upload the `SmithAI-Server` folder.
-2. In the **Tools** or **Shell** panel, install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Upload the GGUF model file to the `SmithAI-Server/models/` folder.
-4. In the `.replit` or **Run** config, set the command to:
-   ```bash
-   python app.py
-   ```
-5. Start the project. Replit will expose a URL.
-6. Copy the **public URL** from the Webview/Port panel.
-7. Paste the URL into the Minecraft plugin config:
-   ```yaml
-   ai:
-     external:
-       enabled: true
-       url: "https://your-replit-name.replit.app"
-   ```
-8. Copy the API key from the Replit console and paste it in Minecraft with `/SmithAPI set SMA-...`.
+For Docker users, the included `docker-compose.yml` handles everything:
+
+```bash
+docker-compose up -d
+```
+
+This builds the server image, mounts your models folder, and exposes port 8000. Override with `PORT=8080 docker-compose up -d`.
 
 ---
 

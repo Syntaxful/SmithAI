@@ -177,7 +177,7 @@ security:
   api_key: ""
 ```
 
-The `api_key` is auto-generated on first run if left empty. Set `PORT` as an environment variable to override `server.port` (useful on Replit and Codespaces).
+The `api_key` is auto-generated on first run if left empty. Set `PORT` as an environment variable to override `server.port` (useful on cloud hosts like Codespaces).
 
 ## Docker
 
