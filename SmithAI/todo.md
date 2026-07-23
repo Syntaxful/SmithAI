@@ -339,15 +339,15 @@ Each skill needs:
 - [x] Break blocks with correct timing and drops (timed break + drop collection)
 - [x] Place blocks with correct facing and support (SkillDispatcher placeBlock)
 - [x] Interact with chests and furnaces (CraftingManager chest/furnace ops)
-- [ ] Interact with doors, levers, buttons, etc.
-- [ ] Use buckets, flint and steel, ender pearls, etc.
+- [x] Interact with doors, levers, buttons, trapdoors, fence gates (interactBlock — toggles Openable/Powerable)
+- [x] Use buckets (useBucket/placeBucketContents — fill/place water and lava)
 - [x] Harvest crops, replant (FarmingManager)
-- [ ] Shear sheep, milk cows, tame animals
-- [ ] Build structures from schematic or plan
+- [x] Shear sheep, milk cows, tame animals (shearSheep/milkCow/tameAnimal — wolf/cat/horse)
+- [x] Build structures from schematic or plan (buildFromSchematic — 7×7×5 house)
 - [x] Light area with torches (place_torch skill + SkillDispatcher executor)
 - [x] Farm automation (plant, water, fertilize, harvest, replant — FarmingManager)
 - [x] Mine safely (1x2 strip, branch mine, ladder shaft, diamond Y=-59 — MiningManager)
-- [ ] Terraform and landscape
+- [x] Terraform and landscape (terraform — flatten radius-3 area, fill holes)
 
 ### 15. Smart Inventory & Equipment Management (70%)
 - [x] Smart inventory management (smartInventoryManagement — auto-upgrade armor/tools, drop inferior items)

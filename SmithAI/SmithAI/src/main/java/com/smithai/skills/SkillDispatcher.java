@@ -9,6 +9,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -337,6 +339,46 @@ public class SkillDispatcher {
         if (skill.contains("break_") || skill.contains("mine_") || skill.contains("chop_") || skill.contains("dig_")) {
             breakBlockTimed(npc, skill, params);
             return;
+        }
+        // Door / lever / button interaction
+        if (skill.contains("open_door") || skill.contains("close_door") || skill.contains("use_door") || skill.contains("toggle_door")) {
+            interactBlock(npc, skill, player, "DOOR"); return;
+        }
+        if (skill.contains("pull_lever") || skill.contains("use_lever") || skill.contains("toggle_lever")) {
+            interactBlock(npc, skill, player, "LEVER"); return;
+        }
+        if (skill.contains("press_button") || skill.contains("use_button") || skill.contains("click_button")) {
+            interactBlock(npc, skill, player, "BUTTON"); return;
+        }
+        if (skill.contains("use_trapdoor") || skill.contains("toggle_trapdoor") || skill.contains("open_trapdoor")) {
+            interactBlock(npc, skill, player, "TRAPDOOR"); return;
+        }
+        if (skill.contains("use_fence_gate") || skill.contains("toggle_gate") || skill.contains("open_gate")) {
+            interactBlock(npc, skill, player, "FENCE_GATE"); return;
+        }
+        // Bucket usage
+        if (skill.contains("fill_bucket") || skill.contains("water_bucket") || skill.contains("collect_water") || skill.contains("collect_lava")) {
+            useBucket(npc, skill, player); return;
+        }
+        if (skill.contains("place_water") || skill.contains("place_lava") || skill.contains("empty_bucket")) {
+            placeBucketContents(npc, skill, player); return;
+        }
+        // Animal interaction
+        if (skill.contains("shear_") || skill.contains("sheep_shear")) {
+            shearSheep(npc, player); return;
+        }
+        if (skill.contains("milk_") || skill.contains("milk_cow")) {
+            milkCow(npc, player); return;
+        }
+        if (skill.contains("tame_") || skill.contains("tame_animal") || skill.contains("tame_wolf") || skill.contains("tame_cat")) {
+            tameAnimal(npc, skill, player); return;
+        }
+        // Schematic building
+        if (skill.contains("build_schematic") || skill.contains("schematic") || skill.contains("blueprint")) {
+            buildFromSchematic(npc, skill, params, player); return;
+        }
+        if (skill.contains("terraform") || skill.contains("landscape") || skill.contains("flatten") || skill.contains("grade")) {
+            terraform(npc, skill, player); return;
         }
         npc.sendMessage(player, "Working on: " + humanize(skill));
     }
@@ -1481,6 +1523,319 @@ public class SkillDispatcher {
             if (player.getInventory().contains(f)) return true;
         }
         return false;
+    }
+
+    // ── WORLD INTERACTION METHODS ──
+
+    /**
+     * Interact with a toggleable block (door, lever, button, trapdoor, fence gate).
+     */
+    private void interactBlock(SmithNPC npc, String skill, Player player, String blockType) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        // Search nearby for matching blocks
+        for (Block b : getNearbyBlocks(loc, 4, b -> b.getType().name().contains(blockType))) {
+            // Toggle the block
+            if (b.getType().name().contains("DOOR") || b.getType().name().contains("GATE") ||
+                b.getType().name().contains("TRAPDOOR")) {
+                // Use setData to toggle — in 1.21, use BlockData
+                org.bukkit.block.data.Openable openable = (org.bukkit.block.data.Openable) b.getBlockData();
+                openable.setOpen(!openable.isOpen());
+                b.setBlockData(openable);
+            } else if (b.getType().name().contains("LEVER")) {
+                org.bukkit.block.data.Powerable powerable = (org.bukkit.block.data.Powerable) b.getBlockData();
+                powerable.setPowered(!powerable.isPowered());
+                b.setBlockData(powerable);
+            } else if (b.getType().name().contains("BUTTON")) {
+                org.bukkit.block.data.Powerable button = (org.bukkit.block.data.Powerable) b.getBlockData();
+                button.setPowered(true);
+                b.setBlockData(button);
+                // Auto-unpress after 1 second
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                    button.setPowered(false);
+                    b.setBlockData(button);
+                }, 20L);
+            }
+            npc.sendMessage(player, "Toggled " + blockType.toLowerCase().replace("_", " ") + ".");
+            fake.getWorld().playSound(b.getLocation(), org.bukkit.Sound.BLOCK_WOODEN_DOOR_OPEN, 0.7f, 1.0f);
+            return;
+        }
+        npc.sendMessage(player, "No " + blockType.toLowerCase().replace("_", " ") + " found nearby.");
+    }
+
+    /**
+     * Fill a bucket with water or lava from nearby source.
+     */
+    private void useBucket(SmithNPC npc, String skill, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        // Check for empty bucket
+        if (!inv.contains(Material.BUCKET)) {
+            npc.sendMessage(player, "I need an empty bucket.");
+            return;
+        }
+
+        boolean fillWater = skill.contains("water");
+        // Search for water or lava source
+        for (Block b : getNearbyBlocks(loc, 4, b -> {
+            return fillWater ? (b.getType() == Material.WATER) : (b.getType() == Material.LAVA);
+        })) {
+            removeOne(fake, Material.BUCKET);
+            inv.addItem(new ItemStack(fillWater ? Material.WATER_BUCKET : Material.LAVA_BUCKET, 1));
+            b.setType(Material.AIR); // Remove source block
+            npc.sendMessage(player, "Filled bucket with " + (fillWater ? "water" : "lava") + ".");
+            return;
+        }
+        npc.sendMessage(player, "No " + (fillWater ? "water" : "lava") + " source nearby.");
+    }
+
+    /**
+     * Place water or lava from a filled bucket.
+     */
+    private void placeBucketContents(SmithNPC npc, String skill, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        boolean placeWater = skill.contains("water");
+        Material needed = placeWater ? Material.WATER_BUCKET : Material.LAVA_BUCKET;
+        if (!inv.contains(needed)) {
+            npc.sendMessage(player, "I need a " + (placeWater ? "water" : "lava") + " bucket.");
+            return;
+        }
+
+        // Place in front of the player
+        Block target = loc.getBlock().getRelative(fake.getFacing());
+        if (target.getType() == Material.AIR) {
+            target.setType(placeWater ? Material.WATER : Material.LAVA);
+            removeOne(fake, needed);
+            inv.addItem(new ItemStack(Material.BUCKET, 1)); // Empty bucket back
+            npc.sendMessage(player, "Placed " + (placeWater ? "water" : "lava") + ".");
+        } else {
+            npc.sendMessage(player, "Can't place there, block is in the way.");
+        }
+    }
+
+    /**
+     * Shear a nearby sheep.
+     */
+    private void shearSheep(SmithNPC npc, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        if (!inv.contains(Material.SHEARS)) {
+            npc.sendMessage(player, "I need shears.");
+            return;
+        }
+
+        for (Entity e : loc.getWorld().getNearbyEntities(loc, 4, 4, 4)) {
+            if (e instanceof org.bukkit.entity.Sheep) {
+                org.bukkit.entity.Sheep sheep = (org.bukkit.entity.Sheep) e;
+                if (!sheep.isSheared()) {
+                    sheep.setSheared(true);
+                    // Drop wool
+                    loc.getWorld().dropItemNaturally(e.getLocation(), new ItemStack(Material.valueOf(sheep.getColor().name() + "_WOOL"), 1 + (int)(Math.random() * 2)));
+                    npc.sendMessage(player, "Sheared a " + sheep.getColor().name().toLowerCase() + " sheep!");
+                    // Damage shears
+                    ItemStack shears = inv.getItemInMainHand();
+                    if (shears != null && shears.getType() == Material.SHEARS) {
+                        org.bukkit.inventory.meta.Damageable dmgMeta = (org.bukkit.inventory.meta.Damageable) shears.getItemMeta();
+                        if (dmgMeta != null) {
+                            dmgMeta.setDamage(dmgMeta.getDamage() + 1);
+                            shears.setItemMeta((ItemMeta) dmgMeta);
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+        npc.sendMessage(player, "No unsheared sheep nearby.");
+    }
+
+    /**
+     * Milk a nearby cow.
+     */
+    private void milkCow(SmithNPC npc, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        if (!inv.contains(Material.BUCKET)) {
+            npc.sendMessage(player, "I need a bucket.");
+            return;
+        }
+
+        for (Entity e : loc.getWorld().getNearbyEntities(loc, 4, 4, 4)) {
+            if (e instanceof org.bukkit.entity.Cow) {
+                removeOne(fake, Material.BUCKET);
+                inv.addItem(new ItemStack(Material.MILK_BUCKET, 1));
+                npc.sendMessage(player, "Milked a cow!");
+                return;
+            }
+        }
+        npc.sendMessage(player, "No cow nearby.");
+    }
+
+    /**
+     * Tame a nearby animal (wolf, cat, parrot, horse).
+     */
+    private void tameAnimal(SmithNPC npc, String skill, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        // Determine taming item
+        Material tameItem = Material.BONE; // Default for wolves
+        String lower = skill.toLowerCase();
+        if (lower.contains("cat") || lower.contains("ocelot")) tameItem = Material.COD;
+        else if (lower.contains("parrot")) tameItem = Material.COOKIE;
+        else if (lower.contains("horse") || lower.contains("donkey") || lower.contains("mule")) tameItem = Material.GOLDEN_APPLE;
+        else if (lower.contains("fox")) tameItem = Material.SWEET_BERRIES;
+
+        if (!inv.contains(tameItem)) {
+            npc.sendMessage(player, "I need " + tameItem.name().toLowerCase().replace("_", " ") + " to tame.");
+            return;
+        }
+
+        for (Entity e : loc.getWorld().getNearbyEntities(loc, 5, 5, 5)) {
+            if (e instanceof org.bukkit.entity.Wolf && tameItem == Material.BONE) {
+                org.bukkit.entity.Wolf wolf = (org.bukkit.entity.Wolf) e;
+                if (!wolf.isTamed()) {
+                    wolf.setOwner(fake);
+                    wolf.setSitting(false);
+                    removeOne(fake, tameItem);
+                    npc.sendMessage(player, "Tamed a wolf!");
+                    sendAchievementToast(player, "Tamed a wolf!");
+                    return;
+                }
+            } else if (e instanceof org.bukkit.entity.Cat && tameItem == Material.COD) {
+                org.bukkit.entity.Cat cat = (org.bukkit.entity.Cat) e;
+                if (!cat.isTamed()) {
+                    cat.setOwner(fake);
+                    removeOne(fake, tameItem);
+                    npc.sendMessage(player, "Tamed a cat!");
+                    return;
+                }
+            } else if (e instanceof org.bukkit.entity.Horse && tameItem == Material.GOLDEN_APPLE) {
+                org.bukkit.entity.Horse horse = (org.bukkit.entity.Horse) e;
+                horse.setOwner(fake);
+                horse.setTamed(true);
+                removeOne(fake, tameItem);
+                npc.sendMessage(player, "Tamed a horse!");
+                return;
+            }
+        }
+        npc.sendMessage(player, "No tameable animal of that type nearby.");
+    }
+
+    /**
+     * Build a simple schematic: read from a plan or build a predefined structure.
+     */
+    private void buildFromSchematic(SmithNPC npc, String skill, Map<String, Object> params, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        // Check for building materials
+        Material walls = params != null && params.containsKey("material") ?
+            Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase()) : Material.COBBLESTONE;
+        if (walls == null) walls = findBestBuildingMaterial(fake);
+
+        npc.sendMessage(player, "Building a simple structure...");
+        // Build a 5x5x4 house (similar to shelter but larger)
+        int blocksPlaced = 0;
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                Block b = loc.clone().add(x, -1, z).getBlock();
+                if (b.getType() == Material.AIR && fake.getInventory().contains(walls)) {
+                    b.setType(walls); removeOne(fake, walls); blocksPlaced++;
+                }
+                // Walls, roof, etc
+                for (int y = 0; y <= 3; y++) {
+                    boolean edge = Math.abs(x) == 3 || Math.abs(z) == 3;
+                    if (!edge) continue;
+                    Block wb = loc.clone().add(x, y, z).getBlock();
+                    if (wb.getType() == Material.AIR && fake.getInventory().contains(walls)) {
+                        wb.setType(walls); removeOne(fake, walls); blocksPlaced++;
+                    }
+                }
+                // Roof
+                Block rb = loc.clone().add(x, 4, z).getBlock();
+                if (rb.getType() == Material.AIR && fake.getInventory().contains(walls)) {
+                    rb.setType(walls); removeOne(fake, walls); blocksPlaced++;
+                }
+            }
+        }
+        npc.sendMessage(player, "Built schematic house (" + blocksPlaced + " blocks).");
+        if (blocksPlaced > 0) sendAchievementToast(player, "Built a schematic!");
+    }
+
+    private Material findBestBuildingMaterial(Player player) {
+        Material[] candidates = { Material.STONE, Material.COBBLESTONE, Material.OAK_PLANKS, Material.DIRT, Material.OAK_LOG };
+        for (Material m : candidates) {
+            if (player.getInventory().contains(m)) return m;
+        }
+        return Material.COBBLESTONE;
+    }
+
+    /**
+     * Terraform/landscape: flatten a small area around the NPC.
+     */
+    private void terraform(SmithNPC npc, String skill, Player player) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        npc.sendMessage(player, "Flattening terrain...");
+        int blocksChanged = 0;
+        int radius = 3;
+        // Flatten the ground at y-1 level
+        int targetY = loc.getBlockY() - 1;
+        for (int x = -radius; x <= radius; x++) {
+            for (int z = -radius; z <= radius; z++) {
+                Block above = loc.clone().add(x, 0, z).getBlock();
+                Block current = loc.clone().add(x, -1, z).getBlock();
+                // Remove blocks above ground level
+                if (above.getType() != Material.AIR && above.getY() > targetY + 1) {
+                    above.setType(Material.AIR);
+                    blocksChanged++;
+                }
+                // Fill holes below ground level
+                if (current.getType() == Material.AIR && above.getType() != Material.AIR) {
+                    Material fill = findBestBuildingMaterial(fake);
+                    if (fill != null && fake.getInventory().contains(fill)) {
+                        current.setType(fill); removeOne(fake, fill); blocksChanged++;
+                    }
+                }
+            }
+        }
+        npc.sendMessage(player, "Terraformed " + blocksChanged + " blocks.");
     }
 
     // ── NEW SKILL DETECTORS ──
