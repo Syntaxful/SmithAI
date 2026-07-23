@@ -2,6 +2,8 @@ package com.smithai.skills;
 
 import com.smithai.SmithAIPlugin;
 import com.smithai.npc.SmithNPC;
+import com.smithai.util.BlockCompat;
+import com.smithai.util.MaterialCompat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -235,34 +237,30 @@ public class SkillDispatcher {
         if (!(entity instanceof Player)) return;
         Player fake = (Player) entity;
         PlayerInventory inv = fake.getInventory();
-        Material preferred = Material.AIR;
+        Material preferred = null;
         if (skill.contains("pickaxe") || skill.contains("mine") || skill.contains("dig") || skill.contains("break_stone") || skill.contains("ore") || skill.contains("obsidian")) {
-            preferred = Material.DIAMOND_PICKAXE;
-            if (!inv.contains(preferred)) preferred = Material.IRON_PICKAXE;
-            if (!inv.contains(preferred)) preferred = Material.STONE_PICKAXE;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_PICKAXE;
+            preferred = firstAvailable(inv, "DIAMOND_PICKAXE", "IRON_PICKAXE", "STONE_PICKAXE", "WOODEN_PICKAXE", "WOOD_PICKAXE");
         } else if (skill.contains("axe") || skill.contains("chop") || skill.contains("break_wood") || skill.contains("log")) {
-            preferred = Material.DIAMOND_AXE;
-            if (!inv.contains(preferred)) preferred = Material.IRON_AXE;
-            if (!inv.contains(preferred)) preferred = Material.STONE_AXE;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_AXE;
+            preferred = firstAvailable(inv, "DIAMOND_AXE", "IRON_AXE", "STONE_AXE", "WOODEN_AXE", "WOOD_AXE");
         } else if (skill.contains("sword") || skill.contains("fight") || skill.contains("attack") || skill.contains("combat") || skill.contains("hostile") || skill.contains("mob")) {
-            preferred = Material.DIAMOND_SWORD;
-            if (!inv.contains(preferred)) preferred = Material.IRON_SWORD;
-            if (!inv.contains(preferred)) preferred = Material.STONE_SWORD;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_SWORD;
+            preferred = firstAvailable(inv, "DIAMOND_SWORD", "IRON_SWORD", "STONE_SWORD", "WOODEN_SWORD", "WOOD_SWORD");
         } else if (skill.contains("shovel") || skill.contains("dirt") || skill.contains("sand") || skill.contains("gravel") || skill.contains("soil")) {
-            preferred = Material.DIAMOND_SHOVEL;
-            if (!inv.contains(preferred)) preferred = Material.IRON_SHOVEL;
-            if (!inv.contains(preferred)) preferred = Material.STONE_SHOVEL;
-            if (!inv.contains(preferred)) preferred = Material.WOODEN_SHOVEL;
+            preferred = firstAvailable(inv, "DIAMOND_SHOVEL", "IRON_SHOVEL", "STONE_SHOVEL", "WOODEN_SHOVEL", "WOOD_SPADE");
         }
-        if (preferred != Material.AIR && inv.contains(preferred)) {
+        if (preferred != null && inv.contains(preferred)) {
             int slot = inv.first(preferred);
             if (slot >= 0 && slot < 9) {
                 inv.setHeldItemSlot(slot);
             }
         }
+    }
+
+    private Material firstAvailable(PlayerInventory inv, String... names) {
+        for (String name : names) {
+            Material mat = MaterialCompat.get(name);
+            if (mat != null && inv.contains(mat)) return mat;
+        }
+        return null;
     }
 
     private void placeTorch(SmithNPC npc) {
@@ -272,12 +270,13 @@ public class SkillDispatcher {
         if (!(entity instanceof Player)) return;
         Player fake = (Player) entity;
         PlayerInventory inv = fake.getInventory();
-        if (!inv.contains(Material.TORCH)) return;
+        Material torch = MaterialCompat.get("TORCH", "LEGACY_TORCH");
+        if (torch == null || !inv.contains(torch)) return;
         Block target = loc.getBlock();
         Block placeOn = target.getRelative(BlockFace.DOWN);
-        if (placeOn.getType().isSolid() && target.getType().isAir()) {
-            target.setType(Material.TORCH);
-            removeOne(fake, Material.TORCH);
+        if (MaterialCompat.isSolid(placeOn.getType()) && BlockCompat.isAir(target)) {
+            target.setType(torch);
+            removeOne(fake, torch);
         }
     }
 
@@ -289,11 +288,11 @@ public class SkillDispatcher {
         Player fake = (Player) entity;
         String matName = String.valueOf(params.get("material")).toUpperCase();
         Material mat = Material.matchMaterial(matName);
-        if (mat == null || !mat.isBlock()) mat = Material.DIRT;
+        if (mat == null || !MaterialCompat.isBlock(mat)) mat = Material.DIRT;
         PlayerInventory inv = fake.getInventory();
         if (!inv.contains(mat)) return;
         Block target = loc.getBlock();
-        if (target.getType().isAir()) {
+        if (BlockCompat.isAir(target)) {
             target.setType(mat);
             removeOne(fake, mat);
         }
@@ -311,7 +310,8 @@ public class SkillDispatcher {
                 target = loc.getWorld().getBlockAt(x, y, z);
             } catch (Exception ignored) {}
         }
-        if (target.getType() == Material.AIR || target.getType() == Material.BEDROCK || target.getType() == Material.WATER || target.getType() == Material.LAVA) {
+        Material t = target.getType();
+        if (BlockCompat.isAir(target) || t == Material.BEDROCK || t == Material.WATER || t == Material.LAVA || t == MaterialCompat.get("STATIONARY_WATER") || t == MaterialCompat.get("STATIONARY_LAVA")) {
             return;
         }
         selectBestTool(npc, skill);
@@ -346,9 +346,20 @@ public class SkillDispatcher {
         }
         if (mat == null || mat == Material.AIR) {
             // Default food/potion choices
-            Material[] foods = { Material.COOKED_BEEF, Material.COOKED_PORKCHOP, Material.COOKED_CHICKEN, Material.BREAD, Material.COOKED_MUTTON, Material.COOKED_RABBIT, Material.BAKED_POTATO, Material.GOLDEN_APPLE, Material.APPLE, Material.CARROT };
+            Material[] foods = {
+                MaterialCompat.get("COOKED_BEEF", "COOKED_BEEF"),
+                MaterialCompat.get("COOKED_PORKCHOP", "GRILLED_PORK"),
+                MaterialCompat.get("COOKED_CHICKEN", "COOKED_CHICKEN"),
+                MaterialCompat.get("BREAD", "BREAD"),
+                MaterialCompat.get("COOKED_MUTTON", "COOKED_MUTTON"),
+                MaterialCompat.get("COOKED_RABBIT", "COOKED_RABBIT"),
+                MaterialCompat.get("BAKED_POTATO", "BAKED_POTATO"),
+                MaterialCompat.get("GOLDEN_APPLE", "GOLDEN_APPLE"),
+                MaterialCompat.get("APPLE", "APPLE"),
+                MaterialCompat.get("CARROT", "CARROT_ITEM")
+            };
             for (Material food : foods) {
-                if (inv.contains(food)) {
+                if (food != null && inv.contains(food)) {
                     mat = food;
                     break;
                 }
@@ -358,7 +369,7 @@ public class SkillDispatcher {
             return;
         }
         // For food items, heal the NPC instead of consuming in the fake inventory
-        if (mat.isEdible() && entity instanceof LivingEntity) {
+        if (MaterialCompat.isEdible(mat) && entity instanceof LivingEntity) {
             LivingEntity le = (LivingEntity) entity;
             le.setHealth(Math.min(le.getHealth() + 4, le.getMaxHealth()));
             removeOne(fake, mat);

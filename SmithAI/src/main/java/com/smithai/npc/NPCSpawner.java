@@ -1,9 +1,12 @@
 package com.smithai.npc;
 
 import com.smithai.SmithAIPlugin;
+import com.smithai.util.LivingEntityCompat;
+import com.smithai.util.VillagerCompat;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Villager;
 
 import java.util.UUID;
@@ -19,13 +22,16 @@ public class NPCSpawner {
         Entity entity = location.getWorld().spawnEntity(location, EntityType.VILLAGER);
         if (entity instanceof Villager) {
             Villager villager = (Villager) entity;
-            villager.setAI(false);
-            villager.setAware(false);
+            LivingEntityCompat.setAI(villager, false);
+            VillagerCompat.setAware(villager, false);
             villager.setCustomName(name);
             villager.setCustomNameVisible(true);
             villager.setSilent(true);
             villager.setInvulnerable(true);
-            villager.setProfession(Villager.Profession.NONE);
+            VillagerCompat.setNoProfession(villager);
+        }
+        if (entity instanceof LivingEntity) {
+            LivingEntityCompat.setAI((LivingEntity) entity, false);
         }
 
         return new SmithNPC(UUID.randomUUID(), entity, name);

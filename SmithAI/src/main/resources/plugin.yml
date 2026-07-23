@@ -1,9 +1,9 @@
 name: SmithAI
 version: ${project.version}
 main: com.smithai.SmithAIPlugin
-api-version: '1.21'
+api-version: '1.12'
 author: SmithAI Team
-description: Official SmithAI plugin - trainable AI companion with Smith-Mini, SmithGPT 1.0, and SmithGPT 2.0 support.
+description: Official SmithAI plugin - trainable AI companion with Smith-Mini, SmithGPT 1.0, and SmithGPT 2.0 support. Works on Minecraft 1.12 - 1.21.x.
 
 commands:
   smithai:

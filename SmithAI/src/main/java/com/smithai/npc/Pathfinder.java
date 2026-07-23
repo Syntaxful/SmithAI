@@ -1,5 +1,7 @@
 package com.smithai.npc;
 
+import com.smithai.util.BlockCompat;
+import com.smithai.util.MaterialCompat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,17 +18,47 @@ import java.util.*;
 public class Pathfinder {
 
     // Blocks that damage the NPC or otherwise cannot be safely walked through.
-    private static final EnumSet<Material> HAZARDOUS = EnumSet.of(
-        Material.LAVA, Material.FIRE, Material.SOUL_FIRE, Material.CACTUS,
-        Material.SWEET_BERRY_BUSH, Material.WITHER_ROSE, Material.CAMPFIRE,
-        Material.SOUL_CAMPFIRE, Material.MAGMA_BLOCK
-    );
+    private static final Set<Material> HAZARDOUS = initHazardous();
 
     // Blocks the NPC can swim through, but with a movement cost penalty.
-    private static final EnumSet<Material> LIQUID_PASSABLE = EnumSet.of(Material.WATER);
+    private static final Set<Material> LIQUID_PASSABLE = initLiquidPassable();
 
     // Blocks that slow the NPC down.
-    private static final EnumSet<Material> SLOW = EnumSet.of(Material.SOUL_SAND, Material.SOUL_SOIL, Material.COBWEB);
+    private static final Set<Material> SLOW = initSlow();
+
+    private static Set<Material> initHazardous() {
+        Set<Material> set = EnumSet.noneOf(Material.class);
+        add(set, "LAVA");
+        add(set, "FIRE");
+        add(set, "SOUL_FIRE");
+        add(set, "CACTUS");
+        add(set, "SWEET_BERRY_BUSH");
+        add(set, "WITHER_ROSE");
+        add(set, "CAMPFIRE");
+        add(set, "SOUL_CAMPFIRE");
+        add(set, "MAGMA_BLOCK");
+        return set;
+    }
+
+    private static Set<Material> initLiquidPassable() {
+        Set<Material> set = EnumSet.noneOf(Material.class);
+        add(set, "WATER");
+        add(set, "STATIONARY_WATER");
+        return set;
+    }
+
+    private static Set<Material> initSlow() {
+        Set<Material> set = EnumSet.noneOf(Material.class);
+        add(set, "SOUL_SAND");
+        add(set, "SOUL_SOIL");
+        add(set, "COBWEB");
+        return set;
+    }
+
+    private static void add(Set<Material> set, String name) {
+        Material mat = MaterialCompat.get(name);
+        if (mat != null) set.add(mat);
+    }
 
     private final World world;
     private final int maxNodes;
@@ -155,8 +187,8 @@ public class Pathfinder {
             Location check = a.clone().add(dir.clone().multiply(d));
             Block feet = check.getBlock();
             Block head = feet.getRelative(BlockFace.UP);
-            if (isLiquidPassable(feet) && head.isPassable()) continue;
-            if (!feet.isPassable() || !head.isPassable() || isHazardous(feet) || isHazardous(head)) {
+            if (isLiquidPassable(feet) && BlockCompat.isPassable(head)) continue;
+            if (!BlockCompat.isPassable(feet) || !BlockCompat.isPassable(head) || isHazardous(feet) || isHazardous(head)) {
                 return false;
             }
         }
@@ -189,7 +221,7 @@ public class Pathfinder {
     private boolean isClear(Vector pos) {
         Block feet = world.getBlockAt(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ());
         Block head = feet.getRelative(BlockFace.UP);
-        return feet.isPassable() && head.isPassable() && !isHazardous(feet) && !isHazardous(head);
+        return BlockCompat.isPassable(feet) && BlockCompat.isPassable(head) && !isHazardous(feet) && !isHazardous(head);
     }
 
     private boolean isWalkable(Node node) {
@@ -200,14 +232,15 @@ public class Pathfinder {
         if (isHazardous(feet) || isHazardous(head) || isHazardous(ground)) return false;
 
         // Allow swimming through water if the head is clear.
-        if (isLiquidPassable(feet) && head.isPassable()) return true;
+        if (isLiquidPassable(feet) && BlockCompat.isPassable(head)) return true;
 
-        if (!feet.isPassable() || !head.isPassable()) return false;
-        if (ground.isPassable()) {
+        if (!BlockCompat.isPassable(feet) || !BlockCompat.isPassable(head)) return false;
+        if (BlockCompat.isPassable(ground)) {
             // allow falling up to fallHeight
-            for (int i = 2; i <= fallHeight; i++) {
+            int fall = (int) Math.floor(fallHeight);
+            for (int i = 2; i <= fall; i++) {
                 Block below = feet.getRelative(0, -i, 0);
-                if (!below.isPassable()) return true;
+                if (!BlockCompat.isPassable(below)) return true;
             }
             return false;
         }
@@ -227,11 +260,11 @@ public class Pathfinder {
     }
 
     private boolean isHazardous(Block block) {
-        return HAZARDOUS.contains(block.getType());
+        return block != null && HAZARDOUS.contains(block.getType());
     }
 
     private boolean isLiquidPassable(Block block) {
-        return LIQUID_PASSABLE.contains(block.getType());
+        return block != null && LIQUID_PASSABLE.contains(block.getType());
     }
 
     private static class Node {

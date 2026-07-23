@@ -1,6 +1,8 @@
 package com.smithai.npc;
 
 import com.smithai.SmithAIPlugin;
+import com.smithai.util.BlockCompat;
+import com.smithai.util.MaterialCompat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,12 +39,26 @@ public class SmithNPC {
     private long lastBridgeTime = 0;
     private static final long BRIDGE_COOLDOWN_MS = 250;
 
-    private static final Material[] BRIDGE_MATERIALS = {
-        Material.COBBLESTONE, Material.STONE, Material.DIRT, Material.OAK_PLANKS,
-        Material.SPRUCE_PLANKS, Material.BIRCH_PLANKS, Material.JUNGLE_PLANKS,
-        Material.ACACIA_PLANKS, Material.DARK_OAK_PLANKS, Material.MANGROVE_PLANKS,
-        Material.CRIMSON_PLANKS, Material.WARPED_PLANKS, Material.NETHERRACK
-    };
+    private static final Material[] BRIDGE_MATERIALS = initBridgeMaterials();
+
+    private static Material[] initBridgeMaterials() {
+        Material[] candidates = {
+            MaterialCompat.get("COBBLESTONE"),
+            MaterialCompat.get("STONE"),
+            MaterialCompat.get("DIRT"),
+            MaterialCompat.get("OAK_PLANKS", "WOOD"),
+            MaterialCompat.get("SPRUCE_PLANKS", "WOOD", "SPRUCE_WOOD"),
+            MaterialCompat.get("BIRCH_PLANKS", "BIRCH_WOOD"),
+            MaterialCompat.get("JUNGLE_PLANKS", "JUNGLE_WOOD"),
+            MaterialCompat.get("ACACIA_PLANKS", "ACACIA_WOOD"),
+            MaterialCompat.get("DARK_OAK_PLANKS", "DARK_OAK_WOOD"),
+            MaterialCompat.get("MANGROVE_PLANKS"),
+            MaterialCompat.get("CRIMSON_PLANKS", "CRIMSON_WOOD"),
+            MaterialCompat.get("WARPED_PLANKS", "WARPED_WOOD"),
+            MaterialCompat.get("NETHERRACK")
+        };
+        return java.util.Arrays.stream(candidates).filter(m -> m != null).toArray(Material[]::new);
+    }
 
     public SmithNPC(UUID id, Entity entity, String name) {
         this.id = id;
@@ -97,9 +113,6 @@ public class SmithNPC {
         Location loc = getLocation();
         if (loc != null && target != null && target.getWorld().equals(loc.getWorld())) {
             loc.setDirection(target.clone().subtract(loc).toVector());
-            if (entity instanceof LivingEntity) {
-                ((LivingEntity) entity).setAI(false);
-            }
             entity.teleport(loc);
         }
     }
@@ -302,12 +315,12 @@ public class SmithNPC {
         // Simple step-up / jump logic
         if (climbing) {
             velocity.setY(0.3);
-        } else if (!blockAhead.isPassable() && blockAboveAhead.isPassable() && blockFeet.isPassable()) {
+        } else if (!BlockCompat.isPassable(blockAhead) && BlockCompat.isPassable(blockAboveAhead) && BlockCompat.isPassable(blockFeet)) {
             velocity.setY(0.45);
         } else if (inWater) {
             // Swim upward to stay at the surface and move through water.
             velocity.setY(0.15);
-        } else if (blockGround.isPassable() && blockFeet.isPassable()) {
+        } else if (BlockCompat.isPassable(blockGround) && BlockCompat.isPassable(blockFeet)) {
             // falling, keep gravity
         } else {
             velocity.setY(Math.min(0.0, velocity.getY()));
@@ -319,7 +332,7 @@ public class SmithNPC {
         tryBridge(current, direction);
 
         // Sneak near an edge to avoid walking off a cliff.
-        boolean nearEdge = blockGround.isPassable() && !inWater && !climbing;
+        boolean nearEdge = BlockCompat.isPassable(blockGround) && !inWater && !climbing;
         setSneaking(nearEdge);
     }
 
@@ -337,11 +350,12 @@ public class SmithNPC {
 
     private boolean isClimbable(Block block) {
         Material type = block.getType();
-        return type == Material.LADDER || type == Material.VINE || type == Material.TWISTING_VINES || type == Material.WEEPING_VINES;
+        return type == MaterialCompat.get("LADDER") || type == MaterialCompat.get("VINE") || type == MaterialCompat.get("TWISTING_VINES") || type == MaterialCompat.get("WEEPING_VINES");
     }
 
     private boolean isLiquidPassable(Block block) {
-        return block.getType() == Material.WATER;
+        Material type = block.getType();
+        return type == Material.WATER || type == MaterialCompat.get("STATIONARY_WATER");
     }
 
     private void tryBridge(Location current, Vector direction) {
@@ -359,7 +373,7 @@ public class SmithNPC {
         // Speedbridge: place a block one step ahead in the direction of travel.
         Location ahead = current.clone().add(horizontal);
         Block aheadGround = ahead.clone().add(0, -1, 0).getBlock();
-        if (aheadGround.isPassable() && !isLiquidPassable(aheadGround)) {
+        if (BlockCompat.isPassable(aheadGround) && !isLiquidPassable(aheadGround)) {
             placeBlockAt(aheadGround.getLocation(), mat);
             lastBridgeTime = now;
             return;
@@ -367,7 +381,7 @@ public class SmithNPC {
 
         // Fallback: place a block under the current position to catch a fall.
         Block currentGround = current.clone().add(0, -1, 0).getBlock();
-        if (currentGround.isPassable() && !isLiquidPassable(currentGround)) {
+        if (BlockCompat.isPassable(currentGround) && !isLiquidPassable(currentGround)) {
             placeBlockAt(currentGround.getLocation(), mat);
             lastBridgeTime = now;
         }
@@ -385,7 +399,7 @@ public class SmithNPC {
 
     private void placeBlockAt(Location loc, Material mat) {
         Block block = loc.getBlock();
-        if (!block.getType().isAir()) return;
+        if (!BlockCompat.isAir(block)) return;
         block.setType(mat);
         if (entity instanceof Player) {
             removeOne((Player) entity, mat);
