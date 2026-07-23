@@ -1,0 +1,1850 @@
+[
+  {
+    "id": "minecraft:wooden_pickaxe",
+    "category": "item",
+    "name": "Wooden Pickaxe",
+    "description": "Can mine stone and coal ore.",
+    "tags": [
+      "item",
+      "tool",
+      "pickaxe",
+      "wood"
+    ]
+  },
+  {
+    "id": "minecraft:stone_pickaxe",
+    "category": "item",
+    "name": "Stone Pickaxe",
+    "description": "Can mine iron ore and lapis.",
+    "tags": [
+      "item",
+      "tool",
+      "pickaxe",
+      "stone"
+    ]
+  },
+  {
+    "id": "minecraft:iron_pickaxe",
+    "category": "item",
+    "name": "Iron Pickaxe",
+    "description": "Can mine diamond ore, redstone, and gold.",
+    "tags": [
+      "item",
+      "tool",
+      "pickaxe",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_pickaxe",
+    "category": "item",
+    "name": "Diamond Pickaxe",
+    "description": "Fast, durable pickaxe. Can mine obsidian.",
+    "tags": [
+      "item",
+      "tool",
+      "pickaxe",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_pickaxe",
+    "category": "item",
+    "name": "Netherite Pickaxe",
+    "description": "The strongest pickaxe.",
+    "tags": [
+      "item",
+      "tool",
+      "pickaxe",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:wooden_axe",
+    "category": "item",
+    "name": "Wooden Axe",
+    "description": "Chops wood faster.",
+    "tags": [
+      "item",
+      "tool",
+      "axe",
+      "wood"
+    ]
+  },
+  {
+    "id": "minecraft:stone_axe",
+    "category": "item",
+    "name": "Stone Axe",
+    "description": "Basic axe.",
+    "tags": [
+      "item",
+      "tool",
+      "axe",
+      "stone"
+    ]
+  },
+  {
+    "id": "minecraft:iron_axe",
+    "category": "item",
+    "name": "Iron Axe",
+    "description": "Durable iron axe.",
+    "tags": [
+      "item",
+      "tool",
+      "axe",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_axe",
+    "category": "item",
+    "name": "Diamond Axe",
+    "description": "Very fast axe.",
+    "tags": [
+      "item",
+      "tool",
+      "axe",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_axe",
+    "category": "item",
+    "name": "Netherite Axe",
+    "description": "The strongest axe.",
+    "tags": [
+      "item",
+      "tool",
+      "axe",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:wooden_shovel",
+    "category": "item",
+    "name": "Wooden Shovel",
+    "description": "Basic shovel.",
+    "tags": [
+      "item",
+      "tool",
+      "shovel",
+      "wood"
+    ]
+  },
+  {
+    "id": "minecraft:stone_shovel",
+    "category": "item",
+    "name": "Stone Shovel",
+    "description": "Better shovel.",
+    "tags": [
+      "item",
+      "tool",
+      "shovel",
+      "stone"
+    ]
+  },
+  {
+    "id": "minecraft:iron_shovel",
+    "category": "item",
+    "name": "Iron Shovel",
+    "description": "Durable shovel.",
+    "tags": [
+      "item",
+      "tool",
+      "shovel",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_shovel",
+    "category": "item",
+    "name": "Diamond Shovel",
+    "description": "Very fast shovel.",
+    "tags": [
+      "item",
+      "tool",
+      "shovel",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_shovel",
+    "category": "item",
+    "name": "Netherite Shovel",
+    "description": "The strongest shovel.",
+    "tags": [
+      "item",
+      "tool",
+      "shovel",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:wooden_hoe",
+    "category": "item",
+    "name": "Wooden Hoe",
+    "description": "Tills dirt into farmland.",
+    "tags": [
+      "item",
+      "tool",
+      "hoe",
+      "wood"
+    ]
+  },
+  {
+    "id": "minecraft:stone_hoe",
+    "category": "item",
+    "name": "Stone Hoe",
+    "description": "Tills dirt into farmland.",
+    "tags": [
+      "item",
+      "tool",
+      "hoe",
+      "stone"
+    ]
+  },
+  {
+    "id": "minecraft:iron_hoe",
+    "category": "item",
+    "name": "Iron Hoe",
+    "description": "Tills dirt into farmland.",
+    "tags": [
+      "item",
+      "tool",
+      "hoe",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_hoe",
+    "category": "item",
+    "name": "Diamond Hoe",
+    "description": "Fastest hoe.",
+    "tags": [
+      "item",
+      "tool",
+      "hoe",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_hoe",
+    "category": "item",
+    "name": "Netherite Hoe",
+    "description": "The strongest hoe.",
+    "tags": [
+      "item",
+      "tool",
+      "hoe",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:wooden_sword",
+    "category": "item",
+    "name": "Wooden Sword",
+    "description": "Lowest tier sword.",
+    "tags": [
+      "item",
+      "weapon",
+      "sword",
+      "wood"
+    ]
+  },
+  {
+    "id": "minecraft:stone_sword",
+    "category": "item",
+    "name": "Stone Sword",
+    "description": "Basic sword.",
+    "tags": [
+      "item",
+      "weapon",
+      "sword",
+      "stone"
+    ]
+  },
+  {
+    "id": "minecraft:iron_sword",
+    "category": "item",
+    "name": "Iron Sword",
+    "description": "Durable sword.",
+    "tags": [
+      "item",
+      "weapon",
+      "sword",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_sword",
+    "category": "item",
+    "name": "Diamond Sword",
+    "description": "Fast, durable sword.",
+    "tags": [
+      "item",
+      "weapon",
+      "sword",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_sword",
+    "category": "item",
+    "name": "Netherite Sword",
+    "description": "The strongest sword.",
+    "tags": [
+      "item",
+      "weapon",
+      "sword",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:bow",
+    "category": "item",
+    "name": "Bow",
+    "description": "Ranged weapon.",
+    "tags": [
+      "item",
+      "weapon",
+      "ranged"
+    ]
+  },
+  {
+    "id": "minecraft:crossbow",
+    "category": "item",
+    "name": "Crossbow",
+    "description": "Ranged weapon loaded with arrows or fireworks.",
+    "tags": [
+      "item",
+      "weapon",
+      "ranged"
+    ]
+  },
+  {
+    "id": "minecraft:arrow",
+    "category": "item",
+    "name": "Arrow",
+    "description": "Ammo for bows and crossbows.",
+    "tags": [
+      "item",
+      "weapon",
+      "ranged",
+      "ammo"
+    ]
+  },
+  {
+    "id": "minecraft:spectral_arrow",
+    "category": "item",
+    "name": "Spectral Arrow",
+    "description": "Arrow that gives the Glowing effect.",
+    "tags": [
+      "item",
+      "weapon",
+      "ranged",
+      "ammo"
+    ]
+  },
+  {
+    "id": "minecraft:tipped_arrow",
+    "category": "item",
+    "name": "Tipped Arrow",
+    "description": "Arrow tipped with a potion effect.",
+    "tags": [
+      "item",
+      "weapon",
+      "ranged",
+      "ammo",
+      "potion"
+    ]
+  },
+  {
+    "id": "minecraft:trident",
+    "category": "item",
+    "name": "Trident",
+    "description": "Melee and ranged weapon.",
+    "tags": [
+      "item",
+      "weapon",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:shield",
+    "category": "item",
+    "name": "Shield",
+    "description": "Blocks incoming attacks.",
+    "tags": [
+      "item",
+      "weapon",
+      "defense"
+    ]
+  },
+  {
+    "id": "minecraft:turtle_helmet",
+    "category": "item",
+    "name": "Turtle Shell",
+    "description": "Helmet giving water breathing.",
+    "tags": [
+      "item",
+      "armor",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:leather_helmet",
+    "category": "item",
+    "name": "Leather Helmet",
+    "description": "Basic helmet.",
+    "tags": [
+      "item",
+      "armor",
+      "leather"
+    ]
+  },
+  {
+    "id": "minecraft:leather_chestplate",
+    "category": "item",
+    "name": "Leather Chestplate",
+    "description": "Basic chestplate.",
+    "tags": [
+      "item",
+      "armor",
+      "leather"
+    ]
+  },
+  {
+    "id": "minecraft:leather_leggings",
+    "category": "item",
+    "name": "Leather Leggings",
+    "description": "Basic leggings.",
+    "tags": [
+      "item",
+      "armor",
+      "leather"
+    ]
+  },
+  {
+    "id": "minecraft:leather_boots",
+    "category": "item",
+    "name": "Leather Boots",
+    "description": "Basic boots.",
+    "tags": [
+      "item",
+      "armor",
+      "leather"
+    ]
+  },
+  {
+    "id": "minecraft:chainmail_helmet",
+    "category": "item",
+    "name": "Chainmail Helmet",
+    "description": "Cannot be crafted.",
+    "tags": [
+      "item",
+      "armor",
+      "chain"
+    ]
+  },
+  {
+    "id": "minecraft:chainmail_chestplate",
+    "category": "item",
+    "name": "Chainmail Chestplate",
+    "description": "Cannot be crafted.",
+    "tags": [
+      "item",
+      "armor",
+      "chain"
+    ]
+  },
+  {
+    "id": "minecraft:chainmail_leggings",
+    "category": "item",
+    "name": "Chainmail Leggings",
+    "description": "Cannot be crafted.",
+    "tags": [
+      "item",
+      "armor",
+      "chain"
+    ]
+  },
+  {
+    "id": "minecraft:chainmail_boots",
+    "category": "item",
+    "name": "Chainmail Boots",
+    "description": "Cannot be crafted.",
+    "tags": [
+      "item",
+      "armor",
+      "chain"
+    ]
+  },
+  {
+    "id": "minecraft:iron_helmet",
+    "category": "item",
+    "name": "Iron Helmet",
+    "description": "Iron helmet.",
+    "tags": [
+      "item",
+      "armor",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:iron_chestplate",
+    "category": "item",
+    "name": "Iron Chestplate",
+    "description": "Iron chestplate.",
+    "tags": [
+      "item",
+      "armor",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:iron_leggings",
+    "category": "item",
+    "name": "Iron Leggings",
+    "description": "Iron leggings.",
+    "tags": [
+      "item",
+      "armor",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:iron_boots",
+    "category": "item",
+    "name": "Iron Boots",
+    "description": "Iron boots.",
+    "tags": [
+      "item",
+      "armor",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_helmet",
+    "category": "item",
+    "name": "Diamond Helmet",
+    "description": "Diamond helmet.",
+    "tags": [
+      "item",
+      "armor",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_chestplate",
+    "category": "item",
+    "name": "Diamond Chestplate",
+    "description": "Diamond chestplate.",
+    "tags": [
+      "item",
+      "armor",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_leggings",
+    "category": "item",
+    "name": "Diamond Leggings",
+    "description": "Diamond leggings.",
+    "tags": [
+      "item",
+      "armor",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_boots",
+    "category": "item",
+    "name": "Diamond Boots",
+    "description": "Diamond boots.",
+    "tags": [
+      "item",
+      "armor",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_helmet",
+    "category": "item",
+    "name": "Netherite Helmet",
+    "description": "Best helmet.",
+    "tags": [
+      "item",
+      "armor",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_chestplate",
+    "category": "item",
+    "name": "Netherite Chestplate",
+    "description": "Best chestplate.",
+    "tags": [
+      "item",
+      "armor",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_leggings",
+    "category": "item",
+    "name": "Netherite Leggings",
+    "description": "Best leggings.",
+    "tags": [
+      "item",
+      "armor",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_boots",
+    "category": "item",
+    "name": "Netherite Boots",
+    "description": "Best boots.",
+    "tags": [
+      "item",
+      "armor",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:elytra",
+    "category": "item",
+    "name": "Elytra",
+    "description": "Wings for gliding. Found in End ships.",
+    "tags": [
+      "item",
+      "armor",
+      "end",
+      "flying"
+    ]
+  },
+  {
+    "id": "minecraft:stick",
+    "category": "item",
+    "name": "Stick",
+    "description": "Basic crafting material.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:iron_ingot",
+    "category": "item",
+    "name": "Iron Ingot",
+    "description": "Metal for tools, armor, and recipes.",
+    "tags": [
+      "item",
+      "material",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:gold_ingot",
+    "category": "item",
+    "name": "Gold Ingot",
+    "description": "Metal for powered rails, golden apples, and armor.",
+    "tags": [
+      "item",
+      "material",
+      "gold"
+    ]
+  },
+  {
+    "id": "minecraft:copper_ingot",
+    "category": "item",
+    "name": "Copper Ingot",
+    "description": "Metal for lightning rods and telescopes.",
+    "tags": [
+      "item",
+      "material",
+      "copper"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_ingot",
+    "category": "item",
+    "name": "Netherite Ingot",
+    "description": "Best material.",
+    "tags": [
+      "item",
+      "material",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:netherite_scrap",
+    "category": "item",
+    "name": "Netherite Scrap",
+    "description": "Smelted from ancient debris.",
+    "tags": [
+      "item",
+      "material",
+      "netherite"
+    ]
+  },
+  {
+    "id": "minecraft:diamond",
+    "category": "item",
+    "name": "Diamond",
+    "description": "Rare gem for best tools and armor.",
+    "tags": [
+      "item",
+      "material",
+      "diamond"
+    ]
+  },
+  {
+    "id": "minecraft:emerald",
+    "category": "item",
+    "name": "Emerald",
+    "description": "Currency for villager trading.",
+    "tags": [
+      "item",
+      "material",
+      "currency"
+    ]
+  },
+  {
+    "id": "minecraft:quartz",
+    "category": "item",
+    "name": "Nether Quartz",
+    "description": "Mined from nether quartz ore.",
+    "tags": [
+      "item",
+      "material",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:amethyst_shard",
+    "category": "item",
+    "name": "Amethyst Shard",
+    "description": "Mined from amethyst clusters.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:redstone",
+    "category": "item",
+    "name": "Redstone Dust",
+    "description": "Used for circuits and mechanisms.",
+    "tags": [
+      "item",
+      "material",
+      "redstone",
+      "circuit"
+    ]
+  },
+  {
+    "id": "minecraft:lapis_lazuli",
+    "category": "item",
+    "name": "Lapis Lazuli",
+    "description": "Used for enchanting and blue dye.",
+    "tags": [
+      "item",
+      "material",
+      "dye",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:coal",
+    "category": "item",
+    "name": "Coal",
+    "description": "Fuel and light source.",
+    "tags": [
+      "item",
+      "fuel",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:charcoal",
+    "category": "item",
+    "name": "Charcoal",
+    "description": "Fuel made by smelting wood.",
+    "tags": [
+      "item",
+      "fuel",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:flint",
+    "category": "item",
+    "name": "Flint",
+    "description": "Used for flint and steel and arrows.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:flint_and_steel",
+    "category": "item",
+    "name": "Flint and Steel",
+    "description": "Ignites fire and nether portals.",
+    "tags": [
+      "item",
+      "tool",
+      "fire"
+    ]
+  },
+  {
+    "id": "minecraft:torch",
+    "category": "item",
+    "name": "Torch",
+    "description": "Provides light.",
+    "tags": [
+      "item",
+      "light"
+    ]
+  },
+  {
+    "id": "minecraft:soul_torch",
+    "category": "item",
+    "name": "Soul Torch",
+    "description": "Blue torch.",
+    "tags": [
+      "item",
+      "light",
+      "soul_fire"
+    ]
+  },
+  {
+    "id": "minecraft:bed",
+    "category": "item",
+    "name": "Bed",
+    "description": "Sets spawn point and skips night.",
+    "tags": [
+      "item",
+      "bed",
+      "spawn"
+    ]
+  },
+  {
+    "id": "minecraft:respawn_anchor",
+    "category": "item",
+    "name": "Respawn Anchor",
+    "description": "Sets respawn in the Nether.",
+    "tags": [
+      "item",
+      "bed",
+      "nether",
+      "spawn"
+    ]
+  },
+  {
+    "id": "minecraft:bucket",
+    "category": "item",
+    "name": "Bucket",
+    "description": "Holds water, lava, milk, or powder snow.",
+    "tags": [
+      "item",
+      "tool",
+      "container"
+    ]
+  },
+  {
+    "id": "minecraft:water_bucket",
+    "category": "item",
+    "name": "Water Bucket",
+    "description": "Bucket of water.",
+    "tags": [
+      "item",
+      "tool",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:lava_bucket",
+    "category": "item",
+    "name": "Lava Bucket",
+    "description": "Bucket of lava.",
+    "tags": [
+      "item",
+      "tool",
+      "lava",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:milk_bucket",
+    "category": "item",
+    "name": "Milk Bucket",
+    "description": "Clears potion effects.",
+    "tags": [
+      "item",
+      "tool",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:powder_snow_bucket",
+    "category": "item",
+    "name": "Powder Snow Bucket",
+    "description": "Bucket of powder snow.",
+    "tags": [
+      "item",
+      "tool",
+      "cold"
+    ]
+  },
+  {
+    "id": "minecraft:shears",
+    "category": "item",
+    "name": "Shears",
+    "description": "Shears sheep and mines leaves.",
+    "tags": [
+      "item",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:compass",
+    "category": "item",
+    "name": "Compass",
+    "description": "Points to world spawn.",
+    "tags": [
+      "item",
+      "tool",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:recovery_compass",
+    "category": "item",
+    "name": "Recovery Compass",
+    "description": "Points to last death location.",
+    "tags": [
+      "item",
+      "tool",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:clock",
+    "category": "item",
+    "name": "Clock",
+    "description": "Shows the time of day.",
+    "tags": [
+      "item",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:spyglass",
+    "category": "item",
+    "name": "Spyglass",
+    "description": "Zooms in on distant objects.",
+    "tags": [
+      "item",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:map",
+    "category": "item",
+    "name": "Map",
+    "description": "Shows explored area.",
+    "tags": [
+      "item",
+      "tool",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:book",
+    "category": "item",
+    "name": "Book",
+    "description": "Used for bookshelves and enchanted books.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:writable_book",
+    "category": "item",
+    "name": "Book and Quill",
+    "description": "A writable book.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:written_book",
+    "category": "item",
+    "name": "Written Book",
+    "description": "A signed book.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:paper",
+    "category": "item",
+    "name": "Paper",
+    "description": "Made from sugar cane.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:leather",
+    "category": "item",
+    "name": "Leather",
+    "description": "Dropped from cows and horses.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:feather",
+    "category": "item",
+    "name": "Feather",
+    "description": "Dropped from chickens.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:string",
+    "category": "item",
+    "name": "String",
+    "description": "Dropped from spiders.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:gunpowder",
+    "category": "item",
+    "name": "Gunpowder",
+    "description": "Dropped from creepers and ghasts.",
+    "tags": [
+      "item",
+      "material",
+      "explosive"
+    ]
+  },
+  {
+    "id": "minecraft:bone",
+    "category": "item",
+    "name": "Bone",
+    "description": "Dropped from skeletons.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:bone_meal",
+    "category": "item",
+    "name": "Bone Meal",
+    "description": "Speeds up crop growth.",
+    "tags": [
+      "item",
+      "material",
+      "farming",
+      "dye"
+    ]
+  },
+  {
+    "id": "minecraft:ender_pearl",
+    "category": "item",
+    "name": "Ender Pearl",
+    "description": "Dropped from Endermen. Used to teleport or craft Eyes of Ender.",
+    "tags": [
+      "item",
+      "material",
+      "end",
+      "teleport"
+    ]
+  },
+  {
+    "id": "minecraft:eye_of_ender",
+    "category": "item",
+    "name": "Eye of Ender",
+    "description": "Crafted from ender pearl and blaze powder.",
+    "tags": [
+      "item",
+      "material",
+      "end",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:blaze_rod",
+    "category": "item",
+    "name": "Blaze Rod",
+    "description": "Dropped from Blazes. Used for brewing.",
+    "tags": [
+      "item",
+      "material",
+      "nether",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:blaze_powder",
+    "category": "item",
+    "name": "Blaze Powder",
+    "description": "Made from blaze rods.",
+    "tags": [
+      "item",
+      "material",
+      "nether",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:ghast_tear",
+    "category": "item",
+    "name": "Ghast Tear",
+    "description": "Dropped from Ghasts. Used for regeneration potions.",
+    "tags": [
+      "item",
+      "material",
+      "nether",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:nether_wart",
+    "category": "item",
+    "name": "Nether Wart",
+    "description": "Grown on soul sand. Base for most potions.",
+    "tags": [
+      "item",
+      "material",
+      "nether",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:sugar",
+    "category": "item",
+    "name": "Sugar",
+    "description": "Made from sugar cane.",
+    "tags": [
+      "item",
+      "material",
+      "food",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:glistering_melon_slice",
+    "category": "item",
+    "name": "Glistering Melon Slice",
+    "description": "Melon slice and gold nugget.",
+    "tags": [
+      "item",
+      "material",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:golden_carrot",
+    "category": "item",
+    "name": "Golden Carrot",
+    "description": "Carrot surrounded by gold nuggets.",
+    "tags": [
+      "item",
+      "material",
+      "brewing",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:fermented_spider_eye",
+    "category": "item",
+    "name": "Fermented Spider Eye",
+    "description": "Creates negative potions.",
+    "tags": [
+      "item",
+      "material",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:magma_cream",
+    "category": "item",
+    "name": "Magma Cream",
+    "description": "For fire resistance potions.",
+    "tags": [
+      "item",
+      "material",
+      "nether",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:phantom_membrane",
+    "category": "item",
+    "name": "Phantom Membrane",
+    "description": "For slow falling potions.",
+    "tags": [
+      "item",
+      "material",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:potion",
+    "category": "item",
+    "name": "Potion",
+    "description": "A brewable item with various effects.",
+    "tags": [
+      "item",
+      "potion",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:splash_potion",
+    "category": "item",
+    "name": "Splash Potion",
+    "description": "A potion that splashes.",
+    "tags": [
+      "item",
+      "potion",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:lingering_potion",
+    "category": "item",
+    "name": "Lingering Potion",
+    "description": "Leaves a lingering cloud.",
+    "tags": [
+      "item",
+      "potion",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:glass_bottle",
+    "category": "item",
+    "name": "Glass Bottle",
+    "description": "Holds potions.",
+    "tags": [
+      "item",
+      "tool",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:brewing_stand",
+    "category": "item",
+    "name": "Brewing Stand",
+    "description": "Brews potions.",
+    "tags": [
+      "item",
+      "tool",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:cauldron",
+    "category": "item",
+    "name": "Cauldron",
+    "description": "Holds water, potions, or dyed water.",
+    "tags": [
+      "item",
+      "tool",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:sugar_cane",
+    "category": "item",
+    "name": "Sugar Cane",
+    "description": "Grows near water.",
+    "tags": [
+      "item",
+      "material",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:wheat",
+    "category": "item",
+    "name": "Wheat",
+    "description": "Grown on farmland.",
+    "tags": [
+      "item",
+      "food",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:bread",
+    "category": "item",
+    "name": "Bread",
+    "description": "Crafted from wheat.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:carrot",
+    "category": "item",
+    "name": "Carrot",
+    "description": "Grown on farmland.",
+    "tags": [
+      "item",
+      "food",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:potato",
+    "category": "item",
+    "name": "Potato",
+    "description": "Grown on farmland.",
+    "tags": [
+      "item",
+      "food",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:baked_potato",
+    "category": "item",
+    "name": "Baked Potato",
+    "description": "Potato baked in a furnace.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:beetroot",
+    "category": "item",
+    "name": "Beetroot",
+    "description": "Grown on farmland.",
+    "tags": [
+      "item",
+      "food",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:beetroot_soup",
+    "category": "item",
+    "name": "Beetroot Soup",
+    "description": "Beets and bowl.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:melon_slice",
+    "category": "item",
+    "name": "Melon Slice",
+    "description": "Food from melons.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:pumpkin",
+    "category": "item",
+    "name": "Pumpkin",
+    "description": "Grown from seeds.",
+    "tags": [
+      "item",
+      "food",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:apple",
+    "category": "item",
+    "name": "Apple",
+    "description": "Dropped from oak leaves.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:golden_apple",
+    "category": "item",
+    "name": "Golden Apple",
+    "description": "Grants absorption and regeneration.",
+    "tags": [
+      "item",
+      "food",
+      "combat"
+    ]
+  },
+  {
+    "id": "minecraft:enchanted_golden_apple",
+    "category": "item",
+    "name": "Enchanted Golden Apple",
+    "description": "Rare golden apple.",
+    "tags": [
+      "item",
+      "food",
+      "combat",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:raw_beef",
+    "category": "item",
+    "name": "Raw Beef",
+    "description": "Dropped from cows.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_beef",
+    "category": "item",
+    "name": "Steak",
+    "description": "One of the best food sources.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:raw_porkchop",
+    "category": "item",
+    "name": "Raw Porkchop",
+    "description": "From pigs and hoglins.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_porkchop",
+    "category": "item",
+    "name": "Cooked Porkchop",
+    "description": "Cooked pork.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:chicken",
+    "category": "item",
+    "name": "Raw Chicken",
+    "description": "From chickens. May cause hunger when raw.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_chicken",
+    "category": "item",
+    "name": "Cooked Chicken",
+    "description": "Cooked chicken.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:raw_mutton",
+    "category": "item",
+    "name": "Raw Mutton",
+    "description": "From sheep.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_mutton",
+    "category": "item",
+    "name": "Cooked Mutton",
+    "description": "Cooked mutton.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:raw_rabbit",
+    "category": "item",
+    "name": "Raw Rabbit",
+    "description": "From rabbits.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_rabbit",
+    "category": "item",
+    "name": "Cooked Rabbit",
+    "description": "Cooked rabbit.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:rabbit_stew",
+    "category": "item",
+    "name": "Rabbit Stew",
+    "description": "Rabbit, carrot, potato, mushrooms in a bowl.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:rotten_flesh",
+    "category": "item",
+    "name": "Rotten Flesh",
+    "description": "From zombies. May cause hunger.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:spider_eye",
+    "category": "item",
+    "name": "Spider Eye",
+    "description": "From spiders. For poison potions.",
+    "tags": [
+      "item",
+      "material",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:poisonous_potato",
+    "category": "item",
+    "name": "Poisonous Potato",
+    "description": "Rare potato drop. Poisons when eaten.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cookie",
+    "category": "item",
+    "name": "Cookie",
+    "description": "Wheat and cocoa beans.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cake",
+    "category": "item",
+    "name": "Cake",
+    "description": "Wheat, sugar, eggs, and milk.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:pumpkin_pie",
+    "category": "item",
+    "name": "Pumpkin Pie",
+    "description": "Pumpkin, sugar, and egg.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:mushroom_stew",
+    "category": "item",
+    "name": "Mushroom Stew",
+    "description": "Red and brown mushroom in a bowl.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:suspicious_stew",
+    "category": "item",
+    "name": "Suspicious Stew",
+    "description": "Brewed from flowers. Random effects.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cod",
+    "category": "item",
+    "name": "Raw Cod",
+    "description": "Caught in water.",
+    "tags": [
+      "item",
+      "food",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:salmon",
+    "category": "item",
+    "name": "Raw Salmon",
+    "description": "Caught in cold water.",
+    "tags": [
+      "item",
+      "food",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:tropical_fish",
+    "category": "item",
+    "name": "Tropical Fish",
+    "description": "Colorful fish.",
+    "tags": [
+      "item",
+      "food",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:pufferfish",
+    "category": "item",
+    "name": "Pufferfish",
+    "description": "For water breathing potions. Poisonous to eat.",
+    "tags": [
+      "item",
+      "food",
+      "water",
+      "brewing"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_cod",
+    "category": "item",
+    "name": "Cooked Cod",
+    "description": "Cooked cod.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:cooked_salmon",
+    "category": "item",
+    "name": "Cooked Salmon",
+    "description": "Cooked salmon.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:dried_kelp",
+    "category": "item",
+    "name": "Dried Kelp",
+    "description": "Easy early-game food.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:honey_bottle",
+    "category": "item",
+    "name": "Honey Bottle",
+    "description": "Cures poison.",
+    "tags": [
+      "item",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:experience_bottle",
+    "category": "item",
+    "name": "Bottle o' Enchanting",
+    "description": "Releases experience orbs.",
+    "tags": [
+      "item",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:ink_sac",
+    "category": "item",
+    "name": "Ink Sac",
+    "description": "Black dye. From squid.",
+    "tags": [
+      "item",
+      "dye",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:glow_ink_sac",
+    "category": "item",
+    "name": "Glow Ink Sac",
+    "description": "Glow item frame maker.",
+    "tags": [
+      "item",
+      "dye",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:cocoa_beans",
+    "category": "item",
+    "name": "Cocoa Beans",
+    "description": "Brown dye. Grows on jungle logs.",
+    "tags": [
+      "item",
+      "dye",
+      "farming"
+    ]
+  },
+  {
+    "id": "minecraft:slime_ball",
+    "category": "item",
+    "name": "Slime Ball",
+    "description": "From slimes. For sticky pistons and leads.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:honeycomb",
+    "category": "item",
+    "name": "Honeycomb",
+    "description": "From bee nests. For candles.",
+    "tags": [
+      "item",
+      "material"
+    ]
+  },
+  {
+    "id": "minecraft:nautilus_shell",
+    "category": "item",
+    "name": "Nautilus Shell",
+    "description": "From fishing or drowned.",
+    "tags": [
+      "item",
+      "material",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:heart_of_the_sea",
+    "category": "item",
+    "name": "Heart of the Sea",
+    "description": "Rare treasure.",
+    "tags": [
+      "item",
+      "material",
+      "water",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:conduit",
+    "category": "item",
+    "name": "Conduit",
+    "description": "Underwater beacon.",
+    "tags": [
+      "item",
+      "tool",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:name_tag",
+    "category": "item",
+    "name": "Name Tag",
+    "description": "Names a mob.",
+    "tags": [
+      "item",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:saddle",
+    "category": "item",
+    "name": "Saddle",
+    "description": "Rides mounts.",
+    "tags": [
+      "item",
+      "tool",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:lead",
+    "category": "item",
+    "name": "Lead",
+    "description": "Leads and ties mobs.",
+    "tags": [
+      "item",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:fishing_rod",
+    "category": "item",
+    "name": "Fishing Rod",
+    "description": "Catches fish and treasure.",
+    "tags": [
+      "item",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:carrot_on_a_stick",
+    "category": "item",
+    "name": "Carrot on a Stick",
+    "description": "Controls saddled pigs.",
+    "tags": [
+      "item",
+      "tool",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:warped_fungus_on_a_stick",
+    "category": "item",
+    "name": "Warped Fungus on a Stick",
+    "description": "Controls saddled striders.",
+    "tags": [
+      "item",
+      "tool",
+      "transport",
+      "nether"
+    ]
+  }
+]

@@ -1,0 +1,60 @@
+# SmithAI configuration
+
+ai:
+  name: "Smith_AI"
+  skin: "robot"
+  memory:
+    maxMessages: 17
+  pathfinding:
+    maxDistance: 128
+    maxNodes: 5000
+    tickRate: 5
+  combat:
+    retreatHealth: 0.3
+    minFood: 6
+  crafting:
+    preferCraftingTable: true
+  permissions:
+    restrictByModel: false
+  models:
+    mini:
+      skillTier: 900
+    gpt1:
+      skillTier: 1800
+    gpt2:
+      skillTier: 6300
+  external:
+    enabled: false
+    url: "http://localhost:8000"
+    apiKey: ""
+    model: "smithgpt-1.0"
+    timeout: 10
+  local:
+    enabled: true
+    modelPath: "plugins/SmithAI/models/smith-mini-1.0.gguf"
+    fallbackToRules: true
+    threadCount: 1
+  reconnectInterval: 30
+  statusMessage: true
+  reminder:
+    enabled: true
+    minSeconds: 10
+    maxSeconds: 50
+
+skills:
+  maxQueueSize: 50
+  stepDelay: 5
+
+training:
+  chatFeedback: true
+  persist: true
+
+npc:
+  followDistance: 3.0
+  pathfinderTimeout: 30
+
+debug:
+  enabled: false
+
+metrics:
+  bstats: false

@@ -1,0 +1,479 @@
+[
+  {
+    "id": "strategy:mining",
+    "category": "strategy",
+    "name": "Mining",
+    "description": "Dig down carefully with torches and food. Avoid digging straight down.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:strip_mining",
+    "category": "strategy",
+    "name": "Strip Mining",
+    "description": "Mine long tunnels at Y=-59 for diamonds. Torches every 10 blocks. Watch for lava.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:caving",
+    "category": "strategy",
+    "name": "Caving",
+    "description": "Explore natural caves for exposed ores. Bring torches, food, and armor.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:nether_exploration",
+    "category": "strategy",
+    "name": "Nether Exploration",
+    "description": "Wear gold armor around piglins. Bring fire resistance. Build paths over lava.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:nether_fortress_route",
+    "category": "strategy",
+    "name": "Nether Fortress Route",
+    "description": "Follow the x-axis. Fortresses generate perpendicular to x-axis.",
+    "tags": [
+      "strategy",
+      "nether"
+    ]
+  },
+  {
+    "id": "strategy:nether_safe_travel",
+    "category": "strategy",
+    "name": "Nether Safe Travel",
+    "description": "Build tunnels with slabs to prevent spawns. Use warped fungi for striders.",
+    "tags": [
+      "strategy",
+      "nether"
+    ]
+  },
+  {
+    "id": "strategy:end_fight",
+    "category": "strategy",
+    "name": "Ender Dragon Fight",
+    "description": "Destroy crystals with arrows or pillars. Attack the dragon when it perches.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:end_city_raiding",
+    "category": "strategy",
+    "name": "End City Raiding",
+    "description": "Bridge to outer islands. Find the ship for elytra. Watch for shulkers.",
+    "tags": [
+      "strategy",
+      "end"
+    ]
+  },
+  {
+    "id": "strategy:wither_fight",
+    "category": "strategy",
+    "name": "Wither Fight",
+    "description": "Fight underground in a confined space. Use smite enchantment.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:warden_avoid",
+    "category": "strategy",
+    "name": "Warden Avoidance",
+    "description": "Move slowly in the deep dark. Wool blocks vibrations. Distract with snowballs.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:villager_trading",
+    "category": "strategy",
+    "name": "Villager Trading",
+    "description": "Protect villagers. Give job blocks. Cure zombie villagers for discounts.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:villager_breedering",
+    "category": "strategy",
+    "name": "Villager Breeder",
+    "description": "Build with beds, workstations, and food. Villagers with beds breed.",
+    "tags": [
+      "strategy",
+      "village"
+    ]
+  },
+  {
+    "id": "strategy:villager_zombie_cure",
+    "category": "strategy",
+    "name": "Zombie Villager Cure",
+    "description": "Splash weakness, feed golden apple. Wait 2-5 min for discounted trades.",
+    "tags": [
+      "strategy",
+      "village"
+    ]
+  },
+  {
+    "id": "strategy:farming",
+    "category": "strategy",
+    "name": "Farming",
+    "description": "Plant on hydrated farmland. Use bonemeal. Keep light level high.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:automated_farm",
+    "category": "strategy",
+    "name": "Automated Farm",
+    "description": "Use water to collect crops. Observer + piston for automatic harvesting.",
+    "tags": [
+      "strategy",
+      "farming"
+    ]
+  },
+  {
+    "id": "strategy:animal_farming",
+    "category": "strategy",
+    "name": "Animal Farming",
+    "description": "Breed animals with their food. Keep in pens with water.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:honey_farming",
+    "category": "strategy",
+    "name": "Honey Farming",
+    "description": "Use shears for honeycomb, bottles for honey. Campfire under hive pacifies bees.",
+    "tags": [
+      "strategy",
+      "farming"
+    ]
+  },
+  {
+    "id": "strategy:defense",
+    "category": "strategy",
+    "name": "Base Defense",
+    "description": "Light the area. Build walls. Use iron golems and traps.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:mob_grinder",
+    "category": "strategy",
+    "name": "Mob Grinder",
+    "description": "Build a dark tower with water channels. Mobs fall to killing chamber.",
+    "tags": [
+      "strategy",
+      "combat"
+    ]
+  },
+  {
+    "id": "strategy:raids",
+    "category": "strategy",
+    "name": "Raid Defense",
+    "description": "Ring a bell to reveal raiders. Walls and ranged attacks. Heal between waves.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:exploration",
+    "category": "strategy",
+    "name": "Exploration",
+    "description": "Bring food, torches, a bed, and a compass. Mark your path.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:combat",
+    "category": "strategy",
+    "name": "Combat Basics",
+    "description": "Equip weapon and armor. Strafe. Retreat when low on health.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:enchanting",
+    "category": "strategy",
+    "name": "Enchanting",
+    "description": "Bookshelves around the table. Anvil to combine enchanted books.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:brewing",
+    "category": "strategy",
+    "name": "Brewing",
+    "description": "Brewing stand. Nether wart is the base ingredient.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:potion_brewing",
+    "category": "strategy",
+    "name": "Potion Brewing Guide",
+    "description": "Nether wart + water bottle = awkward potion. Add effect ingredient. Redstone for duration, glowstone for potency. Gunpowder for splash.",
+    "tags": [
+      "strategy",
+      "brewing"
+    ]
+  },
+  {
+    "id": "strategy:smelting",
+    "category": "strategy",
+    "name": "Smelting",
+    "description": "Use furnaces for everything, blast furnaces for ores, smokers for food.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:redstone",
+    "category": "strategy",
+    "name": "Redstone Basics",
+    "description": "Power with redstone dust, torches, repeaters. Observers detect changes.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:redstone_clock",
+    "category": "strategy",
+    "name": "Redstone Clock",
+    "description": "Repeater loop or observer loop for a repeating signal.",
+    "tags": [
+      "strategy",
+      "redstone"
+    ]
+  },
+  {
+    "id": "strategy:redstone_item_sorter",
+    "category": "strategy",
+    "name": "Item Sorter",
+    "description": "Hoppers and comparators sort items by type into different chests.",
+    "tags": [
+      "strategy",
+      "redstone"
+    ]
+  },
+  {
+    "id": "strategy:building",
+    "category": "strategy",
+    "name": "Building",
+    "description": "Plan foundations and storage. Use scaffolding. Light interiors.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:automation",
+    "category": "strategy",
+    "name": "Automation",
+    "description": "Hoppers, droppers, dispensers, and observers automate farms and sorting.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:speedrun",
+    "category": "strategy",
+    "name": "Speedrun",
+    "description": "Focus on wood, tools, iron, flint and steel, beds, and eyes of ender.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:speedrun_route",
+    "category": "strategy",
+    "name": "Speedrun Route",
+    "description": "Get wood -> stone pick -> iron pick -> portal -> fortress -> bed kills blazes -> pearls from bartering -> eyes -> stronghold -> end.",
+    "tags": [
+      "strategy",
+      "speedrun"
+    ]
+  },
+  {
+    "id": "strategy:resource_management",
+    "category": "strategy",
+    "name": "Resource Management",
+    "description": "Labeled chests for storage. Backup tools. Shulker boxes for travel.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:preparation",
+    "category": "strategy",
+    "name": "Preparation",
+    "description": "Before a big task, gather food, tools, armor, blocks, potions, and set spawn.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:recovery",
+    "category": "strategy",
+    "name": "Recovery",
+    "description": "After death, retrieve items before re-engaging threats.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:multiplayer",
+    "category": "strategy",
+    "name": "Multiplayer",
+    "description": "Coordinate roles, share resources, establish safe zones.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:starter_guide",
+    "category": "strategy",
+    "name": "First Day Guide",
+    "description": "Punch tree -> craft wood pick -> mine 19 stone -> stone tools -> furnace -> shelter before night.",
+    "tags": [
+      "strategy",
+      "early"
+    ]
+  },
+  {
+    "id": "strategy:early_iron",
+    "category": "strategy",
+    "name": "Getting Iron Early",
+    "description": "Find a cave or dig to Y=16. Iron generates between Y=-64 and Y=72.",
+    "tags": [
+      "strategy",
+      "mining"
+    ]
+  },
+  {
+    "id": "strategy:emergency_kits",
+    "category": "strategy",
+    "name": "Emergency Kit",
+    "description": "Carry backup tools, food, blocks, water bucket, and bed in ender chest.",
+    "tags": [
+      "strategy",
+      "preparation"
+    ]
+  },
+  {
+    "id": "strategy:bartering",
+    "category": "strategy",
+    "name": "Piglin Bartering",
+    "description": "Drop gold ingots near piglins. They give pearls, obsidian, fire resistance. Wear gold armor.",
+    "tags": [
+      "strategy",
+      "nether"
+    ]
+  },
+  {
+    "id": "strategy:bridging",
+    "category": "strategy",
+    "name": "Safe Bridging",
+    "description": "Walk backward while placing. Use scaffolding. Sneak at edges.",
+    "tags": [
+      "strategy",
+      "building"
+    ]
+  },
+  {
+    "id": "strategy:water_elevator",
+    "category": "strategy",
+    "name": "Water Elevator",
+    "description": "Kelp makes bubble columns. Soul sand pushes up, magma pushes down.",
+    "tags": [
+      "strategy",
+      "building"
+    ]
+  },
+  {
+    "id": "strategy:tree_farm",
+    "category": "strategy",
+    "name": "Tree Farming",
+    "description": "Plant saplings with 4+ blocks above. Oak needs less space.",
+    "tags": [
+      "strategy",
+      "farming"
+    ]
+  },
+  {
+    "id": "strategy:beacon_usage",
+    "category": "strategy",
+    "name": "Beacon Pyramid",
+    "description": "Build a pyramid of mineral blocks. Full 4-layer = 164 blocks. Gives Haste, Speed, etc.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:safe_mining",
+    "category": "strategy",
+    "name": "Safe Mining",
+    "description": "Never dig straight down. Light up caves. Torches on left wall to find way back.",
+    "tags": [
+      "strategy",
+      "mining"
+    ]
+  },
+  {
+    "id": "strategy:raid_farm",
+    "category": "strategy",
+    "name": "Raid Farm",
+    "description": "Killer chamber with pillager spawner. Obtain totems and emeralds from waves.",
+    "tags": [
+      "strategy",
+      "combat"
+    ]
+  },
+  {
+    "id": "strategy:shulker_box_usage",
+    "category": "strategy",
+    "name": "Shulker Box Storage",
+    "description": "Portable storage. Keeps items when broken. Color-code for organization.",
+    "tags": [
+      "strategy",
+      "end",
+      "storage"
+    ]
+  },
+  {
+    "id": "strategy:explosive_mining",
+    "category": "strategy",
+    "name": "Explosive Mining",
+    "description": "Use beds in the Nether for ancient debris. TNT also works underground.",
+    "tags": [
+      "strategy",
+      "mining",
+      "nether"
+    ]
+  },
+  {
+    "id": "strategy:crop_automation",
+    "category": "strategy",
+    "name": "Crop Automation",
+    "description": "Observers detect growth. Pistons harvest. Waterlogged blocks replace water.",
+    "tags": [
+      "strategy",
+      "farming",
+      "redstone"
+    ]
+  }
+]

@@ -1,0 +1,783 @@
+[
+  {
+    "id": "minecraft:zombie",
+    "category": "mob",
+    "name": "Zombie",
+    "description": "A hostile mob that spawns in dark areas. Burns in sunlight. Drops rotten flesh.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld"
+    ]
+  },
+  {
+    "id": "minecraft:zombie_villager",
+    "category": "mob",
+    "name": "Zombie Villager",
+    "description": "A villager turned into a zombie. Can be cured with a golden apple and weakness potion.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "village"
+    ]
+  },
+  {
+    "id": "minecraft:drowned",
+    "category": "mob",
+    "name": "Drowned",
+    "description": "Underwater zombie that can spawn with tridents.",
+    "tags": [
+      "mob",
+      "hostile",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:husk",
+    "category": "mob",
+    "name": "Husk",
+    "description": "Desert zombie variant. Does not burn in sunlight.",
+    "tags": [
+      "mob",
+      "hostile",
+      "desert"
+    ]
+  },
+  {
+    "id": "minecraft:skeleton",
+    "category": "mob",
+    "name": "Skeleton",
+    "description": "Shoots arrows. Burns in sunlight. Drops bones and arrows.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "ranged"
+    ]
+  },
+  {
+    "id": "minecraft:stray",
+    "category": "mob",
+    "name": "Stray",
+    "description": "Skeleton variant in cold biomes. Shoots arrows of Slowness.",
+    "tags": [
+      "mob",
+      "hostile",
+      "cold",
+      "ranged"
+    ]
+  },
+  {
+    "id": "minecraft:wither_skeleton",
+    "category": "mob",
+    "name": "Wither Skeleton",
+    "description": "Spawns in Nether fortresses. Inflicts Wither. Drops coal, bones, and rarely skulls.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:creeper",
+    "category": "mob",
+    "name": "Creeper",
+    "description": "Approaches and explodes. Drops gunpowder.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "explosive"
+    ]
+  },
+  {
+    "id": "minecraft:charged_creeper",
+    "category": "mob",
+    "name": "Charged Creeper",
+    "description": "A creeper struck by lightning. Larger explosion, drops mob heads.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "explosive",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:spider",
+    "category": "mob",
+    "name": "Spider",
+    "description": "Hostile at night, neutral in daylight. Climbs walls.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld"
+    ]
+  },
+  {
+    "id": "minecraft:cave_spider",
+    "category": "mob",
+    "name": "Cave Spider",
+    "description": "Smaller venomous spider in mineshafts.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "poison"
+    ]
+  },
+  {
+    "id": "minecraft:enderman",
+    "category": "mob",
+    "name": "Enderman",
+    "description": "Tall mob that teleports and picks up blocks. Aggressive if looked at.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:endermite",
+    "category": "mob",
+    "name": "Endermite",
+    "description": "Small hostile that spawns rarely when using ender pearls.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:shulker",
+    "category": "mob",
+    "name": "Shulker",
+    "description": "Shell-like mob in End cities. Fires levitation projectiles.",
+    "tags": [
+      "mob",
+      "hostile",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:witch",
+    "category": "mob",
+    "name": "Witch",
+    "description": "Throws splash potions. Spawns in swamps and raids.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "ranged"
+    ]
+  },
+  {
+    "id": "minecraft:slime",
+    "category": "mob",
+    "name": "Slime",
+    "description": "Spawns in swamps and slime chunks. Splits when killed.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld"
+    ]
+  },
+  {
+    "id": "minecraft:magma_cube",
+    "category": "mob",
+    "name": "Magma Cube",
+    "description": "Nether slime variant. Drops magma cream.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:phantom",
+    "category": "mob",
+    "name": "Phantom",
+    "description": "Flying mob that attacks players who haven't slept.",
+    "tags": [
+      "mob",
+      "hostile",
+      "overworld",
+      "flying"
+    ]
+  },
+  {
+    "id": "minecraft:blaze",
+    "category": "mob",
+    "name": "Blaze",
+    "description": "Found in Nether fortresses. Shoots fireballs. Drops blaze rods.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether",
+      "blaze"
+    ]
+  },
+  {
+    "id": "minecraft:ghast",
+    "category": "mob",
+    "name": "Ghast",
+    "description": "Flying Nether mob that shoots explosive fireballs.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether",
+      "ranged"
+    ]
+  },
+  {
+    "id": "minecraft:hoglin",
+    "category": "mob",
+    "name": "Hoglin",
+    "description": "Hostile boar-like mob in the Nether.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:zoglin",
+    "category": "mob",
+    "name": "Zoglin",
+    "description": "A zombified Hoglin.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:piglin",
+    "category": "mob",
+    "name": "Piglin",
+    "description": "Neutral if wearing gold armor. Barters gold ingots.",
+    "tags": [
+      "mob",
+      "neutral",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:piglin_brute",
+    "category": "mob",
+    "name": "Piglin Brute",
+    "description": "Stronger hostile Piglin in Bastion Remnants.",
+    "tags": [
+      "mob",
+      "hostile",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:ender_dragon",
+    "category": "mob",
+    "name": "Ender Dragon",
+    "description": "The final boss. Defeat by destroying crystals then attacking.",
+    "tags": [
+      "mob",
+      "boss",
+      "end",
+      "dragon"
+    ]
+  },
+  {
+    "id": "minecraft:wither",
+    "category": "mob",
+    "name": "Wither",
+    "description": "A boss spawned with soul sand and skulls. Drops a nether star.",
+    "tags": [
+      "mob",
+      "boss",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:warden",
+    "category": "mob",
+    "name": "Warden",
+    "description": "Powerful mob spawned by sculk. Blind but senses vibrations.",
+    "tags": [
+      "mob",
+      "boss",
+      "deep_dark"
+    ]
+  },
+  {
+    "id": "minecraft:iron_golem",
+    "category": "mob",
+    "name": "Iron Golem",
+    "description": "Neutral mob that protects villages.",
+    "tags": [
+      "mob",
+      "neutral",
+      "village",
+      "golem"
+    ]
+  },
+  {
+    "id": "minecraft:snow_golem",
+    "category": "mob",
+    "name": "Snow Golem",
+    "description": "Passive mob built from snow. Throws snowballs.",
+    "tags": [
+      "mob",
+      "passive",
+      "golem"
+    ]
+  },
+  {
+    "id": "minecraft:villager",
+    "category": "mob",
+    "name": "Villager",
+    "description": "Passive mob that trades items.",
+    "tags": [
+      "mob",
+      "passive",
+      "village",
+      "trading"
+    ]
+  },
+  {
+    "id": "minecraft:wandering_trader",
+    "category": "mob",
+    "name": "Wandering Trader",
+    "description": "Spawns randomly offering rare trades.",
+    "tags": [
+      "mob",
+      "passive",
+      "trading"
+    ]
+  },
+  {
+    "id": "minecraft:cow",
+    "category": "mob",
+    "name": "Cow",
+    "description": "Passive mob that drops beef and leather. Can be milked.",
+    "tags": [
+      "mob",
+      "passive",
+      "food",
+      "farm"
+    ]
+  },
+  {
+    "id": "minecraft:pig",
+    "category": "mob",
+    "name": "Pig",
+    "description": "Passive mob that drops porkchops.",
+    "tags": [
+      "mob",
+      "passive",
+      "food",
+      "farm"
+    ]
+  },
+  {
+    "id": "minecraft:sheep",
+    "category": "mob",
+    "name": "Sheep",
+    "description": "Passive mob that drops wool and mutton.",
+    "tags": [
+      "mob",
+      "passive",
+      "wool",
+      "farm"
+    ]
+  },
+  {
+    "id": "minecraft:chicken",
+    "category": "mob",
+    "name": "Chicken",
+    "description": "Passive mob that drops feathers and raw chicken. Lays eggs.",
+    "tags": [
+      "mob",
+      "passive",
+      "food",
+      "farm"
+    ]
+  },
+  {
+    "id": "minecraft:rabbit",
+    "category": "mob",
+    "name": "Rabbit",
+    "description": "Small passive mob.",
+    "tags": [
+      "mob",
+      "passive",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:mooshroom",
+    "category": "mob",
+    "name": "Mooshroom",
+    "description": "Cow variant on mushroom islands.",
+    "tags": [
+      "mob",
+      "passive",
+      "food",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "minecraft:horse",
+    "category": "mob",
+    "name": "Horse",
+    "description": "Can be tamed and ridden.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:donkey",
+    "category": "mob",
+    "name": "Donkey",
+    "description": "Can be tamed and equipped with a chest.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:mule",
+    "category": "mob",
+    "name": "Mule",
+    "description": "Born from horse and donkey. Can carry a chest.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:skeleton_horse",
+    "category": "mob",
+    "name": "Skeleton Horse",
+    "description": "A rideable undead horse.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:zombie_horse",
+    "category": "mob",
+    "name": "Zombie Horse",
+    "description": "A rare undead horse. Cannot be tamed in survival.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:llama",
+    "category": "mob",
+    "name": "Llama",
+    "description": "Carries chests and forms caravans.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:trader_llama",
+    "category": "mob",
+    "name": "Trader Llama",
+    "description": "Llamas that follow wandering traders.",
+    "tags": [
+      "mob",
+      "passive",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:wolf",
+    "category": "mob",
+    "name": "Wolf",
+    "description": "Neutral mob tamed with bones.",
+    "tags": [
+      "mob",
+      "neutral",
+      "pet",
+      "combat"
+    ]
+  },
+  {
+    "id": "minecraft:cat",
+    "category": "mob",
+    "name": "Cat",
+    "description": "Tamed with raw fish. Scares creepers.",
+    "tags": [
+      "mob",
+      "passive",
+      "pet"
+    ]
+  },
+  {
+    "id": "minecraft:parrot",
+    "category": "mob",
+    "name": "Parrot",
+    "description": "Passive flying mob that mimics sounds.",
+    "tags": [
+      "mob",
+      "passive",
+      "pet",
+      "flying"
+    ]
+  },
+  {
+    "id": "minecraft:fox",
+    "category": "mob",
+    "name": "Fox",
+    "description": "Nocturnal mob that picks up items.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:bee",
+    "category": "mob",
+    "name": "Bee",
+    "description": "Pollinates crops and produces honey.",
+    "tags": [
+      "mob",
+      "passive",
+      "flying",
+      "farm"
+    ]
+  },
+  {
+    "id": "minecraft:bat",
+    "category": "mob",
+    "name": "Bat",
+    "description": "Flying passive mob in caves.",
+    "tags": [
+      "mob",
+      "passive",
+      "flying",
+      "cave"
+    ]
+  },
+  {
+    "id": "minecraft:squid",
+    "category": "mob",
+    "name": "Squid",
+    "description": "Passive water mob that drops ink sacs.",
+    "tags": [
+      "mob",
+      "passive",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:glow_squid",
+    "category": "mob",
+    "name": "Glow Squid",
+    "description": "Passive glowing water mob.",
+    "tags": [
+      "mob",
+      "passive",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:dolphin",
+    "category": "mob",
+    "name": "Dolphin",
+    "description": "Neutral water mob that boosts swimming.",
+    "tags": [
+      "mob",
+      "neutral",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:turtle",
+    "category": "mob",
+    "name": "Turtle",
+    "description": "Passive beach mob that lays eggs.",
+    "tags": [
+      "mob",
+      "passive",
+      "water",
+      "beach"
+    ]
+  },
+  {
+    "id": "minecraft:polar_bear",
+    "category": "mob",
+    "name": "Polar Bear",
+    "description": "Neutral mob in snowy biomes.",
+    "tags": [
+      "mob",
+      "neutral",
+      "cold"
+    ]
+  },
+  {
+    "id": "minecraft:panda",
+    "category": "mob",
+    "name": "Panda",
+    "description": "Neutral mob in bamboo jungles.",
+    "tags": [
+      "mob",
+      "neutral",
+      "jungle"
+    ]
+  },
+  {
+    "id": "minecraft:ocelot",
+    "category": "mob",
+    "name": "Ocelot",
+    "description": "Passive jungle mob. Creepers avoid them.",
+    "tags": [
+      "mob",
+      "passive",
+      "jungle"
+    ]
+  },
+  {
+    "id": "minecraft:axolotl",
+    "category": "mob",
+    "name": "Axolotl",
+    "description": "Passive water mob that plays dead.",
+    "tags": [
+      "mob",
+      "passive",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:frog",
+    "category": "mob",
+    "name": "Frog",
+    "description": "Passive mob found in swamps. Eats small slimes.",
+    "tags": [
+      "mob",
+      "passive",
+      "swamp"
+    ]
+  },
+  {
+    "id": "minecraft:tadpole",
+    "category": "mob",
+    "name": "Tadpole",
+    "description": "Baby frog. Grows into a frog.",
+    "tags": [
+      "mob",
+      "passive",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:allay",
+    "category": "mob",
+    "name": "Allay",
+    "description": "Flying mob that collects items for players.",
+    "tags": [
+      "mob",
+      "passive",
+      "flying"
+    ]
+  },
+  {
+    "id": "minecraft:goat",
+    "category": "mob",
+    "name": "Goat",
+    "description": "Neutral mountain mob that rams players.",
+    "tags": [
+      "mob",
+      "neutral",
+      "cold"
+    ]
+  },
+  {
+    "id": "minecraft:ravager",
+    "category": "mob",
+    "name": "Ravager",
+    "description": "Large hostile mob in raids.",
+    "tags": [
+      "mob",
+      "hostile",
+      "raid"
+    ]
+  },
+  {
+    "id": "minecraft:evoker",
+    "category": "mob",
+    "name": "Evoker",
+    "description": "Hostile illager that summons vexes.",
+    "tags": [
+      "mob",
+      "hostile",
+      "illager",
+      "raid"
+    ]
+  },
+  {
+    "id": "minecraft:vindicator",
+    "category": "mob",
+    "name": "Vindicator",
+    "description": "Hostile illager with an axe.",
+    "tags": [
+      "mob",
+      "hostile",
+      "illager",
+      "raid"
+    ]
+  },
+  {
+    "id": "minecraft:pillager",
+    "category": "mob",
+    "name": "Pillager",
+    "description": "Hostile illager with a crossbow.",
+    "tags": [
+      "mob",
+      "hostile",
+      "illager",
+      "raid"
+    ]
+  },
+  {
+    "id": "minecraft:vex",
+    "category": "mob",
+    "name": "Vex",
+    "description": "Small hostile flying mob. Passes through blocks.",
+    "tags": [
+      "mob",
+      "hostile",
+      "illager",
+      "flying"
+    ]
+  },
+  {
+    "id": "minecraft:illusioner",
+    "category": "mob",
+    "name": "Illusioner",
+    "description": "Hostile illager that creates illusions.",
+    "tags": [
+      "mob",
+      "hostile",
+      "illager",
+      "ranged",
+      "rare"
+    ]
+  }
+]

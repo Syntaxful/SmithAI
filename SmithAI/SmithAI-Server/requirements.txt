@@ -1,0 +1,9 @@
+# Core SmithAI-Server dependencies
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.7.0
+pyyaml>=6.0.1
+
+# Optional: local GGUF model inference. If you don't have a GGUF model yet,
+# the server will run a rule-based fallback and still work with the plugin.
+llama-cpp-python>=0.2.85
