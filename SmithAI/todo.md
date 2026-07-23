@@ -664,17 +664,21 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 88% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states + composite task decomposition (17 sub-task types) |
+| Skill System | 90% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states + composite task decomposition (17 sub-task types) + World Interaction integration |
+| World Interaction | 90% | Block break/place, torches, doors/levers/buttons/trapdoors/gates, buckets (water/lava), shearing/milking/taming, schematic building, terraforming, chests/furnaces, farming, mining all done |
+| Smart Inventory | 70% | Auto-upgrade armor/tools, drop inferior, durability-aware, auto-food, stockpile, crafting done; auto-craft on break pending |
+| Advanced Player Skills | 60% | Clutch, enchanting, building/shelter, sleeping done; elytra/redstone pending |
+| Endgame & Progression | 70% | Diamond/nether/end/dragon/wither/elytra/shulker sequences, advancement tracking done; speedrun pending |
 | Pathfinding & Movement | 100% | ✅ Complete |
 | Inventory & Crafting | 100% | ✅ Complete |
-| Combat & Survival | 82% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, dodge/strafe/block/counter, buff potions (strength/speed/fire_resist/regen/invis), water clutch, FIGHTING animation done |
+| Combat & Survival | 84% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, dodge/strafe/block/counter, buff potions (strength/speed/fire_resist/regen/invis), water clutch, animal interaction, FIGHTING animation done |
 | Training System | 100% | ✅ Complete |
 | Commands & Permissions | 100% | ✅ Complete |
 | Status & Notifications | 100% | ✅ Complete |
 | External AI Server | 100% | ✅ Complete |
-| Models | 74% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader, model warmup, tier notes, GGUF formatting, quant guidance done |
-| Eaglercraft Compatibility | 30% | API usage correct, no NMS, VersionInfo detection + 1.8 protocol handling, Bukkit-only NPC model verified, FAQ docs; needs live testing |
-| Testing & Quality | 60% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; more coverage + manual testing needed |
+| Models | 76% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader, model warmup, tier notes, GGUF formatting, quant guidance all documented |
+| Eaglercraft Compatibility | 32% | API usage correct, no NMS, VersionInfo detection + 1.8 protocol handling, Bukkit-only NPC model verified, all World Interaction Bukkit-only; needs live testing |
+| Testing & Quality | 62% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; World Interaction not tested yet |
 | Documentation | 100% | ✅ Complete |
 
 ---
