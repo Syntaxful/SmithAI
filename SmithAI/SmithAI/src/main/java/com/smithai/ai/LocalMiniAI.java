@@ -11,11 +11,22 @@ public class LocalMiniAI {
 
     private final SmithAIPlugin plugin;
     private final VersionInfo versionInfo;
+    private final GGUFInferenceEngine gguf;
+    private final java.util.Map<String, String> responseCache = new java.util.concurrent.ConcurrentHashMap<>();
 
     public LocalMiniAI(SmithAIPlugin plugin) {
         this.plugin = plugin;
         this.versionInfo = new VersionInfo();
+        this.gguf = new GGUFInferenceEngine(plugin);
+        // Async warmup if model available
+        if (gguf.isAvailable()) {
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin, gguf::warmup);
+        }
     }
+
+    public GGUFInferenceEngine getGgufEngine() { return gguf; }
+
+    public boolean isGGUFAvailable() { return gguf.isAvailable(); }
 
     public String getResponse(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills) {
         String lower = message.toLowerCase();
@@ -117,6 +128,20 @@ public class LocalMiniAI {
         // Task context
         if (task != null) {
             return "I'm working on: " + task + " (using Smith-Mini 1.0).";
+        }
+
+        // Try GGUF inference if model is available
+        if (gguf.isAvailable()) {
+            try {
+                String prompt = gguf.formatPrompt("smith-mini", message, conversation, task, knowledge, skills, versionInfo.getFriendlyName());
+                String result = gguf.infer(prompt, 150).get(15, java.util.concurrent.TimeUnit.SECONDS);
+                if (result != null && !result.isEmpty()) {
+                    responseCache.put(message.toLowerCase(), result);
+                    return result;
+                }
+            } catch (Exception ignored) {
+                // Fall through to rule-based
+            }
         }
 
         return "I'm running on Smith-Mini 1.0 with " + skills.size() + " core skills. Ask me to follow you, mine, build, farm, fight, or explore.";

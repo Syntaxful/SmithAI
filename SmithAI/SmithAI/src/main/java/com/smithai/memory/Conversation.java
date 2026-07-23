@@ -27,6 +27,14 @@ public class Conversation {
         return new ArrayList<>(messages);
     }
 
+    public String getFormattedHistory() {
+        StringBuilder sb = new StringBuilder();
+        for (Message m : messages) {
+            sb.append(m.getRole()).append(": ").append(m.getContent()).append("\n");
+        }
+        return sb.toString().trim();
+    }
+
     public void save(File file) throws IOException {
         YamlConfiguration yaml = new YamlConfiguration();
         for (int i = 0; i < messages.size(); i++) {
