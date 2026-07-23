@@ -353,9 +353,9 @@ Each skill needs:
 - [x] RLDataRecorder — ultra-compact CSV-based reward/punishment recorder (rl_data.csv)
 - [x] `/smithai data` command — view RL event count, file path, and action scores
 - [ ] Demonstration learning: player performs action, AI copies
-- [ ] Per-player preference memory
-- [ ] Per-NPC learned behavior profiles
-- [x] Export/import training data (/smithai export command added)
+- [x] Per-player preference memory (MemoryEnhancer.PlayerPreferences)
+- [x] Per-NPC learned behavior profiles (per-NPC training scores + RL data)
+- [x] Export/import training data (/smithai export + /smithai train import commands)
 - [ ] Training data merge conflicts resolution
 - [x] Visual feedback when training is recorded (chat message from NPC)
 - [x] Reset training for a specific player or NPC (/smithai train reset [player])
@@ -630,7 +630,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
 | Inventory & Crafting | 85% | Inventory scan, pick up, drop, give, item use, CraftingManager (full auto-crafting for 20+ recipes), smelting, brewing, chest store/withdraw/scan, furnace fueling done |
 | Combat & Survival | 45% | Mob-specific tactics (creeper, skeleton, boss, ranged, flying, nether), hazard avoidance, auto-equip, auto-heal, food management, retreat logic, NPCMesh damage/health/death/respawn done |
-| Training System | 85% | Commands, persistence, detailed feedback, RLDataRecorder, /smithai data, reset, export, score-influenced skill selection (prioritizeSkills, getBestAction) done |
+| Training System | 90% | Commands, persistence, detailed feedback, RLDataRecorder with readback, /smithai data (shows top rewarded/punished + recent events + scores), /smithai train import (CSV import for bulk teaching), reset, export, score-influenced selection done |
 | Commands & Permissions | 97% | All subcommands + tab completers done; /smithai config and /smithai export added |
 | Status & Notifications | 65% | Switch messages, reminders, debug/health done; action bar pending |
 | External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard added |

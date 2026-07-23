@@ -254,24 +254,58 @@ public class SmithAICommand implements CommandExecutor {
                     return true;
                 }
                 if (args.length < 2) {
-                    sender.sendMessage("§eUsage: §f/smithai train good|bad|reset §eor §f/smithai train reset <player>");
+                    sender.sendMessage("§eUsage: §f/smithai train good|bad|reset|import §eor §f/smithai train reset <player>");
+                    sender.sendMessage("§7/smithai train import §f- paste RL data CSV to train the AI");
                     return true;
                 }
                 Player trainer = (Player) sender;
+                String trainAction = args[1].toLowerCase();
+
+                if (trainAction.equals("import")) {
+                    if (!sender.hasPermission("smithai.admin")) {
+                        sender.sendMessage("§cNo permission.");
+                        return true;
+                    }
+                    sender.sendMessage("§ePaste RL data CSV and run /smithai train import <action>,<type>,<score>");
+                    sender.sendMessage("§7Format: R,action_name,1  (for reward) or P,action_name,-1  (for punish)");
+                    sender.sendMessage("§7Example: §f/smithai train import R,mine_diamond,1");
+                    // Parse inline data
+                    if (args.length >= 4) {
+                        StringBuilder csv = new StringBuilder();
+                        for (int i = 2; i < args.length; i++) csv.append(args[i]).append(" ");
+                        String line = csv.toString().trim();
+                        String[] parts = line.split(",");
+                        if (parts.length >= 3) {
+                            String rlType = parts[0].trim().toUpperCase();
+                            String rlAction = parts[1].trim();
+                            int rlScore;
+                            try { rlScore = Integer.parseInt(parts[2].trim()); } catch (Exception e) { rlScore = 1; }
+                            if (rlType.equals("R") || rlType.equals("P")) {
+                                plugin.getTrainingManager().getRlRecorder().record(rlType, rlAction, rlScore);
+                                if (rlType.equals("R")) plugin.getTrainingManager().recordGood(rlAction);
+                                else plugin.getTrainingManager().recordBad(rlAction);
+                                sender.sendMessage("§aImported: " + (rlType.equals("R") ? "Reward" : "Punishment") + " for " + rlAction + " (score: " + rlScore + ")");
+                            }
+                        }
+                    }
+                    return true;
+                }
+
                 List<SmithNPC> nearbyTrain = npcManager.getNearbyNPCs(trainer.getLocation(), 16);
-                if (nearbyTrain.isEmpty() && !args[1].equalsIgnoreCase("reset")) {
+                if (nearbyTrain.isEmpty() && !trainAction.equals("reset")) {
                     sender.sendMessage("§cNo Smith_AI nearby.");
                     return true;
                 }
-                String action = args[1].toLowerCase();
                 SmithNPC tnpc = nearbyTrain.isEmpty() ? null : nearbyTrain.get(0);
-                if (action.equals("good")) {
-                    tnpc.sendMessage(trainer, "Thanks! I'll remember that as good.");
-                    plugin.getTrainingManager().recordGood("general");
-                } else if (action.equals("bad")) {
-                    tnpc.sendMessage(trainer, "Got it. I'll avoid that in the future.");
-                    plugin.getTrainingManager().recordBad("general");
-                } else if (action.equals("reset")) {
+                if (trainAction.equals("good")) {
+                    String goodAction = args.length >= 3 ? String.join("_", java.util.Arrays.copyOfRange(args, 2, args.length)) : "general";
+                    tnpc.sendMessage(trainer, "Thanks! I'll remember that as good (" + goodAction + ").");
+                    plugin.getTrainingManager().recordGood(goodAction);
+                } else if (trainAction.equals("bad")) {
+                    String badAction = args.length >= 3 ? String.join("_", java.util.Arrays.copyOfRange(args, 2, args.length)) : "general";
+                    tnpc.sendMessage(trainer, "Got it. I'll avoid that in the future (" + badAction + ").");
+                    plugin.getTrainingManager().recordBad(badAction);
+                } else if (trainAction.equals("reset")) {
                     if (!sender.hasPermission("smithai.admin")) {
                         sender.sendMessage("§cNo permission.");
                         return true;
@@ -280,7 +314,7 @@ public class SmithAICommand implements CommandExecutor {
                     plugin.getTrainingManager().resetFor(targetPlayer);
                     sender.sendMessage("§aTraining data reset for " + targetPlayer + ".");
                 } else {
-                    sender.sendMessage("§eUse §fgood §eor §fbad§e.");
+                    sender.sendMessage("§eUse §fgood <action>§e, §fbad <action>§e, or §fimport§e.");
                 }
                 return true;
 
@@ -501,10 +535,51 @@ public class SmithAICommand implements CommandExecutor {
                 Player dataPlayer = (Player) sender;
                 long rlCount = plugin.getTrainingManager().getRlRecorder().count();
                 String rlPath = plugin.getTrainingManager().getRlRecorder().getFilePath();
-                sender.sendMessage("§eSmithAI training data:");
-                sender.sendMessage("§7- RL data recorded: §f" + rlCount + " events");
-                sender.sendMessage("§7- File: §f" + rlPath);
-                sender.sendMessage("§7- Scores stored: §f" + plugin.getTrainingManager().getAllScores().size() + " actions");
+                java.util.Map<String, Object> summary = plugin.getTrainingManager().getRlRecorder().getSummary();
+
+                sender.sendMessage("§6§l═══ SmithAI Training Data ═══");
+                sender.sendMessage("§eRL Data: §f" + rlCount + " events recorded");
+                sender.sendMessage("§7File: §f" + rlPath);
+                sender.sendMessage("§aScores stored: §f" + plugin.getTrainingManager().getAllScores().size() + " actions");
+
+                // Show training scores
+                java.util.Map<String, Integer> allScores = plugin.getTrainingManager().getAllScores();
+                if (!allScores.isEmpty()) {
+                    sender.sendMessage("");
+                    sender.sendMessage("§eAll training scores (reward: +1, punish: -1):");
+                    allScores.entrySet().stream()
+                        .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
+                        .limit(10)
+                        .forEach(e -> {
+                            String color = e.getValue() > 0 ? "§a" : (e.getValue() < 0 ? "§c" : "§7");
+                            sender.sendMessage("  " + color + e.getKey() + ": §f" + e.getValue());
+                        });
+                }
+
+                // Show RL summary
+                java.util.List<String> topRewarded = (java.util.List<String>) summary.get("top_rewarded");
+                java.util.List<String> topPunished = (java.util.List<String>) summary.get("top_punished");
+                if (!topRewarded.isEmpty()) {
+                    sender.sendMessage("");
+                    sender.sendMessage("§aTop rewarded actions:");
+                    topRewarded.forEach(a -> sender.sendMessage("  §a✓ §f" + a));
+                }
+                if (!topPunished.isEmpty()) {
+                    sender.sendMessage("§cTop punished actions:");
+                    topPunished.forEach(a -> sender.sendMessage("  §c✗ §f" + a));
+                }
+
+                // Show recent RL events
+                java.util.List<com.smithai.training.RLDataRecorder.RLEvent> recent = plugin.getTrainingManager().getRlRecorder().getRecentEvents(8);
+                if (!recent.isEmpty()) {
+                    sender.sendMessage("");
+                    sender.sendMessage("§eRecent events:");
+                    for (com.smithai.training.RLDataRecorder.RLEvent ev : recent) {
+                        String color = ev.type.equals("Reward") ? "§a" : "§c";
+                        sender.sendMessage("  " + color + ev.type + " §f" + ev.action + " §7(score: " + ev.score + ")");
+                    }
+                }
+                sender.sendMessage("§6§l" + "═".repeat(30));
                 return true;
 
             case "config":
