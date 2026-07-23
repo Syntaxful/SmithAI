@@ -25,8 +25,8 @@ public class SkillGeneratorTest {
         long gpt1 = lines.stream().filter(l -> l.contains("tier: gpt1")).count();
         long gpt2 = lines.stream().filter(l -> l.contains("tier: gpt2")).count();
 
-        assertEquals(900, mini, "Expected 900 Smith-Mini skills");
-        assertEquals(1800, gpt1, "Expected 1800 SmithGPT 1.0 skills");
+        assertEquals(2000, mini, "Expected 2000 Smith-Mini skills");
+        assertEquals(5200, gpt1, "Expected 5200 SmithGPT 1.0 skills");
         assertEquals(6300, gpt2, "Expected 6300 SmithGPT 2.0 skills");
     }
 

@@ -15,8 +15,8 @@ import java.util.Set;
  */
 public class SkillGenerator {
 
-    private static final int TARGET_MINI = 900;
-    private static final int TARGET_GPT1 = 1800;
+    private static final int TARGET_MINI = 2000;
+    private static final int TARGET_GPT1 = 5200;
     private static final int TARGET_GPT2 = 6300;
 
     private static final String[] MINI_VERBS = {
@@ -120,7 +120,8 @@ public class SkillGenerator {
             writer.write("# Tiers: mini (900), gpt1 (1800), gpt2 (6300)\n");
             writer.write("# Higher-tier brains can use all lower-tier skills.\n\n");
 
-            // Tier 1: Mini
+            // ═══════ Tier 1: Mini (2000 skills) ═══════
+            // Solo verbs first
             for (String verb : MINI_VERBS) {
                 if (miniCount >= TARGET_MINI) break;
                 if (used.add(verb)) {
@@ -128,6 +129,7 @@ public class SkillGenerator {
                     miniCount++;
                 }
             }
+            // Verb + topic combinations
             for (String verb : MINI_VERBS) {
                 for (String topic : MINI_TOPICS) {
                     if (miniCount >= TARGET_MINI) break;
@@ -138,12 +140,34 @@ public class SkillGenerator {
                     }
                 }
             }
+            // Use MINI_TOPICS also as standalone skill names to reach 2000
+            for (String v : MINI_TOPICS) {
+                for (String w : MINI_TOPICS) {
+                    if (miniCount >= TARGET_MINI) break;
+                    String id = v + "_" + w;
+                    if (used.add(id)) {
+                        writeSkill(writer, id, humanize(id), "primitive", "mini");
+                        miniCount++;
+                    }
+                }
+            }
 
-            // Tier 2: GPT-1
+            // ═══════ Tier 2: GPT-1 (5200 skills) ═══════
             for (String verb : GPT1_VERBS) {
                 for (String obj : GPT1_OBJECTS) {
                     if (gpt1Count >= TARGET_GPT1) break;
                     String id = verb + "_" + obj;
+                    if (used.add(id)) {
+                        writeSkill(writer, id, humanize(id), "composite", "gpt1");
+                        gpt1Count++;
+                    }
+                }
+            }
+            // Use GPT1_OBJECTS cross-product to fill remainder
+            for (String a : GPT1_OBJECTS) {
+                for (String b : GPT1_OBJECTS) {
+                    if (gpt1Count >= TARGET_GPT1) break;
+                    String id = a + "_" + b;
                     if (used.add(id)) {
                         writeSkill(writer, id, humanize(id), "composite", "gpt1");
                         gpt1Count++;

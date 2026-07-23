@@ -18,9 +18,9 @@ ai:
     restrictByModel: false
   models:
     mini:
-      skillTier: 900
+      skillTier: 2000
     gpt1:
-      skillTier: 1800
+      skillTier: 5200
     gpt2:
       skillTier: 6300
   external:

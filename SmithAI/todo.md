@@ -67,10 +67,10 @@ Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-c
 
 Each brain has a fixed set of core skills it can execute. Higher brains can use all lower-brain skills too.
 
-- **Smith-Mini 1.0** — 900 core skills (built-in, runs in plugin)
-- **SmithGPT 1.0** — 1800 core skills (external, 4GB model)
+- **Smith-Mini 1.0** — 2000 core skills (built-in, runs in plugin)
+- **SmithGPT 1.0** — 5200 core skills (external, 4GB model)
 - **SmithGPT 2.0** — 6300 core skills (external, 7.5GB model)
-- **Total core skills** — 9000 (overlapping tiers)
+- **Total core skills** — 13,500 (overlapping tiers)
 
 Skills are generated at runtime by `SkillGenerator` into `plugins/SmithAI/skills.yml` so the plugin JAR stays small (~138KB). Higher-tier models include all lower-tier skills.
 
@@ -291,10 +291,10 @@ Each skill needs:
 - [x] Check inventory stub
 - [x] Select/equip item by task (tool, weapon)
 - [x] Real inventory scanning, item selection, pick up, drop, and use items
-- [ ] Crafting recipes by name and available ingredients
-- [ ] Crafting table / furnace / brewing stand interaction
-- [ ] Smelting, fueling, and result collection
-- [ ] Chest storage and retrieval
+- [x] Crafting recipes by name and available ingredients (CraftingManager — 20+ recipes)
+- [x] Crafting table / furnace / brewing stand interaction (CraftingManager craft/smelt/brew)
+- [x] Smelting, fueling, and result collection (CraftingManager smeltItem/fuelFurnace)
+- [x] Chest storage and retrieval (CraftingManager chestOperation)
 - [ ] Item pickup and drop
 - [ ] Tool/food/weapon/armor selection by task (partial — tools done)
 - [ ] Durability-aware tool switching
@@ -319,26 +319,28 @@ Each skill needs:
 - [x] Break blocks with best tool (instant via `breakNaturally`)
 - [x] Place blocks with material parameter
 - [x] Place torches
-- [ ] Break blocks with correct timing and drops
-- [ ] Place blocks with correct facing and support
-- [ ] Interact with doors, levers, buttons, chests, furnaces, etc.
+- [x] Break blocks with correct timing and drops (timed break + drop collection)
+- [x] Place blocks with correct facing and support (SkillDispatcher placeBlock)
+- [x] Interact with chests and furnaces (CraftingManager chest/furnace ops)
+- [ ] Interact with doors, levers, buttons, etc.
 - [ ] Use buckets, flint and steel, ender pearls, etc.
-- [ ] Harvest crops, shear sheep, milk cows, tame animals
+- [x] Harvest crops, replant (FarmingManager)
+- [ ] Shear sheep, milk cows, tame animals
 - [ ] Build structures from schematic or plan
 - [x] Light area with torches (place_torch skill + SkillDispatcher executor)
-- [ ] Farm automation (plant, grow, harvest)
-- [ ] Mine safely (1x2 strip, ladder down, avoid lava)
+- [x] Farm automation (plant, water, fertilize, harvest, replant — FarmingManager)
+- [x] Mine safely (1x2 strip, branch mine, ladder shaft, diamond Y=-59 — MiningManager)
 - [ ] Terraform and landscape
 
 ### 15. Endgame & Progression Tasks
 - [x] Task planner sequences for "beat the game", diamonds, nether portal, base, etc.
-- [ ] Real diamond mining at Y=-59
-- [ ] Nether portal creation and travel
-- [ ] Blaze rod farming and potion brewing
-- [ ] Eye of ender crafting and stronghold location
-- [ ] End portal activation and dragon fight
-- [ ] Post-dragon elytra/shulker acquisition
-- [ ] Wither and Warden encounters
+- [x] Real diamond mining at Y=-59 (MiningManager.mineDiamonds)
+- [x] Nether portal creation and travel (EndGameManager.buildNetherPortal)
+- [x] Blaze rod farming and potion brewing (EndGameManager.blazeRodFarming, CraftingManager brew)
+- [x] Eye of ender crafting and stronghold location (EndGameManager.craftEyeOfEnder, locateStronghold)
+- [x] End portal activation and dragon fight (EndGameManager.endPortalAndDragon)
+- [x] Post-dragon elytra/shulker acquisition (EndGameManager.postDragonAcquisition)
+- [x] Wither summoning (EndGameManager.summonWither)
 - [ ] Advancement completion tracking
 - [ ] Automated speedrun path (optional)
 
@@ -357,7 +359,7 @@ Each skill needs:
 - [ ] Training data merge conflicts resolution
 - [x] Visual feedback when training is recorded (chat message from NPC)
 - [x] Reset training for a specific player or NPC (/smithai train reset [player])
-- [ ] Use training scores to influence skill selection
+- [x] Use training scores to influence skill selection (TrainingManager.prioritizeSkills, getBestAction)
 - [ ] Training data privacy toggle
 
 ### 17. Commands & Permissions
@@ -619,23 +621,23 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Build & Packaging | 95% | Maven, build script, CI, release packaging, checksums, version bump all done |
 | Plugin Lifecycle | 96% | Enable/disable/reload, subsystem health, debug mode, bStats config done |
 | Config System | 85% | Core keys done; some advanced pathfinding/combat/crafting keys missing |
-| NPC System | 45% | Spawn/follow/stay/goto done; real player model pending |
+| NPC System | 60% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble); player model pending |
 | External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
-| Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
-| Knowledge Base | 85% | 32,581 entries across 6 categories; category index added |
-| Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
+| Chat & Memory | 90% | MemoryManager + MemoryEnhancer (summarization, per-player preferences, mood/emotion, conversation threading) done |
+| Knowledge Base | 88% | 32,581 entries across 6 categories; category index added |
+| Skill System | 70% | 13,500 skills (2000 Mini + 5200 GPT1 + 6300 GPT2), dispatcher/executor with CraftingManager/FarmingManager/MiningManager/EndGameManager wired; most composite skills still message-based |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
-| Inventory & Crafting | 38% | Inventory scan, pick up, drop, give, and item use done; crafting automation pending |
-| Combat & Survival | 18% | Basic attack/eat/torch/lighting done; tactics/hazards pending |
-| Training System | 75% | Commands, persistence, detailed feedback, RLDataRecorder, /smithai data, reset, export done; demo learning pending |
+| Inventory & Crafting | 85% | Inventory scan, pick up, drop, give, item use, CraftingManager (full auto-crafting for 20+ recipes), smelting, brewing, chest store/withdraw/scan, furnace fueling done |
+| Combat & Survival | 45% | Mob-specific tactics (creeper, skeleton, boss, ranged, flying, nether), hazard avoidance, auto-equip, auto-heal, food management, retreat logic, NPCMesh damage/health/death/respawn done |
+| Training System | 85% | Commands, persistence, detailed feedback, RLDataRecorder, /smithai data, reset, export, score-influenced skill selection (prioritizeSkills, getBestAction) done |
 | Commands & Permissions | 97% | All subcommands + tab completers done; /smithai config and /smithai export added |
 | Status & Notifications | 65% | Switch messages, reminders, debug/health done; action bar pending |
 | External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard added |
 | Models | 60% | README done with Hugging Face instructions, license notes, model cards |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 40% | 34 tests across 9 suites; config, export, reset tested via compilation; more coverage pending |
-| Documentation | 90% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE, MODELS done; API/CHANGELOG minor updates pending |
+| Testing & Quality | 42% | 34 tests across 9 suites; all passing with new 13,500 skill counts; more coverage pending |
+| Documentation | 93% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE, MODELS, models/README done; SmithGPT1.0/2.0 hosting scripts documented |
 
 ---
 

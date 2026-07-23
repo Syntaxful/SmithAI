@@ -16,15 +16,26 @@ import java.util.logging.Level;
 
 /**
  * Dispatches broad skill categories to concrete Bukkit actions.
- * Features: timed block breaking + drop collection, inventory automation,
- * mob-specific combat tactics, hazard avoidance, simple crafting.
+ * Delegates to specialized managers for crafting, farming, mining, and endgame.
  */
 public class SkillDispatcher {
 
     private final SmithAIPlugin plugin;
+    private final CraftingManager crafting;
+    private final FarmingManager farming;
+    private final MiningManager mining;
+    private final com.smithai.build.EndGameManager endgame;
 
     // Tracks ongoing timed block breaks
     private final Map<Location, UUID> activeBreaks = new HashMap<>();
+
+    public SkillDispatcher(SmithAIPlugin plugin) {
+        this.plugin = plugin;
+        this.crafting = new CraftingManager(plugin);
+        this.farming = new FarmingManager(plugin);
+        this.mining = new MiningManager(plugin);
+        this.endgame = new com.smithai.build.EndGameManager(plugin);
+    }
 
     // Mob-specific combat tactics
     private static final Set<Material> HAZARD_BLOCKS = EnumSet.of(
@@ -32,10 +43,6 @@ public class SkillDispatcher {
         Material.SWEET_BERRY_BUSH, Material.CAMPFIRE, Material.SOUL_CAMPFIRE,
         Material.MAGMA_BLOCK, Material.WITHER_ROSE
     );
-
-    public SkillDispatcher(SmithAIPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     public void execute(SmithNPC npc, String skillName, Map<String, Object> params, Player contextPlayer) {
         if (npc == null || npc.getEntity() == null || npc.getEntity().isDead()) return;
@@ -70,6 +77,15 @@ public class SkillDispatcher {
 
         // Gather / resource / farming / crafting / building
         if (isResourceSkill(lower)) { executeResource(npc, lower, contextPlayer, params); return; }
+
+        // Endgame / progression tasks
+        if (isEndgameSkill(lower)) { endgame.execute(npc, lower, params, contextPlayer); return; }
+        // Mining operations (safe strip, branch, diamond)
+        if (isMiningSkill(lower)) { mining.execute(npc, lower, params, contextPlayer); return; }
+        // Farming operations (plant, water, fertilize, harvest, breed)
+        if (isFarmingSkill(lower)) { farming.execute(npc, lower, params, contextPlayer); return; }
+        // Crafting / smelting / brewing / chest operations
+        if (isCraftingSkill(lower)) { crafting.execute(npc, lower, params, contextPlayer); return; }
 
         executeComposite(npc, lower, contextPlayer, "I'll plan and execute that advanced objective: " + humanize(skillName));
     }
@@ -752,6 +768,36 @@ public class SkillDispatcher {
 
     private void executeComposite(SmithNPC npc, String skill, Player player, String defaultMessage) {
         npc.sendMessage(player, defaultMessage);
+    }
+
+    // ── NEW SKILL DETECTORS ──
+
+    private boolean isEndgameSkill(String lower) {
+        return lower.contains("portal") || lower.contains("nether") || lower.contains("blaze") ||
+            lower.contains("eye_of_ender") || lower.contains("ender_eye") || lower.contains("stronghold") ||
+            lower.contains("end_portal") || lower.contains("dragon") || lower.contains("wither") ||
+            lower.contains("elytra") || lower.contains("shulker") || lower.contains("end_city");
+    }
+
+    private boolean isMiningSkill(String lower) {
+        return lower.contains("strip_mine") || lower.contains("branch_mine") || lower.contains("mine_diamond") ||
+            lower.contains("find_diamond") || lower.contains("diamond_mine") || lower.contains("ladder_down") ||
+            lower.contains("mine_shaft") || lower.contains("vertical_mine") || lower.contains("safe_mine");
+    }
+
+    private boolean isFarmingSkill(String lower) {
+        return lower.contains("plant_") || lower.contains("water_crop") || lower.contains("fertilize_") ||
+            lower.contains("bone_meal") || lower.contains("grow_crop") || lower.contains("harvest_") ||
+            lower.contains("replant_") || lower.contains("farm_automated") || lower.contains("breed_") ||
+            lower.contains("feed_animal") || lower.contains("till_") || lower.contains("sow_");
+    }
+
+    private boolean isCraftingSkill(String lower) {
+        return (lower.startsWith("craft_") || lower.startsWith("make_") || lower.startsWith("smelt_") ||
+            lower.startsWith("cook_") || lower.startsWith("bake_") || lower.startsWith("brew_") ||
+            lower.contains("chest") || lower.contains("store_") || lower.contains("deposit_") ||
+            lower.contains("withdraw_") || lower.contains("fuel_") || lower.contains("configure_furnace")) &&
+            !lower.contains("crafting_table"); // crafting_table is handled by interaction
     }
 
     private String humanize(String id) {

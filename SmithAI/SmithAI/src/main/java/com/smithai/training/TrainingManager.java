@@ -77,6 +77,34 @@ public class TrainingManager {
         save();
     }
 
+    /**
+     * Score-influenced skill selection: returns skills sorted by training score.
+     * Skills with higher positive scores are preferred; negative scores are deprioritized.
+     */
+    public List<String> prioritizeSkills(List<String> candidateSkills) {
+        Map<String, Integer> scores = getAllScores();
+        List<String> result = new ArrayList<>(candidateSkills);
+        result.sort((a, b) -> {
+            int sa = scores.getOrDefault(a.toLowerCase(), 0);
+            int sb = scores.getOrDefault(b.toLowerCase(), 0);
+            return Integer.compare(sb, sa); // higher score first
+        });
+        return result;
+    }
+
+    public String getBestAction(String... candidates) {
+        String best = null;
+        int bestScore = Integer.MIN_VALUE;
+        for (String c : candidates) {
+            int s = getScore(c);
+            if (s > bestScore) {
+                bestScore = s;
+                best = c;
+            }
+        }
+        return best != null ? best : (candidates.length > 0 ? candidates[0] : "general");
+    }
+
     public void exportTo(File dest) throws IOException {
         YamlConfiguration yaml = new YamlConfiguration();
         for (Map.Entry<String, Integer> entry : feedbackScores.entrySet()) {

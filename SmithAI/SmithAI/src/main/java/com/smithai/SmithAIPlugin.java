@@ -8,8 +8,10 @@ import com.smithai.commands.SmithAPICommand;
 import com.smithai.config.Config;
 import com.smithai.debug.DebugManager;
 import com.smithai.health.SubsystemHealth;
+import com.smithai.memory.MemoryEnhancer;
 import com.smithai.memory.MemoryManager;
 import com.smithai.npc.NPCManager;
+import com.smithai.npc.NPCMesh;
 import com.smithai.skills.SkillExecutor;
 import com.smithai.skills.SkillRegistry;
 import com.smithai.training.FeedbackManager;
@@ -31,6 +33,8 @@ public class SmithAIPlugin extends JavaPlugin {
     private AIManager aiManager;
     private ChatManager chatManager;
     private MemoryManager memoryManager;
+    private MemoryEnhancer memoryEnhancer;
+    private NPCMesh npcMesh;
     private NPCManager npcManager;
     private SkillRegistry skillRegistry;
     private SkillExecutor skillExecutor;
@@ -53,6 +57,8 @@ public class SmithAIPlugin extends JavaPlugin {
         try {
             this.pluginConfig = initSubsystem(SubsystemHealth.Subsystem.AI, () -> new Config(getConfig()), "Configuration loaded");
             this.memoryManager = initSubsystem(SubsystemHealth.Subsystem.MEMORY, () -> new MemoryManager(this), "Memory manager ready");
+            this.memoryEnhancer = new MemoryEnhancer(this);
+            this.npcMesh = new NPCMesh(this);
             this.skillRegistry = initSubsystem(SubsystemHealth.Subsystem.SKILLS, () -> new SkillRegistry(this), "Skill registry ready");
             this.skillExecutor = initSubsystem(SubsystemHealth.Subsystem.SKILLS, () -> new SkillExecutor(this), "Skill executor ready");
             this.trainingManager = initSubsystem(SubsystemHealth.Subsystem.TRAINING, () -> new TrainingManager(this), "Training manager ready");
@@ -214,6 +220,14 @@ public class SmithAIPlugin extends JavaPlugin {
 
     public MemoryManager getMemoryManager() {
         return memoryManager;
+    }
+
+    public MemoryEnhancer getMemoryEnhancer() {
+        return memoryEnhancer;
+    }
+
+    public NPCMesh getNpcMesh() {
+        return npcMesh;
     }
 
     public NPCManager getNpcManager() {
