@@ -1,3 +1,0 @@
-- [SkillDispatcher analytics pattern](skill-dispatcher-analytics.md) — recordSkillUsage tracks per-skill use/success and feeds RL Recorder
-- [8 categories at 100%](8-categories-at-100pct.md) — External AI Server, Commands, Plugin Lifecycle, Build, Docs, Chat/Memory, Knowledge Base, Training System
-- [14 unpushed commits on main](unpushed-commits.md) — all building clean (39 tests, 856K JAR)

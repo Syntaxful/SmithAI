@@ -41,13 +41,22 @@ testem.log
 .DS_Store
 Thumbs.db
 
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
+.github/instructions/
 
 # SmithAI build outputs
 SmithAI/target/
-*.jar
 *.class
+
+# SmithAI runtime data
+SmithAI/memory/
+SmithAI/models/
+SmithAI/skills.yml
+SmithAI/training.yml
+
+# SmithAI-Server runtime
+SmithAI-Server/models/*.gguf
+SmithAI-Server/models/*.bin
+SmithAI-Server/__pycache__/
 
 # Python
 __pycache__/
