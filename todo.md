@@ -219,6 +219,7 @@ Each skill needs:
 - [x] JSON format: id, category, name, description, tags
 - [x] Knowledge lookup by keyword/tag
 - [x] Biome category added
+- [x] Expand from samples to several hundred core entries (334 entries across blocks, mobs, items, recipes, biomes, strategy)
 - [ ] Expand to 29,000 entries
 - [ ] Category index for fast lookup
 - [ ] Knowledge versioning and updates
