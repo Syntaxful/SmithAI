@@ -78,6 +78,26 @@ public class KnowledgeBase {
         return entries.size();
     }
 
+    public java.util.Map<String, List<KnowledgeEntry>> getCategoryIndex() {
+        java.util.Map<String, List<KnowledgeEntry>> index = new java.util.HashMap<>();
+        for (KnowledgeEntry entry : entries) {
+            String cat = entry.getCategory();
+            index.computeIfAbsent(cat, k -> new ArrayList<>()).add(entry);
+        }
+        return index;
+    }
+
+    public java.util.Map<String, Integer> getCategoryCounts() {
+        java.util.Map<String, Integer> counts = new java.util.LinkedHashMap<>();
+        counts.put("block", 0); counts.put("mob", 0); counts.put("item", 0);
+        counts.put("recipe", 0); counts.put("biome", 0); counts.put("strategy", 0);
+        for (KnowledgeEntry entry : entries) {
+            String cat = entry.getCategory();
+            counts.put(cat, counts.getOrDefault(cat, 0) + 1);
+        }
+        return counts;
+    }
+
     public static class KnowledgeEntry {
         private final String id;
         private final String category;

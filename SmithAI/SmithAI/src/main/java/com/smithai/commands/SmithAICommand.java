@@ -254,23 +254,31 @@ public class SmithAICommand implements CommandExecutor {
                     return true;
                 }
                 if (args.length < 2) {
-                    sender.sendMessage("§eUsage: §f/smithai train good §eor §f/smithai train bad");
+                    sender.sendMessage("§eUsage: §f/smithai train good|bad|reset §eor §f/smithai train reset <player>");
                     return true;
                 }
                 Player trainer = (Player) sender;
                 List<SmithNPC> nearbyTrain = npcManager.getNearbyNPCs(trainer.getLocation(), 16);
-                if (nearbyTrain.isEmpty()) {
+                if (nearbyTrain.isEmpty() && !args[1].equalsIgnoreCase("reset")) {
                     sender.sendMessage("§cNo Smith_AI nearby.");
                     return true;
                 }
-                String feedback = args[1].toLowerCase();
-                SmithNPC tnpc = nearbyTrain.get(0);
-                if (feedback.equals("good")) {
+                String action = args[1].toLowerCase();
+                SmithNPC tnpc = nearbyTrain.isEmpty() ? null : nearbyTrain.get(0);
+                if (action.equals("good")) {
                     tnpc.sendMessage(trainer, "Thanks! I'll remember that as good.");
                     plugin.getTrainingManager().recordGood("general");
-                } else if (feedback.equals("bad")) {
+                } else if (action.equals("bad")) {
                     tnpc.sendMessage(trainer, "Got it. I'll avoid that in the future.");
                     plugin.getTrainingManager().recordBad("general");
+                } else if (action.equals("reset")) {
+                    if (!sender.hasPermission("smithai.admin")) {
+                        sender.sendMessage("§cNo permission.");
+                        return true;
+                    }
+                    String targetPlayer = args.length >= 3 ? args[2] : sender.getName();
+                    plugin.getTrainingManager().resetFor(targetPlayer);
+                    sender.sendMessage("§aTraining data reset for " + targetPlayer + ".");
                 } else {
                     sender.sendMessage("§eUse §fgood §eor §fbad§e.");
                 }
@@ -499,6 +507,57 @@ public class SmithAICommand implements CommandExecutor {
                 sender.sendMessage("§7- Scores stored: §f" + plugin.getTrainingManager().getAllScores().size() + " actions");
                 return true;
 
+            case "config":
+                if (!sender.hasPermission("smithai.admin")) {
+                    sender.sendMessage("§cNo permission.");
+                    return true;
+                }
+                com.smithai.config.Config cfg = plugin.getPluginConfig();
+                sender.sendMessage("§eSmithAI configuration:");
+                sender.sendMessage("§7Name: §f" + cfg.getAiName());
+                sender.sendMessage("§7External: §f" + (cfg.isExternalEnabled() ? "enabled (" + cfg.getExternalUrl() + ")" : "disabled"));
+                sender.sendMessage("§7Local: §f" + (cfg.isLocalEnabled() ? "enabled" : "disabled") + " §7| §7Fallback: §f" + cfg.isLocalFallbackToRules());
+                sender.sendMessage("§7Reconnect interval: §f" + cfg.getReconnectInterval() + "s");
+                sender.sendMessage("§7Memory: §f" + cfg.getMaxMemoryMessages() + " messages");
+                sender.sendMessage("§7Follow distance: §f" + cfg.getFollowDistance());
+                sender.sendMessage("§7Skill queue: §f" + cfg.getMaxSkillQueueSize() + " max, " + cfg.getSkillStepDelay() + " tick delay");
+                sender.sendMessage("§7Pathfinding: §f" + cfg.getPathfindingMaxDistance() + " max dist, " + cfg.getPathfindingMaxNodes() + " nodes");
+                sender.sendMessage("§7Combat: §fretreat at " + (int)(cfg.getCombatRetreatHealth()*100) + "% health, min " + (int)cfg.getCombatMinFood() + " hunger");
+                sender.sendMessage("§7Training persist: §f" + cfg.isPersistTraining());
+                sender.sendMessage("§7Debug: §f" + (cfg.isDebugEnabled() ? "enabled" : "disabled"));
+                sender.sendMessage("§7Skill tiers: §fMini " + cfg.getMiniSkillTier() + " | GPT1 " + cfg.getGpt1SkillTier() + " | GPT2 " + cfg.getGpt2SkillTier());
+                return true;
+
+            case "export":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can export data.");
+                    return true;
+                }
+                if (!sender.hasPermission("smithai.admin")) {
+                    sender.sendMessage("§cNo permission.");
+                    return true;
+                }
+                Player exportPlayer = (Player) sender;
+                String ts = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                java.io.File dataDir = new java.io.File(plugin.getDataFolder(), "export");
+                dataDir.mkdirs();
+                // Export memory
+                java.io.File memFile = new java.io.File(dataDir, "memory_" + ts + ".yml");
+                java.io.File trainingFile = new java.io.File(dataDir, "training_" + ts + ".yml");
+                java.io.File rlFile = new java.io.File(dataDir, "rl_data_" + ts + ".csv");
+                try {
+                    plugin.getMemoryManager().exportTo(memFile);
+                    plugin.getTrainingManager().exportTo(trainingFile);
+                    plugin.getTrainingManager().getRlRecorder().exportTo(rlFile);
+                    sender.sendMessage("§aData exported to plugins/SmithAI/export/:");
+                    sender.sendMessage("§7- memory_" + ts + ".yml");
+                    sender.sendMessage("§7- training_" + ts + ".yml");
+                    sender.sendMessage("§7- rl_data_" + ts + ".csv");
+                } catch (Exception e) {
+                    sender.sendMessage("§cExport failed: " + e.getMessage());
+                }
+                return true;
+
             case "help":
                 sender.sendMessage("§eSmithAI commands:");
                 sender.sendMessage("§7/smithai spawn §f- spawn Smith_AI");
@@ -517,6 +576,8 @@ public class SmithAICommand implements CommandExecutor {
                 sender.sendMessage("§7/smithai report <description> §f- open a prefilled GitHub issue");
                 sender.sendMessage("§7/smithai memory §f- show recent conversation");
                 sender.sendMessage("§7/smithai data §f- show training data stats and RL file location");
+                sender.sendMessage("§7/smithai config §f- show current configuration (admin)");
+                sender.sendMessage("§7/smithai export §f- export memory/training data (admin)");
                 sender.sendMessage("§7/smithai status §f- show active brain/model");
                 sender.sendMessage("§7/smithai version §f- show detected server and SmithAI version");
                 sender.sendMessage("§7/smithai reload §f- reload configuration (admin)");

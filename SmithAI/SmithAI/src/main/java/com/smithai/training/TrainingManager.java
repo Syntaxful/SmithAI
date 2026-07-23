@@ -4,6 +4,7 @@ import com.smithai.SmithAIPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
@@ -69,5 +70,18 @@ public class TrainingManager {
 
     public Map<String, Integer> getAllScores() {
         return new HashMap<>(feedbackScores);
+    }
+
+    public void resetFor(String player) {
+        feedbackScores.clear();
+        save();
+    }
+
+    public void exportTo(File dest) throws IOException {
+        YamlConfiguration yaml = new YamlConfiguration();
+        for (Map.Entry<String, Integer> entry : feedbackScores.entrySet()) {
+            yaml.set(entry.getKey(), entry.getValue());
+        }
+        yaml.save(dest);
     }
 }

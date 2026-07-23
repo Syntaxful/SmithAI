@@ -12,8 +12,11 @@ import asyncio
 import uvicorn
 import re
 import random
+import logging
+from logging.handlers import RotatingFileHandler
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Header, Depends, Request
+from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
@@ -44,6 +47,12 @@ API_KEY = config.get("security", {}).get("api_key", "")
 security = HTTPBearer(auto_error=False)
 llm = None
 authenticated = False
+logger = logging.getLogger("smithai-server")
+os.makedirs("logs", exist_ok=True)
+log_handler = RotatingFileHandler("logs/smithai-server.log", maxBytes=5*1024*1024, backupCount=3)
+log_handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
+logger.addHandler(log_handler)
+logger.setLevel(logging.INFO)
 
 
 def generate_api_key():
@@ -130,6 +139,7 @@ async def lifespan(app: FastAPI):
     authenticated = False
     if llm:
         del llm
+    logger.info("SmithAI-Server shutdown complete.")
 
 
 app = FastAPI(
@@ -152,6 +162,39 @@ async def root():
         "authenticated": authenticated,
     }
 
+
+# ========== PROMPT TEMPLATES ==========
+PROMPT_TEMPLATES = {
+    "gpt1": {
+        "system": "You are Smith_AI, a helpful Minecraft companion. You can chat, help with tasks, and answer Minecraft questions. Keep replies concise and useful. End with [action:skill_name] if a skill is appropriate.",
+        "version_context": True,
+        "knowledge_prefix": "Relevant information:\n",
+        "max_tokens": 200,
+    },
+    "gpt2": {
+        "system": "You are Smith_AI, an advanced Minecraft AI companion with strategic reasoning. You break complex goals into steps. Use skills from your library. Consider resources, environment, and player safety. You can reason about multi-step processes and coordinate advanced tasks.",
+        "version_context": True,
+        "knowledge_prefix": "Strategy context:\n",
+        "max_tokens": 400,
+    },
+}
+
+# ========== RATE LIMITING ==========
+import time
+from collections import defaultdict
+RATE_LIMIT_RPS = float(config.get("server", {}).get("rate_limit", 10.0))
+RATE_WINDOW = 1.0
+rate_tracker = defaultdict(list)
+
+def check_rate_limit(client_ip: str):
+    now = time.time()
+    window = rate_tracker[client_ip]
+    # Remove old entries
+    while window and window[0] < now - RATE_WINDOW:
+        window.pop(0)
+    if len(window) >= RATE_LIMIT_RPS:
+        raise HTTPException(status_code=429, detail=f"Rate limit exceeded ({RATE_LIMIT_RPS} req/s)")
+    window.append(now)
 
 # In-memory skill library (subset used for prompting)
 SKILL_LIBRARY = [
@@ -261,38 +304,77 @@ class VersionContext:
         return f"{base} Java Edition"
 
 
-@app.get("/health", response_model=HealthResponse)
-def health():
-    return HealthResponse(
-        status="ok",
-        model=MODEL_NAME,
-        tier=get_model_tier(),
-        skills=len(available_skills()),
-        model_loaded=llm is not None,
-    )
+@app.get("/status", response_class=HTMLResponse)
+def status_page():
+    model_loaded = llm is not None
+    tier = get_model_tier()
+    mem = 0
+    try:
+        import psutil
+        mem = psutil.Process().memory_info().rss // (1024*1024)
+    except ImportError:
+        pass
+    skills = available_skills()
+    html = f"""<!DOCTYPE html><html><head><title>SmithAI-Server Status</title>
+<style>body{{font-family:sans-serif;max-width:720px;margin:40px auto;padding:0 20px;background:#1a1a2e;color:#eee}}
+h1{{color:#e94560}}table{{width:100%;border-collapse:collapse}}th,td{{padding:8px 12px;text-align:left;border-bottom:1px solid #333}}
+th{{color:#e94560;font-weight:normal}}.ok{{color:#4ecca3}}.warn{{color:#ffc93c}}.bad{{color:#e94560}}
+pre{{background:#16213e;padding:12px;border-radius:6px;overflow-x:auto}}</style></head>
+<body><h1>SmithAI-Server</h1><table>
+<tr><th>Status</th><td class="ok">Running</td></tr>
+<tr><th>Model</th><td>{MODEL_NAME}</td></tr>
+<tr><th>Tier</th><td>{tier}</td></tr>
+<tr><th>Model Loaded</th><td class="{'ok' if model_loaded else 'warn'}">{'Yes' if model_loaded else 'No (fallback)'}</td></tr>
+<tr><th>Authenticated</th><td class="{'ok' if authenticated else 'warn'}">{'Yes' if authenticated else 'Waiting for plugin'}</td></tr>
+<tr><th>Skills Available</th><td>{len(skills)}</td></tr>
+<tr><th>Memory Usage</th><td>{mem} MB</td></tr>
+<tr><th>Llama Available</th><td>{'Yes' if LLAMA_AVAILABLE else 'No'}</td></tr>
+</table><h2>Available Skills ({len(skills)})</h2><pre>{chr(10).join(skills)}</pre>
+<p style="color:#666;margin-top:40px">SmithAI-Server v2.0.0</p></body></html>"""
+    return HTMLResponse(html)
+
+@app.get("/health")
+def health(request: Request):
+    rss_mb = 0
+    try:
+        import psutil
+        rss_mb = psutil.Process().memory_info().rss // (1024 * 1024)
+    except ImportError:
+        pass
+    return {
+        "status": "ok",
+        "model": MODEL_NAME,
+        "tier": get_model_tier(),
+        "skills": len(available_skills()),
+        "model_loaded": llm is not None,
+        "authenticated": authenticated,
+        "memory_mb": rss_mb,
+        "rate_limit_rps": RATE_LIMIT_RPS,
+        "prompt_templates": list(PROMPT_TEMPLATES.keys()),
+    }
 
 
 @app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest, token: str = Depends(verify_token)):
+def chat(req: ChatRequest, token: str = Depends(verify_token), request: Request = None):
+    if request:
+        client = request.client.host if request.client else "unknown"
+        check_rate_limit(client)
     if llm is not None:
         try:
             return chat_with_llm(req)
         except Exception as e:
             print(f"LLM error, falling back to rules: {e}")
+            logger.warning(f"LLM error: {e}")
     return chat_rule_based(req)
 
 
 def chat_with_llm(req: ChatRequest) -> ChatResponse:
     model_tier = get_model_tier()
+    tpl = get_prompt_template(model_tier)
     skill_count = len(available_skills())
     version = VersionContext(req.context)
-    system_prompt = (
-        "You are Smith_AI, an AI companion in Minecraft. You can chat, help with tasks, "
-        "and answer questions about the game. Keep replies short and useful.\n"
-        f"Model tier: {model_tier}. Available core skills: {skill_count}.\n"
-        "You may choose one or more skills to accomplish a task if it helps.\n"
-        "If you choose a skill, end your reply with the tag [action:skill_name] or [action:skill_name,target].\n"
-    )
+    system_prompt = tpl["system"] + f"\nModel tier: {model_tier}. Available core skills: {skill_count}.\n"
+    system_prompt += "If you choose a skill, end your reply with the tag [action:skill_name] or [action:skill_name,target].\n"
     if version.version:
         system_prompt += (
             f"The player is running {version.friendly_name()}. "
@@ -311,7 +393,7 @@ def chat_with_llm(req: ChatRequest) -> ChatResponse:
     for m in req.messages:
         messages.append({"role": m.role, "content": m.content})
 
-    output = llm.create_chat_completion(messages=messages, max_tokens=MAX_TOKENS)
+    output = llm.create_chat_completion(messages=messages, max_tokens=tpl.get("max_tokens", MAX_TOKENS))
     raw_reply = output["choices"][0]["message"]["content"].strip()
     action, target, reply = parse_action_tag(raw_reply)
 
@@ -323,6 +405,9 @@ def chat_with_llm(req: ChatRequest) -> ChatResponse:
         model=MODEL_NAME,
     )
 
+
+def get_prompt_template(tier: str) -> Dict[str, Any]:
+    return PROMPT_TEMPLATES.get(tier, PROMPT_TEMPLATES["gpt1"])
 
 def chat_rule_based(req: ChatRequest) -> ChatResponse:
     if not req.messages:
@@ -532,4 +617,5 @@ if __name__ == "__main__":
     print(f"Starting SmithAI-Server v2.0.0")
     print(f"Model: {MODEL_NAME}")
     print(f"Listening on {HOST}:{PORT}")
-    uvicorn.run(app, host=HOST, port=PORT)
+    logger.info(f"Starting SmithAI-Server v2.0.0 (model={MODEL_NAME}, host={HOST}, port={PORT})")
+    uvicorn.run(app, host=HOST, port=PORT, log_config=None)

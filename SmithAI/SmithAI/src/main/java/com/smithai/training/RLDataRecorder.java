@@ -86,4 +86,10 @@ public class RLDataRecorder {
     public String getFilePath() {
         return file.getAbsolutePath();
     }
+
+    public void exportTo(File dest) throws IOException {
+        if (file.exists()) {
+            Files.copy(file.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
 }

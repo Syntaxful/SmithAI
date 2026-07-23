@@ -6,6 +6,8 @@ server:
   # Default port is 8000. Many hosting platforms set the PORT environment variable,
   # which the server uses automatically if present.
   port: 8000
+  # Rate limit: max requests per second per client IP
+  rate_limit: 10.0
 
 model:
   # Model name for display/logging

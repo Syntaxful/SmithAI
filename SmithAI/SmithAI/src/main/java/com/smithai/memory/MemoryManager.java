@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,20 @@ public class MemoryManager {
             }
             return conv;
         });
+    }
+
+    public void exportTo(File dest) throws IOException {
+        YamlConfiguration yaml = new YamlConfiguration();
+        int i = 0;
+        for (Map.Entry<UUID, Conversation> entry : conversations.entrySet()) {
+            for (Conversation.Message msg : entry.getValue().getMessages()) {
+                yaml.set("conversation." + i + ".npc", entry.getKey().toString());
+                yaml.set("conversation." + i + ".role", msg.getRole());
+                yaml.set("conversation." + i + ".content", msg.getContent());
+                i++;
+            }
+        }
+        yaml.save(dest);
     }
 
     public void saveAll() {
