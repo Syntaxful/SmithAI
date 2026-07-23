@@ -255,7 +255,7 @@ Each skill needs:
 - [x] `goto` target support via `setMoveTarget`
 - [ ] Real player-model NPC with robot skin and limbs
 - [x] Real pathfinding using Bukkit pathfinders or custom A*
-- [ ] NPC inventory and equipment mirroring
+- [x] NPC inventory and equipment mirroring
 - [ ] NPC animation states (walking, mining, fighting)
 - [ ] NPC damage, health, death, and respawn handling
 - [ ] NPC nameplate and hologram display
@@ -278,7 +278,7 @@ Each skill needs:
 ### 12. Inventory & Crafting Automation
 - [x] Check inventory stub
 - [x] Select/equip item by task (tool, weapon)
-- [ ] Real inventory scanning and item selection
+- [x] Real inventory scanning, item selection, pick up, drop, and use items
 - [ ] Crafting recipes by name and available ingredients
 - [ ] Crafting table / furnace / brewing stand interaction
 - [ ] Smelting, fueling, and result collection
@@ -576,7 +576,8 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 - [x] Tool selection by task
 - [x] Basic mob combat with target selection
 - [x] Pathfinding (A* or navigator)
-- [ ] Inventory/crafting automation
+- [x] Inventory automation (scan, pick up, drop, use)
+- [ ] Crafting automation
 - [ ] Combat/survival automation
 - [ ] Endgame task sequences
 - [ ] Base building and farming
@@ -605,7 +606,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
 | Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
 | Pathfinding & Movement | 60% | Basic A* pathfinding implemented; obstacle handling and navigation smoothing remain |
-| Inventory & Crafting | 10% | Tool selection done; full inventory/crafting pending |
+| Inventory & Crafting | 35% | Inventory scan, pick up, drop, and item use done; crafting automation pending |
 | Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
 | Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
 | Commands & Permissions | 90% | Core commands + feedback/report/debug/health done; some advanced commands missing |

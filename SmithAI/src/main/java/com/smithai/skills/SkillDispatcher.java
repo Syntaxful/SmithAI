@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -198,16 +199,20 @@ public class SkillDispatcher {
     }
 
     private void executeInteraction(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
-        if (skill.startsWith("eat") || skill.startsWith("heal")) {
-            Entity entity = npc.getEntity();
-            if (entity instanceof LivingEntity) {
-                LivingEntity le = (LivingEntity) entity;
-                le.setHealth(Math.min(le.getHealth() + 2, le.getMaxHealth()));
-            }
+        if (skill.startsWith("eat") || skill.startsWith("heal") || skill.startsWith("consume") || skill.startsWith("use_item")) {
+            useItem(npc, skill, params);
             return;
         }
         if (skill.startsWith("equip") || skill.startsWith("select")) {
             selectBestTool(npc, skill);
+            return;
+        }
+        if (skill.startsWith("drop_") || skill.startsWith("throw_")) {
+            dropItem(npc, params);
+            return;
+        }
+        if (skill.startsWith("pick_up") || skill.startsWith("collect") || skill.startsWith("loot_")) {
+            pickUpItems(npc, params);
             return;
         }
         if (skill.contains("place_torch")) {
@@ -326,6 +331,92 @@ public class SkillDispatcher {
                     inv.setItem(i, stack);
                 }
                 return;
+            }
+        }
+    }
+
+    private void useItem(SmithNPC npc, String skill, Map<String, Object> params) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Material mat = Material.AIR;
+        if (params != null && params.containsKey("material")) {
+            mat = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
+        }
+        if (mat == null || mat == Material.AIR) {
+            // Default food/potion choices
+            Material[] foods = { Material.COOKED_BEEF, Material.COOKED_PORKCHOP, Material.COOKED_CHICKEN, Material.BREAD, Material.COOKED_MUTTON, Material.COOKED_RABBIT, Material.BAKED_POTATO, Material.GOLDEN_APPLE, Material.APPLE, Material.CARROT };
+            for (Material food : foods) {
+                if (inv.contains(food)) {
+                    mat = food;
+                    break;
+                }
+            }
+        }
+        if (mat == null || mat == Material.AIR || !inv.contains(mat)) {
+            return;
+        }
+        // For food items, heal the NPC instead of consuming in the fake inventory
+        if (mat.isEdible() && entity instanceof LivingEntity) {
+            LivingEntity le = (LivingEntity) entity;
+            le.setHealth(Math.min(le.getHealth() + 4, le.getMaxHealth()));
+            removeOne(fake, mat);
+        } else {
+            // General item use: remove one and simulate usage (e.g., potions)
+            removeOne(fake, mat);
+        }
+    }
+
+    private void dropItem(SmithNPC npc, Map<String, Object> params) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Material mat = Material.AIR;
+        if (params != null && params.containsKey("material")) {
+            mat = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
+        }
+        if (mat == null || mat == Material.AIR) {
+            // Drop the held item if nothing specified
+            ItemStack held = inv.getItemInMainHand();
+            if (held != null && held.getType() != Material.AIR) {
+                fake.getWorld().dropItemNaturally(fake.getLocation(), held.clone());
+                inv.setItemInMainHand(null);
+            }
+            return;
+        }
+        if (!inv.contains(mat)) return;
+        for (ItemStack stack : inv.getContents()) {
+            if (stack != null && stack.getType() == mat) {
+                fake.getWorld().dropItemNaturally(fake.getLocation(), stack.clone());
+                inv.remove(stack);
+                return;
+            }
+        }
+    }
+
+    private void pickUpItems(SmithNPC npc, Map<String, Object> params) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        Location loc = npc.getLocation();
+        if (loc == null) return;
+        double radius = 3.0;
+        if (params != null && params.containsKey("radius")) {
+            try { radius = ((Number) params.get("radius")).doubleValue(); } catch (Exception ignored) {}
+        }
+        Material filter = null;
+        if (params != null && params.containsKey("material")) {
+            filter = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
+        }
+        for (Item drop : loc.getWorld().getEntitiesByClass(Item.class)) {
+            if (drop == null || drop.isDead() || drop.getLocation().distanceSquared(loc) > radius * radius) continue;
+            ItemStack stack = drop.getItemStack();
+            if (filter != null && stack.getType() != filter) continue;
+            if (fake.getInventory().firstEmpty() >= 0) {
+                fake.getInventory().addItem(stack.clone());
+                drop.remove();
             }
         }
     }
