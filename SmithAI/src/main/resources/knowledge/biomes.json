@@ -1,93 +1,389 @@
 [
   {
-    "id": "biome:plains",
+    "id": "minecraft:plains",
     "category": "biome",
     "name": "Plains",
-    "description": "A flat biome with grass and flowers. Villages and passive mobs are common here. Good for building and early farms.",
-    "tags": ["biome", "overworld", "village", "farming"]
+    "description": "Flat grasslands with scattered trees and villages. Good for building and farming.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:forest",
+    "id": "minecraft:forest",
     "category": "biome",
     "name": "Forest",
-    "description": "A biome with many oak and birch trees. Good for wood. Wolves and foxes can spawn here.",
-    "tags": ["biome", "overworld", "wood"]
+    "description": "Overworld biome with many oak and birch trees.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:desert",
+    "id": "minecraft:dark_forest",
     "category": "biome",
-    "name": "Desert",
-    "description": "A dry biome with sand and cacti. Desert villages and desert temples can spawn here. It does not rain.",
-    "tags": ["biome", "overworld", "sand", "village"]
+    "name": "Dark Forest",
+    "description": "Dense forest with dark oak trees. Woodland mansions can spawn here.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:mountains",
+    "id": "minecraft:birch_forest",
     "category": "biome",
-    "name": "Mountains",
-    "description": "A tall biome with exposed stone and ores. Emerald ore and silverfish blocks can be found here. Goats spawn here.",
-    "tags": ["biome", "overworld", "ore", "emerald"]
+    "name": "Birch Forest",
+    "description": "Forest dominated by birch trees.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:swamp",
+    "id": "minecraft:flower_forest",
     "category": "biome",
-    "name": "Swamp",
-    "description": "A wetland biome with shallow water, lily pads, and mangroves. Witches and slimes spawn here. Witch huts can be found.",
-    "tags": ["biome", "overworld", "slime", "witch"]
+    "name": "Flower Forest",
+    "description": "Forest with many flowers and fewer trees.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:jungle",
+    "id": "minecraft:taiga",
+    "category": "biome",
+    "name": "Taiga",
+    "description": "Cold forest with spruce trees, foxes, and wolves.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:snowy_taiga",
+    "category": "biome",
+    "name": "Snowy Taiga",
+    "description": "Cold taiga covered in snow.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:old_growth_pine_taiga",
+    "category": "biome",
+    "name": "Old Growth Pine Taiga",
+    "description": "Taiga with giant spruce trees and podzol ground.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:jungle",
     "category": "biome",
     "name": "Jungle",
-    "description": "A dense biome with tall trees and vines. Ocelots, parrots, and pandas spawn here. Jungle temples can be found.",
-    "tags": ["biome", "overworld", "wood", "temple"]
+    "description": "Dense tropical biome with tall trees, vines, and temples.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:ocean",
+    "id": "minecraft:bamboo_jungle",
+    "category": "biome",
+    "name": "Bamboo Jungle",
+    "description": "Jungle variant filled with bamboo and pandas.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:swamp",
+    "category": "biome",
+    "name": "Swamp",
+    "description": "Wet biome with shallow water, oak trees, and witch huts.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:mangrove_swamp",
+    "category": "biome",
+    "name": "Mangrove Swamp",
+    "description": "Swamp with mangrove trees, mud, and frogs.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:desert",
+    "category": "biome",
+    "name": "Desert",
+    "description": "Dry biome with sand, cacti, and desert pyramids.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:savanna",
+    "category": "biome",
+    "name": "Savanna",
+    "description": "Warm grassland with acacia trees and villages.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:windswept_savanna",
+    "category": "biome",
+    "name": "Windswept Savanna",
+    "description": "Savanna with extreme terrain and floating islands.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:badlands",
+    "category": "biome",
+    "name": "Badlands",
+    "description": "Dry biome with terracotta and gold ore. Mineshafts spawn on the surface.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:wooded_badlands",
+    "category": "biome",
+    "name": "Wooded Badlands",
+    "description": "Badlands with patches of oak trees.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:meadow",
+    "category": "biome",
+    "name": "Meadow",
+    "description": "High-altitude grassy plain with flowers and rabbits.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:grove",
+    "category": "biome",
+    "name": "Grove",
+    "description": "Snowy forest found on mountain slopes.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:snowy_slopes",
+    "category": "biome",
+    "name": "Snowy Slopes",
+    "description": "Cold mountain slopes with rabbits and goats.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:jagged_peaks",
+    "category": "biome",
+    "name": "Jagged Peaks",
+    "description": "High mountain peaks of stone and snow.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:frozen_peaks",
+    "category": "biome",
+    "name": "Frozen Peaks",
+    "description": "High mountain peaks covered in ice and snow.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:stony_peaks",
+    "category": "biome",
+    "name": "Stony Peaks",
+    "description": "High mountain peaks made of stone and calcite.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:beach",
+    "category": "biome",
+    "name": "Beach",
+    "description": "Sandy area between oceans and land.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:snowy_beach",
+    "category": "biome",
+    "name": "Snowy Beach",
+    "description": "Cold beach covered in snow.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:river",
+    "category": "biome",
+    "name": "River",
+    "description": "Long stretches of water through the Overworld.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:frozen_river",
+    "category": "biome",
+    "name": "Frozen River",
+    "description": "River covered in ice.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:ocean",
     "category": "biome",
     "name": "Ocean",
-    "description": "A large body of water. Squid, fish, dolphins, and drowned spawn here. Ocean monuments and shipwrecks can be found.",
-    "tags": ["biome", "overworld", "water", "shipwreck"]
+    "description": "Large saltwater biome with fish, kelp, and shipwrecks.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:nether_wastes",
+    "id": "minecraft:deep_ocean",
+    "category": "biome",
+    "name": "Deep Ocean",
+    "description": "Deeper ocean variant with ocean monuments.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:warm_ocean",
+    "category": "biome",
+    "name": "Warm Ocean",
+    "description": "Ocean with coral reefs and tropical fish.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:lukewarm_ocean",
+    "category": "biome",
+    "name": "Lukewarm Ocean",
+    "description": "Ocean between warm and cold.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:cold_ocean",
+    "category": "biome",
+    "name": "Cold Ocean",
+    "description": "Cold ocean with cod and less life.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:frozen_ocean",
+    "category": "biome",
+    "name": "Frozen Ocean",
+    "description": "Ocean with icebergs and polar bears.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:mushroom_fields",
+    "category": "biome",
+    "name": "Mushroom Fields",
+    "description": "Rare biome with mooshrooms and giant mushrooms. No hostile mobs spawn.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:nether_wastes",
     "category": "biome",
     "name": "Nether Wastes",
-    "description": "The most common Nether biome. It is made of netherrack and has lava oceans. Piglins and ghasts spawn here.",
-    "tags": ["biome", "nether"]
+    "description": "The main Nether biome with netherrack, lava, and ghasts.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:crimson_forest",
-    "category": "biome",
-    "name": "Crimson Forest",
-    "description": "A red Nether biome with huge crimson fungi. Hoglins and piglins spawn here. Good for crimson wood and pork.",
-    "tags": ["biome", "nether", "wood", "hoglin"]
-  },
-  {
-    "id": "biome:warped_forest",
-    "category": "biome",
-    "name": "Warped Forest",
-    "description": "A blue Nether biome with huge warped fungi. Endermen are very common here. Good for warped wood and ender pearls.",
-    "tags": ["biome", "nether", "wood", "enderman"]
-  },
-  {
-    "id": "biome:soul_sand_valley",
+    "id": "minecraft:soul_sand_valley",
     "category": "biome",
     "name": "Soul Sand Valley",
-    "description": "A Nether biome made of soul sand and soul soil. Skeletons and ghasts spawn here. Movement is slowed by soul sand.",
-    "tags": ["biome", "nether", "soul_sand"]
+    "description": "Nether biome with soul sand, soul soil, and skeletons/ghasts.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:basalt_deltas",
+    "id": "minecraft:crimson_forest",
+    "category": "biome",
+    "name": "Crimson Forest",
+    "description": "Nether forest with crimson trees, hoglins, and piglins.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:warped_forest",
+    "category": "biome",
+    "name": "Warped Forest",
+    "description": "Nether forest with warped trees and endermen.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:basalt_deltas",
     "category": "biome",
     "name": "Basalt Deltas",
-    "description": "A volcanic Nether biome with basalt and blackstone. Magma cubes and ghasts spawn here. Dangerous terrain.",
-    "tags": ["biome", "nether", "blackstone", "magmacube"]
+    "description": "Nether biome with basalt pillars, magma cubes, and ghasts.",
+    "tags": [
+      "biome"
+    ]
   },
   {
-    "id": "biome:end_highlands",
+    "id": "minecraft:the_end",
+    "category": "biome",
+    "name": "The End",
+    "description": "Dimension of floating islands and the Ender Dragon.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:end_highlands",
     "category": "biome",
     "name": "End Highlands",
-    "description": "The main End biome where chorus plants and end cities generate. Shulkers and endermen are common. Elytra can be found in end cities.",
-    "tags": ["biome", "end", "chorus", "end_city"]
+    "description": "Outer End islands with chorus plants and end cities.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:end_midlands",
+    "category": "biome",
+    "name": "End Midlands",
+    "description": "Transition area between central End and outer islands.",
+    "tags": [
+      "biome"
+    ]
+  },
+  {
+    "id": "minecraft:end_barrens",
+    "category": "biome",
+    "name": "End Barrens",
+    "description": "Empty outer End areas with few features.",
+    "tags": [
+      "biome"
+    ]
   }
 ]

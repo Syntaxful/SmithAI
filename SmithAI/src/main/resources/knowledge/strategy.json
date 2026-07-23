@@ -1,107 +1,227 @@
 [
   {
-    "id": "strategy:find_diamonds",
+    "id": "strategy:mining",
     "category": "strategy",
-    "name": "Finding Diamonds",
-    "description": "Diamonds generate most commonly between Y=-64 and Y=16, with peak frequency around Y=-59. Strip mine at Y=-59 with an iron or better pickaxe. Place torches to prevent mob spawns.",
-    "tags": ["strategy", "mining", "diamond"]
-  },
-  {
-    "id": "strategy:find_iron",
-    "category": "strategy",
-    "name": "Finding Iron",
-    "description": "Iron ore generates from Y=-64 to Y=72, with large blobs above ground in mountains. Use a stone pickaxe or better. Smelt raw iron into ingots.",
-    "tags": ["strategy", "mining", "iron"]
-  },
-  {
-    "id": "strategy:find_coal",
-    "category": "strategy",
-    "name": "Finding Coal",
-    "description": "Coal ore is common from Y=0 to Y=128 and exposed in mountains. Mine with any pickaxe. Use coal for torches and furnace fuel.",
-    "tags": ["strategy", "mining", "coal"]
-  },
-  {
-    "id": "strategy:beat_game",
-    "category": "strategy",
-    "name": "Beating the Game",
-    "description": "The standard progression is: gather wood, make tools, mine iron, get diamonds, make a diamond pickaxe, build a nether portal, find a fortress, collect blaze rods, craft eyes of ender, locate a stronghold, enter the End, and defeat the Ender Dragon.",
-    "tags": ["strategy", "end", "dragon", "progression"]
-  },
-  {
-    "id": "strategy:nether_fortress",
-    "category": "strategy",
-    "name": "Finding a Nether Fortress",
-    "description": "Nether fortresses generate in lines along the Z axis in the Nether. Travel north or south along the Z axis, or use the /locate command if cheats are enabled. Blazes and Nether Wart spawn inside.",
-    "tags": ["strategy", "nether", "fortress", "blaze"]
-  },
-  {
-    "id": "strategy:stronghold",
-    "category": "strategy",
-    "name": "Locating a Stronghold",
-    "description": "Throw eyes of ender and follow the direction they fly. Eyes of ender have a chance to break when thrown. Strongholds generate underground, often under villages or other surface features.",
-    "tags": ["strategy", "end", "stronghold", "eyes"]
-  },
-  {
-    "id": "strategy:ender_dragon",
-    "category": "strategy",
-    "name": "Defeating the Ender Dragon",
-    "description": "Destroy the obsidian towers with end crystals first. Use a bow or bed explosions to damage the dragon when it perches. Avoid dragon breath and stay away from the dragon's head when it charges.",
-    "tags": ["strategy", "end", "dragon", "boss"]
+    "name": "Mining",
+    "description": "Dig down carefully with torches, tools, and food. Avoid digging straight down. Use strip mining at diamond levels.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
     "id": "strategy:strip_mining",
     "category": "strategy",
     "name": "Strip Mining",
-    "description": "Dig long horizontal tunnels at the target Y level, leaving 2 blocks between tunnels to expose the maximum number of blocks. Use a pickaxe and carry plenty of torches and food.",
-    "tags": ["strategy", "mining"]
+    "description": "Mine long tunnels at Y=-59 to find diamonds. Place torches every 10 blocks and watch for lava.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
-    "id": "strategy:surviving_first_night",
+    "id": "strategy:caving",
     "category": "strategy",
-    "name": "Surviving the First Night",
-    "description": "Punch wood, craft a crafting table and wooden pickaxe, mine stone for tools, gather coal or make charcoal, build a small shelter or dig into a wall, and place torches to survive until morning.",
-    "tags": ["strategy", "survival", "early_game"]
+    "name": "Caving",
+    "description": "Explore natural caves for exposed ores. Bring plenty of torches, food, and armor.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
-    "id": "strategy:farming",
+    "id": "strategy:nether_exploration",
     "category": "strategy",
-    "name": "Farming",
-    "description": "Till dirt near water with a hoe, plant seeds, and wait for crops to grow. Bonemeal speeds growth. Harvest fully grown crops and replant. Light the farm to prevent mob trampling.",
-    "tags": ["strategy", "farming", "food"]
+    "name": "Nether Exploration",
+    "description": "Wear gold armor around piglins. Bring fire resistance potions. Build safe paths over lava.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:end_fight",
+    "category": "strategy",
+    "name": "Ender Dragon Fight",
+    "description": "Destroy end crystals with arrows or blocks. Attack the dragon when it perches. Bring slow falling potions.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:wither_fight",
+    "category": "strategy",
+    "name": "Wither Fight",
+    "description": "Fight underground or in a confined space to limit movement. Use smite enchanted sword and healing potions.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:warden_avoid",
+    "category": "strategy",
+    "name": "Warden Avoidance",
+    "description": "Move slowly in the deep dark. Wool blocks reduce vibrations. Use snowballs to distract.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
     "id": "strategy:villager_trading",
     "category": "strategy",
     "name": "Villager Trading",
-    "description": "Assign villagers a workstation to set their profession. Trade emeralds for items. Protect villagers with walls, lights, and iron golems. Refresh trades by breaking and replacing workstations.",
-    "tags": ["strategy", "trading", "villager"]
+    "description": "Protect villagers with walls and beds. Provide job blocks for trades. Cures zombie villagers for discounts.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:farming",
+    "category": "strategy",
+    "name": "Farming",
+    "description": "Plant crops on hydrated farmland. Use bonemeal to speed growth. Keep light level high.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:animal_farming",
+    "category": "strategy",
+    "name": "Animal Farming",
+    "description": "Breed animals with their preferred food. Keep them in enclosed pens with water.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:defense",
+    "category": "strategy",
+    "name": "Base Defense",
+    "description": "Light the area, build walls, use iron golems, and place traps for hostile mobs.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:raids",
+    "category": "strategy",
+    "name": "Raid Defense",
+    "description": "Ring a bell to reveal raiders. Use walls and ranged attacks. Heal between waves.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:exploration",
+    "category": "strategy",
+    "name": "Exploration",
+    "description": "Bring food, torches, a bed, and a compass. Mark your path to avoid getting lost.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:combat",
+    "category": "strategy",
+    "name": "Combat Basics",
+    "description": "Equip the right weapon and armor. Strafe to avoid attacks. Retreat when low on health.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
     "id": "strategy:enchanting",
     "category": "strategy",
     "name": "Enchanting",
-    "description": "Build an enchanting table from 2 diamonds, 4 obsidian, and 1 book. Place bookshelves around it for higher level enchantments. Lapis lazuli is required for enchanting.",
-    "tags": ["strategy", "enchanting", "endgame"]
+    "description": "Build bookshelves around the enchanting table. Use an anvil to combine enchanted books.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
-    "id": "strategy:netherite",
+    "id": "strategy:brewing",
     "category": "strategy",
-    "name": "Getting Netherite",
-    "description": "Mine ancient debris in the Nether at Y=15 using a diamond or netherite pickaxe. Smelt it into netherite scrap. Combine 4 scrap with 4 gold ingots to make a netherite ingot. Upgrade diamond gear at a smithing table.",
-    "tags": ["strategy", "nether", "netherite", "endgame"]
+    "name": "Brewing",
+    "description": "Build a brewing stand with blaze rods. Nether wart is the base for most potions.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
-    "id": "strategy:breeding_animals",
+    "id": "strategy:smelting",
     "category": "strategy",
-    "name": "Breeding Animals",
-    "description": "Feed two animals their preferred food (wheat for cows, carrots for pigs, seeds for chickens) to make them breed and produce a baby. Build a pen to keep them contained.",
-    "tags": ["strategy", "farming", "animals"]
+    "name": "Smelting",
+    "description": "Use furnaces, blast furnaces for ores, and smokers for food. Choose fuel based on availability.",
+    "tags": [
+      "strategy"
+    ]
   },
   {
-    "id": "strategy:mining_safety",
+    "id": "strategy:redstone",
     "category": "strategy",
-    "name": "Mining Safety",
-    "description": "Never dig straight down. Carry water to turn lava into obsidian. Place torches to prevent mobs. Keep food and spare tools. Watch for gravel and sand that can suffocate you.",
-    "tags": ["strategy", "mining", "survival"]
+    "name": "Redstone Basics",
+    "description": "Power components with redstone dust, torches, and repeaters. Use observers for block detection.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:building",
+    "category": "strategy",
+    "name": "Building",
+    "description": "Plan foundations and storage first. Use scaffolding for tall builds. Light interiors.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:automation",
+    "category": "strategy",
+    "name": "Automation",
+    "description": "Use hoppers, droppers, dispensers, and observers to create farms, sorters, and mob grinders.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:speedrun",
+    "category": "strategy",
+    "name": "Speedrun",
+    "description": "Focus on wood, tools, iron, flint and steel, beds, and eyes of ender. Minimize detours.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:resource_management",
+    "category": "strategy",
+    "name": "Resource Management",
+    "description": "Store items in labeled chests. Keep backups of important tools. Use shulker boxes for travel.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:preparation",
+    "category": "strategy",
+    "name": "Preparation",
+    "description": "Before a big task, gather food, tools, armor, blocks, potions, and set a spawn point.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:recovery",
+    "category": "strategy",
+    "name": "Recovery",
+    "description": "After death, prioritize retrieving items before re-engaging threats. Use a backup set of gear.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:multiplayer",
+    "category": "strategy",
+    "name": "Multiplayer",
+    "description": "Coordinate roles, share resources, and establish safe zones. Communicate before risky actions.",
+    "tags": [
+      "strategy"
+    ]
   }
 ]
