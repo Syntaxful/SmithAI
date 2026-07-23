@@ -166,11 +166,12 @@ Each skill needs:
 - [x] `/SmithAPI set <key>` — save the external server key
 - [x] `/SmithAPI status` — show current API key and connection status (masked)
 - [x] Tab completion for both commands
-- [ ] `/smithai inventory` — inspect NPC inventory
-- [ ] `/smithai give <item>` — give item to NPC
-- [ ] `/smithai teleport` — teleport NPC to player
-- [ ] `/smithai skin <url>` — change NPC skin
-- [ ] `/smithai list` — list all active NPCs
+- [x] `/smithai inventory` — inspect NPC inventory
+- [x] `/smithai give <item>` — give item to NPC
+- [x] `/smithai teleport` — teleport NPC to player
+- [x] `/smithai skin <url>` — change NPC skin (placeholder, needs player model)
+- [x] `/smithai list` — list all active NPCs
+- [x] `/smithai help` — in-game help system
 - [ ] `/smithai config` — in-game config viewer
 - [ ] `/smithai export` — export memory/training data
 

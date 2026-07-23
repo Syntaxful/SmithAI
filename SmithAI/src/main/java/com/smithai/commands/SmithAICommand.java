@@ -10,6 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.Material;
 
 import java.util.List;
 
@@ -26,7 +29,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|reload|train|feedback|report|reports|memory>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin>");
             return true;
         }
 
@@ -352,10 +355,151 @@ public class SmithAICommand implements CommandExecutor {
                 });
                 return true;
 
+            case "inventory":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player invPlayer = (Player) sender;
+                SmithNPC invNpc = nearest(invPlayer);
+                if (invNpc == null) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                if (!invNpc.hasInventory()) {
+                    sender.sendMessage("§cThis Smith_AI has no inventory.");
+                    return true;
+                }
+                Inventory inv = invNpc.getInventory();
+                sender.sendMessage("§e" + invNpc.getName() + "'s inventory:");
+                if (inv != null) {
+                    for (ItemStack stack : inv.getContents()) {
+                        if (stack != null && stack.getType() != Material.AIR) {
+                            sender.sendMessage("§7- " + stack.getAmount() + "x " + stack.getType().name().toLowerCase().replace("_", " "));
+                        }
+                    }
+                }
+                return true;
+
+            case "give":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 2) {
+                    sender.sendMessage("§eUsage: §f/smithai give <item> [amount]");
+                    return true;
+                }
+                Player givePlayer = (Player) sender;
+                SmithNPC giveNpc = nearest(givePlayer);
+                if (giveNpc == null) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                if (!giveNpc.hasInventory()) {
+                    sender.sendMessage("§cThis Smith_AI has no inventory.");
+                    return true;
+                }
+                Material mat = Material.matchMaterial(args[1]);
+                if (mat == null || mat == Material.AIR) {
+                    sender.sendMessage("§cUnknown item: §f" + args[1]);
+                    return true;
+                }
+                int amount = 1;
+                if (args.length >= 3) {
+                    try {
+                        amount = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage("§cAmount must be a number.");
+                        return true;
+                    }
+                }
+                Inventory npcInv = giveNpc.getInventory();
+                ItemStack item = new ItemStack(mat, Math.max(1, amount));
+                if (givePlayer.getInventory().containsAtLeast(item, item.getAmount())) {
+                    givePlayer.getInventory().removeItem(item);
+                    npcInv.addItem(item);
+                    giveNpc.sendMessage(givePlayer, "Thanks, I now have " + item.getAmount() + " " + item.getType().name().toLowerCase().replace("_", " ") + ".");
+                } else {
+                    sender.sendMessage("§cYou don't have enough of that item.");
+                }
+                return true;
+
+            case "list":
+                List<SmithNPC> all = npcManager.getAllNPCs();
+                sender.sendMessage("§eActive Smith_AI NPCs: §f" + all.size());
+                for (SmithNPC n : all) {
+                    Location l = n.getLocation();
+                    String loc = l != null ? l.getWorld().getName() + " " + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() : "unknown";
+                    sender.sendMessage("§7- " + n.getName() + " §f(" + loc + ")");
+                }
+                return true;
+
+            case "teleport":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player tpPlayer = (Player) sender;
+                SmithNPC tpNpc = nearest(tpPlayer);
+                if (tpNpc == null) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                tpNpc.teleport(tpPlayer.getLocation());
+                tpNpc.sendMessage(tpPlayer, "I'm here now.");
+                return true;
+
+            case "skin":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 2) {
+                    sender.sendMessage("§eUsage: §f/smithai skin <url>");
+                    sender.sendMessage("§7Changing NPC skins requires a player-model renderer. This is a placeholder.");
+                    return true;
+                }
+                Player skinPlayer = (Player) sender;
+                SmithNPC skinNpc = nearest(skinPlayer);
+                if (skinNpc == null) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                skinNpc.sendMessage(skinPlayer, "Skin change to " + args[1] + " is not yet implemented (requires player model).");
+                return true;
+
+            case "help":
+                sender.sendMessage("§eSmithAI commands:");
+                sender.sendMessage("§7/smithai spawn §f- spawn Smith_AI");
+                sender.sendMessage("§7/smithai despawn §f- remove all Smith_AI");
+                sender.sendMessage("§7/smithai follow §f- nearby Smith_AI follows you");
+                sender.sendMessage("§7/smithai stay §f- nearby Smith_AI stops following");
+                sender.sendMessage("§7/smithai goto <x> <y> <z> §f- send Smith_AI to coordinates");
+                sender.sendMessage("§7/smithai do <task> §f- plan and execute a task");
+                sender.sendMessage("§7/smithai stop §f- cancel all tasks");
+                sender.sendMessage("§7/smithai inventory §f- view nearby Smith_AI inventory");
+                sender.sendMessage("§7/smithai give <item> [amount] §f- give an item to Smith_AI");
+                sender.sendMessage("§7/smithai list §f- list all active Smith_AI NPCs");
+                sender.sendMessage("§7/smithai teleport §f- teleport nearby Smith_AI to you");
+                sender.sendMessage("§7/smithai train good|bad §f- reward or punish the AI");
+                sender.sendMessage("§7/smithai feedback <message> §f- report a specific mistake");
+                sender.sendMessage("§7/smithai report <description> §f- open a prefilled GitHub issue");
+                sender.sendMessage("§7/smithai memory §f- show recent conversation");
+                sender.sendMessage("§7/smithai status §f- show active brain/model");
+                sender.sendMessage("§7/smithai reload §f- reload configuration (admin)");
+                sender.sendMessage("§7/smithai health §f- show subsystem health (admin)");
+                return true;
+
             default:
-                sender.sendMessage("§eUnknown subcommand. Use /smithai for help.");
+                sender.sendMessage("§eUnknown subcommand. Use /smithai help.");
                 return true;
         }
+    }
+
+    private SmithNPC nearest(Player player) {
+        List<SmithNPC> nearby = npcManager.getNearbyNPCs(player.getLocation(), 16);
+        return nearby.isEmpty() ? null : nearby.get(0);
     }
 
     private String encode(String value) {

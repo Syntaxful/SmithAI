@@ -48,6 +48,17 @@ public class SmithNPC {
         }
     }
 
+    public boolean hasInventory() {
+        return entity instanceof Player;
+    }
+
+    public org.bukkit.inventory.Inventory getInventory() {
+        if (entity instanceof Player) {
+            return ((Player) entity).getInventory();
+        }
+        return null;
+    }
+
     public void sendMessage(Player player, String message) {
         if (player != null && player.isOnline()) {
             player.sendMessage("§b[" + name + "] §f" + message);
