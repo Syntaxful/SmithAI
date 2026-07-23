@@ -1,0 +1,4 @@
+modules = ["java-graalvm22.3"]
+[[ports]]
+localPort = 8080
+externalPort = 80

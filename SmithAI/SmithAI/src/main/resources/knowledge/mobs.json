@@ -3,149 +3,1117 @@
     "id": "minecraft:zombie",
     "category": "mob",
     "name": "Zombie",
-    "description": "A hostile mob that spawns in dark areas. Burns in sunlight. Drops rotten flesh.",
+    "description": "Zombie is a hostile mob in Minecraft. Drops: rotten_flesh,iron,carrot,potato. Found in overworld dark. Burns in sunlight.",
     "tags": [
       "mob",
-      "hostile",
-      "overworld"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:zombie_villager",
+    "id": "minecraft:zombie_drops",
     "category": "mob",
-    "name": "Zombie Villager",
-    "description": "A villager turned into a zombie. Can be cured with a golden apple and weakness potion.",
+    "name": "Zombie drops",
+    "description": "Zombie drops: rotten_flesh,iron,carrot,potato. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "overworld",
-      "village"
+      "strategy",
+      "farming",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:drowned",
+    "id": "minecraft:zombie_spawn",
     "category": "mob",
-    "name": "Drowned",
-    "description": "Underwater zombie that can spawn with tridents.",
+    "name": "Zombie spawns",
+    "description": "Spawning conditions for Zombie: overworld dark. Spawns in darkness (light level 7 or less).",
     "tags": [
-      "mob",
-      "hostile",
-      "water"
+      "strategy",
+      "spawning",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:husk",
+    "id": "minecraft:zombie_fight",
     "category": "mob",
-    "name": "Husk",
-    "description": "Desert zombie variant. Does not burn in sunlight.",
+    "name": "Fighting Zombie",
+    "description": "Combat strategy vs Zombie: Use diamond armor, sword, and bow. Burns in sunlight. Strafe and use healing potions.",
     "tags": [
-      "mob",
-      "hostile",
-      "desert"
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
     "id": "minecraft:skeleton",
     "category": "mob",
     "name": "Skeleton",
-    "description": "Shoots arrows. Burns in sunlight. Drops bones and arrows.",
+    "description": "Skeleton is a hostile mob in Minecraft. Drops: bone,arrow. Found in overworld dark. Shoots arrows, burns in sun.",
     "tags": [
       "mob",
-      "hostile",
-      "overworld",
-      "ranged"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:stray",
+    "id": "minecraft:skeleton_drops",
     "category": "mob",
-    "name": "Stray",
-    "description": "Skeleton variant in cold biomes. Shoots arrows of Slowness.",
+    "name": "Skeleton drops",
+    "description": "Skeleton drops: bone,arrow. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "cold",
-      "ranged"
+      "strategy",
+      "farming",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:wither_skeleton",
+    "id": "minecraft:skeleton_spawn",
     "category": "mob",
-    "name": "Wither Skeleton",
-    "description": "Spawns in Nether fortresses. Inflicts Wither. Drops coal, bones, and rarely skulls.",
+    "name": "Skeleton spawns",
+    "description": "Spawning conditions for Skeleton: overworld dark. Spawns in darkness (light level 7 or less).",
     "tags": [
-      "mob",
-      "hostile",
-      "nether"
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:skeleton_fight",
+    "category": "mob",
+    "name": "Fighting Skeleton",
+    "description": "Combat strategy vs Skeleton: Use diamond armor, sword, and bow. Shoots arrows, burns in sun. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
     "id": "minecraft:creeper",
     "category": "mob",
     "name": "Creeper",
-    "description": "Approaches and explodes. Drops gunpowder.",
+    "description": "Creeper is a hostile mob in Minecraft. Drops: gunpowder. Found in overworld dark. Silent, explodes.",
     "tags": [
       "mob",
-      "hostile",
-      "overworld",
-      "explosive"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:charged_creeper",
+    "id": "minecraft:creeper_drops",
     "category": "mob",
-    "name": "Charged Creeper",
-    "description": "A creeper struck by lightning. Larger explosion, drops mob heads.",
+    "name": "Creeper drops",
+    "description": "Creeper drops: gunpowder. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "overworld",
-      "explosive",
-      "rare"
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:creeper_spawn",
+    "category": "mob",
+    "name": "Creeper spawns",
+    "description": "Spawning conditions for Creeper: overworld dark. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:creeper_fight",
+    "category": "mob",
+    "name": "Fighting Creeper",
+    "description": "Combat strategy vs Creeper: Use diamond armor, sword, and bow. Hit then retreat, use shield to block explosion.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
     "id": "minecraft:spider",
     "category": "mob",
     "name": "Spider",
-    "description": "Hostile at night, neutral in daylight. Climbs walls.",
+    "description": "Spider is a neutral mob in Minecraft. Drops: string,spider_eye. Found in overworld dark. Climbs walls, neutral daytime.",
     "tags": [
       "mob",
-      "hostile",
-      "overworld"
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:cave_spider",
+    "id": "minecraft:spider_drops",
     "category": "mob",
-    "name": "Cave Spider",
-    "description": "Smaller venomous spider in mineshafts.",
+    "name": "Spider drops",
+    "description": "Spider drops: string,spider_eye. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "overworld",
-      "poison"
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:spider_spawn",
+    "category": "mob",
+    "name": "Spider spawns",
+    "description": "Spawning conditions for Spider: overworld dark. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:spider_fight",
+    "category": "mob",
+    "name": "Fighting Spider",
+    "description": "Combat strategy vs Spider: Use diamond armor, sword, and bow. Climbs walls, neutral daytime. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
     ]
   },
   {
     "id": "minecraft:enderman",
     "category": "mob",
     "name": "Enderman",
-    "description": "Tall mob that teleports and picks up blocks. Aggressive if looked at.",
+    "description": "Enderman is a neutral mob in Minecraft. Drops: ender_pearl. Found in all dimensions. Teleports, aggressive when stared at.",
     "tags": [
       "mob",
-      "hostile",
-      "overworld",
-      "end"
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:endermite",
+    "id": "minecraft:enderman_drops",
     "category": "mob",
-    "name": "Endermite",
-    "description": "Small hostile that spawns rarely when using ender pearls.",
+    "name": "Enderman drops",
+    "description": "Enderman drops: ender_pearl. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:enderman_spawn",
+    "category": "mob",
+    "name": "Enderman spawns",
+    "description": "Spawning conditions for Enderman: all dimensions. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:enderman_fight",
+    "category": "mob",
+    "name": "Fighting Enderman",
+    "description": "Combat strategy vs Enderman: Use diamond armor, sword, and bow. Teleports, aggressive when stared at. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:blaze",
+    "category": "mob",
+    "name": "Blaze",
+    "description": "Blaze is a hostile mob in Minecraft. Drops: blaze_rod. Found in nether fortresses. Fires 3 fireballs.",
     "tags": [
       "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:blaze_drops",
+    "category": "mob",
+    "name": "Blaze drops",
+    "description": "Blaze drops: blaze_rod. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:blaze_spawn",
+    "category": "mob",
+    "name": "Blaze spawns",
+    "description": "Spawning conditions for Blaze: nether fortresses. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:blaze_fight",
+    "category": "mob",
+    "name": "Fighting Blaze",
+    "description": "Combat strategy vs Blaze: Use diamond armor, sword, and bow. Fires 3 fireballs. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ghast",
+    "category": "mob",
+    "name": "Ghast",
+    "description": "Ghast is a hostile mob in Minecraft. Drops: ghast_tear,gunpowder. Found in nether wastes. Flies, shoots fireballs.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ghast_drops",
+    "category": "mob",
+    "name": "Ghast drops",
+    "description": "Ghast drops: ghast_tear,gunpowder. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ghast_spawn",
+    "category": "mob",
+    "name": "Ghast spawns",
+    "description": "Spawning conditions for Ghast: nether wastes. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ghast_fight",
+    "category": "mob",
+    "name": "Fighting Ghast",
+    "description": "Combat strategy vs Ghast: Use diamond armor, sword, and bow. Flies, shoots fireballs. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:piglin",
+    "category": "mob",
+    "name": "Piglin",
+    "description": "Piglin is a neutral mob in Minecraft. Drops: gold_nuggets. Found in nether wastes/crimson. Barters with gold, attacks otherwise.",
+    "tags": [
+      "mob",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:piglin_drops",
+    "category": "mob",
+    "name": "Piglin drops",
+    "description": "Piglin drops: gold_nuggets. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:piglin_spawn",
+    "category": "mob",
+    "name": "Piglin spawns",
+    "description": "Spawning conditions for Piglin: nether wastes/crimson. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:piglin_fight",
+    "category": "mob",
+    "name": "Fighting Piglin",
+    "description": "Combat strategy vs Piglin: Use diamond armor, sword, and bow. Barters with gold, attacks otherwise. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:hoglin",
+    "category": "mob",
+    "name": "Hoglin",
+    "description": "Hoglin is a hostile mob in Minecraft. Drops: porkchop,leather. Found in crimson forests. Attacks on sight, breeds with crimson fungi.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:hoglin_drops",
+    "category": "mob",
+    "name": "Hoglin drops",
+    "description": "Hoglin drops: porkchop,leather. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:hoglin_spawn",
+    "category": "mob",
+    "name": "Hoglin spawns",
+    "description": "Spawning conditions for Hoglin: crimson forests. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:hoglin_fight",
+    "category": "mob",
+    "name": "Fighting Hoglin",
+    "description": "Combat strategy vs Hoglin: Use diamond armor, sword, and bow. Attacks on sight, breeds with crimson fungi. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:zombified_piglin",
+    "category": "mob",
+    "name": "Zombified Piglin",
+    "description": "Zombified Piglin is a neutral mob in Minecraft. Drops: rotten_flesh,gold_nugget. Found in nether. Neutral unless provoked.",
+    "tags": [
+      "mob",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:zombified_piglin_drops",
+    "category": "mob",
+    "name": "Zombified Piglin drops",
+    "description": "Zombified Piglin drops: rotten_flesh,gold_nugget. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:zombified_piglin_spawn",
+    "category": "mob",
+    "name": "Zombified Piglin spawns",
+    "description": "Spawning conditions for Zombified Piglin: nether. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:zombified_piglin_fight",
+    "category": "mob",
+    "name": "Fighting Zombified Piglin",
+    "description": "Combat strategy vs Zombified Piglin: Use diamond armor, sword, and bow. Neutral unless provoked. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:magma_cube",
+    "category": "mob",
+    "name": "Magma Cube",
+    "description": "Magma Cube is a hostile mob in Minecraft. Drops: magma_cream. Found in basalt deltas. Splits, fire resistant.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:magma_cube_drops",
+    "category": "mob",
+    "name": "Magma Cube drops",
+    "description": "Magma Cube drops: magma_cream. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:magma_cube_spawn",
+    "category": "mob",
+    "name": "Magma Cube spawns",
+    "description": "Spawning conditions for Magma Cube: basalt deltas. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:magma_cube_fight",
+    "category": "mob",
+    "name": "Fighting Magma Cube",
+    "description": "Combat strategy vs Magma Cube: Use diamond armor, sword, and bow. Splits, fire resistant. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:wither_skeleton",
+    "category": "mob",
+    "name": "Wither Skeleton",
+    "description": "Wither Skeleton is a hostile mob in Minecraft. Drops: coal,bone,skull. Found in nether fortresses. Inflicts wither.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:wither_skeleton_drops",
+    "category": "mob",
+    "name": "Wither Skeleton drops",
+    "description": "Wither Skeleton drops: coal,bone,skull. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:wither_skeleton_spawn",
+    "category": "mob",
+    "name": "Wither Skeleton spawns",
+    "description": "Spawning conditions for Wither Skeleton: nether fortresses. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:wither_skeleton_fight",
+    "category": "mob",
+    "name": "Fighting Wither Skeleton",
+    "description": "Combat strategy vs Wither Skeleton: Use diamond armor, sword, and bow. Inflicts wither. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ender_dragon",
+    "category": "mob",
+    "name": "Ender Dragon",
+    "description": "Ender Dragon is a boss mob in Minecraft. Drops: dragon_egg. Found in the end. Flies, destroys blocks.",
+    "tags": [
+      "mob",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:ender_dragon_drops",
+    "category": "mob",
+    "name": "Ender Dragon drops",
+    "description": "Ender Dragon drops: dragon_egg. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:ender_dragon_spawn",
+    "category": "mob",
+    "name": "Ender Dragon spawns",
+    "description": "Spawning conditions for Ender Dragon: the end. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:ender_dragon_fight",
+    "category": "mob",
+    "name": "Fighting Ender Dragon",
+    "description": "Combat strategy vs Ender Dragon: Use diamond armor, sword, and bow. Destroy end crystals first, then shoot with bow while dragon perches.",
+    "tags": [
+      "strategy",
+      "combat",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:wither",
+    "category": "mob",
+    "name": "Wither",
+    "description": "Wither is a boss mob in Minecraft. Drops: nether_star. Found in player-summoned. Shoots skulls, destroys terrain.",
+    "tags": [
+      "mob",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:wither_drops",
+    "category": "mob",
+    "name": "Wither drops",
+    "description": "Wither drops: nether_star. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:wither_spawn",
+    "category": "mob",
+    "name": "Wither spawns",
+    "description": "Spawning conditions for Wither: player-summoned. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:wither_fight",
+    "category": "mob",
+    "name": "Fighting Wither",
+    "description": "Combat strategy vs Wither: Use diamond armor, sword, and bow. Fight underground to limit destruction. Smite sword is most effective.",
+    "tags": [
+      "strategy",
+      "combat",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:warden",
+    "category": "mob",
+    "name": "Warden",
+    "description": "Warden is a boss mob in Minecraft. Drops: sculk_catalyst. Found in deep dark. Blind, sonic boom attack.",
+    "tags": [
+      "mob",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:warden_drops",
+    "category": "mob",
+    "name": "Warden drops",
+    "description": "Warden drops: sculk_catalyst. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:warden_spawn",
+    "category": "mob",
+    "name": "Warden spawns",
+    "description": "Spawning conditions for Warden: deep dark. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:warden_fight",
+    "category": "mob",
+    "name": "Fighting Warden",
+    "description": "Combat strategy vs Warden: Use diamond armor, sword, and bow. Avoid triggering. Sneak on wool blocks. Use ranged attacks from distance.",
+    "tags": [
+      "strategy",
+      "combat",
+      "boss"
+    ]
+  },
+  {
+    "id": "minecraft:drowned",
+    "category": "mob",
+    "name": "Drowned",
+    "description": "Drowned is a hostile mob in Minecraft. Drops: rotten_flesh,copper,trident. Found in oceans/rivers. Swims, trident variant.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:drowned_drops",
+    "category": "mob",
+    "name": "Drowned drops",
+    "description": "Drowned drops: rotten_flesh,copper,trident. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:drowned_spawn",
+    "category": "mob",
+    "name": "Drowned spawns",
+    "description": "Spawning conditions for Drowned: oceans/rivers. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:drowned_fight",
+    "category": "mob",
+    "name": "Fighting Drowned",
+    "description": "Combat strategy vs Drowned: Use diamond armor, sword, and bow. Swims, trident variant. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:husk",
+    "category": "mob",
+    "name": "Husk",
+    "description": "Husk is a hostile mob in Minecraft. Drops: rotten_flesh. Found in deserts. Gives hunger, sun-resistant.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:husk_drops",
+    "category": "mob",
+    "name": "Husk drops",
+    "description": "Husk drops: rotten_flesh. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:husk_spawn",
+    "category": "mob",
+    "name": "Husk spawns",
+    "description": "Spawning conditions for Husk: deserts. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:husk_fight",
+    "category": "mob",
+    "name": "Fighting Husk",
+    "description": "Combat strategy vs Husk: Use diamond armor, sword, and bow. Gives hunger, sun-resistant. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:stray",
+    "category": "mob",
+    "name": "Stray",
+    "description": "Stray is a hostile mob in Minecraft. Drops: bone,arrow. Found in snowy biomes. Shoots slowness arrows.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:stray_drops",
+    "category": "mob",
+    "name": "Stray drops",
+    "description": "Stray drops: bone,arrow. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:stray_spawn",
+    "category": "mob",
+    "name": "Stray spawns",
+    "description": "Spawning conditions for Stray: snowy biomes. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:stray_fight",
+    "category": "mob",
+    "name": "Fighting Stray",
+    "description": "Combat strategy vs Stray: Use diamond armor, sword, and bow. Shoots slowness arrows. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:witch",
+    "category": "mob",
+    "name": "Witch",
+    "description": "Witch is a hostile mob in Minecraft. Drops: various items. Found in swamps/raids. Throws potions, drinks healing.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:witch_drops",
+    "category": "mob",
+    "name": "Witch drops",
+    "description": "Witch drops: various items. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:witch_spawn",
+    "category": "mob",
+    "name": "Witch spawns",
+    "description": "Spawning conditions for Witch: swamps/raids. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:witch_fight",
+    "category": "mob",
+    "name": "Fighting Witch",
+    "description": "Combat strategy vs Witch: Use diamond armor, sword, and bow. Throws potions, drinks healing. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:slime",
+    "category": "mob",
+    "name": "Slime",
+    "description": "Slime is a hostile mob in Minecraft. Drops: slime_ball. Found in swamps/slime chunks. Splits into smaller slimes.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:slime_drops",
+    "category": "mob",
+    "name": "Slime drops",
+    "description": "Slime drops: slime_ball. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:slime_spawn",
+    "category": "mob",
+    "name": "Slime spawns",
+    "description": "Spawning conditions for Slime: swamps/slime chunks. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:slime_fight",
+    "category": "mob",
+    "name": "Fighting Slime",
+    "description": "Combat strategy vs Slime: Use diamond armor, sword, and bow. Splits into smaller slimes. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:phantom",
+    "category": "mob",
+    "name": "Phantom",
+    "description": "Phantom is a hostile mob in Minecraft. Drops: phantom_membrane. Found in players not sleeping. Dives from sky.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:phantom_drops",
+    "category": "mob",
+    "name": "Phantom drops",
+    "description": "Phantom drops: phantom_membrane. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:phantom_spawn",
+    "category": "mob",
+    "name": "Phantom spawns",
+    "description": "Spawning conditions for Phantom: players not sleeping. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:phantom_fight",
+    "category": "mob",
+    "name": "Fighting Phantom",
+    "description": "Combat strategy vs Phantom: Use diamond armor, sword, and bow. Dives from sky. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:evoker",
+    "category": "mob",
+    "name": "Evoker",
+    "description": "Evoker is a hostile mob in Minecraft. Drops: totem_of_undying,emerald. Found in woodland mansions/raids. Summons vexes and fangs.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:evoker_drops",
+    "category": "mob",
+    "name": "Evoker drops",
+    "description": "Evoker drops: totem_of_undying,emerald. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:evoker_spawn",
+    "category": "mob",
+    "name": "Evoker spawns",
+    "description": "Spawning conditions for Evoker: woodland mansions/raids. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:evoker_fight",
+    "category": "mob",
+    "name": "Fighting Evoker",
+    "description": "Combat strategy vs Evoker: Use diamond armor, sword, and bow. Summons vexes and fangs. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vindicator",
+    "category": "mob",
+    "name": "Vindicator",
+    "description": "Vindicator is a hostile mob in Minecraft. Drops: emerald,iron_axe. Found in woodland mansions/raids. Charges with axe.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vindicator_drops",
+    "category": "mob",
+    "name": "Vindicator drops",
+    "description": "Vindicator drops: emerald,iron_axe. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vindicator_spawn",
+    "category": "mob",
+    "name": "Vindicator spawns",
+    "description": "Spawning conditions for Vindicator: woodland mansions/raids. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vindicator_fight",
+    "category": "mob",
+    "name": "Fighting Vindicator",
+    "description": "Combat strategy vs Vindicator: Use diamond armor, sword, and bow. Charges with axe. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:pillager",
+    "category": "mob",
+    "name": "Pillager",
+    "description": "Pillager is a hostile mob in Minecraft. Drops: crossbow,arrows. Found in outposts/patrols. Uses crossbow.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:pillager_drops",
+    "category": "mob",
+    "name": "Pillager drops",
+    "description": "Pillager drops: crossbow,arrows. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:pillager_spawn",
+    "category": "mob",
+    "name": "Pillager spawns",
+    "description": "Spawning conditions for Pillager: outposts/patrols. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:pillager_fight",
+    "category": "mob",
+    "name": "Fighting Pillager",
+    "description": "Combat strategy vs Pillager: Use diamond armor, sword, and bow. Uses crossbow. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ravager",
+    "category": "mob",
+    "name": "Ravager",
+    "description": "Ravager is a hostile mob in Minecraft. Drops: saddle. Found in raids. Destroys crops and leaves.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ravager_drops",
+    "category": "mob",
+    "name": "Ravager drops",
+    "description": "Ravager drops: saddle. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ravager_spawn",
+    "category": "mob",
+    "name": "Ravager spawns",
+    "description": "Spawning conditions for Ravager: raids. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:ravager_fight",
+    "category": "mob",
+    "name": "Fighting Ravager",
+    "description": "Combat strategy vs Ravager: Use diamond armor, sword, and bow. Destroys crops and leaves. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vex",
+    "category": "mob",
+    "name": "Vex",
+    "description": "Vex is a hostile mob in Minecraft. Drops: nothing. Found in summoned by evoker. Flies through blocks.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vex_drops",
+    "category": "mob",
+    "name": "Vex drops",
+    "description": "Vex drops: nothing. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vex_spawn",
+    "category": "mob",
+    "name": "Vex spawns",
+    "description": "Spawning conditions for Vex: summoned by evoker. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:vex_fight",
+    "category": "mob",
+    "name": "Fighting Vex",
+    "description": "Combat strategy vs Vex: Use diamond armor, sword, and bow. Flies through blocks. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
       "hostile"
     ]
   },
@@ -153,401 +1121,716 @@
     "id": "minecraft:shulker",
     "category": "mob",
     "name": "Shulker",
-    "description": "Shell-like mob in End cities. Fires levitation projectiles.",
+    "description": "Shulker is a hostile mob in Minecraft. Drops: shulker_shell. Found in end cities. Shoots levitation bullets.",
     "tags": [
       "mob",
-      "hostile",
-      "end"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:witch",
+    "id": "minecraft:shulker_drops",
     "category": "mob",
-    "name": "Witch",
-    "description": "Throws splash potions. Spawns in swamps and raids.",
+    "name": "Shulker drops",
+    "description": "Shulker drops: shulker_shell. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "overworld",
-      "ranged"
+      "strategy",
+      "farming",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:slime",
+    "id": "minecraft:shulker_spawn",
     "category": "mob",
-    "name": "Slime",
-    "description": "Spawns in swamps and slime chunks. Splits when killed.",
+    "name": "Shulker spawns",
+    "description": "Spawning conditions for Shulker: end cities. Spawns in darkness (light level 7 or less).",
     "tags": [
-      "mob",
-      "hostile",
-      "overworld"
+      "strategy",
+      "spawning",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:magma_cube",
+    "id": "minecraft:shulker_fight",
     "category": "mob",
-    "name": "Magma Cube",
-    "description": "Nether slime variant. Drops magma cream.",
+    "name": "Fighting Shulker",
+    "description": "Combat strategy vs Shulker: Use diamond armor, sword, and bow. Shoots levitation bullets. Strafe and use healing potions.",
     "tags": [
-      "mob",
-      "hostile",
-      "nether"
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:phantom",
+    "id": "minecraft:cave_spider",
     "category": "mob",
-    "name": "Phantom",
-    "description": "Flying mob that attacks players who haven't slept.",
+    "name": "Cave Spider",
+    "description": "Cave Spider is a hostile mob in Minecraft. Drops: string,spider_eye. Found in mineshafts. Poisons, fits 1-block gaps.",
     "tags": [
       "mob",
-      "hostile",
-      "overworld",
-      "flying"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:blaze",
+    "id": "minecraft:cave_spider_drops",
     "category": "mob",
-    "name": "Blaze",
-    "description": "Found in Nether fortresses. Shoots fireballs. Drops blaze rods.",
+    "name": "Cave Spider drops",
+    "description": "Cave Spider drops: string,spider_eye. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "nether",
-      "blaze"
+      "strategy",
+      "farming",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:ghast",
+    "id": "minecraft:cave_spider_spawn",
     "category": "mob",
-    "name": "Ghast",
-    "description": "Flying Nether mob that shoots explosive fireballs.",
+    "name": "Cave Spider spawns",
+    "description": "Spawning conditions for Cave Spider: mineshafts. Spawns in darkness (light level 7 or less).",
     "tags": [
-      "mob",
-      "hostile",
-      "nether",
-      "ranged"
+      "strategy",
+      "spawning",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:hoglin",
+    "id": "minecraft:cave_spider_fight",
     "category": "mob",
-    "name": "Hoglin",
-    "description": "Hostile boar-like mob in the Nether.",
+    "name": "Fighting Cave Spider",
+    "description": "Combat strategy vs Cave Spider: Use diamond armor, sword, and bow. Poisons, fits 1-block gaps. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:silverfish",
+    "category": "mob",
+    "name": "Silverfish",
+    "description": "Silverfish is a hostile mob in Minecraft. Drops: nothing. Found in infested blocks. Hides in stone, calls others.",
     "tags": [
       "mob",
-      "hostile",
-      "nether"
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:silverfish_drops",
+    "category": "mob",
+    "name": "Silverfish drops",
+    "description": "Silverfish drops: nothing. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:silverfish_spawn",
+    "category": "mob",
+    "name": "Silverfish spawns",
+    "description": "Spawning conditions for Silverfish: infested blocks. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:silverfish_fight",
+    "category": "mob",
+    "name": "Fighting Silverfish",
+    "description": "Combat strategy vs Silverfish: Use diamond armor, sword, and bow. Hides in stone, calls others. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:endermite",
+    "category": "mob",
+    "name": "Endermite",
+    "description": "Endermite is a hostile mob in Minecraft. Drops: nothing. Found in ender pearls. Small, attacks.",
+    "tags": [
+      "mob",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:endermite_drops",
+    "category": "mob",
+    "name": "Endermite drops",
+    "description": "Endermite drops: nothing. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:endermite_spawn",
+    "category": "mob",
+    "name": "Endermite spawns",
+    "description": "Spawning conditions for Endermite: ender pearls. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:endermite_fight",
+    "category": "mob",
+    "name": "Fighting Endermite",
+    "description": "Combat strategy vs Endermite: Use diamond armor, sword, and bow. Small, attacks. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
     "id": "minecraft:zoglin",
     "category": "mob",
     "name": "Zoglin",
-    "description": "A zombified Hoglin.",
+    "description": "Zoglin is a hostile mob in Minecraft. Drops: rotten_flesh. Found in nether. Zombified hoglin, attacks all.",
     "tags": [
       "mob",
-      "hostile",
-      "nether"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:piglin",
+    "id": "minecraft:zoglin_drops",
     "category": "mob",
-    "name": "Piglin",
-    "description": "Neutral if wearing gold armor. Barters gold ingots.",
+    "name": "Zoglin drops",
+    "description": "Zoglin drops: rotten_flesh. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "neutral",
-      "nether"
+      "strategy",
+      "farming",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:zoglin_spawn",
+    "category": "mob",
+    "name": "Zoglin spawns",
+    "description": "Spawning conditions for Zoglin: nether. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "hostile"
+    ]
+  },
+  {
+    "id": "minecraft:zoglin_fight",
+    "category": "mob",
+    "name": "Fighting Zoglin",
+    "description": "Combat strategy vs Zoglin: Use diamond armor, sword, and bow. Zombified hoglin, attacks all. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
     "id": "minecraft:piglin_brute",
     "category": "mob",
     "name": "Piglin Brute",
-    "description": "Stronger hostile Piglin in Bastion Remnants.",
+    "description": "Piglin Brute is a hostile mob in Minecraft. Drops: golden_axe. Found in bastions. Always hostile, cannot be distracted.",
     "tags": [
       "mob",
-      "hostile",
-      "nether"
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:ender_dragon",
+    "id": "minecraft:piglin_brute_drops",
     "category": "mob",
-    "name": "Ender Dragon",
-    "description": "The final boss. Defeat by destroying crystals then attacking.",
+    "name": "Piglin Brute drops",
+    "description": "Piglin Brute drops: golden_axe. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "boss",
-      "end",
-      "dragon"
+      "strategy",
+      "farming",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:wither",
+    "id": "minecraft:piglin_brute_spawn",
     "category": "mob",
-    "name": "Wither",
-    "description": "A boss spawned with soul sand and skulls. Drops a nether star.",
+    "name": "Piglin Brute spawns",
+    "description": "Spawning conditions for Piglin Brute: bastions. Spawns in darkness (light level 7 or less).",
     "tags": [
-      "mob",
-      "boss",
-      "nether"
+      "strategy",
+      "spawning",
+      "hostile"
     ]
   },
   {
-    "id": "minecraft:warden",
+    "id": "minecraft:piglin_brute_fight",
     "category": "mob",
-    "name": "Warden",
-    "description": "Powerful mob spawned by sculk. Blind but senses vibrations.",
+    "name": "Fighting Piglin Brute",
+    "description": "Combat strategy vs Piglin Brute: Use diamond armor, sword, and bow. Always hostile, cannot be distracted. Strafe and use healing potions.",
     "tags": [
-      "mob",
-      "boss",
-      "deep_dark"
-    ]
-  },
-  {
-    "id": "minecraft:iron_golem",
-    "category": "mob",
-    "name": "Iron Golem",
-    "description": "Neutral mob that protects villages.",
-    "tags": [
-      "mob",
-      "neutral",
-      "village",
-      "golem"
-    ]
-  },
-  {
-    "id": "minecraft:snow_golem",
-    "category": "mob",
-    "name": "Snow Golem",
-    "description": "Passive mob built from snow. Throws snowballs.",
-    "tags": [
-      "mob",
-      "passive",
-      "golem"
+      "strategy",
+      "combat",
+      "hostile"
     ]
   },
   {
     "id": "minecraft:villager",
     "category": "mob",
     "name": "Villager",
-    "description": "Passive mob that trades items.",
+    "description": "Villager is a passive mob in Minecraft. Drops: nothing. Found in villages. Trades, works at stations.",
     "tags": [
       "mob",
-      "passive",
-      "village",
-      "trading"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:villager_drops",
+    "category": "mob",
+    "name": "Villager drops",
+    "description": "Villager drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:villager_spawn",
+    "category": "mob",
+    "name": "Villager spawns",
+    "description": "Spawning conditions for Villager: villages. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:wandering_trader",
     "category": "mob",
     "name": "Wandering Trader",
-    "description": "Spawns randomly offering rare trades.",
+    "description": "Wandering Trader is a passive mob in Minecraft. Drops: nothing. Found in near player. Random trades.",
     "tags": [
       "mob",
-      "passive",
-      "trading"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:wandering_trader_drops",
+    "category": "mob",
+    "name": "Wandering Trader drops",
+    "description": "Wandering Trader drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:wandering_trader_spawn",
+    "category": "mob",
+    "name": "Wandering Trader spawns",
+    "description": "Spawning conditions for Wandering Trader: near player. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:cow",
     "category": "mob",
     "name": "Cow",
-    "description": "Passive mob that drops beef and leather. Can be milked.",
+    "description": "Cow is a passive mob in Minecraft. Drops: beef,leather. Found in plains/forests. Milked, bred with wheat.",
     "tags": [
       "mob",
-      "passive",
-      "food",
-      "farm"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:cow_drops",
+    "category": "mob",
+    "name": "Cow drops",
+    "description": "Cow drops: beef,leather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:cow_spawn",
+    "category": "mob",
+    "name": "Cow spawns",
+    "description": "Spawning conditions for Cow: plains/forests. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:pig",
     "category": "mob",
     "name": "Pig",
-    "description": "Passive mob that drops porkchops.",
+    "description": "Pig is a passive mob in Minecraft. Drops: porkchop. Found in plains/forests. Saddled, bred with carrots.",
     "tags": [
       "mob",
-      "passive",
-      "food",
-      "farm"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:pig_drops",
+    "category": "mob",
+    "name": "Pig drops",
+    "description": "Pig drops: porkchop. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:pig_spawn",
+    "category": "mob",
+    "name": "Pig spawns",
+    "description": "Spawning conditions for Pig: plains/forests. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:sheep",
     "category": "mob",
     "name": "Sheep",
-    "description": "Passive mob that drops wool and mutton.",
+    "description": "Sheep is a passive mob in Minecraft. Drops: mutton,wool. Found in all grassy biomes. Dyed, bred with wheat.",
     "tags": [
       "mob",
-      "passive",
-      "wool",
-      "farm"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:sheep_drops",
+    "category": "mob",
+    "name": "Sheep drops",
+    "description": "Sheep drops: mutton,wool. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:sheep_spawn",
+    "category": "mob",
+    "name": "Sheep spawns",
+    "description": "Spawning conditions for Sheep: all grassy biomes. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:chicken",
     "category": "mob",
     "name": "Chicken",
-    "description": "Passive mob that drops feathers and raw chicken. Lays eggs.",
+    "description": "Chicken is a passive mob in Minecraft. Drops: chicken,feather,egg. Found in all grassy biomes. Lays eggs, bred with seeds.",
     "tags": [
       "mob",
-      "passive",
-      "food",
-      "farm"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:chicken_drops",
+    "category": "mob",
+    "name": "Chicken drops",
+    "description": "Chicken drops: chicken,feather,egg. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:chicken_spawn",
+    "category": "mob",
+    "name": "Chicken spawns",
+    "description": "Spawning conditions for Chicken: all grassy biomes. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:rabbit",
     "category": "mob",
     "name": "Rabbit",
-    "description": "Small passive mob.",
+    "description": "Rabbit is a passive mob in Minecraft. Drops: rabbit,rabbit_hide,rabbit_foot. Found in forests/deserts/taiga. Bred with carrots.",
     "tags": [
       "mob",
-      "passive",
-      "food"
+      "passive"
     ]
   },
   {
-    "id": "minecraft:mooshroom",
+    "id": "minecraft:rabbit_drops",
     "category": "mob",
-    "name": "Mooshroom",
-    "description": "Cow variant on mushroom islands.",
+    "name": "Rabbit drops",
+    "description": "Rabbit drops: rabbit,rabbit_hide,rabbit_foot. Breed and kill sustainably.",
     "tags": [
-      "mob",
-      "passive",
-      "food",
-      "mushroom"
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:rabbit_spawn",
+    "category": "mob",
+    "name": "Rabbit spawns",
+    "description": "Spawning conditions for Rabbit: forests/deserts/taiga. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:horse",
     "category": "mob",
     "name": "Horse",
-    "description": "Can be tamed and ridden.",
+    "description": "Horse is a passive mob in Minecraft. Drops: leather. Found in plains/savannas. Tamed, ridden, varying stats.",
     "tags": [
       "mob",
-      "passive",
-      "transport"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:horse_drops",
+    "category": "mob",
+    "name": "Horse drops",
+    "description": "Horse drops: leather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:horse_spawn",
+    "category": "mob",
+    "name": "Horse spawns",
+    "description": "Spawning conditions for Horse: plains/savannas. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:donkey",
     "category": "mob",
     "name": "Donkey",
-    "description": "Can be tamed and equipped with a chest.",
+    "description": "Donkey is a passive mob in Minecraft. Drops: leather. Found in plains/savannas. Carries chest, ridden.",
     "tags": [
       "mob",
-      "passive",
-      "transport",
-      "storage"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:donkey_drops",
+    "category": "mob",
+    "name": "Donkey drops",
+    "description": "Donkey drops: leather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:donkey_spawn",
+    "category": "mob",
+    "name": "Donkey spawns",
+    "description": "Spawning conditions for Donkey: plains/savannas. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:mule",
     "category": "mob",
     "name": "Mule",
-    "description": "Born from horse and donkey. Can carry a chest.",
+    "description": "Mule is a passive mob in Minecraft. Drops: leather. Found in bred from horse+donkey. Carries chest.",
     "tags": [
       "mob",
-      "passive",
-      "transport",
-      "storage"
+      "passive"
     ]
   },
   {
-    "id": "minecraft:skeleton_horse",
+    "id": "minecraft:mule_drops",
     "category": "mob",
-    "name": "Skeleton Horse",
-    "description": "A rideable undead horse.",
+    "name": "Mule drops",
+    "description": "Mule drops: leather. Breed and kill sustainably.",
     "tags": [
-      "mob",
-      "passive",
-      "transport"
+      "strategy",
+      "farming",
+      "passive"
     ]
   },
   {
-    "id": "minecraft:zombie_horse",
+    "id": "minecraft:mule_spawn",
     "category": "mob",
-    "name": "Zombie Horse",
-    "description": "A rare undead horse. Cannot be tamed in survival.",
+    "name": "Mule spawns",
+    "description": "Spawning conditions for Mule: bred from horse+donkey. Requires grass blocks and light.",
     "tags": [
-      "mob",
-      "passive",
-      "transport",
-      "rare"
-    ]
-  },
-  {
-    "id": "minecraft:llama",
-    "category": "mob",
-    "name": "Llama",
-    "description": "Carries chests and forms caravans.",
-    "tags": [
-      "mob",
-      "passive",
-      "transport",
-      "storage"
-    ]
-  },
-  {
-    "id": "minecraft:trader_llama",
-    "category": "mob",
-    "name": "Trader Llama",
-    "description": "Llamas that follow wandering traders.",
-    "tags": [
-      "mob",
-      "passive",
-      "transport"
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:wolf",
     "category": "mob",
     "name": "Wolf",
-    "description": "Neutral mob tamed with bones.",
+    "description": "Wolf is a neutral mob in Minecraft. Drops: nothing. Found in forests/taiga. Tamed with bones.",
     "tags": [
       "mob",
-      "neutral",
-      "pet",
-      "combat"
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:wolf_drops",
+    "category": "mob",
+    "name": "Wolf drops",
+    "description": "Wolf drops: nothing. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:wolf_spawn",
+    "category": "mob",
+    "name": "Wolf spawns",
+    "description": "Spawning conditions for Wolf: forests/taiga. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:wolf_fight",
+    "category": "mob",
+    "name": "Fighting Wolf",
+    "description": "Combat strategy vs Wolf: Use diamond armor, sword, and bow. Tamed with bones. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
     ]
   },
   {
     "id": "minecraft:cat",
     "category": "mob",
     "name": "Cat",
-    "description": "Tamed with raw fish. Scares creepers.",
+    "description": "Cat is a passive mob in Minecraft. Drops: string. Found in villages. Tamed with fish, scares creepers.",
     "tags": [
       "mob",
-      "passive",
-      "pet"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:cat_drops",
+    "category": "mob",
+    "name": "Cat drops",
+    "description": "Cat drops: string. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:cat_spawn",
+    "category": "mob",
+    "name": "Cat spawns",
+    "description": "Spawning conditions for Cat: villages. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:parrot",
     "category": "mob",
     "name": "Parrot",
-    "description": "Passive flying mob that mimics sounds.",
+    "description": "Parrot is a passive mob in Minecraft. Drops: feather. Found in jungles. Tamed with seeds, dances.",
     "tags": [
       "mob",
-      "passive",
-      "pet",
-      "flying"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:parrot_drops",
+    "category": "mob",
+    "name": "Parrot drops",
+    "description": "Parrot drops: feather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:parrot_spawn",
+    "category": "mob",
+    "name": "Parrot spawns",
+    "description": "Spawning conditions for Parrot: jungles. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:fox",
     "category": "mob",
     "name": "Fox",
-    "description": "Nocturnal mob that picks up items.",
+    "description": "Fox is a passive mob in Minecraft. Drops: rabbit_foot. Found in taiga. Carries items.",
     "tags": [
       "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:fox_drops",
+    "category": "mob",
+    "name": "Fox drops",
+    "description": "Fox drops: rabbit_foot. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:fox_spawn",
+    "category": "mob",
+    "name": "Fox spawns",
+    "description": "Spawning conditions for Fox: taiga. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
       "passive"
     ]
   },
@@ -555,229 +1838,695 @@
     "id": "minecraft:bee",
     "category": "mob",
     "name": "Bee",
-    "description": "Pollinates crops and produces honey.",
+    "description": "Bee is a neutral mob in Minecraft. Drops: nothing. Found in flower forest/plains. Stings once, then dies.",
     "tags": [
       "mob",
-      "passive",
-      "flying",
-      "farm"
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:bat",
+    "id": "minecraft:bee_drops",
     "category": "mob",
-    "name": "Bat",
-    "description": "Flying passive mob in caves.",
+    "name": "Bee drops",
+    "description": "Bee drops: nothing. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "passive",
-      "flying",
-      "cave"
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:bee_spawn",
+    "category": "mob",
+    "name": "Bee spawns",
+    "description": "Spawning conditions for Bee: flower forest/plains. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:bee_fight",
+    "category": "mob",
+    "name": "Fighting Bee",
+    "description": "Combat strategy vs Bee: Use diamond armor, sword, and bow. Stings once, then dies. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
     ]
   },
   {
     "id": "minecraft:squid",
     "category": "mob",
     "name": "Squid",
-    "description": "Passive water mob that drops ink sacs.",
+    "description": "Squid is a passive mob in Minecraft. Drops: ink_sac. Found in water. Swims passively.",
     "tags": [
       "mob",
-      "passive",
-      "water"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:squid_drops",
+    "category": "mob",
+    "name": "Squid drops",
+    "description": "Squid drops: ink_sac. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:squid_spawn",
+    "category": "mob",
+    "name": "Squid spawns",
+    "description": "Spawning conditions for Squid: water. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:glow_squid",
     "category": "mob",
     "name": "Glow Squid",
-    "description": "Passive glowing water mob.",
+    "description": "Glow Squid is a passive mob in Minecraft. Drops: glow_ink_sac. Found in dark water. Glows.",
     "tags": [
       "mob",
-      "passive",
-      "water"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:glow_squid_drops",
+    "category": "mob",
+    "name": "Glow Squid drops",
+    "description": "Glow Squid drops: glow_ink_sac. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:glow_squid_spawn",
+    "category": "mob",
+    "name": "Glow Squid spawns",
+    "description": "Spawning conditions for Glow Squid: dark water. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:dolphin",
     "category": "mob",
     "name": "Dolphin",
-    "description": "Neutral water mob that boosts swimming.",
+    "description": "Dolphin is a neutral mob in Minecraft. Drops: cod. Found in warm oceans. Leads to treasure.",
     "tags": [
       "mob",
-      "neutral",
-      "water"
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:dolphin_drops",
+    "category": "mob",
+    "name": "Dolphin drops",
+    "description": "Dolphin drops: cod. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:dolphin_spawn",
+    "category": "mob",
+    "name": "Dolphin spawns",
+    "description": "Spawning conditions for Dolphin: warm oceans. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:dolphin_fight",
+    "category": "mob",
+    "name": "Fighting Dolphin",
+    "description": "Combat strategy vs Dolphin: Use diamond armor, sword, and bow. Leads to treasure. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
     ]
   },
   {
     "id": "minecraft:turtle",
     "category": "mob",
     "name": "Turtle",
-    "description": "Passive beach mob that lays eggs.",
+    "description": "Turtle is a passive mob in Minecraft. Drops: scute. Found in beaches. Lays eggs.",
     "tags": [
       "mob",
-      "passive",
-      "water",
-      "beach"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:turtle_drops",
+    "category": "mob",
+    "name": "Turtle drops",
+    "description": "Turtle drops: scute. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:turtle_spawn",
+    "category": "mob",
+    "name": "Turtle spawns",
+    "description": "Spawning conditions for Turtle: beaches. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:polar_bear",
     "category": "mob",
     "name": "Polar Bear",
-    "description": "Neutral mob in snowy biomes.",
+    "description": "Polar Bear is a neutral mob in Minecraft. Drops: cod,salmon. Found in snowy/icy biomes. Protects cubs.",
     "tags": [
       "mob",
-      "neutral",
-      "cold"
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:polar_bear_drops",
+    "category": "mob",
+    "name": "Polar Bear drops",
+    "description": "Polar Bear drops: cod,salmon. Looting enchantment increases drop rates.",
+    "tags": [
+      "strategy",
+      "farming",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:polar_bear_spawn",
+    "category": "mob",
+    "name": "Polar Bear spawns",
+    "description": "Spawning conditions for Polar Bear: snowy/icy biomes. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:polar_bear_fight",
+    "category": "mob",
+    "name": "Fighting Polar Bear",
+    "description": "Combat strategy vs Polar Bear: Use diamond armor, sword, and bow. Protects cubs. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
     ]
   },
   {
     "id": "minecraft:panda",
     "category": "mob",
     "name": "Panda",
-    "description": "Neutral mob in bamboo jungles.",
+    "description": "Panda is a passive mob in Minecraft. Drops: bamboo. Found in bamboo jungles. Various personalities.",
     "tags": [
       "mob",
-      "neutral",
-      "jungle"
+      "passive"
     ]
   },
   {
-    "id": "minecraft:ocelot",
+    "id": "minecraft:panda_drops",
     "category": "mob",
-    "name": "Ocelot",
-    "description": "Passive jungle mob. Creepers avoid them.",
+    "name": "Panda drops",
+    "description": "Panda drops: bamboo. Breed and kill sustainably.",
     "tags": [
-      "mob",
-      "passive",
-      "jungle"
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:panda_spawn",
+    "category": "mob",
+    "name": "Panda spawns",
+    "description": "Spawning conditions for Panda: bamboo jungles. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:axolotl",
     "category": "mob",
     "name": "Axolotl",
-    "description": "Passive water mob that plays dead.",
+    "description": "Axolotl is a passive mob in Minecraft. Drops: nothing. Found in lush caves. Plays dead, attacks fish.",
     "tags": [
       "mob",
-      "passive",
-      "water"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:axolotl_drops",
+    "category": "mob",
+    "name": "Axolotl drops",
+    "description": "Axolotl drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:axolotl_spawn",
+    "category": "mob",
+    "name": "Axolotl spawns",
+    "description": "Spawning conditions for Axolotl: lush caves. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:frog",
     "category": "mob",
     "name": "Frog",
-    "description": "Passive mob found in swamps. Eats small slimes.",
+    "description": "Frog is a passive mob in Minecraft. Drops: nothing. Found in swamps. Eats small mobs.",
     "tags": [
       "mob",
-      "passive",
-      "swamp"
+      "passive"
     ]
   },
   {
-    "id": "minecraft:tadpole",
+    "id": "minecraft:frog_drops",
     "category": "mob",
-    "name": "Tadpole",
-    "description": "Baby frog. Grows into a frog.",
+    "name": "Frog drops",
+    "description": "Frog drops: nothing. Breed and kill sustainably.",
     "tags": [
-      "mob",
-      "passive",
-      "water"
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:frog_spawn",
+    "category": "mob",
+    "name": "Frog spawns",
+    "description": "Spawning conditions for Frog: swamps. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:allay",
     "category": "mob",
     "name": "Allay",
-    "description": "Flying mob that collects items for players.",
+    "description": "Allay is a passive mob in Minecraft. Drops: nothing. Found in pillager outposts/mansions. Collects dropped items.",
     "tags": [
       "mob",
-      "passive",
-      "flying"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:allay_drops",
+    "category": "mob",
+    "name": "Allay drops",
+    "description": "Allay drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:allay_spawn",
+    "category": "mob",
+    "name": "Allay spawns",
+    "description": "Spawning conditions for Allay: pillager outposts/mansions. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   },
   {
     "id": "minecraft:goat",
     "category": "mob",
     "name": "Goat",
-    "description": "Neutral mountain mob that rams players.",
+    "description": "Goat is a neutral mob in Minecraft. Drops: goat_horn. Found in mountain biomes. Headbutts.",
     "tags": [
       "mob",
-      "neutral",
-      "cold"
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:ravager",
+    "id": "minecraft:goat_drops",
     "category": "mob",
-    "name": "Ravager",
-    "description": "Large hostile mob in raids.",
+    "name": "Goat drops",
+    "description": "Goat drops: goat_horn. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "raid"
+      "strategy",
+      "farming",
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:evoker",
+    "id": "minecraft:goat_spawn",
     "category": "mob",
-    "name": "Evoker",
-    "description": "Hostile illager that summons vexes.",
+    "name": "Goat spawns",
+    "description": "Spawning conditions for Goat: mountain biomes. Spawns in darkness (light level 7 or less).",
     "tags": [
-      "mob",
-      "hostile",
-      "illager",
-      "raid"
+      "strategy",
+      "spawning",
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:vindicator",
+    "id": "minecraft:goat_fight",
     "category": "mob",
-    "name": "Vindicator",
-    "description": "Hostile illager with an axe.",
+    "name": "Fighting Goat",
+    "description": "Combat strategy vs Goat: Use diamond armor, sword, and bow. Headbutts. Strafe and use healing potions.",
     "tags": [
-      "mob",
-      "hostile",
-      "illager",
-      "raid"
+      "strategy",
+      "combat",
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:pillager",
+    "id": "minecraft:iron_golem",
     "category": "mob",
-    "name": "Pillager",
-    "description": "Hostile illager with a crossbow.",
+    "name": "Iron Golem",
+    "description": "Iron Golem is a neutral mob in Minecraft. Drops: iron_ingot,poppy. Found in villages. Protects villagers.",
     "tags": [
       "mob",
-      "hostile",
-      "illager",
-      "raid"
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:vex",
+    "id": "minecraft:iron_golem_drops",
     "category": "mob",
-    "name": "Vex",
-    "description": "Small hostile flying mob. Passes through blocks.",
+    "name": "Iron Golem drops",
+    "description": "Iron Golem drops: iron_ingot,poppy. Looting enchantment increases drop rates.",
     "tags": [
-      "mob",
-      "hostile",
-      "illager",
-      "flying"
+      "strategy",
+      "farming",
+      "neutral"
     ]
   },
   {
-    "id": "minecraft:illusioner",
+    "id": "minecraft:iron_golem_spawn",
     "category": "mob",
-    "name": "Illusioner",
-    "description": "Hostile illager that creates illusions.",
+    "name": "Iron Golem spawns",
+    "description": "Spawning conditions for Iron Golem: villages. Spawns in darkness (light level 7 or less).",
+    "tags": [
+      "strategy",
+      "spawning",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:iron_golem_fight",
+    "category": "mob",
+    "name": "Fighting Iron Golem",
+    "description": "Combat strategy vs Iron Golem: Use diamond armor, sword, and bow. Protects villagers. Strafe and use healing potions.",
+    "tags": [
+      "strategy",
+      "combat",
+      "neutral"
+    ]
+  },
+  {
+    "id": "minecraft:snow_golem",
+    "category": "mob",
+    "name": "Snow Golem",
+    "description": "Snow Golem is a passive mob in Minecraft. Drops: snowball. Found in player-built. Throws snowballs.",
     "tags": [
       "mob",
-      "hostile",
-      "illager",
-      "ranged",
-      "rare"
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:snow_golem_drops",
+    "category": "mob",
+    "name": "Snow Golem drops",
+    "description": "Snow Golem drops: snowball. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:snow_golem_spawn",
+    "category": "mob",
+    "name": "Snow Golem spawns",
+    "description": "Spawning conditions for Snow Golem: player-built. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:mooshroom",
+    "category": "mob",
+    "name": "Mooshroom",
+    "description": "Mooshroom is a passive mob in Minecraft. Drops: beef,leather. Found in mushroom fields. Red/brown variant, stewed.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:mooshroom_drops",
+    "category": "mob",
+    "name": "Mooshroom drops",
+    "description": "Mooshroom drops: beef,leather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:mooshroom_spawn",
+    "category": "mob",
+    "name": "Mooshroom spawns",
+    "description": "Spawning conditions for Mooshroom: mushroom fields. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:llama",
+    "category": "mob",
+    "name": "Llama",
+    "description": "Llama is a passive mob in Minecraft. Drops: leather. Found in savannas/mountains. Carries chests, spits.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:llama_drops",
+    "category": "mob",
+    "name": "Llama drops",
+    "description": "Llama drops: leather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:llama_spawn",
+    "category": "mob",
+    "name": "Llama spawns",
+    "description": "Spawning conditions for Llama: savannas/mountains. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:trader_llama",
+    "category": "mob",
+    "name": "Trader Llama",
+    "description": "Trader Llama is a passive mob in Minecraft. Drops: leather. Found in with wandering trader. Follows trader.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:trader_llama_drops",
+    "category": "mob",
+    "name": "Trader Llama drops",
+    "description": "Trader Llama drops: leather. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:trader_llama_spawn",
+    "category": "mob",
+    "name": "Trader Llama spawns",
+    "description": "Spawning conditions for Trader Llama: with wandering trader. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:ocelot",
+    "category": "mob",
+    "name": "Ocelot",
+    "description": "Ocelot is a passive mob in Minecraft. Drops: nothing. Found in jungles. Wild cat, flees.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:ocelot_drops",
+    "category": "mob",
+    "name": "Ocelot drops",
+    "description": "Ocelot drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:ocelot_spawn",
+    "category": "mob",
+    "name": "Ocelot spawns",
+    "description": "Spawning conditions for Ocelot: jungles. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:bat",
+    "category": "mob",
+    "name": "Bat",
+    "description": "Bat is a passive mob in Minecraft. Drops: nothing. Found in caves. Flies, no drops.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:bat_drops",
+    "category": "mob",
+    "name": "Bat drops",
+    "description": "Bat drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:bat_spawn",
+    "category": "mob",
+    "name": "Bat spawns",
+    "description": "Spawning conditions for Bat: caves. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:skeleton_horse",
+    "category": "mob",
+    "name": "Skeleton Horse",
+    "description": "Skeleton Horse is a passive mob in Minecraft. Drops: nothing. Found in skeleton traps. Rideable.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:skeleton_horse_drops",
+    "category": "mob",
+    "name": "Skeleton Horse drops",
+    "description": "Skeleton Horse drops: nothing. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:skeleton_horse_spawn",
+    "category": "mob",
+    "name": "Skeleton Horse spawns",
+    "description": "Spawning conditions for Skeleton Horse: skeleton traps. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:strider",
+    "category": "mob",
+    "name": "Strider",
+    "description": "Strider is a passive mob in Minecraft. Drops: string. Found in nether lava lakes. Walks on lava, ridden with fungus.",
+    "tags": [
+      "mob",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:strider_drops",
+    "category": "mob",
+    "name": "Strider drops",
+    "description": "Strider drops: string. Breed and kill sustainably.",
+    "tags": [
+      "strategy",
+      "farming",
+      "passive"
+    ]
+  },
+  {
+    "id": "minecraft:strider_spawn",
+    "category": "mob",
+    "name": "Strider spawns",
+    "description": "Spawning conditions for Strider: nether lava lakes. Requires grass blocks and light.",
+    "tags": [
+      "strategy",
+      "spawning",
+      "passive"
     ]
   }
 ]

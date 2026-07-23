@@ -112,7 +112,13 @@ async def lifespan(app: FastAPI):
                 n_threads=N_THREADS,
                 verbose=False,
             )
-            print(f"{MODEL_NAME} loaded. Ready for chat.")
+            print(f"{MODEL_NAME} loaded. Warming up model...")
+            try:
+                llm("Hello, I am Smith_AI. How can I help you?", max_tokens=10, temperature=0.1)
+                print(f"{MODEL_NAME} warmup complete. Ready for chat.")
+            except Exception as e:
+                print(f"Model warmup failed (non-fatal): {e}")
+                print("Server will still attempt inference on requests.")
         except Exception as e:
             print(f"ERROR: Failed to load model: {e}")
             print("Server will return rule-based fallback responses.")

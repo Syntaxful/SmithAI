@@ -85,7 +85,7 @@ public class TaskPlanner {
             "craft_blaze_powder", "collect_ender_pearls", "craft_eyes_of_ender",
             "locate_stronghold", "travel_to_stronghold", "find_end_portal_room", "fill_end_portal",
             "enter_end_portal", "equip_bow", "equip_armor", "destroy_end_crystals",
-            "attack_dragon_perched", "dodge_dragon_charge", "finish_dragon", "exit_end"
+            "attack_dragon_perched", "dodge_dragon_charge", "defeat_ender_dragon", "exit_end"
         ));
         TASKS.put("win", TASKS.get("beat the game"));
         TASKS.put("speedrun", Arrays.asList(

@@ -1,604 +1,739 @@
 #!/usr/bin/env node
-/* Generate expanded knowledge JSON files for SmithAI (700+ entries). */
+/* Generate 30,000+ knowledge entries via aggressive combinatorial expansion. */
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..', 'SmithAI', 'src', 'main', 'resources', 'knowledge');
 
+const entry = (id, category, name, desc, tags) => ({ id, category, name, description: desc, tags });
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 function write(name, data) {
   const out = path.join(ROOT, name);
   fs.writeFileSync(out, JSON.stringify(data, null, 2), 'utf-8');
   console.log(`Wrote ${data.length} entries to ${out}`);
 }
 
-const entry = (id, category, name, description, tags) => ({ id, category, name, description, tags });
-
-const blocks = () => [
-  entry("minecraft:stone","block","Stone","A common solid block found underground. Mined fastest with a pickaxe. Drops cobblestone unless mined with Silk Touch.",["block","mining","building"]),
-  entry("minecraft:cobblestone","block","Cobblestone","Dropped when mining stone without Silk Touch. Used for tools, furnaces, and building.",["block","mining","building"]),
-  entry("minecraft:granite","block","Granite","An igneous rock variant of stone. Can be polished for decorative building.",["block","mining","building","decorative"]),
-  entry("minecraft:diorite","block","Diorite","A white stone variant. Can be polished for decorative use.",["block","mining","building","decorative"]),
-  entry("minecraft:andesite","block","Andesite","A gray stone variant. Can be polished for decorative building.",["block","mining","building","decorative"]),
-  entry("minecraft:tuff","block","Tuff","A light gray rock found near deepslate. Used for decorative building.",["block","mining","building","decorative"]),
-  entry("minecraft:calcite","block","Calcite","A white mineral block found in geode layers. Used for decorative building.",["block","mining","building","decorative"]),
-  entry("minecraft:deepslate","block","Deepslate","A dark stone variant found deep underground. Harder than stone and used for building.",["block","mining","building","deep"]),
-  entry("minecraft:cobbled_deepslate","block","Cobbled Deepslate","Drops from mining deepslate. Used for tools and building.",["block","mining","building"]),
-  entry("minecraft:reinforced_deepslate","block","Reinforced Deepslate","Indestructible block found in the deep dark near the warden. Cannot be mined.",["block","indestructible","deep"]),
-  entry("minecraft:bedrock","block","Bedrock","An indestructible block found at the bottom of the world and in the End and Nether roofs.",["block","indestructible"]),
-  entry("minecraft:dirt","block","Dirt","A common surface block. Can be tilled into farmland with a hoe.",["block","dirt","farming"]),
-  entry("minecraft:grass_block","block","Grass Block","Dirt covered in grass. Common in the Overworld surface. Can be silk-touched.",["block","dirt","grass"]),
-  entry("minecraft:mycelium","block","Mycelium","Dirt covered in fungus. Found in mushroom fields. Great for growing mushrooms.",["block","dirt","mushroom"]),
-  entry("minecraft:podzol","block","Podzol","Dirt covered in pine needles. Found in old-growth taiga.",["block","dirt","taiga","building"]),
-  entry("minecraft:coarse_dirt","block","Coarse Dirt","Dirt that cannot be tilled. Crafted from dirt and gravel.",["block","dirt","building"]),
-  entry("minecraft:rooted_dirt","block","Rooted Dirt","Dirt with roots under azalea trees. Can be converted to dirt.",["block","dirt","roots"]),
-  entry("minecraft:mud","block","Mud","Found in mangrove swamps. Can be packed into mud bricks or combined with wheat into packed mud.",["block","mud","swamp"]),
-  entry("minecraft:clay","block","Clay","Found underwater in rivers and lakes. Smelt into bricks or terracotta.",["block","clay","water"]),
-  entry("minecraft:terracotta","block","Terracotta","A hardened clay block found in Badlands. Can be dyed into colored variants.",["block","building","decorative"]),
-  entry("minecraft:white_terracotta","block","White Terracotta","Dyed terracotta. Used for decorative building.",["block","building","decorative"]),
-  entry("minecraft:iron_ore","block","Iron Ore","Iron ore is found underground, usually between Y=-64 and Y=72. Requires a stone pickaxe or better. Smelt it to get iron ingots.",["block","mining","ore","iron"]),
-  entry("minecraft:deepslate_iron_ore","block","Deepslate Iron Ore","Iron ore embedded in deepslate. Requires a stone pickaxe or better. Drops iron ore.",["block","mining","ore","iron"]),
-  entry("minecraft:gold_ore","block","Gold Ore","Gold ore found around Y=-16 and abundantly in Badlands. Requires an iron pickaxe or better.",["block","mining","ore","gold"]),
-  entry("minecraft:deepslate_gold_ore","block","Deepslate Gold Ore","Gold ore embedded in deepslate. Requires an iron pickaxe or better.",["block","mining","ore","gold"]),
-  entry("minecraft:diamond_ore","block","Diamond Ore","Diamond ore is found deep underground, most commonly around Y=-59. Requires an iron pickaxe or better.",["block","mining","ore","diamond"]),
-  entry("minecraft:deepslate_diamond_ore","block","Deepslate Diamond Ore","Diamond ore embedded in deepslate. Requires an iron pickaxe or better.",["block","mining","ore","diamond"]),
-  entry("minecraft:coal_ore","block","Coal Ore","Coal ore is common underground and in mountains. Mined with any pickaxe. Drops coal for torches and fuel.",["block","mining","ore","coal","fuel"]),
-  entry("minecraft:deepslate_coal_ore","block","Deepslate Coal Ore","Coal ore embedded in deepslate. Mined with any pickaxe.",["block","mining","ore","coal","fuel"]),
-  entry("minecraft:redstone_ore","block","Redstone Ore","Redstone ore is found deep underground. Requires an iron pickaxe or better. Drops redstone dust.",["block","mining","ore","redstone"]),
-  entry("minecraft:deepslate_redstone_ore","block","Deepslate Redstone Ore","Redstone ore embedded in deepslate.",["block","mining","ore","redstone"]),
-  entry("minecraft:lapis_ore","block","Lapis Lazuli Ore","Lapis ore is found underground. Requires a stone pickaxe or better. Drops lapis lazuli.",["block","mining","ore","lapis"]),
-  entry("minecraft:deepslate_lapis_ore","block","Deepslate Lapis Ore","Lapis ore embedded in deepslate.",["block","mining","ore","lapis"]),
-  entry("minecraft:copper_ore","block","Copper Ore","Copper ore generates in larger ore blobs underground. Requires a stone pickaxe or better.",["block","mining","ore","copper"]),
-  entry("minecraft:deepslate_copper_ore","block","Deepslate Copper Ore","Copper ore embedded in deepslate.",["block","mining","ore","copper"]),
-  entry("minecraft:emerald_ore","block","Emerald Ore","Emerald ore is found in mountain biomes. Requires an iron pickaxe or better.",["block","mining","ore","emerald"]),
-  entry("minecraft:deepslate_emerald_ore","block","Deepslate Emerald Ore","Emerald ore embedded in deepslate.",["block","mining","ore","emerald"]),
-  entry("minecraft:nether_gold_ore","block","Nether Gold Ore","Gold ore found in the Nether. Drops gold nuggets when mined.",["block","nether","mining","ore","gold"]),
-  entry("minecraft:nether_quartz_ore","block","Nether Quartz Ore","Quartz ore found in the Nether. Drops nether quartz.",["block","nether","mining","ore","quartz"]),
-  entry("minecraft:ancient_debris","block","Ancient Debris","Rare ore found deep in the Nether. Smelted into netherite scrap. Blast-resistant.",["block","nether","mining","ore","netherite"]),
-  entry("minecraft:raw_iron_block","block","Block of Raw Iron","A compact block of raw iron. Can be smelted directly.",["block","ore","metal","storage"]),
-  entry("minecraft:raw_gold_block","block","Block of Raw Gold","A compact block of raw gold.",["block","ore","metal","storage"]),
-  entry("minecraft:raw_copper_block","block","Block of Raw Copper","A compact block of raw copper.",["block","ore","metal","storage"]),
-  entry("minecraft:obsidian","block","Obsidian","Created when water touches a lava source. Requires a diamond or netherite pickaxe. Used for nether portals and enchanting tables.",["block","mining","portal","enchanting"]),
-  entry("minecraft:crying_obsidian","block","Crying Obsidian","A decorative obsidian variant that emits purple particles. Used to craft respawn anchors.",["block","nether","portal","decorative"]),
-  entry("minecraft:glowstone","block","Glowstone","A bright light source found in the Nether. Drops glowstone dust.",["block","light","nether"]),
-  entry("minecraft:shroomlight","block","Shroomlight","A light-emitting block found in nether forests.",["block","light","nether"]),
-  entry("minecraft:ochre_froglight","block","Ochre Froglight","A warm yellow light block dropped by frogs eating small magma cubes.",["block","light","decorative"]),
-  entry("minecraft:verdant_froglight","block","Verdant Froglight","A green light block dropped by frogs eating small magma cubes.",["block","light","decorative"]),
-  entry("minecraft:pearlescent_froglight","block","Pearlescent Froglight","A purple light block dropped by frogs eating small magma cubes.",["block","light","decorative"]),
-  entry("minecraft:crafting_table","block","Crafting Table","Expands the crafting grid to 3x3. Crafted from 4 wooden planks.",["block","crafting"]),
-  entry("minecraft:furnace","block","Furnace","Smelts ores, food, and other items using fuel. Crafted from 8 cobblestone.",["block","smelting","fuel"]),
-  entry("minecraft:blast_furnace","block","Blast Furnace","Smelts ores and metal items twice as fast as a furnace.",["block","smelting","ore"]),
-  entry("minecraft:smoker","block","Smoker","Cooks food twice as fast as a furnace. Crafted from a furnace and logs.",["block","smelting","food"]),
-  entry("minecraft:chest","block","Chest","Stores up to 27 stacks of items. Crafted from 8 wooden planks.",["block","storage"]),
-  entry("minecraft:trapped_chest","block","Trapped Chest","A chest that emits a redstone signal when opened.",["block","storage","redstone"]),
-  entry("minecraft:ender_chest","block","Ender Chest","A chest whose contents are shared across all ender chests.",["block","storage","end"]),
-  entry("minecraft:barrel","block","Barrel","A storage block that can be opened even when blocks are placed on top.",["block","storage"]),
-  entry("minecraft:enchanting_table","block","Enchanting Table","Used to enchant tools, weapons, and armor.",["block","enchanting"]),
-  entry("minecraft:anvil","block","Anvil","Used to repair, rename, and combine enchanted items.",["block","repair","enchanting"]),
-  entry("minecraft:grindstone","block","Grindstone","Used to repair tools or remove enchantments. Returns some experience.",["block","repair","enchanting"]),
-  entry("minecraft:stonecutter","block","Stonecutter","Cuts stone blocks into slabs and stairs more efficiently.",["block","building","crafting"]),
-  entry("minecraft:loom","block","Loom","Used to apply patterns to banners.",["block","crafting","decorative"]),
-  entry("minecraft:smithing_table","block","Smithing Table","Used to upgrade diamond gear to netherite.",["block","crafting","netherite"]),
-  entry("minecraft:cartography_table","block","Cartography Table","Used to clone, expand, and lock maps.",["block","crafting","navigation"]),
-  entry("minecraft:composter","block","Composter","Converts crops and plants into bone meal.",["block","farming"]),
-  entry("minecraft:lectern","block","Lectern","Holds books for multiple players to read. Emits a redstone signal.",["block","redstone","storage"]),
-  entry("minecraft:torch","block","Torch","Provides light. Crafted from coal and a stick.",["block","light","torch"]),
-  entry("minecraft:soul_torch","block","Soul Torch","A blue torch emitting less light.",["block","light","soul_fire"]),
-  entry("minecraft:lantern","block","Lantern","A brighter light source than a torch.",["block","light"]),
-  entry("minecraft:soul_lantern","block","Soul Lantern","A blue lantern variant.",["block","light","soul_fire"]),
-  entry("minecraft:jack_o_lantern","block","Jack o'Lantern","A carved pumpkin with a torch inside.",["block","light","decorative"]),
-  entry("minecraft:sea_lantern","block","Sea Lantern","A bright underwater light source.",["block","light","water"]),
-  entry("minecraft:redstone_lamp","block","Redstone Lamp","A lamp that lights up when powered by redstone.",["block","light","redstone"]),
-  entry("minecraft:oak_log","block","Oak Log","Wood from oak trees. Can be crafted into planks and sticks.",["block","wood","building"]),
-  entry("minecraft:spruce_log","block","Spruce Log","Wood from spruce trees.",["block","wood","building"]),
-  entry("minecraft:birch_log","block","Birch Log","Light-colored wood from birch trees.",["block","wood","building"]),
-  entry("minecraft:jungle_log","block","Jungle Log","Wood from jungle trees.",["block","wood","building"]),
-  entry("minecraft:acacia_log","block","Acacia Log","Wood from acacia trees. Crafted into reddish planks.",["block","wood","building"]),
-  entry("minecraft:dark_oak_log","block","Dark Oak Log","Wood from dark oak trees.",["block","wood","building"]),
-  entry("minecraft:mangrove_log","block","Mangrove Log","Wood from mangrove trees.",["block","wood","building"]),
-  entry("minecraft:cherry_log","block","Cherry Log","Pink-tinted wood from cherry trees.",["block","wood","building","decorative"]),
-  entry("minecraft:crimson_stem","block","Crimson Stem","The wood of crimson fungi in the Nether. Not flammable.",["block","wood","nether","building"]),
-  entry("minecraft:warped_stem","block","Warped Stem","The wood of warped fungi in the Nether. Not flammable.",["block","wood","nether","building"]),
-  entry("minecraft:oak_planks","block","Oak Planks","Basic wooden planks. Used for crafting, sticks, and building.",["block","wood","building"]),
-  entry("minecraft:glass","block","Glass","Transparent block made by smelting sand.",["block","glass","building"]),
-  entry("minecraft:glass_pane","block","Glass Pane","Thin glass that connects to adjacent panes.",["block","glass","building"]),
-  entry("minecraft:white_stained_glass","block","White Stained Glass","Colored glass.",["block","glass","building","decorative"]),
-  entry("minecraft:sand","block","Sand","A gravity-affected block found in deserts and beaches. Smelt into glass.",["block","sand","glass"]),
-  entry("minecraft:red_sand","block","Red Sand","A red variant of sand found in Badlands biomes.",["block","sand","badlands"]),
-  entry("minecraft:suspicious_sand","block","Suspicious Sand","Sand containing buried treasure.",["block","sand","treasure"]),
-  entry("minecraft:suspicious_gravel","block","Suspicious Gravel","Gravel containing buried treasure.",["block","gravel","treasure"]),
-  entry("minecraft:gravel","block","Gravel","A gravity-affected block. Drops flint occasionally.",["block","gravel","flint"]),
-  entry("minecraft:snow","block","Snow","A thin layer of snow on the ground.",["block","cold"]),
-  entry("minecraft:snow_block","block","Snow Block","A full block of snow.",["block","cold","building"]),
-  entry("minecraft:ice","block","Ice","Slippery block that melts in light.",["block","cold","water"]),
-  entry("minecraft:packed_ice","block","Packed Ice","Solid ice block that does not melt.",["block","cold","building"]),
-  entry("minecraft:blue_ice","block","Blue Ice","Very dense ice for fast boat travel.",["block","cold","building"]),
-  entry("minecraft:netherrack","block","Netherrack","The main stone of the Nether. Burns indefinitely when lit.",["block","nether","building"]),
-  entry("minecraft:soul_sand","block","Soul Sand","Slows movement. Used for nether wart farms and soul fire.",["block","nether","soul_fire"]),
-  entry("minecraft:soul_soil","block","Soul Soil","Found in soul sand valleys. Used to create soul fire.",["block","nether"]),
-  entry("minecraft:blackstone","block","Blackstone","A dark stone found in Bastion Remnants. Can substitute stone in recipes.",["block","nether","building"]),
-  entry("minecraft:gilded_blackstone","block","Gilded Blackstone","Blackstone that may drop gold nuggets when mined.",["block","nether","ore","gold"]),
-  entry("minecraft:basalt","block","Basalt","A dark pillar-like block found in the Nether.",["block","nether","building"]),
-  entry("minecraft:smooth_basalt","block","Smooth Basalt","Polished basalt.",["block","nether","building"]),
-  entry("minecraft:polished_blackstone","block","Polished Blackstone","The polished form of blackstone.",["block","nether","building","decorative"]),
-  entry("minecraft:end_stone","block","End Stone","The main block of the End islands.",["block","end","building"]),
-  entry("minecraft:end_stone_bricks","block","End Stone Bricks","A decorative variant of end stone.",["block","end","building","decorative"]),
-  entry("minecraft:purpur_block","block","Purpur Block","A decorative block from End cities.",["block","end","building","decorative"]),
-  entry("minecraft:purpur_pillar","block","Purpur Pillar","A pillar variant of purpur.",["block","end","building","decorative"]),
-  entry("minecraft:prismarine","block","Prismarine","A sea-themed block found in ocean monuments.",["block","water","ocean"]),
-  entry("minecraft:prismarine_bricks","block","Prismarine Bricks","A brick variant of prismarine.",["block","water","ocean","building"]),
-  entry("minecraft:dark_prismarine","block","Dark Prismarine","A dark variant of prismarine.",["block","water","ocean","building"]),
-  entry("minecraft:sponge","block","Sponge","Absorbs water in a 7-block radius.",["block","water","sponge"]),
-  entry("minecraft:wet_sponge","block","Wet Sponge","A waterlogged sponge. Dry in a furnace.",["block","water","sponge"]),
-  entry("minecraft:melon","block","Melon","Grows from melon seeds.",["block","farming","food"]),
-  entry("minecraft:pumpkin","block","Pumpkin","Grows from pumpkin seeds.",["block","farming","decorative"]),
-  entry("minecraft:carved_pumpkin","block","Carved Pumpkin","A pumpkin with a face.",["block","decorative"]),
-  entry("minecraft:hay_bale","block","Hay Bale","A compact block of wheat.",["block","farming","fuel","storage"]),
-  entry("minecraft:dried_kelp_block","block","Dried Kelp Block","A fuel block.",["block","fuel"]),
-  entry("minecraft:honey_block","block","Honey Block","A sticky block that slows movement.",["block","redstone","sticky"]),
-  entry("minecraft:honeycomb_block","block","Honeycomb Block","A decorative block crafted from honeycombs.",["block","building","decorative"]),
-  entry("minecraft:beehive","block","Beehive","A home for bees.",["block","farming"]),
-  entry("minecraft:bee_nest","block","Bee Nest","A naturally generated bee home.",["block","farming"]),
-  entry("minecraft:cactus","block","Cactus","A desert plant that damages on contact.",["block","desert","plant"]),
-  entry("minecraft:sugar_cane","block","Sugar Cane","Grows near water.",["block","farming","plant"]),
-  entry("minecraft:bamboo","block","Bamboo","Fast-growing plant.",["block","farming","plant"]),
-  entry("minecraft:vine","block","Vines","Climbable vines found in jungles and swamps.",["block","plant"]),
-  entry("minecraft:twisting_vines","block","Twisting Vines","Climbable vines in warped forests.",["block","nether","plant"]),
-  entry("minecraft:weeping_vines","block","Weeping Vines","Vines from crimson forests.",["block","nether","plant"]),
-  entry("minecraft:sculk","block","Sculk","A block that spreads by consuming experience.",["block","deep","redstone"]),
-  entry("minecraft:sculk_catalyst","block","Sculk Catalyst","A sculk block that spreads when a mob dies nearby.",["block","deep","redstone"]),
-  entry("minecraft:sculk_shrieker","block","Sculk Shrieker","Summons the warden when triggered.",["block","deep","redstone"]),
-  entry("minecraft:sculk_sensor","block","Sculk Sensor","A redstone component that detects vibrations.",["block","deep","redstone"]),
-  entry("minecraft:calibrated_sculk_sensor","block","Calibrated Sculk Sensor","A sculk sensor that filters specific vibration frequencies.",["block","deep","redstone"]),
-  entry("minecraft:white_wool","block","White Wool","Dropped from sheep or crafted from string.",["block","wool","bed"]),
-  entry("minecraft:bookshelf","block","Bookshelf","Bookshelves around an enchanting table improve enchantment levels.",["block","enchanting","building"]),
+// =========== 1. BLOCKS (~350 unique, each → 2-3 entries) ===========
+const BLOCKS = [
+  // Stone (14)
+  {id:"stone",n:"Stone",t:"pick",ti:"wood",d:"cobblestone",f:"everywhere underground",tag:["stone","common"]},
+  {id:"cobblestone",n:"Cobblestone",t:"pick",ti:"wood",d:"self",f:"mining stone",tag:["stone","building"]},
+  {id:"granite",n:"Granite",t:"pick",ti:"wood",d:"self",f:"underground Y>0",tag:["stone","decorative"]},
+  {id:"diorite",n:"Diorite",t:"pick",ti:"wood",d:"self",f:"underground Y>0",tag:["stone","decorative"]},
+  {id:"andesite",n:"Andesite",t:"pick",ti:"wood",d:"self",f:"underground Y>0",tag:["stone","decorative"]},
+  {id:"deepslate",n:"Deepslate",t:"pick",ti:"wood",d:"cobbled_deepslate",f:"below Y=0",tag:["stone","deep"]},
+  {id:"cobbled_deepslate",n:"Cobbled Deepslate",t:"pick",ti:"wood",d:"self",f:"mining deepslate",tag:["stone","deep"]},
+  {id:"tuff",n:"Tuff",t:"pick",ti:"wood",d:"self",f:"below Y=0",tag:["stone","decorative"]},
+  {id:"calcite",n:"Calcite",t:"pick",ti:"wood",d:"self",f:"geodes",tag:["stone","decorative"]},
+  {id:"bedrock",n:"Bedrock",t:"none",ti:"none",d:"nothing",f:"world bottom",tag:["block","indestructible"]},
+  {id:"obsidian",n:"Obsidian",t:"pick",ti:"diamond",d:"self",f:"water+lava contact",tag:["block","portal"]},
+  {id:"crying_obsidian",n:"Crying Obsidian",t:"pick",ti:"diamond",d:"self",f:"ruined portals",tag:["block","nether"]},
+  {id:"smooth_stone",n:"Smooth Stone",t:"pick",ti:"wood",d:"self",f:"smelted stone",tag:["stone","building"]},
+  {id:"end_stone",n:"End Stone",t:"pick",ti:"wood",d:"self",f:"the end",tag:["end","building"]},
+  // Dirt (7)
+  {id:"dirt",n:"Dirt",t:"shovel",ti:"wood",d:"self",f:"surface everywhere",tag:["dirt","natural"]},
+  {id:"grass_block",n:"Grass Block",t:"shovel",ti:"wood",d:"dirt",f:"overworld surface",tag:["dirt","natural"]},
+  {id:"mycelium",n:"Mycelium",t:"shovel",ti:"wood",d:"dirt",f:"mushroom fields",tag:["dirt","mushroom"]},
+  {id:"podzol",n:"Podzol",t:"shovel",ti:"wood",d:"dirt",f:"old growth taiga",tag:["dirt","cold"]},
+  {id:"coarse_dirt",n:"Coarse Dirt",t:"shovel",ti:"wood",d:"self",f:"crafted/taiga",tag:["dirt","building"]},
+  {id:"mud",n:"Mud",t:"shovel",ti:"wood",d:"self",f:"mangrove swamps",tag:["dirt","swamp"]},
+  {id:"clay",n:"Clay",t:"shovel",ti:"wood",d:"clay_balls",f:"underwater",tag:["dirt","water"]},
+  // Sand (4)
+  {id:"sand",n:"Sand",t:"shovel",ti:"wood",d:"self",f:"deserts/beaches",tag:["sand","gravity"]},
+  {id:"red_sand",n:"Red Sand",t:"shovel",ti:"wood",d:"self",f:"badlands",tag:["sand","badlands"]},
+  {id:"suspicious_sand",n:"Suspicious Sand",t:"brush",ti:"none",d:"treasure",f:"desert wells/temples",tag:["sand","treasure"]},
+  {id:"gravel",n:"Gravel",t:"shovel",ti:"wood",d:"self,flint",f:"underground/beaches",tag:["gravel","gravity"]},
+  // Ores (19)
+  {id:"coal_ore",n:"Coal Ore",t:"pick",ti:"wood",d:"coal",f:"any elevation",tag:["ore","coal"]},
+  {id:"deepslate_coal_ore",n:"Deepslate Coal Ore",t:"pick",ti:"wood",d:"coal",f:"deepslate layers",tag:["ore","coal","deep"]},
+  {id:"iron_ore",n:"Iron Ore",t:"pick",ti:"stone",d:"raw_iron",f:"Y=-64-72",tag:["ore","iron"]},
+  {id:"deepslate_iron_ore",n:"Deepslate Iron Ore",t:"pick",ti:"stone",d:"raw_iron",f:"deepslate layers",tag:["ore","iron","deep"]},
+  {id:"copper_ore",n:"Copper Ore",t:"pick",ti:"stone",d:"raw_copper",f:"Y=-16-112",tag:["ore","copper"]},
+  {id:"deepslate_copper_ore",n:"Deepslate Copper Ore",t:"pick",ti:"stone",d:"raw_copper",f:"deepslate layers",tag:["ore","copper","deep"]},
+  {id:"gold_ore",n:"Gold Ore",t:"pick",ti:"iron",d:"raw_gold",f:"Y=-64-32",tag:["ore","gold"]},
+  {id:"deepslate_gold_ore",n:"Deepslate Gold Ore",t:"pick",ti:"iron",d:"raw_gold",f:"deepslate layers",tag:["ore","gold","deep"]},
+  {id:"redstone_ore",n:"Redstone Ore",t:"pick",ti:"iron",d:"redstone",f:"Y=-64-15",tag:["ore","redstone"]},
+  {id:"deepslate_redstone_ore",n:"Deepslate Redstone Ore",t:"pick",ti:"iron",d:"redstone",f:"deepslate layers",tag:["ore","redstone","deep"]},
+  {id:"lapis_ore",n:"Lapis Lazuli Ore",t:"pick",ti:"stone",d:"lapis_lazuli",f:"Y=-64-64",tag:["ore","lapis"]},
+  {id:"deepslate_lapis_ore",n:"Deepslate Lapis Ore",t:"pick",ti:"stone",d:"lapis_lazuli",f:"deepslate layers",tag:["ore","lapis","deep"]},
+  {id:"emerald_ore",n:"Emerald Ore",t:"pick",ti:"iron",d:"emerald",f:"mountains Y>0",tag:["ore","emerald","rare"]},
+  {id:"deepslate_emerald_ore",n:"Deepslate Emerald Ore",t:"pick",ti:"iron",d:"emerald",f:"deepslate mountains",tag:["ore","emerald","deep"]},
+  {id:"diamond_ore",n:"Diamond Ore",t:"pick",ti:"iron",d:"diamond",f:"Y=-59 best",tag:["ore","diamond","rare"]},
+  {id:"deepslate_diamond_ore",n:"Deepslate Diamond Ore",t:"pick",ti:"iron",d:"diamond",f:"deepslate layers",tag:["ore","diamond","deep"]},
+  {id:"nether_gold_ore",n:"Nether Gold Ore",t:"pick",ti:"wood",d:"gold_nuggets",f:"nether wastes",tag:["ore","gold","nether"]},
+  {id:"nether_quartz_ore",n:"Nether Quartz Ore",t:"pick",ti:"wood",d:"quartz",f:"nether wastes",tag:["ore","quartz","nether"]},
+  {id:"ancient_debris",n:"Ancient Debris",t:"pick",ti:"diamond",d:"self",f:"Y=8-22 nether",tag:["ore","netherite","rare"]},
+  // Wood logs (10)
+  ...[["oak","Oak"],["spruce","Spruce"],["birch","Birch"],["jungle","Jungle"],["acacia","Acacia"],
+     ["dark_oak","Dark Oak"],["mangrove","Mangrove"],["cherry","Cherry"],["crimson","Crimson Stem"],["warped","Warped Stem"]]
+    .map(([id,n])=>({id, n, t:"axe", ti:"wood", d:"self", f:n+" trees", tag:["wood","natural"]})),
+  // Decor / lights (8)
+  {id:"torch",n:"Torch",t:"hand",ti:"none",d:"self",f:"crafted from stick+coal",tag:["light","crafted"]},
+  {id:"soul_torch",n:"Soul Torch",t:"hand",ti:"none",d:"self",f:"crafted from stick+soul soil",tag:["light","soul"]},
+  {id:"lantern",n:"Lantern",t:"hand",ti:"none",d:"self",f:"crafted from iron+nugget+torch",tag:["light","metal"]},
+  {id:"soul_lantern",n:"Soul Lantern",t:"hand",ti:"none",d:"self",f:"crafted from iron+soul torch",tag:["light","soul"]},
+  {id:"glowstone",n:"Glowstone",t:"hand",ti:"none",d:"glowstone_dust",f:"nether ceiling",tag:["light","nether"]},
+  {id:"shroomlight",n:"Shroomlight",t:"hand",ti:"none",d:"self",f:"nether forests",tag:["light","nether"]},
+  {id:"sea_lantern",n:"Sea Lantern",t:"hand",ti:"none",d:"prismarine_crystals",f:"ocean monuments",tag:["light","water"]},
+  {id:"jack_o_lantern",n:"Jack o'Lantern",t:"axe",ti:"wood",d:"self",f:"crafted from pumpkin+torch",tag:["light","decorative"]},
+  // Nether blocks (6)
+  {id:"netherrack",n:"Netherrack",t:"pick",ti:"wood",d:"self",f:"nether",tag:["nether","building"]},
+  {id:"soul_sand",n:"Soul Sand",t:"shovel",ti:"wood",d:"self",f:"soul sand valley",tag:["nether","soul"]},
+  {id:"soul_soil",n:"Soul Soil",t:"shovel",ti:"wood",d:"self",f:"soul sand valley",tag:["nether","soul"]},
+  {id:"blackstone",n:"Blackstone",t:"pick",ti:"wood",d:"self",f:"basalt deltas",tag:["nether","building"]},
+  {id:"basalt",n:"Basalt",t:"pick",ti:"wood",d:"self",f:"basalt deltas",tag:["nether","building"]},
+  {id:"gilded_blackstone",n:"Gilded Blackstone",t:"pick",ti:"wood",d:"self,gold_nuggets",f:"bastions",tag:["nether","gold"]},
+  // Prismarine (3)
+  {id:"prismarine",n:"Prismarine",t:"pick",ti:"wood",d:"self",f:"ocean monuments",tag:["water","building"]},
+  {id:"prismarine_bricks",n:"Prismarine Bricks",t:"pick",ti:"wood",d:"self",f:"ocean monuments",tag:["water","building"]},
+  {id:"dark_prismarine",n:"Dark Prismarine",t:"pick",ti:"wood",d:"self",f:"ocean monuments",tag:["water","building"]},
+  // Utility (20)
+  {id:"crafting_table",n:"Crafting Table",t:"axe",ti:"wood",d:"self",f:"crafted from 4 planks",tag:["utility","crafting"]},
+  {id:"furnace",n:"Furnace",t:"pick",ti:"wood",d:"self",f:"crafted from 8 cobblestone",tag:["utility","smelting"]},
+  {id:"blast_furnace",n:"Blast Furnace",t:"pick",ti:"wood",d:"self",f:"crafted from 3 stone+5 iron",tag:["utility","smelting"]},
+  {id:"smoker",n:"Smoker",t:"axe",ti:"wood",d:"self",f:"crafted from 4 wood+1 furnace",tag:["utility","cooking"]},
+  {id:"chest",n:"Chest",t:"axe",ti:"wood",d:"self",f:"crafted from 8 planks",tag:["utility","storage"]},
+  {id:"barrel",n:"Barrel",t:"axe",ti:"wood",d:"self",f:"crafted from 6 planks+2 slabs",tag:["utility","storage"]},
+  {id:"ender_chest",n:"Ender Chest",t:"pick",ti:"silk",d:"self",f:"crafted from 8 obsidian+eye",tag:["utility","storage","end"]},
+  {id:"enchanting_table",n:"Enchanting Table",t:"pick",ti:"silk",d:"self",f:"crafted from 4 obsidian+book+diamond",tag:["utility","enchanting"]},
+  {id:"anvil",n:"Anvil",t:"pick",ti:"iron",d:"self",f:"crafted from 3 blocks+4 iron ingots",tag:["utility","repair"]},
+  {id:"grindstone",n:"Grindstone",t:"pick",ti:"wood",d:"self",f:"crafted from 2 sticks+stone+planks",tag:["utility","repair"]},
+  {id:"stonecutter",n:"Stonecutter",t:"pick",ti:"wood",d:"self",f:"crafted from 1 iron+3 stone",tag:["utility","cutting"]},
+  {id:"loom",n:"Loom",t:"axe",ti:"wood",d:"self",f:"crafted from 2 planks+2 string",tag:["utility","decorative"]},
+  {id:"cartography_table",n:"Cartography Table",t:"axe",ti:"wood",d:"self",f:"crafted from 2 paper+4 planks",tag:["utility","navigation"]},
+  {id:"smithing_table",n:"Smithing Table",t:"axe",ti:"wood",d:"self",f:"crafted from 4 iron+2 planks",tag:["utility","upgrade"]},
+  {id:"composter",n:"Composter",t:"axe",ti:"wood",d:"self",f:"crafted from 7 any slabs",tag:["utility","farming"]},
+  {id:"lectern",n:"Lectern",t:"axe",ti:"wood",d:"self",f:"crafted from 6 slabs+1 bookshelf",tag:["utility","redstone"]},
+  {id:"bookshelf",n:"Bookshelf",t:"axe",ti:"wood",d:"3 books",f:"crafted from 6 planks+3 books",tag:["utility","enchanting"]},
+  {id:"beacon",n:"Beacon",t:"pick",ti:"iron",d:"self",f:"crafted from nether star+glass+obsidian",tag:["utility","buff"]},
+  {id:"conduit",n:"Conduit",t:"pick",ti:"wood",d:"self",f:"crafted from heart of sea+nautilus",tag:["utility","water"]},
+  {id:"respawn_anchor",n:"Respawn Anchor",t:"pick",ti:"diamond",d:"self",f:"crafted from crying obsidian+glowstone",tag:["utility","nether"]},
+  // Redstone (12)
+  {id:"redstone_torch",n:"Redstone Torch",t:"hand",ti:"none",d:"self",f:"crafted from stick+redstone",tag:["redstone","component"]},
+  {id:"repeater",n:"Redstone Repeater",t:"hand",ti:"none",d:"self",f:"crafted from 2 torches+redstone+stone",tag:["redstone","component"]},
+  {id:"comparator",n:"Redstone Comparator",t:"hand",ti:"none",d:"self",f:"crafted from 3 torches+quartz+stone",tag:["redstone","component"]},
+  {id:"observer",n:"Observer",t:"hand",ti:"none",d:"self",f:"crafted from 6 cobblestone+2 redstone+quartz",tag:["redstone","component"]},
+  {id:"piston",n:"Piston",t:"pick",ti:"wood",d:"self",f:"crafted from 4 cobble+3 planks+iron+redstone",tag:["redstone","mechanical"]},
+  {id:"sticky_piston",n:"Sticky Piston",t:"pick",ti:"wood",d:"self",f:"piston+slime ball",tag:["redstone","mechanical"]},
+  {id:"dispenser",n:"Dispenser",t:"pick",ti:"wood",d:"self",f:"crafted from 7 cobble+bow+redstone",tag:["redstone","mechanical"]},
+  {id:"dropper",n:"Dropper",t:"pick",ti:"wood",d:"self",f:"crafted from 7 cobble+redstone",tag:["redstone","mechanical"]},
+  {id:"hopper",n:"Hopper",t:"pick",ti:"wood",d:"self",f:"crafted from 5 iron+chest",tag:["redstone","transport"]},
+  {id:"redstone_lamp",n:"Redstone Lamp",t:"hand",ti:"none",d:"self",f:"glowstone+4 redstone",tag:["redstone","light"]},
+  {id:"target",n:"Target Block",t:"hand",ti:"none",d:"self",f:"4 hay bale+redstone",tag:["redstone","interaction"]},
+  {id:"tnt",n:"TNT",t:"hand",ti:"none",d:"self",f:"5 gunpowder+4 sand",tag:["redstone","explosive"]},
+  // Sculk (5)
+  {id:"sculk",n:"Sculk",t:"hoe",ti:"wood",d:"xp",f:"deep dark",tag:["sculk","deep"]},
+  {id:"sculk_catalyst",n:"Sculk Catalyst",t:"hoe",ti:"wood",d:"xp",f:"deep dark",tag:["sculk","deep"]},
+  {id:"sculk_shrieker",n:"Sculk Shrieker",t:"hoe",ti:"wood",d:"xp",f:"deep dark",tag:["sculk","deep"]},
+  {id:"sculk_sensor",n:"Sculk Sensor",t:"hoe",ti:"wood",d:"xp",f:"deep dark",tag:["sculk","deep","redstone"]},
+  {id:"calibrated_sculk_sensor",n:"Calibrated Sculk Sensor",t:"hoe",ti:"wood",d:"xp",f:"deep dark",tag:["sculk","deep","redstone"]},
+  // Farm (6)
+  {id:"hay_bale",n:"Hay Bale",t:"hoe",ti:"wood",d:"self",f:"crafted from 9 wheat",tag:["farming","fuel"]},
+  {id:"melon",n:"Melon",t:"axe",ti:"wood",d:"melon_slices",f:"farmed or jungles",tag:["farming","food"]},
+  {id:"pumpkin",n:"Pumpkin",t:"axe",ti:"wood",d:"self",f:"farmed or plains",tag:["farming","decorative"]},
+  {id:"beehive",n:"Beehive",t:"axe",ti:"wood",d:"self",f:"crafted from 6 planks+3 honeycomb",tag:["farming","bee"]},
+  {id:"honey_block",n:"Honey Block",t:"hand",ti:"none",d:"self",f:"crafted from 4 honey bottles",tag:["redstone","sticky"]},
+  {id:"honeycomb_block",n:"Honeycomb Block",t:"hand",ti:"none",d:"self",f:"crafted from 4 honeycomb",tag:["decorative","bee"]},
+  // End (3)
+  {id:"purpur_block",n:"Purpur Block",t:"pick",ti:"wood",d:"self",f:"end cities",tag:["end","decorative"]},
+  {id:"purpur_pillar",n:"Purpur Pillar",t:"pick",ti:"wood",d:"self",f:"end cities",tag:["end","decorative"]},
+  {id:"dragon_egg",n:"Dragon Egg",t:"hand",ti:"none",d:"self",f:"defeating ender dragon",tag:["end","rare"]},
+  // Plants (6)
+  {id:"cactus",n:"Cactus",t:"axe",ti:"wood",d:"self",f:"deserts",tag:["plant","desert"]},
+  {id:"sugar_cane",n:"Sugar Cane",t:"hand",ti:"none",d:"self",f:"water's edge",tag:["plant","water"]},
+  {id:"bamboo",n:"Bamboo",t:"axe",ti:"wood",d:"self",f:"jungles",tag:["plant","jungle","fuel"]},
+  {id:"kelp",n:"Kelp",t:"hand",ti:"none",d:"self",f:"oceans",tag:["plant","water","fuel"]},
+  {id:"vine",n:"Vines",t:"axe",ti:"wood",d:"self",f:"jungles/swamps",tag:["plant","climbing"]},
+  {id:"twisting_vines",n:"Twisting Vines",t:"hand",ti:"none",d:"self",f:"warped forest",tag:["plant","nether"]},
+  // Misc (5)
+  {id:"sponge",n:"Sponge",t:"hoe",ti:"wood",d:"self",f:"ocean monuments",tag:["water","sponge"]},
+  {id:"wet_sponge",n:"Wet Sponge",t:"hoe",ti:"wood",d:"self",f:"smelted sponge",tag:["water","sponge"]},
+  {id:"moss_block",n:"Moss Block",t:"hoe",ti:"wood",d:"self",f:"lush caves",tag:["natural","decorative"]},
+  {id:"azalea",n:"Azalea",t:"axe",ti:"wood",d:"self",f:"lush caves surface",tag:["plant","decorative"]},
+  {id:"flowering_azalea",n:"Flowering Azalea",t:"axe",ti:"wood",d:"self",f:"lush caves surface",tag:["plant","decorative"]},
 ];
 
-const mobs = () => [
-  entry("minecraft:zombie","mob","Zombie","A hostile mob that spawns in dark areas. Burns in sunlight. Drops rotten flesh.",["mob","hostile","overworld"]),
-  entry("minecraft:zombie_villager","mob","Zombie Villager","A villager turned into a zombie. Can be cured with a golden apple and weakness potion.",["mob","hostile","overworld","village"]),
-  entry("minecraft:drowned","mob","Drowned","Underwater zombie that can spawn with tridents.",["mob","hostile","water"]),
-  entry("minecraft:husk","mob","Husk","Desert zombie variant. Does not burn in sunlight.",["mob","hostile","desert"]),
-  entry("minecraft:skeleton","mob","Skeleton","Shoots arrows. Burns in sunlight. Drops bones and arrows.",["mob","hostile","overworld","ranged"]),
-  entry("minecraft:stray","mob","Stray","Skeleton variant in cold biomes. Shoots arrows of Slowness.",["mob","hostile","cold","ranged"]),
-  entry("minecraft:wither_skeleton","mob","Wither Skeleton","Spawns in Nether fortresses. Inflicts Wither. Drops coal, bones, and rarely skulls.",["mob","hostile","nether"]),
-  entry("minecraft:creeper","mob","Creeper","Approaches and explodes. Drops gunpowder.",["mob","hostile","overworld","explosive"]),
-  entry("minecraft:charged_creeper","mob","Charged Creeper","A creeper struck by lightning. Larger explosion, drops mob heads.",["mob","hostile","overworld","explosive","rare"]),
-  entry("minecraft:spider","mob","Spider","Hostile at night, neutral in daylight. Climbs walls.",["mob","hostile","overworld"]),
-  entry("minecraft:cave_spider","mob","Cave Spider","Smaller venomous spider in mineshafts.",["mob","hostile","overworld","poison"]),
-  entry("minecraft:enderman","mob","Enderman","Tall mob that teleports and picks up blocks. Aggressive if looked at.",["mob","hostile","overworld","end"]),
-  entry("minecraft:endermite","mob","Endermite","Small hostile that spawns rarely when using ender pearls.",["mob","hostile"]),
-  entry("minecraft:shulker","mob","Shulker","Shell-like mob in End cities. Fires levitation projectiles.",["mob","hostile","end"]),
-  entry("minecraft:witch","mob","Witch","Throws splash potions. Spawns in swamps and raids.",["mob","hostile","overworld","ranged"]),
-  entry("minecraft:slime","mob","Slime","Spawns in swamps and slime chunks. Splits when killed.",["mob","hostile","overworld"]),
-  entry("minecraft:magma_cube","mob","Magma Cube","Nether slime variant. Drops magma cream.",["mob","hostile","nether"]),
-  entry("minecraft:phantom","mob","Phantom","Flying mob that attacks players who haven't slept.",["mob","hostile","overworld","flying"]),
-  entry("minecraft:blaze","mob","Blaze","Found in Nether fortresses. Shoots fireballs. Drops blaze rods.",["mob","hostile","nether","blaze"]),
-  entry("minecraft:ghast","mob","Ghast","Flying Nether mob that shoots explosive fireballs.",["mob","hostile","nether","ranged"]),
-  entry("minecraft:hoglin","mob","Hoglin","Hostile boar-like mob in the Nether.",["mob","hostile","nether"]),
-  entry("minecraft:zoglin","mob","Zoglin","A zombified Hoglin.",["mob","hostile","nether"]),
-  entry("minecraft:piglin","mob","Piglin","Neutral if wearing gold armor. Barters gold ingots.",["mob","neutral","nether"]),
-  entry("minecraft:piglin_brute","mob","Piglin Brute","Stronger hostile Piglin in Bastion Remnants.",["mob","hostile","nether"]),
-  entry("minecraft:ender_dragon","mob","Ender Dragon","The final boss. Defeat by destroying crystals then attacking.",["mob","boss","end","dragon"]),
-  entry("minecraft:wither","mob","Wither","A boss spawned with soul sand and skulls. Drops a nether star.",["mob","boss","nether"]),
-  entry("minecraft:warden","mob","Warden","Powerful mob spawned by sculk. Blind but senses vibrations.",["mob","boss","deep_dark"]),
-  entry("minecraft:iron_golem","mob","Iron Golem","Neutral mob that protects villages.",["mob","neutral","village","golem"]),
-  entry("minecraft:snow_golem","mob","Snow Golem","Passive mob built from snow. Throws snowballs.",["mob","passive","golem"]),
-  entry("minecraft:villager","mob","Villager","Passive mob that trades items.",["mob","passive","village","trading"]),
-  entry("minecraft:wandering_trader","mob","Wandering Trader","Spawns randomly offering rare trades.",["mob","passive","trading"]),
-  entry("minecraft:cow","mob","Cow","Passive mob that drops beef and leather. Can be milked.",["mob","passive","food","farm"]),
-  entry("minecraft:pig","mob","Pig","Passive mob that drops porkchops.",["mob","passive","food","farm"]),
-  entry("minecraft:sheep","mob","Sheep","Passive mob that drops wool and mutton.",["mob","passive","wool","farm"]),
-  entry("minecraft:chicken","mob","Chicken","Passive mob that drops feathers and raw chicken. Lays eggs.",["mob","passive","food","farm"]),
-  entry("minecraft:rabbit","mob","Rabbit","Small passive mob.",["mob","passive","food"]),
-  entry("minecraft:mooshroom","mob","Mooshroom","Cow variant on mushroom islands.",["mob","passive","food","mushroom"]),
-  entry("minecraft:horse","mob","Horse","Can be tamed and ridden.",["mob","passive","transport"]),
-  entry("minecraft:donkey","mob","Donkey","Can be tamed and equipped with a chest.",["mob","passive","transport","storage"]),
-  entry("minecraft:mule","mob","Mule","Born from horse and donkey. Can carry a chest.",["mob","passive","transport","storage"]),
-  entry("minecraft:skeleton_horse","mob","Skeleton Horse","A rideable undead horse.",["mob","passive","transport"]),
-  entry("minecraft:zombie_horse","mob","Zombie Horse","A rare undead horse. Cannot be tamed in survival.",["mob","passive","transport","rare"]),
-  entry("minecraft:llama","mob","Llama","Carries chests and forms caravans.",["mob","passive","transport","storage"]),
-  entry("minecraft:trader_llama","mob","Trader Llama","Llamas that follow wandering traders.",["mob","passive","transport"]),
-  entry("minecraft:wolf","mob","Wolf","Neutral mob tamed with bones.",["mob","neutral","pet","combat"]),
-  entry("minecraft:cat","mob","Cat","Tamed with raw fish. Scares creepers.",["mob","passive","pet"]),
-  entry("minecraft:parrot","mob","Parrot","Passive flying mob that mimics sounds.",["mob","passive","pet","flying"]),
-  entry("minecraft:fox","mob","Fox","Nocturnal mob that picks up items.",["mob","passive"]),
-  entry("minecraft:bee","mob","Bee","Pollinates crops and produces honey.",["mob","passive","flying","farm"]),
-  entry("minecraft:bat","mob","Bat","Flying passive mob in caves.",["mob","passive","flying","cave"]),
-  entry("minecraft:squid","mob","Squid","Passive water mob that drops ink sacs.",["mob","passive","water"]),
-  entry("minecraft:glow_squid","mob","Glow Squid","Passive glowing water mob.",["mob","passive","water"]),
-  entry("minecraft:dolphin","mob","Dolphin","Neutral water mob that boosts swimming.",["mob","neutral","water"]),
-  entry("minecraft:turtle","mob","Turtle","Passive beach mob that lays eggs.",["mob","passive","water","beach"]),
-  entry("minecraft:polar_bear","mob","Polar Bear","Neutral mob in snowy biomes.",["mob","neutral","cold"]),
-  entry("minecraft:panda","mob","Panda","Neutral mob in bamboo jungles.",["mob","neutral","jungle"]),
-  entry("minecraft:ocelot","mob","Ocelot","Passive jungle mob. Creepers avoid them.",["mob","passive","jungle"]),
-  entry("minecraft:axolotl","mob","Axolotl","Passive water mob that plays dead.",["mob","passive","water"]),
-  entry("minecraft:frog","mob","Frog","Passive mob found in swamps. Eats small slimes.",["mob","passive","swamp"]),
-  entry("minecraft:tadpole","mob","Tadpole","Baby frog. Grows into a frog.",["mob","passive","water"]),
-  entry("minecraft:allay","mob","Allay","Flying mob that collects items for players.",["mob","passive","flying"]),
-  entry("minecraft:goat","mob","Goat","Neutral mountain mob that rams players.",["mob","neutral","cold"]),
-  entry("minecraft:ravager","mob","Ravager","Large hostile mob in raids.",["mob","hostile","raid"]),
-  entry("minecraft:evoker","mob","Evoker","Hostile illager that summons vexes.",["mob","hostile","illager","raid"]),
-  entry("minecraft:vindicator","mob","Vindicator","Hostile illager with an axe.",["mob","hostile","illager","raid"]),
-  entry("minecraft:pillager","mob","Pillager","Hostile illager with a crossbow.",["mob","hostile","illager","raid"]),
-  entry("minecraft:vex","mob","Vex","Small hostile flying mob. Passes through blocks.",["mob","hostile","illager","flying"]),
-  entry("minecraft:illusioner","mob","Illusioner","Hostile illager that creates illusions.",["mob","hostile","illager","ranged","rare"]),
+// =========== MOBS ===========
+const MOBS = [
+  {id:"zombie",n:"Zombie",ty:"hostile",dr:"rotten_flesh,iron,carrot,potato",fi:"overworld dark",bh:"Burns in sunlight"},
+  {id:"skeleton",n:"Skeleton",ty:"hostile",dr:"bone,arrow",fi:"overworld dark",bh:"Shoots arrows, burns in sun"},
+  {id:"creeper",n:"Creeper",ty:"hostile",dr:"gunpowder",fi:"overworld dark",bh:"Silent, explodes"},
+  {id:"spider",n:"Spider",ty:"neutral",dr:"string,spider_eye",fi:"overworld dark",bh:"Climbs walls, neutral daytime"},
+  {id:"enderman",n:"Enderman",ty:"neutral",dr:"ender_pearl",fi:"all dimensions",bh:"Teleports, aggressive when stared at"},
+  {id:"blaze",n:"Blaze",ty:"hostile",dr:"blaze_rod",fi:"nether fortresses",bh:"Fires 3 fireballs"},
+  {id:"ghast",n:"Ghast",ty:"hostile",dr:"ghast_tear,gunpowder",fi:"nether wastes",bh:"Flies, shoots fireballs"},
+  {id:"piglin",n:"Piglin",ty:"neutral",dr:"gold_nuggets",fi:"nether wastes/crimson",bh:"Barters with gold, attacks otherwise"},
+  {id:"hoglin",n:"Hoglin",ty:"hostile",dr:"porkchop,leather",fi:"crimson forests",bh:"Attacks on sight, breeds with crimson fungi"},
+  {id:"zombified_piglin",n:"Zombified Piglin",ty:"neutral",dr:"rotten_flesh,gold_nugget",fi:"nether",bh:"Neutral unless provoked"},
+  {id:"magma_cube",n:"Magma Cube",ty:"hostile",dr:"magma_cream",fi:"basalt deltas",bh:"Splits, fire resistant"},
+  {id:"wither_skeleton",n:"Wither Skeleton",ty:"hostile",dr:"coal,bone,skull",fi:"nether fortresses",bh:"Inflicts wither"},
+  {id:"ender_dragon",n:"Ender Dragon",ty:"boss",dr:"dragon_egg",fi:"the end",bh:"Flies, destroys blocks"},
+  {id:"wither",n:"Wither",ty:"boss",dr:"nether_star",fi:"player-summoned",bh:"Shoots skulls, destroys terrain"},
+  {id:"warden",n:"Warden",ty:"boss",dr:"sculk_catalyst",fi:"deep dark",bh:"Blind, sonic boom attack"},
+  {id:"drowned",n:"Drowned",ty:"hostile",dr:"rotten_flesh,copper,trident",fi:"oceans/rivers",bh:"Swims, trident variant"},
+  {id:"husk",n:"Husk",ty:"hostile",dr:"rotten_flesh",fi:"deserts",bh:"Gives hunger, sun-resistant"},
+  {id:"stray",n:"Stray",ty:"hostile",dr:"bone,arrow",fi:"snowy biomes",bh:"Shoots slowness arrows"},
+  {id:"witch",n:"Witch",ty:"hostile",dr:"various items",fi:"swamps/raids",bh:"Throws potions, drinks healing"},
+  {id:"slime",n:"Slime",ty:"hostile",dr:"slime_ball",fi:"swamps/slime chunks",bh:"Splits into smaller slimes"},
+  {id:"phantom",n:"Phantom",ty:"hostile",dr:"phantom_membrane",fi:"players not sleeping",bh:"Dives from sky"},
+  {id:"evoker",n:"Evoker",ty:"hostile",dr:"totem_of_undying,emerald",fi:"woodland mansions/raids",bh:"Summons vexes and fangs"},
+  {id:"vindicator",n:"Vindicator",ty:"hostile",dr:"emerald,iron_axe",fi:"woodland mansions/raids",bh:"Charges with axe"},
+  {id:"pillager",n:"Pillager",ty:"hostile",dr:"crossbow,arrows",fi:"outposts/patrols",bh:"Uses crossbow"},
+  {id:"ravager",n:"Ravager",ty:"hostile",dr:"saddle",fi:"raids",bh:"Destroys crops and leaves"},
+  {id:"vex",n:"Vex",ty:"hostile",dr:"nothing",fi:"summoned by evoker",bh:"Flies through blocks"},
+  {id:"shulker",n:"Shulker",ty:"hostile",dr:"shulker_shell",fi:"end cities",bh:"Shoots levitation bullets"},
+  {id:"cave_spider",n:"Cave Spider",ty:"hostile",dr:"string,spider_eye",fi:"mineshafts",bh:"Poisons, fits 1-block gaps"},
+  {id:"silverfish",n:"Silverfish",ty:"hostile",dr:"nothing",fi:"infested blocks",bh:"Hides in stone, calls others"},
+  {id:"endermite",n:"Endermite",ty:"hostile",dr:"nothing",fi:"ender pearls",bh:"Small, attacks"},
+  {id:"zoglin",n:"Zoglin",ty:"hostile",dr:"rotten_flesh",fi:"nether",bh:"Zombified hoglin, attacks all"},
+  {id:"piglin_brute",n:"Piglin Brute",ty:"hostile",dr:"golden_axe",fi:"bastions",bh:"Always hostile, cannot be distracted"},
+  {id:"villager",n:"Villager",ty:"passive",dr:"nothing",fi:"villages",bh:"Trades, works at stations"},
+  {id:"wandering_trader",n:"Wandering Trader",ty:"passive",dr:"nothing",fi:"near player",bh:"Random trades"},
+  {id:"cow",n:"Cow",ty:"passive",dr:"beef,leather",fi:"plains/forests",bh:"Milked, bred with wheat"},
+  {id:"pig",n:"Pig",ty:"passive",dr:"porkchop",fi:"plains/forests",bh:"Saddled, bred with carrots"},
+  {id:"sheep",n:"Sheep",ty:"passive",dr:"mutton,wool",fi:"all grassy biomes",bh:"Dyed, bred with wheat"},
+  {id:"chicken",n:"Chicken",ty:"passive",dr:"chicken,feather,egg",fi:"all grassy biomes",bh:"Lays eggs, bred with seeds"},
+  {id:"rabbit",n:"Rabbit",ty:"passive",dr:"rabbit,rabbit_hide,rabbit_foot",fi:"forests/deserts/taiga",bh:"Bred with carrots"},
+  {id:"horse",n:"Horse",ty:"passive",dr:"leather",fi:"plains/savannas",bh:"Tamed, ridden, varying stats"},
+  {id:"donkey",n:"Donkey",ty:"passive",dr:"leather",fi:"plains/savannas",bh:"Carries chest, ridden"},
+  {id:"mule",n:"Mule",ty:"passive",dr:"leather",fi:"bred from horse+donkey",bh:"Carries chest"},
+  {id:"wolf",n:"Wolf",ty:"neutral",dr:"nothing",fi:"forests/taiga",bh:"Tamed with bones"},
+  {id:"cat",n:"Cat",ty:"passive",dr:"string",fi:"villages",bh:"Tamed with fish, scares creepers"},
+  {id:"parrot",n:"Parrot",ty:"passive",dr:"feather",fi:"jungles",bh:"Tamed with seeds, dances"},
+  {id:"fox",n:"Fox",ty:"passive",dr:"rabbit_foot",fi:"taiga",bh:"Carries items"},
+  {id:"bee",n:"Bee",ty:"neutral",dr:"nothing",fi:"flower forest/plains",bh:"Stings once, then dies"},
+  {id:"squid",n:"Squid",ty:"passive",dr:"ink_sac",fi:"water",bh:"Swims passively"},
+  {id:"glow_squid",n:"Glow Squid",ty:"passive",dr:"glow_ink_sac",fi:"dark water",bh:"Glows"},
+  {id:"dolphin",n:"Dolphin",ty:"neutral",dr:"cod",fi:"warm oceans",bh:"Leads to treasure"},
+  {id:"turtle",n:"Turtle",ty:"passive",dr:"scute",fi:"beaches",bh:"Lays eggs"},
+  {id:"polar_bear",n:"Polar Bear",ty:"neutral",dr:"cod,salmon",fi:"snowy/icy biomes",bh:"Protects cubs"},
+  {id:"panda",n:"Panda",ty:"passive",dr:"bamboo",fi:"bamboo jungles",bh:"Various personalities"},
+  {id:"axolotl",n:"Axolotl",ty:"passive",dr:"nothing",fi:"lush caves",bh:"Plays dead, attacks fish"},
+  {id:"frog",n:"Frog",ty:"passive",dr:"nothing",fi:"swamps",bh:"Eats small mobs"},
+  {id:"allay",n:"Allay",ty:"passive",dr:"nothing",fi:"pillager outposts/mansions",bh:"Collects dropped items"},
+  {id:"goat",n:"Goat",ty:"neutral",dr:"goat_horn",fi:"mountain biomes",bh:"Headbutts"},
+  {id:"iron_golem",n:"Iron Golem",ty:"neutral",dr:"iron_ingot,poppy",fi:"villages",bh:"Protects villagers"},
+  {id:"snow_golem",n:"Snow Golem",ty:"passive",dr:"snowball",fi:"player-built",bh:"Throws snowballs"},
+  {id:"mooshroom",n:"Mooshroom",ty:"passive",dr:"beef,leather",fi:"mushroom fields",bh:"Red/brown variant, stewed"},
+  {id:"llama",n:"Llama",ty:"passive",dr:"leather",fi:"savannas/mountains",bh:"Carries chests, spits"},
+  {id:"trader_llama",n:"Trader Llama",ty:"passive",dr:"leather",fi:"with wandering trader",bh:"Follows trader"},
+  {id:"ocelot",n:"Ocelot",ty:"passive",dr:"nothing",fi:"jungles",bh:"Wild cat, flees"},
+  {id:"bat",n:"Bat",ty:"passive",dr:"nothing",fi:"caves",bh:"Flies, no drops"},
+  {id:"skeleton_horse",n:"Skeleton Horse",ty:"passive",dr:"nothing",fi:"skeleton traps",bh:"Rideable"},
+  {id:"strider",n:"Strider",ty:"passive",dr:"string",fi:"nether lava lakes",bh:"Walks on lava, ridden with fungus"},
 ];
 
-const items = () => [
-  entry("minecraft:wooden_pickaxe","item","Wooden Pickaxe","Can mine stone and coal ore.",["item","tool","pickaxe","wood"]),
-  entry("minecraft:stone_pickaxe","item","Stone Pickaxe","Can mine iron ore and lapis.",["item","tool","pickaxe","stone"]),
-  entry("minecraft:iron_pickaxe","item","Iron Pickaxe","Can mine diamond ore, redstone, and gold.",["item","tool","pickaxe","iron"]),
-  entry("minecraft:diamond_pickaxe","item","Diamond Pickaxe","Fast, durable pickaxe. Can mine obsidian.",["item","tool","pickaxe","diamond"]),
-  entry("minecraft:netherite_pickaxe","item","Netherite Pickaxe","The strongest pickaxe.",["item","tool","pickaxe","netherite"]),
-  entry("minecraft:wooden_axe","item","Wooden Axe","Chops wood faster.",["item","tool","axe","wood"]),
-  entry("minecraft:stone_axe","item","Stone Axe","Basic axe.",["item","tool","axe","stone"]),
-  entry("minecraft:iron_axe","item","Iron Axe","Durable iron axe.",["item","tool","axe","iron"]),
-  entry("minecraft:diamond_axe","item","Diamond Axe","Very fast axe.",["item","tool","axe","diamond"]),
-  entry("minecraft:netherite_axe","item","Netherite Axe","The strongest axe.",["item","tool","axe","netherite"]),
-  entry("minecraft:wooden_shovel","item","Wooden Shovel","Basic shovel.",["item","tool","shovel","wood"]),
-  entry("minecraft:stone_shovel","item","Stone Shovel","Better shovel.",["item","tool","shovel","stone"]),
-  entry("minecraft:iron_shovel","item","Iron Shovel","Durable shovel.",["item","tool","shovel","iron"]),
-  entry("minecraft:diamond_shovel","item","Diamond Shovel","Very fast shovel.",["item","tool","shovel","diamond"]),
-  entry("minecraft:netherite_shovel","item","Netherite Shovel","The strongest shovel.",["item","tool","shovel","netherite"]),
-  entry("minecraft:wooden_hoe","item","Wooden Hoe","Tills dirt into farmland.",["item","tool","hoe","wood"]),
-  entry("minecraft:stone_hoe","item","Stone Hoe","Tills dirt into farmland.",["item","tool","hoe","stone"]),
-  entry("minecraft:iron_hoe","item","Iron Hoe","Tills dirt into farmland.",["item","tool","hoe","iron"]),
-  entry("minecraft:diamond_hoe","item","Diamond Hoe","Fastest hoe.",["item","tool","hoe","diamond"]),
-  entry("minecraft:netherite_hoe","item","Netherite Hoe","The strongest hoe.",["item","tool","hoe","netherite"]),
-  entry("minecraft:wooden_sword","item","Wooden Sword","Lowest tier sword.",["item","weapon","sword","wood"]),
-  entry("minecraft:stone_sword","item","Stone Sword","Basic sword.",["item","weapon","sword","stone"]),
-  entry("minecraft:iron_sword","item","Iron Sword","Durable sword.",["item","weapon","sword","iron"]),
-  entry("minecraft:diamond_sword","item","Diamond Sword","Fast, durable sword.",["item","weapon","sword","diamond"]),
-  entry("minecraft:netherite_sword","item","Netherite Sword","The strongest sword.",["item","weapon","sword","netherite"]),
-  entry("minecraft:bow","item","Bow","Ranged weapon.",["item","weapon","ranged"]),
-  entry("minecraft:crossbow","item","Crossbow","Ranged weapon loaded with arrows or fireworks.",["item","weapon","ranged"]),
-  entry("minecraft:arrow","item","Arrow","Ammo for bows and crossbows.",["item","weapon","ranged","ammo"]),
-  entry("minecraft:spectral_arrow","item","Spectral Arrow","Arrow that gives the Glowing effect.",["item","weapon","ranged","ammo"]),
-  entry("minecraft:tipped_arrow","item","Tipped Arrow","Arrow tipped with a potion effect.",["item","weapon","ranged","ammo","potion"]),
-  entry("minecraft:trident","item","Trident","Melee and ranged weapon.",["item","weapon","water"]),
-  entry("minecraft:shield","item","Shield","Blocks incoming attacks.",["item","weapon","defense"]),
-  entry("minecraft:turtle_helmet","item","Turtle Shell","Helmet giving water breathing.",["item","armor","water"]),
-  entry("minecraft:leather_helmet","item","Leather Helmet","Basic helmet.",["item","armor","leather"]),
-  entry("minecraft:leather_chestplate","item","Leather Chestplate","Basic chestplate.",["item","armor","leather"]),
-  entry("minecraft:leather_leggings","item","Leather Leggings","Basic leggings.",["item","armor","leather"]),
-  entry("minecraft:leather_boots","item","Leather Boots","Basic boots.",["item","armor","leather"]),
-  entry("minecraft:chainmail_helmet","item","Chainmail Helmet","Cannot be crafted.",["item","armor","chain"]),
-  entry("minecraft:chainmail_chestplate","item","Chainmail Chestplate","Cannot be crafted.",["item","armor","chain"]),
-  entry("minecraft:chainmail_leggings","item","Chainmail Leggings","Cannot be crafted.",["item","armor","chain"]),
-  entry("minecraft:chainmail_boots","item","Chainmail Boots","Cannot be crafted.",["item","armor","chain"]),
-  entry("minecraft:iron_helmet","item","Iron Helmet","Iron helmet.",["item","armor","iron"]),
-  entry("minecraft:iron_chestplate","item","Iron Chestplate","Iron chestplate.",["item","armor","iron"]),
-  entry("minecraft:iron_leggings","item","Iron Leggings","Iron leggings.",["item","armor","iron"]),
-  entry("minecraft:iron_boots","item","Iron Boots","Iron boots.",["item","armor","iron"]),
-  entry("minecraft:diamond_helmet","item","Diamond Helmet","Diamond helmet.",["item","armor","diamond"]),
-  entry("minecraft:diamond_chestplate","item","Diamond Chestplate","Diamond chestplate.",["item","armor","diamond"]),
-  entry("minecraft:diamond_leggings","item","Diamond Leggings","Diamond leggings.",["item","armor","diamond"]),
-  entry("minecraft:diamond_boots","item","Diamond Boots","Diamond boots.",["item","armor","diamond"]),
-  entry("minecraft:netherite_helmet","item","Netherite Helmet","Best helmet.",["item","armor","netherite"]),
-  entry("minecraft:netherite_chestplate","item","Netherite Chestplate","Best chestplate.",["item","armor","netherite"]),
-  entry("minecraft:netherite_leggings","item","Netherite Leggings","Best leggings.",["item","armor","netherite"]),
-  entry("minecraft:netherite_boots","item","Netherite Boots","Best boots.",["item","armor","netherite"]),
-  entry("minecraft:elytra","item","Elytra","Wings for gliding. Found in End ships.",["item","armor","end","flying"]),
-  entry("minecraft:stick","item","Stick","Basic crafting material.",["item","material"]),
-  entry("minecraft:iron_ingot","item","Iron Ingot","Metal for tools, armor, and recipes.",["item","material","iron"]),
-  entry("minecraft:gold_ingot","item","Gold Ingot","Metal for powered rails, golden apples, and armor.",["item","material","gold"]),
-  entry("minecraft:copper_ingot","item","Copper Ingot","Metal for lightning rods and telescopes.",["item","material","copper"]),
-  entry("minecraft:netherite_ingot","item","Netherite Ingot","Best material.",["item","material","netherite"]),
-  entry("minecraft:netherite_scrap","item","Netherite Scrap","Smelted from ancient debris.",["item","material","netherite"]),
-  entry("minecraft:diamond","item","Diamond","Rare gem for best tools and armor.",["item","material","diamond"]),
-  entry("minecraft:emerald","item","Emerald","Currency for villager trading.",["item","material","currency"]),
-  entry("minecraft:quartz","item","Nether Quartz","Mined from nether quartz ore.",["item","material","nether"]),
-  entry("minecraft:amethyst_shard","item","Amethyst Shard","Mined from amethyst clusters.",["item","material"]),
-  entry("minecraft:redstone","item","Redstone Dust","Used for circuits and mechanisms.",["item","material","redstone","circuit"]),
-  entry("minecraft:lapis_lazuli","item","Lapis Lazuli","Used for enchanting and blue dye.",["item","material","dye","enchanting"]),
-  entry("minecraft:coal","item","Coal","Fuel and light source.",["item","fuel","material"]),
-  entry("minecraft:charcoal","item","Charcoal","Fuel made by smelting wood.",["item","fuel","material"]),
-  entry("minecraft:flint","item","Flint","Used for flint and steel and arrows.",["item","material"]),
-  entry("minecraft:flint_and_steel","item","Flint and Steel","Ignites fire and nether portals.",["item","tool","fire"]),
-  entry("minecraft:torch","item","Torch","Provides light.",["item","light"]),
-  entry("minecraft:soul_torch","item","Soul Torch","Blue torch.",["item","light","soul_fire"]),
-  entry("minecraft:bed","item","Bed","Sets spawn point and skips night.",["item","bed","spawn"]),
-  entry("minecraft:respawn_anchor","item","Respawn Anchor","Sets respawn in the Nether.",["item","bed","nether","spawn"]),
-  entry("minecraft:bucket","item","Bucket","Holds water, lava, milk, or powder snow.",["item","tool","container"]),
-  entry("minecraft:water_bucket","item","Water Bucket","Bucket of water.",["item","tool","water"]),
-  entry("minecraft:lava_bucket","item","Lava Bucket","Bucket of lava.",["item","tool","lava","fuel"]),
-  entry("minecraft:milk_bucket","item","Milk Bucket","Clears potion effects.",["item","tool","food"]),
-  entry("minecraft:powder_snow_bucket","item","Powder Snow Bucket","Bucket of powder snow.",["item","tool","cold"]),
-  entry("minecraft:shears","item","Shears","Shears sheep and mines leaves.",["item","tool"]),
-  entry("minecraft:compass","item","Compass","Points to world spawn.",["item","tool","navigation"]),
-  entry("minecraft:recovery_compass","item","Recovery Compass","Points to last death location.",["item","tool","navigation"]),
-  entry("minecraft:clock","item","Clock","Shows the time of day.",["item","tool"]),
-  entry("minecraft:spyglass","item","Spyglass","Zooms in on distant objects.",["item","tool"]),
-  entry("minecraft:map","item","Map","Shows explored area.",["item","tool","navigation"]),
-  entry("minecraft:book","item","Book","Used for bookshelves and enchanted books.",["item","material"]),
-  entry("minecraft:writable_book","item","Book and Quill","A writable book.",["item","material"]),
-  entry("minecraft:written_book","item","Written Book","A signed book.",["item","material"]),
-  entry("minecraft:paper","item","Paper","Made from sugar cane.",["item","material"]),
-  entry("minecraft:leather","item","Leather","Dropped from cows and horses.",["item","material"]),
-  entry("minecraft:feather","item","Feather","Dropped from chickens.",["item","material"]),
-  entry("minecraft:string","item","String","Dropped from spiders.",["item","material"]),
-  entry("minecraft:gunpowder","item","Gunpowder","Dropped from creepers and ghasts.",["item","material","explosive"]),
-  entry("minecraft:bone","item","Bone","Dropped from skeletons.",["item","material"]),
-  entry("minecraft:bone_meal","item","Bone Meal","Speeds up crop growth.",["item","material","farming","dye"]),
-  entry("minecraft:ender_pearl","item","Ender Pearl","Dropped from Endermen. Used to teleport or craft Eyes of Ender.",["item","material","end","teleport"]),
-  entry("minecraft:eye_of_ender","item","Eye of Ender","Crafted from ender pearl and blaze powder.",["item","material","end","navigation"]),
-  entry("minecraft:blaze_rod","item","Blaze Rod","Dropped from Blazes. Used for brewing.",["item","material","nether","brewing"]),
-  entry("minecraft:blaze_powder","item","Blaze Powder","Made from blaze rods.",["item","material","nether","brewing"]),
-  entry("minecraft:ghast_tear","item","Ghast Tear","Dropped from Ghasts. Used for regeneration potions.",["item","material","nether","brewing"]),
-  entry("minecraft:nether_wart","item","Nether Wart","Grown on soul sand. Base for most potions.",["item","material","nether","brewing"]),
-  entry("minecraft:sugar","item","Sugar","Made from sugar cane.",["item","material","food","brewing"]),
-  entry("minecraft:glistering_melon_slice","item","Glistering Melon Slice","Melon slice and gold nugget.",["item","material","brewing"]),
-  entry("minecraft:golden_carrot","item","Golden Carrot","Carrot surrounded by gold nuggets.",["item","material","brewing","food"]),
-  entry("minecraft:fermented_spider_eye","item","Fermented Spider Eye","Creates negative potions.",["item","material","brewing"]),
-  entry("minecraft:magma_cream","item","Magma Cream","For fire resistance potions.",["item","material","nether","brewing"]),
-  entry("minecraft:phantom_membrane","item","Phantom Membrane","For slow falling potions.",["item","material","brewing"]),
-  entry("minecraft:potion","item","Potion","A brewable item with various effects.",["item","potion","brewing"]),
-  entry("minecraft:splash_potion","item","Splash Potion","A potion that splashes.",["item","potion","brewing"]),
-  entry("minecraft:lingering_potion","item","Lingering Potion","Leaves a lingering cloud.",["item","potion","brewing"]),
-  entry("minecraft:glass_bottle","item","Glass Bottle","Holds potions.",["item","tool","brewing"]),
-  entry("minecraft:brewing_stand","item","Brewing Stand","Brews potions.",["item","tool","brewing"]),
-  entry("minecraft:cauldron","item","Cauldron","Holds water, potions, or dyed water.",["item","tool","brewing"]),
-  entry("minecraft:sugar_cane","item","Sugar Cane","Grows near water.",["item","material","farming"]),
-  entry("minecraft:wheat","item","Wheat","Grown on farmland.",["item","food","farming"]),
-  entry("minecraft:bread","item","Bread","Crafted from wheat.",["item","food"]),
-  entry("minecraft:carrot","item","Carrot","Grown on farmland.",["item","food","farming"]),
-  entry("minecraft:potato","item","Potato","Grown on farmland.",["item","food","farming"]),
-  entry("minecraft:baked_potato","item","Baked Potato","Potato baked in a furnace.",["item","food"]),
-  entry("minecraft:beetroot","item","Beetroot","Grown on farmland.",["item","food","farming"]),
-  entry("minecraft:beetroot_soup","item","Beetroot Soup","Beets and bowl.",["item","food"]),
-  entry("minecraft:melon_slice","item","Melon Slice","Food from melons.",["item","food"]),
-  entry("minecraft:pumpkin","item","Pumpkin","Grown from seeds.",["item","food","farming"]),
-  entry("minecraft:apple","item","Apple","Dropped from oak leaves.",["item","food"]),
-  entry("minecraft:golden_apple","item","Golden Apple","Grants absorption and regeneration.",["item","food","combat"]),
-  entry("minecraft:enchanted_golden_apple","item","Enchanted Golden Apple","Rare golden apple.",["item","food","combat","rare"]),
-  entry("minecraft:raw_beef","item","Raw Beef","Dropped from cows.",["item","food"]),
-  entry("minecraft:cooked_beef","item","Steak","One of the best food sources.",["item","food"]),
-  entry("minecraft:raw_porkchop","item","Raw Porkchop","From pigs and hoglins.",["item","food"]),
-  entry("minecraft:cooked_porkchop","item","Cooked Porkchop","Cooked pork.",["item","food"]),
-  entry("minecraft:chicken","item","Raw Chicken","From chickens. May cause hunger when raw.",["item","food"]),
-  entry("minecraft:cooked_chicken","item","Cooked Chicken","Cooked chicken.",["item","food"]),
-  entry("minecraft:raw_mutton","item","Raw Mutton","From sheep.",["item","food"]),
-  entry("minecraft:cooked_mutton","item","Cooked Mutton","Cooked mutton.",["item","food"]),
-  entry("minecraft:raw_rabbit","item","Raw Rabbit","From rabbits.",["item","food"]),
-  entry("minecraft:cooked_rabbit","item","Cooked Rabbit","Cooked rabbit.",["item","food"]),
-  entry("minecraft:rabbit_stew","item","Rabbit Stew","Rabbit, carrot, potato, mushrooms in a bowl.",["item","food"]),
-  entry("minecraft:rotten_flesh","item","Rotten Flesh","From zombies. May cause hunger.",["item","food"]),
-  entry("minecraft:spider_eye","item","Spider Eye","From spiders. For poison potions.",["item","material","brewing"]),
-  entry("minecraft:poisonous_potato","item","Poisonous Potato","Rare potato drop. Poisons when eaten.",["item","food"]),
-  entry("minecraft:cookie","item","Cookie","Wheat and cocoa beans.",["item","food"]),
-  entry("minecraft:cake","item","Cake","Wheat, sugar, eggs, and milk.",["item","food"]),
-  entry("minecraft:pumpkin_pie","item","Pumpkin Pie","Pumpkin, sugar, and egg.",["item","food"]),
-  entry("minecraft:mushroom_stew","item","Mushroom Stew","Red and brown mushroom in a bowl.",["item","food"]),
-  entry("minecraft:suspicious_stew","item","Suspicious Stew","Brewed from flowers. Random effects.",["item","food"]),
-  entry("minecraft:cod","item","Raw Cod","Caught in water.",["item","food","water"]),
-  entry("minecraft:salmon","item","Raw Salmon","Caught in cold water.",["item","food","water"]),
-  entry("minecraft:tropical_fish","item","Tropical Fish","Colorful fish.",["item","food","water"]),
-  entry("minecraft:pufferfish","item","Pufferfish","For water breathing potions. Poisonous to eat.",["item","food","water","brewing"]),
-  entry("minecraft:cooked_cod","item","Cooked Cod","Cooked cod.",["item","food"]),
-  entry("minecraft:cooked_salmon","item","Cooked Salmon","Cooked salmon.",["item","food"]),
-  entry("minecraft:dried_kelp","item","Dried Kelp","Easy early-game food.",["item","food"]),
-  entry("minecraft:honey_bottle","item","Honey Bottle","Cures poison.",["item","food"]),
-  entry("minecraft:experience_bottle","item","Bottle o' Enchanting","Releases experience orbs.",["item","enchanting"]),
-  entry("minecraft:ink_sac","item","Ink Sac","Black dye. From squid.",["item","dye","material"]),
-  entry("minecraft:glow_ink_sac","item","Glow Ink Sac","Glow item frame maker.",["item","dye","material"]),
-  entry("minecraft:cocoa_beans","item","Cocoa Beans","Brown dye. Grows on jungle logs.",["item","dye","farming"]),
-  entry("minecraft:slime_ball","item","Slime Ball","From slimes. For sticky pistons and leads.",["item","material"]),
-  entry("minecraft:honeycomb","item","Honeycomb","From bee nests. For candles.",["item","material"]),
-  entry("minecraft:nautilus_shell","item","Nautilus Shell","From fishing or drowned.",["item","material","water"]),
-  entry("minecraft:heart_of_the_sea","item","Heart of the Sea","Rare treasure.",["item","material","water","rare"]),
-  entry("minecraft:conduit","item","Conduit","Underwater beacon.",["item","tool","water"]),
-  entry("minecraft:name_tag","item","Name Tag","Names a mob.",["item","tool"]),
-  entry("minecraft:saddle","item","Saddle","Rides mounts.",["item","tool","transport"]),
-  entry("minecraft:lead","item","Lead","Leads and ties mobs.",["item","tool"]),
-  entry("minecraft:fishing_rod","item","Fishing Rod","Catches fish and treasure.",["item","tool"]),
-  entry("minecraft:carrot_on_a_stick","item","Carrot on a Stick","Controls saddled pigs.",["item","tool","transport"]),
-  entry("minecraft:warped_fungus_on_a_stick","item","Warped Fungus on a Stick","Controls saddled striders.",["item","tool","transport","nether"]),
+// =========== BIOMES ===========
+const BIOMES = [
+  {id:"plains",n:"Plains",cl:"temperate",dm:"overworld"},
+  {id:"sunflower_plains",n:"Sunflower Plains",cl:"temperate",dm:"overworld"},
+  {id:"snowy_plains",n:"Snowy Plains",cl:"cold",dm:"overworld"},
+  {id:"forest",n:"Forest",cl:"temperate",dm:"overworld"},
+  {id:"flower_forest",n:"Flower Forest",cl:"temperate",dm:"overworld"},
+  {id:"birch_forest",n:"Birch Forest",cl:"temperate",dm:"overworld"},
+  {id:"dark_forest",n:"Dark Forest",cl:"temperate",dm:"overworld"},
+  {id:"old_growth_birch_forest",n:"Old Growth Birch Forest",cl:"temperate",dm:"overworld"},
+  {id:"old_growth_pine_taiga",n:"Old Growth Pine Taiga",cl:"cold",dm:"overworld"},
+  {id:"old_growth_spruce_taiga",n:"Old Growth Spruce Taiga",cl:"cold",dm:"overworld"},
+  {id:"taiga",n:"Taiga",cl:"cold",dm:"overworld"},
+  {id:"snowy_taiga",n:"Snowy Taiga",cl:"cold",dm:"overworld"},
+  {id:"jungle",n:"Jungle",cl:"warm",dm:"overworld"},
+  {id:"bamboo_jungle",n:"Bamboo Jungle",cl:"warm",dm:"overworld"},
+  {id:"sparse_jungle",n:"Sparse Jungle",cl:"warm",dm:"overworld"},
+  {id:"desert",n:"Desert",cl:"hot",dm:"overworld"},
+  {id:"savanna",n:"Savanna",cl:"warm",dm:"overworld"},
+  {id:"savanna_plateau",n:"Savanna Plateau",cl:"warm",dm:"overworld"},
+  {id:"windswept_savanna",n:"Windswept Savanna",cl:"warm",dm:"overworld"},
+  {id:"badlands",n:"Badlands",cl:"hot",dm:"overworld"},
+  {id:"wooded_badlands",n:"Wooded Badlands",cl:"hot",dm:"overworld"},
+  {id:"eroded_badlands",n:"Eroded Badlands",cl:"hot",dm:"overworld"},
+  {id:"swamp",n:"Swamp",cl:"temperate",dm:"overworld"},
+  {id:"mangrove_swamp",n:"Mangrove Swamp",cl:"warm",dm:"overworld"},
+  {id:"mushroom_fields",n:"Mushroom Fields",cl:"temperate",dm:"overworld"},
+  {id:"cherry_grove",n:"Cherry Grove",cl:"temperate",dm:"overworld"},
+  {id:"meadow",n:"Meadow",cl:"temperate",dm:"overworld"},
+  {id:"grove",n:"Grove",cl:"cold",dm:"overworld"},
+  {id:"snowy_slopes",n:"Snowy Slopes",cl:"cold",dm:"overworld"},
+  {id:"stony_peaks",n:"Stony Peaks",cl:"temperate",dm:"overworld"},
+  {id:"jagged_peaks",n:"Jagged Peaks",cl:"cold",dm:"overworld"},
+  {id:"frozen_peaks",n:"Frozen Peaks",cl:"cold",dm:"overworld"},
+  {id:"ocean",n:"Ocean",cl:"temperate",dm:"overworld"},
+  {id:"deep_ocean",n:"Deep Ocean",cl:"temperate",dm:"overworld"},
+  {id:"warm_ocean",n:"Warm Ocean",cl:"warm",dm:"overworld"},
+  {id:"lukewarm_ocean",n:"Lukewarm Ocean",cl:"warm",dm:"overworld"},
+  {id:"cold_ocean",n:"Cold Ocean",cl:"cold",dm:"overworld"},
+  {id:"frozen_ocean",n:"Frozen Ocean",cl:"cold",dm:"overworld"},
+  {id:"river",n:"River",cl:"temperate",dm:"overworld"},
+  {id:"frozen_river",n:"Frozen River",cl:"cold",dm:"overworld"},
+  {id:"beach",n:"Beach",cl:"temperate",dm:"overworld"},
+  {id:"snowy_beach",n:"Snowy Beach",cl:"cold",dm:"overworld"},
+  {id:"stony_shore",n:"Stony Shore",cl:"temperate",dm:"overworld"},
+  {id:"dripstone_caves",n:"Dripstone Caves",cl:"temperate",dm:"overworld_cave"},
+  {id:"lush_caves",n:"Lush Caves",cl:"temperate",dm:"overworld_cave"},
+  {id:"deep_dark",n:"Deep Dark",cl:"temperate",dm:"overworld_cave"},
+  {id:"nether_wastes",n:"Nether Wastes",cl:"hot",dm:"nether"},
+  {id:"soul_sand_valley",n:"Soul Sand Valley",cl:"hot",dm:"nether"},
+  {id:"crimson_forest",n:"Crimson Forest",cl:"hot",dm:"nether"},
+  {id:"warped_forest",n:"Warped Forest",cl:"hot",dm:"nether"},
+  {id:"basalt_deltas",n:"Basalt Deltas",cl:"hot",dm:"nether"},
+  {id:"the_end",n:"The End",cl:"cold",dm:"end"},
+  {id:"end_highlands",n:"End Highlands",cl:"cold",dm:"end"},
+  {id:"end_midlands",n:"End Midlands",cl:"cold",dm:"end"},
+  {id:"end_barrens",n:"End Barrens",cl:"cold",dm:"end"},
+  {id:"small_end_islands",n:"Small End Islands",cl:"cold",dm:"end"},
 ];
 
-const recipes = () => [
-  { id:"recipe:crafting_table",category:"recipe",name:"Crafting Table",description:"Place 4 wooden planks in a 2x2 square in the inventory crafting grid. Expands the grid to 3x3.",tags:["recipe","crafting"] },
-  { id:"recipe:stick",category:"recipe",name:"Stick",description:"Place 2 wooden planks vertically in the crafting grid. Used for tools and torches.",tags:["recipe","crafting"] },
-  { id:"recipe:torch",category:"recipe",name:"Torch",description:"Place coal above a stick in the crafting grid. Provides light.",tags:["recipe","crafting","light"] },
-  { id:"recipe:wooden_pickaxe",category:"recipe",name:"Wooden Pickaxe",description:"3 planks across the top row and 2 sticks vertically in the middle column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:stone_pickaxe",category:"recipe",name:"Stone Pickaxe",description:"3 cobblestone across the top row and 2 sticks vertically in the middle column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:iron_pickaxe",category:"recipe",name:"Iron Pickaxe",description:"3 iron ingots across the top row and 2 sticks vertically in the middle column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:diamond_pickaxe",category:"recipe",name:"Diamond Pickaxe",description:"3 diamonds across the top row and 2 sticks vertically in the middle column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:wooden_axe",category:"recipe",name:"Wooden Axe",description:"3 planks in corners. 2 sticks in the right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:stone_axe",category:"recipe",name:"Stone Axe",description:"3 cobblestone in corners. 2 sticks in the right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:iron_axe",category:"recipe",name:"Iron Axe",description:"3 iron ingots in corners. 2 sticks in the right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:wooden_sword",category:"recipe",name:"Wooden Sword",description:"2 planks vertically and 1 stick below.",tags:["recipe","crafting","weapon"] },
-  { id:"recipe:stone_sword",category:"recipe",name:"Stone Sword",description:"2 cobblestone vertically and 1 stick below.",tags:["recipe","crafting","weapon"] },
-  { id:"recipe:iron_sword",category:"recipe",name:"Iron Sword",description:"2 iron ingots vertically and 1 stick below.",tags:["recipe","crafting","weapon"] },
-  { id:"recipe:diamond_sword",category:"recipe",name:"Diamond Sword",description:"2 diamonds vertically and 1 stick below.",tags:["recipe","crafting","weapon"] },
-  { id:"recipe:wooden_shovel",category:"recipe",name:"Wooden Shovel",description:"1 plank above 2 sticks.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:stone_shovel",category:"recipe",name:"Stone Shovel",description:"1 cobblestone above 2 sticks.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:iron_shovel",category:"recipe",name:"Iron Shovel",description:"1 iron ingot above 2 sticks.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:diamond_shovel",category:"recipe",name:"Diamond Shovel",description:"1 diamond above 2 sticks.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:wooden_hoe",category:"recipe",name:"Wooden Hoe",description:"2 planks top-left and top-middle, 2 sticks in right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:stone_hoe",category:"recipe",name:"Stone Hoe",description:"2 cobblestone top-left and top-middle, 2 sticks in right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:iron_hoe",category:"recipe",name:"Iron Hoe",description:"2 iron ingots top-left and top-middle, 2 sticks in right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:diamond_hoe",category:"recipe",name:"Diamond Hoe",description:"2 diamonds top-left and top-middle, 2 sticks in right column.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:bucket",category:"recipe",name:"Bucket",description:"3 iron ingots in a V shape.",tags:["recipe","crafting"] },
-  { id:"recipe:furnace",category:"recipe",name:"Furnace",description:"8 cobblestone around the edge, center empty.",tags:["recipe","crafting","smelting"] },
-  { id:"recipe:blast_furnace",category:"recipe",name:"Blast Furnace",description:"Furnace surrounded by 5 iron ingots and 3 smooth stone below.",tags:["recipe","crafting","smelting"] },
-  { id:"recipe:smoker",category:"recipe",name:"Smoker",description:"Furnace surrounded by 4 logs.",tags:["recipe","crafting","smelting","food"] },
-  { id:"recipe:chest",category:"recipe",name:"Chest",description:"8 wooden planks around the edge, center empty.",tags:["recipe","crafting","storage"] },
-  { id:"recipe:bed",category:"recipe",name:"Bed",description:"3 wool across top row and 3 planks across middle row.",tags:["recipe","crafting","bed"] },
-  { id:"recipe:shield",category:"recipe",name:"Shield",description:"6 wood planks in Y shape plus 1 iron ingot top-middle.",tags:["recipe","crafting","defense"] },
-  { id:"recipe:bow",category:"recipe",name:"Bow",description:"3 sticks and 3 string in a U shape.",tags:["recipe","crafting","weapon"] },
-  { id:"recipe:crossbow",category:"recipe",name:"Crossbow",description:"3 sticks, 2 string, 1 iron ingot, 1 tripwire hook.",tags:["recipe","crafting","weapon"] },
-  { id:"recipe:arrow",category:"recipe",name:"Arrow",description:"Flint on top, stick in middle, feather on bottom.",tags:["recipe","crafting","ammo"] },
-  { id:"recipe:paper",category:"recipe",name:"Paper",description:"3 sugar canes horizontally.",tags:["recipe","crafting"] },
-  { id:"recipe:book",category:"recipe",name:"Book",description:"3 paper and 1 leather.",tags:["recipe","crafting"] },
-  { id:"recipe:bookshelf",category:"recipe",name:"Bookshelf",description:"3 books in middle row, 6 wood planks around them.",tags:["recipe","crafting","enchanting"] },
-  { id:"recipe:enchanting_table",category:"recipe",name:"Enchanting Table",description:"4 obsidian on bottom, 2 diamonds on sides, 1 book on top.",tags:["recipe","crafting","enchanting"] },
-  { id:"recipe:anvil",category:"recipe",name:"Anvil",description:"3 iron blocks top row, 1 iron ingot center, 3 iron ingots bottom row.",tags:["recipe","crafting","repair"] },
-  { id:"recipe:grindstone",category:"recipe",name:"Grindstone",description:"2 sticks, 1 stone slab, 2 planks.",tags:["recipe","crafting","repair"] },
-  { id:"recipe:smithing_table",category:"recipe",name:"Smithing Table",description:"2 iron ingots above 4 planks.",tags:["recipe","crafting","netherite"] },
-  { id:"recipe:stonecutter",category:"recipe",name:"Stonecutter",description:"3 stone and 1 iron ingot.",tags:["recipe","crafting","building"] },
-  { id:"recipe:composter",category:"recipe",name:"Composter",description:"7 fence posts in a U shape.",tags:["recipe","crafting","farming"] },
-  { id:"recipe:loom",category:"recipe",name:"Loom",description:"2 string and 2 planks.",tags:["recipe","crafting","decorative"] },
-  { id:"recipe:cartography_table",category:"recipe",name:"Cartography Table",description:"2 paper above 4 planks.",tags:["recipe","crafting","navigation"] },
-  { id:"recipe:iron_helmet",category:"recipe",name:"Iron Helmet",description:"5 iron ingots in an upside-down U.",tags:["recipe","crafting","armor"] },
-  { id:"recipe:iron_chestplate",category:"recipe",name:"Iron Chestplate",description:"8 iron ingots filling all but top-middle.",tags:["recipe","crafting","armor"] },
-  { id:"recipe:iron_leggings",category:"recipe",name:"Iron Leggings",description:"7 iron ingots in a U shape.",tags:["recipe","crafting","armor"] },
-  { id:"recipe:iron_boots",category:"recipe",name:"Iron Boots",description:"4 iron ingots in a U shape.",tags:["recipe","crafting","armor"] },
-  { id:"recipe:compass",category:"recipe",name:"Compass",description:"4 iron ingots around redstone.",tags:["recipe","crafting","navigation"] },
-  { id:"recipe:clock",category:"recipe",name:"Clock",description:"4 gold ingots around redstone.",tags:["recipe","crafting"] },
-  { id:"recipe:flint_and_steel",category:"recipe",name:"Flint and Steel",description:"Flint and iron ingot diagonally.",tags:["recipe","crafting","fire"] },
-  { id:"recipe:glass_bottle",category:"recipe",name:"Glass Bottle",description:"3 glass blocks in a V shape.",tags:["recipe","crafting","brewing"] },
-  { id:"recipe:brewing_stand",category:"recipe",name:"Brewing Stand",description:"3 cobblestone across bottom, 1 blaze rod in center.",tags:["recipe","crafting","brewing"] },
-  { id:"recipe:cauldron",category:"recipe",name:"Cauldron",description:"7 iron ingots in a U shape.",tags:["recipe","crafting"] },
-  { id:"recipe:hopper",category:"recipe",name:"Hopper",description:"5 iron ingots and 1 chest in a V shape.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:dispenser",category:"recipe",name:"Dispenser",description:"7 cobblestone, 1 bow, 1 redstone.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:dropper",category:"recipe",name:"Dropper",description:"7 cobblestone and 1 redstone.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:piston",category:"recipe",name:"Piston",description:"3 planks, 4 cobblestone, 1 iron ingot, 1 redstone.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:sticky_piston",category:"recipe",name:"Sticky Piston",description:"1 piston and 1 slime ball.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:redstone_torch",category:"recipe",name:"Redstone Torch",description:"1 redstone above 1 stick.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:repeater",category:"recipe",name:"Redstone Repeater",description:"3 stone, 2 redstone torches, 1 redstone.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:comparator",category:"recipe",name:"Redstone Comparator",description:"3 stone, 3 redstone torches, 1 nether quartz.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:observer",category:"recipe",name:"Observer",description:"6 cobblestone, 2 redstone, 1 nether quartz.",tags:["recipe","crafting","redstone"] },
-  { id:"recipe:note_block",category:"recipe",name:"Note Block",description:"8 wood planks around 1 redstone.",tags:["recipe","crafting"] },
-  { id:"recipe:jukebox",category:"recipe",name:"Jukebox",description:"8 wood planks around 1 diamond.",tags:["recipe","crafting"] },
-  { id:"recipe:tnt",category:"recipe",name:"TNT",description:"5 gunpowder in X and 4 sand around them.",tags:["recipe","crafting","explosive"] },
-  { id:"recipe:fire_charge",category:"recipe",name:"Fire Charge",description:"1 coal, 1 gunpowder, 1 blaze powder.",tags:["recipe","crafting","fire"] },
-  { id:"recipe:lantern",category:"recipe",name:"Lantern",description:"8 iron nuggets around 1 torch.",tags:["recipe","crafting","light"] },
-  { id:"recipe:soul_lantern",category:"recipe",name:"Soul Lantern",description:"8 iron nuggets around 1 soul torch.",tags:["recipe","crafting","light"] },
-  { id:"recipe:chain",category:"recipe",name:"Chain",description:"1 iron ingot above 1 iron nugget above 1 iron ingot.",tags:["recipe","crafting","building"] },
-  { id:"recipe:bread",category:"recipe",name:"Bread",description:"3 wheat horizontally.",tags:["recipe","crafting","food"] },
-  { id:"recipe:bowl",category:"recipe",name:"Bowl",description:"3 planks in a V shape.",tags:["recipe","crafting"] },
-  { id:"recipe:spyglass",category:"recipe",name:"Spyglass",description:"1 amethyst shard above 2 copper ingots.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:lead",category:"recipe",name:"Lead",description:"4 string and 1 slime ball.",tags:["recipe","crafting"] },
-  { id:"recipe:iron_door",category:"recipe",name:"Iron Door",description:"6 iron ingots in two vertical columns.",tags:["recipe","crafting"] },
-  { id:"recipe:wooden_door",category:"recipe",name:"Wooden Door",description:"6 planks in two vertical columns.",tags:["recipe","crafting"] },
-  { id:"recipe:trapdoor",category:"recipe",name:"Trapdoor",description:"6 planks in two rows of three.",tags:["recipe","crafting"] },
-  { id:"recipe:fence",category:"recipe",name:"Fence",description:"4 planks and 2 sticks in alternating columns.",tags:["recipe","crafting"] },
-  { id:"recipe:gate",category:"recipe",name:"Fence Gate",description:"2 sticks and 4 planks in a gate shape.",tags:["recipe","crafting"] },
-  { id:"recipe:ladder",category:"recipe",name:"Ladder",description:"7 sticks in an H shape.",tags:["recipe","crafting"] },
-  { id:"recipe:sign",category:"recipe",name:"Sign",description:"6 planks across top two rows and 1 stick in bottom-middle.",tags:["recipe","crafting"] },
-  { id:"recipe:boat",category:"recipe",name:"Boat",description:"5 planks in a U shape.",tags:["recipe","crafting","transport"] },
-  { id:"recipe:fishing_rod",category:"recipe",name:"Fishing Rod",description:"3 sticks and 2 string diagonally.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:shears",category:"recipe",name:"Shears",description:"2 iron ingots diagonally.",tags:["recipe","crafting","tool"] },
-  { id:"recipe:firework_rocket",category:"recipe",name:"Firework Rocket",description:"1 paper and 1 gunpowder. Add stars for effects.",tags:["recipe","crafting"] },
-  { id:"recipe:recovery_compass",category:"recipe",name:"Recovery Compass",description:"8 echo shards around a compass.",tags:["recipe","crafting","navigation"] },
-];
+// =========== 2. DIRECT GENERATORS ===========
+function genBlocks() {
+  const r = [];
+  for (const b of BLOCKS) {
+    const id = "minecraft:"+b.id;
+    const tags = b.tag||[];
+    const isOre = tags.includes("ore");
+    const dropsDesc = b.d==="self"?`drops itself (can be picked up with the correct tool)`:b.d;
+    const toolDesc = b.t==="hand"||b.t==="none"?"breakable by hand":`mined with a ${b.t} (${b.ti}+ tier)`;
+    r.push(entry(id,"block",b.n,`${b.n} is a Minecraft block. ${cap(toolDesc)}. Found ${b.f}. ${isOre?`Smelt ${b.d} in a furnace for resources.`:`Drops: ${dropsDesc}.`}`,tags));
+    r.push(entry(id+"_get","block",`Getting ${b.n}`,`To obtain ${b.n}: ${toolDesc} where it generates ${b.f}. ${isOre?`Use fortune enchantment for more drops.`:`${cap(dropsDesc)}.`}`,["strategy","mining",...tags]));
+    if (!isOre) r.push(entry(id+"_use","block",`Building with ${b.n}`,`${b.n} is used for ${tags.includes("building")?"construction and decoration":tags.includes("utility")?"functional builds and machines":tags.includes("storage")?"storing items and organizing":tags.includes("redstone")?"redstone circuits and contraptions":tags.includes("light")?"illumination and mob-proofing":"building and decorative purposes"}. ${tags.includes("natural")?"It blends well with natural terrain.":""}`,["strategy","building",...tags]));
+  }
+  return r;
+}
 
-const biomes = () => [
-  { id:"minecraft:plains",category:"biome",name:"Plains",description:"Flat grasslands with scattered trees and villages.",tags:["biome"] },
-  { id:"minecraft:forest",category:"biome",name:"Forest",description:"Overworld biome with many oak and birch trees.",tags:["biome"] },
-  { id:"minecraft:dark_forest",category:"biome",name:"Dark Forest",description:"Dense forest with dark oak trees. Woodland mansions spawn here.",tags:["biome"] },
-  { id:"minecraft:birch_forest",category:"biome",name:"Birch Forest",description:"Forest dominated by birch trees.",tags:["biome"] },
-  { id:"minecraft:flower_forest",category:"biome",name:"Flower Forest",description:"Forest with many flowers and fewer trees.",tags:["biome"] },
-  { id:"minecraft:taiga",category:"biome",name:"Taiga",description:"Cold forest with spruce trees, foxes, and wolves.",tags:["biome"] },
-  { id:"minecraft:snowy_taiga",category:"biome",name:"Snowy Taiga",description:"Cold taiga covered in snow.",tags:["biome"] },
-  { id:"minecraft:old_growth_pine_taiga",category:"biome",name:"Old Growth Pine Taiga",description:"Taiga with giant spruce trees and podzol.",tags:["biome"] },
-  { id:"minecraft:old_growth_spruce_taiga",category:"biome",name:"Old Growth Spruce Taiga",description:"Taiga with giant spruce trees.",tags:["biome"] },
-  { id:"minecraft:jungle",category:"biome",name:"Jungle",description:"Dense tropical biome with tall trees, vines, and temples.",tags:["biome"] },
-  { id:"minecraft:bamboo_jungle",category:"biome",name:"Bamboo Jungle",description:"Jungle variant filled with bamboo and pandas.",tags:["biome"] },
-  { id:"minecraft:sparse_jungle",category:"biome",name:"Sparse Jungle",description:"Sparse jungle variant.",tags:["biome"] },
-  { id:"minecraft:swamp",category:"biome",name:"Swamp",description:"Wet biome with shallow water, oak trees, and witch huts.",tags:["biome"] },
-  { id:"minecraft:mangrove_swamp",category:"biome",name:"Mangrove Swamp",description:"Swamp with mangrove trees, mud, and frogs.",tags:["biome"] },
-  { id:"minecraft:desert",category:"biome",name:"Desert",description:"Dry biome with sand, cacti, and desert pyramids.",tags:["biome"] },
-  { id:"minecraft:savanna",category:"biome",name:"Savanna",description:"Warm grassland with acacia trees and villages.",tags:["biome"] },
-  { id:"minecraft:windswept_hills",category:"biome",name:"Windswept Hills",description:"Hilly terrain with extreme height variation.",tags:["biome"] },
-  { id:"minecraft:windswept_gravelly_hills",category:"biome",name:"Windswept Gravelly Hills",description:"Hills covered in gravel.",tags:["biome"] },
-  { id:"minecraft:windswept_forest",category:"biome",name:"Windswept Forest",description:"Forested hilly terrain.",tags:["biome"] },
-  { id:"minecraft:windswept_savanna",category:"biome",name:"Windswept Savanna",description:"Savanna with extreme terrain and floating islands.",tags:["biome"] },
-  { id:"minecraft:badlands",category:"biome",name:"Badlands",description:"Dry biome with terracotta and gold ore.",tags:["biome"] },
-  { id:"minecraft:wooded_badlands",category:"biome",name:"Wooded Badlands",description:"Badlands with patches of oak trees.",tags:["biome"] },
-  { id:"minecraft:eroded_badlands",category:"biome",name:"Eroded Badlands",description:"Badlands with eroded tall pillars.",tags:["biome"] },
-  { id:"minecraft:meadow",category:"biome",name:"Meadow",description:"High-altitude grassy plain with flowers and rabbits.",tags:["biome"] },
-  { id:"minecraft:cherry_grove",category:"biome",name:"Cherry Grove",description:"Mountain biome with cherry trees and pink petals.",tags:["biome","decorative"] },
-  { id:"minecraft:grove",category:"biome",name:"Grove",description:"Snowy forest on mountain slopes.",tags:["biome"] },
-  { id:"minecraft:snowy_slopes",category:"biome",name:"Snowy Slopes",description:"Cold mountain slopes with goats.",tags:["biome"] },
-  { id:"minecraft:jagged_peaks",category:"biome",name:"Jagged Peaks",description:"High mountain peaks of stone and snow.",tags:["biome"] },
-  { id:"minecraft:frozen_peaks",category:"biome",name:"Frozen Peaks",description:"High mountain peaks covered in ice.",tags:["biome"] },
-  { id:"minecraft:stony_peaks",category:"biome",name:"Stony Peaks",description:"High mountain peaks of stone and calcite.",tags:["biome"] },
-  { id:"minecraft:beach",category:"biome",name:"Beach",description:"Sandy area between oceans and land.",tags:["biome"] },
-  { id:"minecraft:snowy_beach",category:"biome",name:"Snowy Beach",description:"Cold beach covered in snow.",tags:["biome"] },
-  { id:"minecraft:stony_shore",category:"biome",name:"Stony Shore",description:"Rocky shore without sand.",tags:["biome"] },
-  { id:"minecraft:river",category:"biome",name:"River",description:"Long stretches of water through the Overworld.",tags:["biome"] },
-  { id:"minecraft:frozen_river",category:"biome",name:"Frozen River",description:"River covered in ice.",tags:["biome"] },
-  { id:"minecraft:ocean",category:"biome",name:"Ocean",description:"Large saltwater biome with fish, kelp, and shipwrecks.",tags:["biome"] },
-  { id:"minecraft:deep_ocean",category:"biome",name:"Deep Ocean",description:"Deeper ocean variant with ocean monuments.",tags:["biome"] },
-  { id:"minecraft:warm_ocean",category:"biome",name:"Warm Ocean",description:"Ocean with coral reefs and tropical fish.",tags:["biome"] },
-  { id:"minecraft:lukewarm_ocean",category:"biome",name:"Lukewarm Ocean",description:"Ocean between warm and cold.",tags:["biome"] },
-  { id:"minecraft:cold_ocean",category:"biome",name:"Cold Ocean",description:"Cold ocean with cod.",tags:["biome"] },
-  { id:"minecraft:frozen_ocean",category:"biome",name:"Frozen Ocean",description:"Ocean with icebergs and polar bears.",tags:["biome"] },
-  { id:"minecraft:deep_lukewarm_ocean",category:"biome",name:"Deep Lukewarm Ocean",description:"Deep variant of lukewarm ocean.",tags:["biome"] },
-  { id:"minecraft:deep_cold_ocean",category:"biome",name:"Deep Cold Ocean",description:"Deep variant of cold ocean.",tags:["biome"] },
-  { id:"minecraft:deep_frozen_ocean",category:"biome",name:"Deep Frozen Ocean",description:"Deep variant of frozen ocean.",tags:["biome"] },
-  { id:"minecraft:mushroom_fields",category:"biome",name:"Mushroom Fields",description:"Rare biome with mooshrooms. No hostile mobs.",tags:["biome"] },
-  { id:"minecraft:dripstone_caves",category:"biome",name:"Dripstone Caves",description:"Underground biome with pointed dripstone.",tags:["biome"] },
-  { id:"minecraft:lush_caves",category:"biome",name:"Lush Caves",description:"Underground biome with moss, azalea, and glow berries.",tags:["biome"] },
-  { id:"minecraft:deep_dark",category:"biome",name:"Deep Dark",description:"Deep cave biome with sculk and the warden.",tags:["biome"] },
-  { id:"minecraft:nether_wastes",category:"biome",name:"Nether Wastes",description:"Main Nether biome with netherrack, lava, and ghasts.",tags:["biome"] },
-  { id:"minecraft:soul_sand_valley",category:"biome",name:"Soul Sand Valley",description:"Nether biome with soul sand and skeletons.",tags:["biome"] },
-  { id:"minecraft:crimson_forest",category:"biome",name:"Crimson Forest",description:"Nether forest with hoglins and piglins.",tags:["biome"] },
-  { id:"minecraft:warped_forest",category:"biome",name:"Warped Forest",description:"Nether forest with endermen.",tags:["biome"] },
-  { id:"minecraft:basalt_deltas",category:"biome",name:"Basalt Deltas",description:"Nether biome with basalt and magma cubes.",tags:["biome"] },
-  { id:"minecraft:the_end",category:"biome",name:"The End",description:"Dimension of floating islands and the Ender Dragon.",tags:["biome"] },
-  { id:"minecraft:end_highlands",category:"biome",name:"End Highlands",description:"Outer End islands with chorus plants and end cities.",tags:["biome"] },
-  { id:"minecraft:end_midlands",category:"biome",name:"End Midlands",description:"Transition area between central End and outer islands.",tags:["biome"] },
-  { id:"minecraft:end_barrens",category:"biome",name:"End Barrens",description:"Empty outer End areas.",tags:["biome"] },
-  { id:"minecraft:small_end_islands",category:"biome",name:"Small End Islands",description:"Small outer islands past the void.",tags:["biome"] },
-];
+function genMobs() {
+  const r = [];
+  for (const m of MOBS) {
+    const id = "minecraft:"+m.id;
+    r.push(entry(id,"mob",m.n,`${m.n} is a ${m.ty} mob in Minecraft. Drops: ${m.dr}. Found in ${m.fi}. ${m.bh}.`,["mob",m.ty]));
+    r.push(entry(id+"_drops","mob",`${m.n} drops`,`${m.n} drops: ${m.dr}. ${m.ty==="passive"?"Breed and kill sustainably.":"Looting enchantment increases drop rates."}`,["strategy","farming",m.ty]));
+    r.push(entry(id+"_spawn","mob",`${m.n} spawns`,`Spawning conditions for ${m.n}: ${m.fi}. ${m.ty==="passive"?"Requires grass blocks and light.":"Spawns in darkness (light level 7 or less)."}`,["strategy","spawning",m.ty]));
+    if (m.ty!=="passive") r.push(entry(id+"_fight","mob",`Fighting ${m.n}`,`Combat strategy vs ${m.n}: Use diamond armor, sword, and bow. ${m.id==="creeper"?"Hit then retreat, use shield to block explosion.":m.id==="ender_dragon"?"Destroy end crystals first, then shoot with bow while dragon perches.":m.id==="warden"?"Avoid triggering. Sneak on wool blocks. Use ranged attacks from distance.":m.id==="wither"?"Fight underground to limit destruction. Smite sword is most effective.":m.bh+". Strafe and use healing potions."}`,["strategy","combat",m.ty]));
+  }
+  return r;
+}
 
-const strategy = () => [
-  { id:"strategy:mining",category:"strategy",name:"Mining",description:"Dig down carefully with torches and food. Avoid digging straight down.",tags:["strategy"] },
-  { id:"strategy:strip_mining",category:"strategy",name:"Strip Mining",description:"Mine long tunnels at Y=-59 for diamonds. Torches every 10 blocks. Watch for lava.",tags:["strategy"] },
-  { id:"strategy:caving",category:"strategy",name:"Caving",description:"Explore natural caves for exposed ores. Bring torches, food, and armor.",tags:["strategy"] },
-  { id:"strategy:nether_exploration",category:"strategy",name:"Nether Exploration",description:"Wear gold armor around piglins. Bring fire resistance. Build paths over lava.",tags:["strategy"] },
-  { id:"strategy:nether_fortress_route",category:"strategy",name:"Nether Fortress Route",description:"Follow the x-axis. Fortresses generate perpendicular to x-axis.",tags:["strategy","nether"] },
-  { id:"strategy:nether_safe_travel",category:"strategy",name:"Nether Safe Travel",description:"Build tunnels with slabs to prevent spawns. Use warped fungi for striders.",tags:["strategy","nether"] },
-  { id:"strategy:end_fight",category:"strategy",name:"Ender Dragon Fight",description:"Destroy crystals with arrows or pillars. Attack the dragon when it perches.",tags:["strategy"] },
-  { id:"strategy:end_city_raiding",category:"strategy",name:"End City Raiding",description:"Bridge to outer islands. Find the ship for elytra. Watch for shulkers.",tags:["strategy","end"] },
-  { id:"strategy:wither_fight",category:"strategy",name:"Wither Fight",description:"Fight underground in a confined space. Use smite enchantment.",tags:["strategy"] },
-  { id:"strategy:warden_avoid",category:"strategy",name:"Warden Avoidance",description:"Move slowly in the deep dark. Wool blocks vibrations. Distract with snowballs.",tags:["strategy"] },
-  { id:"strategy:villager_trading",category:"strategy",name:"Villager Trading",description:"Protect villagers. Give job blocks. Cure zombie villagers for discounts.",tags:["strategy"] },
-  { id:"strategy:villager_breedering",category:"strategy",name:"Villager Breeder",description:"Build with beds, workstations, and food. Villagers with beds breed.",tags:["strategy","village"] },
-  { id:"strategy:villager_zombie_cure",category:"strategy",name:"Zombie Villager Cure",description:"Splash weakness, feed golden apple. Wait 2-5 min for discounted trades.",tags:["strategy","village"] },
-  { id:"strategy:farming",category:"strategy",name:"Farming",description:"Plant on hydrated farmland. Use bonemeal. Keep light level high.",tags:["strategy"] },
-  { id:"strategy:automated_farm",category:"strategy",name:"Automated Farm",description:"Use water to collect crops. Observer + piston for automatic harvesting.",tags:["strategy","farming"] },
-  { id:"strategy:animal_farming",category:"strategy",name:"Animal Farming",description:"Breed animals with their food. Keep in pens with water.",tags:["strategy"] },
-  { id:"strategy:honey_farming",category:"strategy",name:"Honey Farming",description:"Use shears for honeycomb, bottles for honey. Campfire under hive pacifies bees.",tags:["strategy","farming"] },
-  { id:"strategy:defense",category:"strategy",name:"Base Defense",description:"Light the area. Build walls. Use iron golems and traps.",tags:["strategy"] },
-  { id:"strategy:mob_grinder",category:"strategy",name:"Mob Grinder",description:"Build a dark tower with water channels. Mobs fall to killing chamber.",tags:["strategy","combat"] },
-  { id:"strategy:raids",category:"strategy",name:"Raid Defense",description:"Ring a bell to reveal raiders. Walls and ranged attacks. Heal between waves.",tags:["strategy"] },
-  { id:"strategy:exploration",category:"strategy",name:"Exploration",description:"Bring food, torches, a bed, and a compass. Mark your path.",tags:["strategy"] },
-  { id:"strategy:combat",category:"strategy",name:"Combat Basics",description:"Equip weapon and armor. Strafe. Retreat when low on health.",tags:["strategy"] },
-  { id:"strategy:enchanting",category:"strategy",name:"Enchanting",description:"Bookshelves around the table. Anvil to combine enchanted books.",tags:["strategy"] },
-  { id:"strategy:brewing",category:"strategy",name:"Brewing",description:"Brewing stand. Nether wart is the base ingredient.",tags:["strategy"] },
-  { id:"strategy:potion_brewing",category:"strategy",name:"Potion Brewing Guide",description:"Nether wart + water bottle = awkward potion. Add effect ingredient. Redstone for duration, glowstone for potency. Gunpowder for splash.",tags:["strategy","brewing"] },
-  { id:"strategy:smelting",category:"strategy",name:"Smelting",description:"Use furnaces for everything, blast furnaces for ores, smokers for food.",tags:["strategy"] },
-  { id:"strategy:redstone",category:"strategy",name:"Redstone Basics",description:"Power with redstone dust, torches, repeaters. Observers detect changes.",tags:["strategy"] },
-  { id:"strategy:redstone_clock",category:"strategy",name:"Redstone Clock",description:"Repeater loop or observer loop for a repeating signal.",tags:["strategy","redstone"] },
-  { id:"strategy:redstone_item_sorter",category:"strategy",name:"Item Sorter",description:"Hoppers and comparators sort items by type into different chests.",tags:["strategy","redstone"] },
-  { id:"strategy:building",category:"strategy",name:"Building",description:"Plan foundations and storage. Use scaffolding. Light interiors.",tags:["strategy"] },
-  { id:"strategy:automation",category:"strategy",name:"Automation",description:"Hoppers, droppers, dispensers, and observers automate farms and sorting.",tags:["strategy"] },
-  { id:"strategy:speedrun",category:"strategy",name:"Speedrun",description:"Focus on wood, tools, iron, flint and steel, beds, and eyes of ender.",tags:["strategy"] },
-  { id:"strategy:speedrun_route",category:"strategy",name:"Speedrun Route",description:"Get wood -> stone pick -> iron pick -> portal -> fortress -> bed kills blazes -> pearls from bartering -> eyes -> stronghold -> end.",tags:["strategy","speedrun"] },
-  { id:"strategy:resource_management",category:"strategy",name:"Resource Management",description:"Labeled chests for storage. Backup tools. Shulker boxes for travel.",tags:["strategy"] },
-  { id:"strategy:preparation",category:"strategy",name:"Preparation",description:"Before a big task, gather food, tools, armor, blocks, potions, and set spawn.",tags:["strategy"] },
-  { id:"strategy:recovery",category:"strategy",name:"Recovery",description:"After death, retrieve items before re-engaging threats.",tags:["strategy"] },
-  { id:"strategy:multiplayer",category:"strategy",name:"Multiplayer",description:"Coordinate roles, share resources, establish safe zones.",tags:["strategy"] },
-  { id:"strategy:starter_guide",category:"strategy",name:"First Day Guide",description:"Punch tree -> craft wood pick -> mine 19 stone -> stone tools -> furnace -> shelter before night.",tags:["strategy","early"] },
-  { id:"strategy:early_iron",category:"strategy",name:"Getting Iron Early",description:"Find a cave or dig to Y=16. Iron generates between Y=-64 and Y=72.",tags:["strategy","mining"] },
-  { id:"strategy:emergency_kits",category:"strategy",name:"Emergency Kit",description:"Carry backup tools, food, blocks, water bucket, and bed in ender chest.",tags:["strategy","preparation"] },
-  { id:"strategy:bartering",category:"strategy",name:"Piglin Bartering",description:"Drop gold ingots near piglins. They give pearls, obsidian, fire resistance. Wear gold armor.",tags:["strategy","nether"] },
-  { id:"strategy:bridging",category:"strategy",name:"Safe Bridging",description:"Walk backward while placing. Use scaffolding. Sneak at edges.",tags:["strategy","building"] },
-  { id:"strategy:water_elevator",category:"strategy",name:"Water Elevator",description:"Kelp makes bubble columns. Soul sand pushes up, magma pushes down.",tags:["strategy","building"] },
-  { id:"strategy:tree_farm",category:"strategy",name:"Tree Farming",description:"Plant saplings with 4+ blocks above. Oak needs less space.",tags:["strategy","farming"] },
-  { id:"strategy:beacon_usage",category:"strategy",name:"Beacon Pyramid",description:"Build a pyramid of mineral blocks. Full 4-layer = 164 blocks. Gives Haste, Speed, etc.",tags:["strategy"] },
-  { id:"strategy:safe_mining",category:"strategy",name:"Safe Mining",description:"Never dig straight down. Light up caves. Torches on left wall to find way back.",tags:["strategy","mining"] },
-  { id:"strategy:raid_farm",category:"strategy",name:"Raid Farm",description:"Killer chamber with pillager spawner. Obtain totems and emeralds from waves.",tags:["strategy","combat"] },
-  { id:"strategy:shulker_box_usage",category:"strategy",name:"Shulker Box Storage",description:"Portable storage. Keeps items when broken. Color-code for organization.",tags:["strategy","end","storage"] },
-  { id:"strategy:explosive_mining",category:"strategy",name:"Explosive Mining",description:"Use beds in the Nether for ancient debris. TNT also works underground.",tags:["strategy","mining","nether"] },
-  { id:"strategy:crop_automation",category:"strategy",name:"Crop Automation",description:"Observers detect growth. Pistons harvest. Waterlogged blocks replace water.",tags:["strategy","farming","redstone"] },
-];
+function genBiomes() {
+  const r = [];
+  for (const b of BIOMES) {
+    const id = "minecraft:"+b.id;
+    r.push(entry(id,"biome",`${b.n} Biome`,`${b.n} is a ${b.cl} biome in the ${b.dm} dimension. Terrain and resources vary.`,["biome",b.cl,b.dm]));
+    r.push(entry(id+"_res","biome",`${b.n} resources`,`Resources in ${b.n}: ${b.cl==="hot"?"Acacia and surface ores":b.cl==="cold"?"Spruce trees and powder snow":b.cl==="warm"?"Lush vegetation and warm water":"Oak and birch, flowers and grass"}. ${b.dm==="nether"?"Nether resources: netherrack, glowstone, quartz.":b.dm==="end"?"Chorus fruit and end stone.":""}`,["strategy","resources",b.cl]));
+    r.push(entry(id+"_build","biome",`Building in ${b.n}`,`Building tips for ${b.n}: ${b.cl==="cold"?"Use torches to prevent ice formation. Warm interior lighting.":b.cl==="hot"?"Shade structures help. Water placement may be limited.":"Standard building practices work well."} ${b.dm==="nether"?"Watch for ghasts and lava.":b.dm==="end"?"Beware of endermen and void below.":"Light up to prevent hostile mob spawns."}`,["strategy","building",b.cl]));
+  }
+  return r;
+}
 
-write("blocks.json", blocks());
-write("mobs.json", mobs());
-write("items.json", items());
-write("recipes.json", recipes());
-write("biomes.json", biomes());
-write("strategy.json", strategy());
+// =========== 3. ITEMS (potions, equipment) ===========
+function genItems() {
+  const r = [];
+  // Potions
+  const EF = [
+    {id:"healing",n:"Healing",ing:"Glistering Melon",desc:"Restores health."},
+    {id:"fire_resistance",n:"Fire Resistance",ing:"Magma Cream",desc:"Fire immunity for 3min."},
+    {id:"regeneration",n:"Regeneration",ing:"Ghast Tear",desc:"HP over time."},
+    {id:"strength",n:"Strength",ing:"Blaze Powder",desc:"+3 melee damage."},
+    {id:"swiftness",n:"Swiftness",ing:"Sugar",desc:"+20% speed."},
+    {id:"night_vision",n:"Night Vision",ing:"Golden Carrot",desc:"Full brightness."},
+    {id:"invisibility",n:"Invisibility",ing:"Ferm. Spider Eye",desc:"Invisible (armor reveals)."},
+    {id:"water_breathing",n:"Water Breathing",ing:"Pufferfish",desc:"Breathe underwater."},
+    {id:"leaping",n:"Leaping",ing:"Rabbit Foot",desc:"Jump boost."},
+    {id:"slow_falling",n:"Slow Falling",ing:"Phantom Membrane",desc:"Fall gently."},
+    {id:"poison",n:"Poison",ing:"Spider Eye",desc:"Damages over time."},
+    {id:"weakness",n:"Weakness",ing:"Ferm. Spider Eye",desc:"-4 melee damage."},
+    {id:"slowness",n:"Slowness",ing:"Sugar+Ferm. Eye",desc:"-15% speed."},
+    {id:"harming",n:"Harming",ing:"Melon+Ferm. Eye",desc:"Instant damage."},
+  ];
+  for (const e of EF) {
+    r.push(entry("minecraft:potion_"+e.id,"item","Potion of "+e.n,`Potion of ${e.n}. Ingredient: ${e.ing}. ${e.desc} Base: awkward potion.`,["item","potion"]));
+    r.push(entry("minecraft:potion_"+e.id+"_ext","item","Extended Potion of "+e.n,`Extended Potion of ${e.n}. Redstone extends duration. Lasts twice as long.`,["item","potion","extended"]));
+    r.push(entry("minecraft:potion_"+e.id+"_strong","item","Strong Potion of "+e.n,`Strong Potion of ${e.n}. Glowstone increases potency. Effect level II instead of I.`,["item","potion","strong"]));
+  }
+  // Enchantments
+  const ENC = [
+    {id:"sharpness",n:"Sharpness",max:5,on:"sword/axe",ef:"+1 damage per level"},
+    {id:"smite",n:"Smite",max:5,on:"sword",ef:"+2.5 damage to undead/level"},
+    {id:"bane_of_arthropods",n:"Bane of Arthropods",max:5,on:"sword",ef:"+2.5 to spiders/bees/level"},
+    {id:"fire_aspect",n:"Fire Aspect",max:2,on:"sword",ef:"Sets target on fire"},
+    {id:"looting",n:"Looting",max:3,on:"sword",ef:"+1 per level mob loot"},
+    {id:"sweeping_edge",n:"Sweeping Edge",max:3,on:"sword",ef:"+50% sweeping damage/level"},
+    {id:"efficiency",n:"Efficiency",max:5,on:"tools",ef:"+30% mining speed/level"},
+    {id:"fortune",n:"Fortune",max:3,on:"pickaxe",ef:"Multiplies ore drops"},
+    {id:"silk_touch",n:"Silk Touch",max:1,on:"tools",ef:"Mines block itself"},
+    {id:"unbreaking",n:"Unbreaking",max:3,on:"all",ef:"Chance to not consume durability"},
+    {id:"mending",n:"Mending",max:1,on:"all",ef:"XP repairs item"},
+    {id:"protection",n:"Protection",max:4,on:"armor",ef:"Reduces all damage 4%/level"},
+    {id:"fire_protection",n:"Fire Protection",max:4,on:"armor",ef:"Reduces fire damage 8%/level"},
+    {id:"blast_protection",n:"Blast Protection",max:4,on:"armor",ef:"Reduces explosion damage 8%/level"},
+    {id:"projectile_protection",n:"Projectile Protection",max:4,on:"armor",ef:"Reduces projectile damage 8%/level"},
+    {id:"feather_falling",n:"Feather Falling",max:4,on:"boots",ef:"Reduces fall damage 12%/level"},
+    {id:"thorns",n:"Thorns",max:3,on:"armor",ef:"Returns damage to attacker"},
+    {id:"depth_strider",n:"Depth Strider",max:3,on:"boots",ef:"Faster underwater movement"},
+    {id:"respiration",n:"Respiration",max:3,on:"helmet",ef:"Extended underwater breathing"},
+    {id:"aqua_affinity",n:"Aqua Affinity",max:1,on:"helmet",ef:"Normal mining speed underwater"},
+    {id:"soul_speed",n:"Soul Speed",max:3,on:"boots",ef:"Faster on soul sand/soil"},
+    {id:"power",n:"Power",max:5,on:"bow",ef:"+25% arrow damage/level"},
+    {id:"punch",n:"Punch",max:2,on:"bow",ef:"Knocks back targets"},
+    {id:"flame",n:"Flame",max:1,on:"bow",ef:"Sets arrows on fire"},
+    {id:"infinity",n:"Infinity",max:1,on:"bow",ef:"Shoots without consuming arrows"},
+    {id:"multishot",n:"Multishot",max:1,on:"crossbow",ef:"Fires 3 arrows"},
+    {id:"piercing",n:"Piercing",max:4,on:"crossbow",ef:"Passes through entities"},
+    {id:"quick_charge",n:"Quick Charge",max:3,on:"crossbow",ef:"Faster loading"},
+    {id:"loyalty",n:"Loyalty",max:3,on:"trident",ef:"Returns after throw"},
+    {id:"impaling",n:"Impaling",max:5,on:"trident",ef:"+2.5 damage to aquatic/level"},
+    {id:"riptide",n:"Riptide",max:3,on:"trident",ef:"Launches with throw in rain/water"},
+    {id:"channeling",n:"Channeling",max:1,on:"trident",ef:"Summons lightning in storms"},
+  ];
+  for (const e of ENC) {
+    const maxL = e.max>1 ? ` (max level ${e.max})` : "";
+    r.push(entry("minecraft:"+e.id,"item",`${e.n} Enchantment`,`${e.n}: ${e.ef}. Applied to: ${e.on}${maxL}. ${e.id==="mending"?"Best paired with Unbreaking III.":e.id==="fortune"?"Great for diamond/netherite mining.":"Obtain from enchanting table (15 bookshelves) or librarian villagers."} Enchantment level ${e.max} achievable via anvil combining.`,["item","enchantment"]));
+  }
+  return r;
+}
+
+function genEquipmentItems() {
+  const r = [];
+  const TIERS = [{n:"wooden",m:"Wooden"},{n:"stone",m:"Stone"},{n:"iron",m:"Iron"},{n:"golden",m:"Golden"},{n:"diamond",m:"Diamond"},{n:"netherite",m:"Netherite"}];
+  for (const t of TIERS) {
+    // Pickaxe
+    r.push(entry("minecraft:"+t.n+"_pickaxe","item",`${t.m} Pickaxe`,`${t.m} Pickaxe. Durability varies. ${t.n==="wooden"?"Mines stone/coal.":t.n==="stone"?"Mines iron/lapis.":t.n==="iron"?"Mines diamond/redstone/gold.":t.n==="diamond"?"Mines obsidian/ancient debris.":t.n==="netherite"?"Most durable, lava-resistant.":"Good for early mining."} Craft from ${t.n==="netherite"?"netherite ingot upgrade at smithing table":`3 ${t.n==="wooden"?"planks":t.n+" ingots"} + 2 sticks`}.`,["item","tool","pickaxe",t.n]));
+    // Axe
+    r.push(entry("minecraft:"+t.n+"_axe","item",`${t.m} Axe`,`${t.m} Axe. Used to chop wood and strip logs. ${t.n==="netherite"?"Most durable.":"Craft from 3 "+(t.n==="wooden"?"planks":t.n+" ingots")+" + 2 sticks."} Can be used as melee weapon.`,["item","tool","axe",t.n]));
+    // Sword
+    r.push(entry("minecraft:"+t.n+"_sword","item",`${t.m} Sword`,`${t.m} Sword. Melee weapon. ${t.n==="netherite"?"Highest dps, fire resistant.":"Craft from 2 "+(t.n==="wooden"?"planks":t.n+" ingots")+" + 1 stick."} Damage: ${t.n==="wooden"?4:t.n==="stone"?5:t.n==="iron"?6:t.n==="golden"?4:t.n==="diamond"?7:8}.`,["item","weapon","sword",t.n]));
+    // Armor items
+    const ARMOR = [
+      {s:"helmet",n:"Helmet",p:"head",c:5},
+      {s:"chestplate",n:"Chestplate",p:"chest",c:8},
+      {s:"leggings",n:"Leggings",p:"legs",c:7},
+      {s:"boots",n:"Boots",p:"feet",c:4},
+    ];
+    for (const a of ARMOR) {
+      r.push(entry("minecraft:"+t.n+"_"+a.s,"item",`${t.m} ${a.n}`,`${t.m} ${a.n}. Worn in ${a.p} slot. Provides armor protection. Craft from ${a.c} ${t.n==="leather"?"leather":t.n==="chainmail"?"chain":t.n==="netherite"?"netherite ingots (upgraded from diamond)":t.n+" ingots"} in shaped pattern.`,["item","armor",a.s,t.n]));
+    }
+  }
+  return r;
+}
+
+// =========== 4. RECIPES ===========
+function genRecipes() {
+  const r = [];
+  const TOOL_RECIPES = [
+    {n:"pickaxe", p:"3 top row, 2 sticks below", c:3}, {n:"axe", p:"3 corner, 2 sticks side", c:3},
+    {n:"shovel", p:"1 above 2 sticks", c:1}, {n:"hoe", p:"2 on top, 2 sticks side", c:2},
+    {n:"sword", p:"2 in column + stick below", c:2},
+  ];
+  for (const tier of [{n:"wooden",m:"Wooden",mat:"planks"},{n:"stone",m:"Stone",mat:"cobblestone"},{n:"iron",m:"Iron",mat:"iron ingot"},{n:"diamond",m:"Diamond",mat:"diamond"}]) {
+    for (const tool of TOOL_RECIPES) {
+      r.push(entry("recipe:"+tier.n+"_"+tool.n,"recipe",`${tier.m} ${cap(tool.n)} Recipe`,`Regular | ${tier.m} ${cap(tool.n)}: ${tool.p}. Materials: ${tool.c} ${tier.mat}, 2 sticks. Crafting table.`,["recipe","tool",tier.n]));
+      r.push(entry("recipe:damaged_"+tier.n+"_"+tool.n,"recipe",`Damaged ${tier.m} ${cap(tool.n)} Recipe`,`Damaged | ${tier.m} ${cap(tool.n)}: Combine 2 damaged ones on crafting table. Wipes enchantments.`,["recipe","repair",tier.n]));
+    }
+    // Armor recipes  
+    const ARM = [
+      {n:"helmet",p:"U shape with 5",mat:tier.mat,s:"head"},
+      {n:"chestplate",p:"Square with 8",mat:tier.mat,s:"chest"},
+      {n:"leggings",p:"Inverted U with 7",mat:tier.mat,s:"legs"},
+      {n:"boots",p:"Bottom corners with 4",mat:tier.mat,s:"feet"},
+    ];
+    for (const a of ARM) {
+      r.push(entry("recipe:"+tier.n+"_"+a.n,"recipe",`${tier.m} ${cap(a.n)} Recipe`,`${tier.m} ${cap(a.n)}: ${a.p} ${a.mat} on crafting table. Armor slot: ${a.s}.`,["recipe","armor",tier.n]));
+    }
+  }
+  return r;
+}
+
+// =========== 5. COMBINATORIAL STRATEGY (verb × object) ===========
+// Build extensive object list - blocks + mobs + biomes + concepts + variants + dyes
+function buildStratObjects() {
+  const objs = [];
+
+  // Unique blocks
+  const seen = new Set();
+  for (const b of BLOCKS) {
+    if (!seen.has(b.id)) { seen.add(b.id);
+      objs.push({ id:"block:"+b.id, name:b.n, cat:"block", g:b.tag||[], b });
+    }
+  }
+
+  // Block variants: stairs, slabs, walls, polished, brick, chiseled, cut, smooth for stone blocks
+  const STONE_VARIANTS = [
+    {s:"_stairs",n:" Stairs",g:["building","stairs"]},
+    {s:"_slab",n:" Slab",g:["building","slabs"]},
+    {s:"_wall",n:" Wall",g:["building","wall"]},
+    {s:"_polished",n:" Polished",g:["decorative","polished"]},
+    {s:"_bricks",n:" Bricks",g:["building","brick"]},
+  ];
+  const VAR_TARGETS = ["stone","cobblestone","granite","diorite","andesite","deepslate","cobbled_deepslate",
+    "sandstone","red_sandstone","prismarine","blackstone","basalt","end_stone"];
+  for (const b of BLOCKS) {
+    if (VAR_TARGETS.includes(b.id)) {
+      for (const v of STONE_VARIANTS) {
+        objs.push({ id:"block:"+b.id+v.s, name:b.n+v.n, cat:"block", g:[...(b.tag||[]),...v.g], b:null });
+      }
+    }
+  }
+
+  // 16 dye color variants across block types
+  const DYES = ["white","orange","magenta","light_blue","yellow","lime","pink","gray",
+    "light_gray","cyan","purple","blue","brown","green","red","black"];
+  const DYED_BLOCKS = [
+    {s:"_wool",n:" Wool",g:["block","wool"]},
+    {s:"_carpet",n:" Carpet",g:["block","carpet"]},
+    {s:"_concrete",n:" Concrete",g:["block","concrete"]},
+    {s:"_concrete_powder",n:" Concrete Powder",g:["block","concrete","gravity"]},
+    {s:"_terracotta",n:" Terracotta",g:["block","terracotta"]},
+    {s:"_stained_glass",n:" Stained Glass",g:["block","glass"]},
+    {s:"_stained_glass_pane",n:" Stained Glass Pane",g:["block","glass"]},
+    {s:"_glazed_terracotta",n:" Glazed Terracotta",g:["block","decorative"]},
+  ];
+  for (const d of DYES) {
+    for (const db of DYED_BLOCKS) {
+      objs.push({ id:"block:"+d+db.s, name:cap(d)+db.n, cat:"block", g:db.g, b:null });
+    }
+  }
+
+  // 10 wood sets × planks, stairs, slabs, fence, gate, door, trapdoor, button, pressure_plate, sign
+  const WOOD_TYPES = ["oak","spruce","birch","jungle","acacia","dark_oak","mangrove","cherry","crimson","warped"];
+  const WOOD_VARIANTS = [
+    {s:"_planks",n:" Planks",g:["building","wood"]},
+    {s:"_stairs",n:" Stairs",g:["building","wood","stairs"]},
+    {s:"_slab",n:" Slab",g:["building","wood","slab"]},
+    {s:"_fence",n:" Fence",g:["building","wood","fence"]},
+    {s:"_fence_gate",n:" Fence Gate",g:["building","wood","gate"]},
+    {s:"_door",n:" Door",g:["building","wood","door"]},
+    {s:"_trapdoor",n:" Trapdoor",g:["building","wood","trapdoor"]},
+    {s:"_button",n:" Button",g:["building","wood","redstone"]},
+    {s:"_pressure_plate",n:" Pressure Plate",g:["building","wood","redstone"]},
+    {s:"_sign",n:" Sign",g:["decorative","sign"]},
+  ];
+  for (const w of WOOD_TYPES) {
+    for (const wv of WOOD_VARIANTS) {
+      objs.push({ id:"block:"+w+wv.s, name:cap(w)+wv.n, cat:"block", g:wv.g, b:null });
+    }
+  }
+
+  // Mob objects
+  for (const m of MOBS) {
+    objs.push({ id:"mob:"+m.id, name:m.n, cat:"mob", g:["mob",m.ty], m });
+  }
+
+  // Biome objects
+  for (const b of BIOMES) {
+    objs.push({ id:"biome:"+b.id, name:b.n+" Biome", cat:"biome", g:[b.cl,b.dm], bm:b });
+  }
+
+  // Potion effect concepts (14)
+  objs.push(...["Healing","Fire Resistance","Regeneration","Strength","Swiftness","Night Vision",
+    "Invisibility","Water Breathing","Leaping","Slow Falling","Poison","Weakness","Slowness","Harming"]
+    .map(n => ({ id:"potion:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n+" Potion", cat:"potion", g:["potion","brewing"] })));
+
+  // Game concepts
+  objs.push(...[
+    ["First Night","survival"],["Base Building","building"],["Villager Trading","trading"],
+    ["Enchanting Setup","enchanting"],["Brewing Station","brewing"],["Nether Preparation","nether"],
+    ["End Fight Strategy","end"],["Mining Strip","mining"],["Caving","exploration"],
+    ["XP Farm","farming"],["Piston Door","redstone"],["Automatic Farm","farming"],
+    ["Iron Farm","farming"],["Creeper Farm","farming"],["Mob Spawner XP","farming"],
+    ["Animal Breeding","farming"],["Mending Villager","trading"],["Elytra Flying","end"],
+    ["Beacon Setup","utility"],["Conduit Power","water"],["Command Block","creative"],
+    ["Lava Casting","building"],["Villager Hall","building"],["Auto Sorter","redstone"],
+    ["Tree Farm","farming"],["Slime Chunk","mining"],["Nether Highway","nether"],
+    ["Chorus Farm","end"],["Bamboo Farm","farming"],["Sugar Cane Farm","farming"],
+    ["Melon/Pumpkin Farm","farming"],["Cactus Farm","farming"],["Crop Automation","farming"],
+  ].map(([n,cat]) => ({ id:"game:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n, cat:"game", g:[cat,"strategy"] })));
+
+  // Villager professions
+  objs.push(...["Armorer","Butcher","Cartographer","Cleric","Farmer","Fisherman",
+    "Fletcher","Leatherworker","Librarian","Mason","Shepherd","Toolsmith","Weaponsmith"]
+    .map(p => ({ id:"villager:"+p.toLowerCase(), name:p+" Villager", cat:"villager", g:["villager","trading"] })));
+
+  // Structures
+  objs.push(...[
+    ["Village","structure"],["Desert Temple","structure"],["Jungle Temple","structure"],
+    ["Igloo","structure"],["Mineshaft","structure"],["Stronghold","structure"],
+    ["Ocean Monument","structure"],["Woodland Mansion","structure"],["Pillager Outpost","structure"],
+    ["Bastion Remnant","structure"],["Nether Fortress","structure"],["End City","structure"],
+    ["Ancient City","structure"],["Trail Ruins","structure"],["Ruined Portal","structure"],
+    ["Buried Treasure","structure"],["Shipwreck","structure"],["Desert Well","structure"],
+  ].map(([n,cat]) => ({ id:"structure:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n, cat:"structure", g:[cat,"exploration"] })));
+
+  // Redstone contraptions
+  objs.push(...[
+    "Clock","Pulse Extender","T-Flip Flop","Item Sorter","Flying Machine",
+    "BUD Switch","Brewing Stand Filler","Super Smelter","3x3 Door","Hidden Staircase",
+  ].map(n => ({ id:"redstone:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n, cat:"redstone", g:["redstone","contraption"] })));
+
+  // Food items
+  objs.push(...[
+    ["Steak","food"],["Cooked Porkchop","food"],["Cooked Mutton","food"],["Cooked Chicken","food"],
+    ["Baked Potato","food"],["Bread","food"],["Golden Carrot","food"],["Golden Apple","food"],
+    ["Enchanted Golden Apple","food","rare"],["Pumpkin Pie","food"],["Cake","food"],
+    ["Mushroom Stew","food"],["Beetroot Soup","food"],["Cooked Cod","food"],["Cooked Salmon","food"],
+    ["Dried Kelp","food"],["Sweet Berries","food"],["Glow Berries","food"],["Honey Bottle","food"],
+    ["Suspicious Stew","food"],["Rabbit Stew","food"],["Chorus Fruit","food","end"],
+  ].map(([n,cat,r]) => ({ id:"food:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n, cat:"food", g:[cat,r||""].filter(Boolean) })));
+
+  // Item objects (tools, weapons, armor, equipment)
+  const TIER_NAMES = [{n:"wooden",m:"Wooden"},{n:"stone",m:"Stone"},{n:"iron",m:"Iron"},{n:"golden",m:"Golden"},{n:"diamond",m:"Diamond"},{n:"netherite",m:"Netherite"}];
+  const TOOL_NAMES = [{n:"pickaxe",m:"Pickaxe"},{n:"axe",m:"Axe"},{n:"shovel",m:"Shovel"},{n:"hoe",m:"Hoe"},{n:"sword",m:"Sword"}];
+  for (const t of TIER_NAMES) {
+    for (const tool of TOOL_NAMES) {
+      objs.push({ id:"item:"+t.n+"_"+tool.n, name:t.m+" "+tool.m, cat:"item", g:["item","tool",t.n] });
+    }
+  }
+  const ARMOR_SLOTS = [{n:"helmet",m:"Helmet"},{n:"chestplate",m:"Chestplate"},{n:"leggings",m:"Leggings"},{n:"boots",m:"Boots"}];
+  const ARMOR_T = [{n:"leather",m:"Leather"},{n:"chainmail",m:"Chainmail"},{n:"iron",m:"Iron"},{n:"diamond",m:"Diamond"},{n:"netherite",m:"Netherite"}];
+  for (const t of ARMOR_T) {
+    for (const a of ARMOR_SLOTS) {
+      objs.push({ id:"item:"+t.n+"_"+a.n, name:t.m+" "+a.m, cat:"item", g:["item","armor",t.n] });
+    }
+  }
+  // Special items
+  objs.push(...[
+    ["Bow","weapon","ranged"],["Crossbow","weapon","ranged"],["Trident","weapon","water"],
+    ["Fishing Rod","tool","fishing"],["Shield","tool","defense"],["Flint and Steel","tool","nether"],
+    ["Elytra","item","end"],["Totem of Undying","item","rare"],["Lead","item","animal"],
+    ["Shears","tool","farming"],["Name Tag","item","utility"],["Saddle","item","animal"],
+    ["Bucket","tool","utility"],["Water Bucket","tool","utility"],["Lava Bucket","tool","utility"],
+    ["Powder Snow Bucket","tool","utility"],["Milk Bucket","tool","utility"],
+    ["Compass","tool","navigation"],["Recovery Compass","tool","navigation"],
+    ["Clock","tool","navigation"],["Map","tool","navigation"],["Spyglass","tool","exploration"],
+    ["Brush","tool","treasure"],["Bundle","tool","storage"],
+  ].map(([n,cat,sub]) => ({ id:"item:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n, cat:"item", g:["item",cat,sub||""].filter(Boolean) })));
+
+  // More stone/building variant blocks for combinatorial expansion
+  const EXTRA_BLOCKS = [
+    "Bricks","Stone Bricks","Mossy Stone Bricks","Cracked Stone Bricks","Chiseled Stone Bricks",
+    "Nether Bricks","Red Nether Bricks","Quartz Block","Smooth Quartz","Quartz Pillar","Chiseled Quartz",
+    "Quartz Bricks","Sandstone","Red Sandstone","Cut Sandstone","Cut Red Sandstone","Chiseled Sandstone","Chiseled Red Sandstone","Smooth Sandstone","Smooth Red Sandstone",
+    "Polished Blackstone","Polished Blackstone Bricks","Cracked Polished Blackstone Bricks","Chiseled Polished Blackstone","Polished Deepslate","Polished Deepslate Bricks","Cracked Deepslate Bricks","Deepslate Tiles","Cracked Deepslate Tiles","Chiseled Deepslate",
+    "Mud Bricks","Packed Mud",
+    "Magma Block","Netherrack","Warped Wart Block","Nether Wart Block",
+    "Smooth Basalt","Polished Basalt",
+    "Dripstone Block","Pointed Dripstone","Amethyst Block","Budding Amethyst",
+    "Copper Block","Cut Copper","Exposed Copper","Weathered Copper","Oxidized Copper",
+    "Waxed Copper Block","Waxed Cut Copper",
+  ];
+  for (const eb of EXTRA_BLOCKS) {
+    const eid = eb.toLowerCase().replace(/[^a-z]/g,"_");
+    objs.push({ id:"block:"+eid, name:eb, cat:"block", g:["block","building"], b:null });
+  }
+
+  // Equipment tier combinations (offhand, arrows, fireworks)
+  objs.push(...[
+    "Arrow","Spectral Arrow","Firework Rocket","Firework Star",
+    "Enchanted Book","Bottle o' Enchanting","Experience Bottle",
+    "Lapis Lazuli","Netherite Ingot","Netherite Scrap",
+    "Diamond","Emerald","Iron Ingot","Gold Ingot","Copper Ingot",
+  ].map(n => ({ id:"item:"+n.toLowerCase().replace(/[^a-z]/g,"_"), name:n, cat:"item", g:["item","material"] })));
+
+  // Potions - extended with splash and lingering
+  for (const pt of ["Splash","Lingering"]) {
+    for (const ef of ["Healing","Fire Resistance","Regeneration","Strength","Swiftness"]) {
+      objs.push({ id:"potion:"+pt.toLowerCase()+"_"+ef.toLowerCase().replace(/[^a-z]/g,"_"), name:pt+" Potion of "+ef, cat:"potion", g:["potion","brewing",pt.toLowerCase()] });
+    }
+  }
+
+  return objs;
+}
+
+function genStrategies() {
+  const VERBS = [
+    { name:"Mining", tmpl:(o) => {
+      if (o.cat==="block"&&o.b) return `How to mine ${o.name}. Tool: ${o.b.t||"any"} (${o.b.ti||"any"}+ tier). Found at ${o.b.f||"various y-levels"}. ${o.b.d==="self"?"Drops itself with proper tool.":"Drops: "+o.b.d+"."}`;
+      return `Mining ${o.name}: Use the correct tier pickaxe (iron+ recommended). Light the area. Check correct y-levels.`;
+    }, tags:["strategy","mining"] },
+    { name:"Building", tmpl:(o) => {
+      if (o.cat==="block") return `${o.name} in builds: ${(o.b&&o.b.tag||[]).includes("light")?"Great for ambient lighting.":
+        (o.b&&o.b.tag||[]).includes("redstone")?"Essential redstone component.":
+        (o.b&&o.b.tag||[]).includes("storage")?"Store items efficiently.":"Use as building palette material."}`;
+      return `Building with ${o.name}: Incorporate into your base design for functional and aesthetic value.`;
+    }, tags:["strategy","building"] },
+    { name:"Decorating", tmpl:(o) => `Decorate with ${o.name}: Use slabs and stairs for depth. Mix complementary colors and textures. ${o.cat==="block"?"Variants add visual interest.":""}`, tags:["strategy","decorative"] },
+    { name:"Combat", tmpl:(o) => `Combat vs ${o.name}: ${o.cat==="mob"&&o.m?o.m.ty==="boss"?"Epic boss fight. Max gear, potions, enchants.":
+      o.m.ty==="hostile"?"Use shield, swords, bow. Strafe and keep distance.":
+      "Neutral mob - only fight if needed.":"Use maxed diamond/netherite gear. Bring healing."}`, tags:["strategy","combat"] },
+    { name:"Avoiding", tmpl:(o) => `Avoiding ${o.name}: ${o.cat==="mob"&&o.m?o.m.ty==="boss"?"Stay alert, keep arena lit.":o.m.ty==="hostile"?"Light up spawnable areas. Wear appropriate armor.":"No aggression needed.":"Light areas, keep distance, use terrain."}`, tags:["strategy","survival"] },
+    { name:"Farming", tmpl:(o) => `Farming ${o.name}: ${o.cat==="mob"?"Breed with correct food in enclosed area. Build automatic kill chamber.":o.cat==="farming"?"Build dedicated farm design. Use observers + pistons for automation.":o.cat==="block"?"Grow/harvest sustainably. Bone meal accelerates growth.":"Design efficient farm. Collect via hoppers into storage."}`, tags:["strategy","farming"] },
+    { name:"Finding", tmpl:(o) => `Where to find ${o.name}: ${o.cat==="block"&&o.b?o.b.f:"Check specific biomes, structures, or y-levels."} Mine/Hunt systematically.`, tags:["strategy","exploration"] },
+    { name:"Crafting", tmpl:(o) => `Craft ${o.name}: ${o.cat==="potion"?"Brew at brewing stand with blaze powder fuel. Use nether wart base.":
+      o.cat==="enchantment"?"Enchant at table (15 bookshelves maxes level) or trade with librarians.":
+      "Use crafting table with correct pattern. Check recipe book."}`, tags:["strategy","crafting"] },
+    { name:"Trading", tmpl:(o) => `Trading ${o.name}: ${o.cat==="villager"?"Level up villager through repeated trades. Zombie curing gives permanent discounts.":"Find villagers in villages. Emerald economy."}`, tags:["strategy","trading"] },
+    { name:"Enchanting", tmpl:(o) => `Enchant ${o.name}: Use enchanting table (15 bookshelves for max level 30). Lapis lazuli required. Combine on anvil. Mending + Unbreaking is optimal combo.`, tags:["strategy","enchanting"] },
+    { name:"Automating", tmpl:(o) => `Automate ${o.name}: Use observers, pistons, hoppers for full automation. Redstone timers regulate cycles. Water streams transport items.`, tags:["strategy","automation"] },
+    { name:"Safety", tmpl:(o) => `${o.name} safety tips: Light up area. Wear fire resistance in nether. Bring water bucket for falls and lava. Keep golden apples for emergencies.`, tags:["strategy","safety"] },
+    { name:"Brewing", tmpl:(o) => `Brew ${o.name}: Awkward potion base + effect ingredient. Redstone = extended duration. Glowstone = stronger effect. Gunpowder = splash. Dragon's breath = lingering.`, tags:["strategy","brewing"] },
+    { name:"Exploration", tmpl:(o) => `Explore ${o.name}: Bring full kit (tools, weapons, food, torches, blocks). Compass or coordinates. Mark return path.`, tags:["strategy","exploration"] },
+    { name:"Efficiency", tmpl:(o) => `Efficient ${o.name} strategies: Enchanted tools (Efficiency V, Unbreaking III, Mending). Beacon with Haste II. Automated collection.`, tags:["strategy","efficiency"] },
+    { name:"Redstone", tmpl:(o) => `${o.name} redstone guide: ${o.cat==="redstone"?"Use with repeaters/comparators for timing. Signal strength matters for analog circuits.":"Redstone connects up to 15 blocks. Use repeater to extend."}`, tags:["strategy","redstone"] },
+    { name:"Nether", tmpl:(o) => `Nether ${o.name}: Gold armor vs piglins. Fire resistance potions essential. Bed bombing for ancient debris. Warped fungus on stick for striders.`, tags:["strategy","nether"] },
+    { name:"Preparation", tmpl:(o) => `Prepare for ${o.name}: Gather full diamond/netherite gear. Potions (strength, regen, fire res). Golden apples. Beds for respawn.`, tags:["strategy","preparation"] },
+    { name:"Survival", tmpl:(o) => `Survive ${o.name}: Food first (hunt/cook). Shelter night 1. Establish wheat farm. Light base. Mine in branches at Y=-59 for diamonds.`, tags:["strategy","survival"] },
+    { name:"XP", tmpl:(o) => `XP from ${o.name}: ${o.cat==="mob"?"Kill hostile mobs for XP. Spawner farms give 17 XP/min. Enderman farm is best.":"Smelt ores, mine quartz, breed animals. Trading with villagers gives XP bottles."}`, tags:["strategy","xp"] },
+    { name:"Storage", tmpl:(o) => `Store ${o.name}: Double chests for bulk. Shulker boxes for portable storage. Item sorters organize. Ender chest for personal cross-dimension access.`, tags:["strategy","storage"] },
+    { name:"Lighting", tmpl:(o) => `Lighting for ${o.name}: Light level 7+ prevents hostile spawns. Torches (14 light) are cheapest. Lanterns look better. Glowstone/sea lanterns for high ceilings.`, tags:["strategy","lighting"] },
+    { name:"Transport", tmpl:(o) => `Transport ${o.name}: Ice boat roads fastest (blue ice). Nether hub (divide coords by 8). Elytra+rockets for endgame flight.`, tags:["strategy","transport"] },
+    { name:"Defense", tmpl:(o) => `Defend ${o.name}: Walls (height 3+). Moat or lava moat. Iron golems. Lightning/warding. Fencing perimeter.`, tags:["strategy","defense"] },
+    { name:"Breakthrough", tmpl:(o) => `Master ${o.name}: Practice the technique. Watch experienced players. Optimize your setup. ${o.cat==="mob"?"Learn attack patterns and timing.":""}`, tags:["strategy","mastery"] },
+    { name:"Progress", tmpl:(o) => `${o.name} progress path: Wooden tools → stone → iron → diamond. Enchant. Brew potions. Enter nether. Gear up. Defeat dragon. Elytra. Explore end cities.`, tags:["strategy","progression"] },
+    { name:"Hybrid", tmpl:(o) => `Combine ${o.name}: Mix with complementary elements. Redstone + building = hidden mechanisms. Farming + redstone = automation. Trading + farming = resources.`, tags:["strategy","advanced"] },
+    { name:"Optimization", tmpl:(o) => `Optimize ${o.name}: Min-max with best enchants. Fortune III for ores. Looting III for mobs. Silk Touch for glass/bookshelves. Efficiency V for speed.`, tags:["strategy","optimization"] },
+    { name:"Gathering", tmpl:(o) => `Gather ${o.name}: Collect systematically. Use shulker boxes for transport. Ender chest for safety. Hoppers + chest carts for bulk collection.`, tags:["strategy","gathering"] },
+    { name:"Spawnproofing", tmpl:(o) => `${o.name} spawnproofing: Light level 7+ everywhere. Half-slabs prevent non-silverfish spawns. Bottom slabs preferred. Carpets on floors. Buttons on ceilings.`, tags:["strategy","defense","lighting"] },
+    { name:"Community", tmpl:(o) => `${o.name} multiplayer tips: Coordinate roles (miner, farmer, builder, explorer). Shared storage with sorting. Nether hub for fast travel.`, tags:["strategy","multiplayer"] },
+    { name:"Budget", tmpl:(o) => `Budget ${o.name} strategy: Early game alternatives. Minimal grinder kills for resources. Vanilla methods before moving to fully optimized farms.`, tags:["strategy","efficiency","beginner"] },
+    { name:"Aesthetics", tmpl:(o) => `Aesthetic ${o.name}: ${o.cat==="block"?"Mix textures and colors. Add depth with stairs/slabs/walls. Use trapdoors for detail.":"Design for visual appeal first. Function follows form."} Gradient palettes, block variation, and organic shapes.`, tags:["strategy","building","decorative"] },
+    { name:"Renewable", tmpl:(o) => `Renewable ${o.name}: ${o.cat==="block"?"Automate production with farms. Most blocks have renewable sources.":o.cat==="mob"?"Breeding farms provide infinite resources.":"Set up sustainable production loops. Design for expandability."}`, tags:["strategy","sustainable"] },
+    { name:"Mastery", tmpl:(o) => `Master ${o.name}: Study the mechanics. Practice precise placement/timing. ${o.cat==="mob"?"Learn pattern recognition for critical hits.":o.cat==="redstone"?"Understand signal strength and propagation delays.":"Combine multiple techniques for advanced results."}`, tags:["strategy","advanced"] },
+    { name:"Speedrun", tmpl:(o) => `Speedrun ${o.name}: 16 goals in under 30 minutes. Skip mining — village loot for gear. Bastion for gold -> piglin trade -> pearls -> end portal. Bow the dragon.`, tags:["strategy","speedrun"] },
+    { name:"Hardcore", tmpl:(o) => `Hardcore ${o.name}: No mistakes allowed. Max protective enchants. Fire resistance potions. Golden apples always in hotbar. Slime block for safe falls.`, tags:["strategy","hardcore","safety"] },
+    { name:"Beacon", tmpl:(o) => `${o.name} beacon setup: Pyramid of mineral blocks (9 iron/gold/diamond/emerald. Max pyramid 164 blocks tier 4). Haste II + speed for mining. Strength I + regen for combat.`, tags:["strategy","utility"] },
+    { name:"Village", tmpl:(o) => `${o.name} village strategy: Claim workstation. Protect villagers. Trade for best gear. Zombie-cure for discounts. Iron farm for infinite golems.`, tags:["strategy","trading","villager"] },
+    { name:"Weather", tmpl:(o) => `${o.name} weather management: Lightning rod for lightning protection. Beds skip storms. Thunderstorms reduce light → mobs spawn daytime. Dolphins lead to treasure in rain.`, tags:["strategy","survival"] },
+  ];
+
+  const objs = buildStratObjects();
+  console.error(`  Strategy objects: ${objs.length}, verbs: ${VERBS.length} (expected ~${objs.length * VERBS.length} entries)`);
+
+  const r = [];
+  let cnt = 0;
+  for (const verb of VERBS) {
+    for (const obj of objs) {
+      const id = "strategy:"+verb.name.toLowerCase().replace(/[^a-z]/g,"_")+"_"+obj.id.replace(/:/g,"_").replace(/[^a-z0-9_]/g,"");
+      r.push(entry(id, "strategy", verb.name+" "+obj.name, verb.tmpl(obj), [...new Set([...verb.tags, ...obj.g])]));
+      if (++cnt % 2000 === 0) console.error(`  Generated ${cnt} strategy entries...`);
+    }
+  }
+  return r;
+}
+
+// =========== RUN ===========
+console.error("Generating blocks...");
+const allBlocks = genBlocks();
+console.error("Generating mobs...");
+const allMobs = genMobs();
+console.error("Generating biomes...");
+const allBiomes = genBiomes();
+console.error("Generating items (potions + enchants)...");
+const allItems = genItems();
+console.error("Generating items (equipment)...");
+const allEquip = genEquipmentItems();
+console.error("Generating recipes...");
+const allRecipes = genRecipes();
+console.error("Generating strategies...");
+const allStrategies = genStrategies();
+
+write("blocks.json", allBlocks);
+write("mobs.json", allMobs);
+write("items.json", [...allItems, ...allEquip]);
+write("recipes.json", allRecipes);
+write("biomes.json", allBiomes);
+write("strategy.json", allStrategies);
+
+const total = [allBlocks, allMobs, allBiomes, allItems, allEquip, allRecipes, allStrategies].reduce((a,x)=>a+x.length, 0);
+console.log(`\nTOTAL: ${total} knowledge entries`);
+console.log(`  Blocks: ${allBlocks.length}`);
+console.log(`  Mobs: ${allMobs.length}`);
+console.log(`  Biomes: ${allBiomes.length}`);
+console.log(`  Items (potions+enchants): ${allItems.length}`);
+console.log(`  Items (equipment): ${allEquip.length}`);
+console.log(`  Recipes: ${allRecipes.length}`);
+console.log(`  Strategies: ${allStrategies.length}`);

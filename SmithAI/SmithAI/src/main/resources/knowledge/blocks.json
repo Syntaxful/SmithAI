@@ -3,21 +3,67 @@
     "id": "minecraft:stone",
     "category": "block",
     "name": "Stone",
-    "description": "A common solid block found underground. Mined fastest with a pickaxe. Drops cobblestone unless mined with Silk Touch.",
+    "description": "Stone is a Minecraft block. Mined with a pick (wood+ tier). Found everywhere underground. Drops: cobblestone.",
     "tags": [
-      "block",
+      "stone",
+      "common"
+    ]
+  },
+  {
+    "id": "minecraft:stone_get",
+    "category": "block",
+    "name": "Getting Stone",
+    "description": "To obtain Stone: mined with a pick (wood+ tier) where it generates everywhere underground. Cobblestone.",
+    "tags": [
+      "strategy",
       "mining",
-      "building"
+      "stone",
+      "common"
+    ]
+  },
+  {
+    "id": "minecraft:stone_use",
+    "category": "block",
+    "name": "Building with Stone",
+    "description": "Stone is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "stone",
+      "common"
     ]
   },
   {
     "id": "minecraft:cobblestone",
     "category": "block",
     "name": "Cobblestone",
-    "description": "Dropped when mining stone without Silk Touch. Used for tools, furnaces, and building.",
+    "description": "Cobblestone is a Minecraft block. Mined with a pick (wood+ tier). Found mining stone. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "stone",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:cobblestone_get",
+    "category": "block",
+    "name": "Getting Cobblestone",
+    "description": "To obtain Cobblestone: mined with a pick (wood+ tier) where it generates mining stone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
       "mining",
+      "stone",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:cobblestone_use",
+    "category": "block",
+    "name": "Building with Cobblestone",
+    "description": "Cobblestone is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "stone",
       "building"
     ]
   },
@@ -25,11 +71,33 @@
     "id": "minecraft:granite",
     "category": "block",
     "name": "Granite",
-    "description": "An igneous rock variant of stone. Can be polished for decorative building.",
+    "description": "Granite is a Minecraft block. Mined with a pick (wood+ tier). Found underground Y>0. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:granite_get",
+    "category": "block",
+    "name": "Getting Granite",
+    "description": "To obtain Granite: mined with a pick (wood+ tier) where it generates underground Y>0. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
       "mining",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:granite_use",
+    "category": "block",
+    "name": "Building with Granite",
+    "description": "Granite is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
       "building",
+      "stone",
       "decorative"
     ]
   },
@@ -37,11 +105,33 @@
     "id": "minecraft:diorite",
     "category": "block",
     "name": "Diorite",
-    "description": "A white stone variant. Can be polished for decorative use.",
+    "description": "Diorite is a Minecraft block. Mined with a pick (wood+ tier). Found underground Y>0. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:diorite_get",
+    "category": "block",
+    "name": "Getting Diorite",
+    "description": "To obtain Diorite: mined with a pick (wood+ tier) where it generates underground Y>0. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
       "mining",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:diorite_use",
+    "category": "block",
+    "name": "Building with Diorite",
+    "description": "Diorite is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
       "building",
+      "stone",
       "decorative"
     ]
   },
@@ -49,35 +139,33 @@
     "id": "minecraft:andesite",
     "category": "block",
     "name": "Andesite",
-    "description": "A gray stone variant. Can be polished for decorative building.",
+    "description": "Andesite is a Minecraft block. Mined with a pick (wood+ tier). Found underground Y>0. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "mining",
-      "building",
+      "stone",
       "decorative"
     ]
   },
   {
-    "id": "minecraft:tuff",
+    "id": "minecraft:andesite_get",
     "category": "block",
-    "name": "Tuff",
-    "description": "A light gray rock found near deepslate. Used for decorative building.",
+    "name": "Getting Andesite",
+    "description": "To obtain Andesite: mined with a pick (wood+ tier) where it generates underground Y>0. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "strategy",
       "mining",
-      "building",
+      "stone",
       "decorative"
     ]
   },
   {
-    "id": "minecraft:calcite",
+    "id": "minecraft:andesite_use",
     "category": "block",
-    "name": "Calcite",
-    "description": "A white mineral block found in geode layers. Used for decorative building.",
+    "name": "Building with Andesite",
+    "description": "Andesite is used for building and decorative purposes. ",
     "tags": [
-      "block",
-      "mining",
+      "strategy",
       "building",
+      "stone",
       "decorative"
     ]
   },
@@ -85,11 +173,33 @@
     "id": "minecraft:deepslate",
     "category": "block",
     "name": "Deepslate",
-    "description": "A dark stone variant found deep underground. Harder than stone and used for building.",
+    "description": "Deepslate is a Minecraft block. Mined with a pick (wood+ tier). Found below Y=0. Drops: cobbled_deepslate.",
     "tags": [
-      "block",
+      "stone",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_get",
+    "category": "block",
+    "name": "Getting Deepslate",
+    "description": "To obtain Deepslate: mined with a pick (wood+ tier) where it generates below Y=0. Cobbled_deepslate.",
+    "tags": [
+      "strategy",
       "mining",
+      "stone",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_use",
+    "category": "block",
+    "name": "Building with Deepslate",
+    "description": "Deepslate is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
       "building",
+      "stone",
       "deep"
     ]
   },
@@ -97,63 +207,372 @@
     "id": "minecraft:cobbled_deepslate",
     "category": "block",
     "name": "Cobbled Deepslate",
-    "description": "Drops from mining deepslate. Used for tools and building.",
+    "description": "Cobbled Deepslate is a Minecraft block. Mined with a pick (wood+ tier). Found mining deepslate. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "mining",
-      "building"
+      "stone",
+      "deep"
     ]
   },
   {
-    "id": "minecraft:reinforced_deepslate",
+    "id": "minecraft:cobbled_deepslate_get",
     "category": "block",
-    "name": "Reinforced Deepslate",
-    "description": "Indestructible block found in the deep dark near the warden. Cannot be mined.",
+    "name": "Getting Cobbled Deepslate",
+    "description": "To obtain Cobbled Deepslate: mined with a pick (wood+ tier) where it generates mining deepslate. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "indestructible",
+      "strategy",
+      "mining",
+      "stone",
       "deep"
+    ]
+  },
+  {
+    "id": "minecraft:cobbled_deepslate_use",
+    "category": "block",
+    "name": "Building with Cobbled Deepslate",
+    "description": "Cobbled Deepslate is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "stone",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:tuff",
+    "category": "block",
+    "name": "Tuff",
+    "description": "Tuff is a Minecraft block. Mined with a pick (wood+ tier). Found below Y=0. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:tuff_get",
+    "category": "block",
+    "name": "Getting Tuff",
+    "description": "To obtain Tuff: mined with a pick (wood+ tier) where it generates below Y=0. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:tuff_use",
+    "category": "block",
+    "name": "Building with Tuff",
+    "description": "Tuff is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:calcite",
+    "category": "block",
+    "name": "Calcite",
+    "description": "Calcite is a Minecraft block. Mined with a pick (wood+ tier). Found geodes. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:calcite_get",
+    "category": "block",
+    "name": "Getting Calcite",
+    "description": "To obtain Calcite: mined with a pick (wood+ tier) where it generates geodes. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "stone",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:calcite_use",
+    "category": "block",
+    "name": "Building with Calcite",
+    "description": "Calcite is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "stone",
+      "decorative"
     ]
   },
   {
     "id": "minecraft:bedrock",
     "category": "block",
     "name": "Bedrock",
-    "description": "An indestructible block found at the bottom of the world and in the End and Nether roofs.",
+    "description": "Bedrock is a Minecraft block. Breakable by hand. Found world bottom. Drops: nothing.",
     "tags": [
       "block",
       "indestructible"
     ]
   },
   {
+    "id": "minecraft:bedrock_get",
+    "category": "block",
+    "name": "Getting Bedrock",
+    "description": "To obtain Bedrock: breakable by hand where it generates world bottom. Nothing.",
+    "tags": [
+      "strategy",
+      "mining",
+      "block",
+      "indestructible"
+    ]
+  },
+  {
+    "id": "minecraft:bedrock_use",
+    "category": "block",
+    "name": "Building with Bedrock",
+    "description": "Bedrock is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "block",
+      "indestructible"
+    ]
+  },
+  {
+    "id": "minecraft:obsidian",
+    "category": "block",
+    "name": "Obsidian",
+    "description": "Obsidian is a Minecraft block. Mined with a pick (diamond+ tier). Found water+lava contact. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "block",
+      "portal"
+    ]
+  },
+  {
+    "id": "minecraft:obsidian_get",
+    "category": "block",
+    "name": "Getting Obsidian",
+    "description": "To obtain Obsidian: mined with a pick (diamond+ tier) where it generates water+lava contact. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "block",
+      "portal"
+    ]
+  },
+  {
+    "id": "minecraft:obsidian_use",
+    "category": "block",
+    "name": "Building with Obsidian",
+    "description": "Obsidian is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "block",
+      "portal"
+    ]
+  },
+  {
+    "id": "minecraft:crying_obsidian",
+    "category": "block",
+    "name": "Crying Obsidian",
+    "description": "Crying Obsidian is a Minecraft block. Mined with a pick (diamond+ tier). Found ruined portals. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "block",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:crying_obsidian_get",
+    "category": "block",
+    "name": "Getting Crying Obsidian",
+    "description": "To obtain Crying Obsidian: mined with a pick (diamond+ tier) where it generates ruined portals. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "block",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:crying_obsidian_use",
+    "category": "block",
+    "name": "Building with Crying Obsidian",
+    "description": "Crying Obsidian is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "block",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:smooth_stone",
+    "category": "block",
+    "name": "Smooth Stone",
+    "description": "Smooth Stone is a Minecraft block. Mined with a pick (wood+ tier). Found smelted stone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "stone",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:smooth_stone_get",
+    "category": "block",
+    "name": "Getting Smooth Stone",
+    "description": "To obtain Smooth Stone: mined with a pick (wood+ tier) where it generates smelted stone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "stone",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:smooth_stone_use",
+    "category": "block",
+    "name": "Building with Smooth Stone",
+    "description": "Smooth Stone is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "stone",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:end_stone",
+    "category": "block",
+    "name": "End Stone",
+    "description": "End Stone is a Minecraft block. Mined with a pick (wood+ tier). Found the end. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "end",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:end_stone_get",
+    "category": "block",
+    "name": "Getting End Stone",
+    "description": "To obtain End Stone: mined with a pick (wood+ tier) where it generates the end. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "end",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:end_stone_use",
+    "category": "block",
+    "name": "Building with End Stone",
+    "description": "End Stone is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "end",
+      "building"
+    ]
+  },
+  {
     "id": "minecraft:dirt",
     "category": "block",
     "name": "Dirt",
-    "description": "A common surface block. Can be tilled into farmland with a hoe.",
+    "description": "Dirt is a Minecraft block. Mined with a shovel (wood+ tier). Found surface everywhere. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "dirt",
-      "farming"
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:dirt_get",
+    "category": "block",
+    "name": "Getting Dirt",
+    "description": "To obtain Dirt: mined with a shovel (wood+ tier) where it generates surface everywhere. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "dirt",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:dirt_use",
+    "category": "block",
+    "name": "Building with Dirt",
+    "description": "Dirt is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "dirt",
+      "natural"
     ]
   },
   {
     "id": "minecraft:grass_block",
     "category": "block",
     "name": "Grass Block",
-    "description": "Dirt covered in grass. Common in the Overworld surface. Can be silk-touched.",
+    "description": "Grass Block is a Minecraft block. Mined with a shovel (wood+ tier). Found overworld surface. Drops: dirt.",
     "tags": [
-      "block",
       "dirt",
-      "grass"
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:grass_block_get",
+    "category": "block",
+    "name": "Getting Grass Block",
+    "description": "To obtain Grass Block: mined with a shovel (wood+ tier) where it generates overworld surface. Dirt.",
+    "tags": [
+      "strategy",
+      "mining",
+      "dirt",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:grass_block_use",
+    "category": "block",
+    "name": "Building with Grass Block",
+    "description": "Grass Block is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "dirt",
+      "natural"
     ]
   },
   {
     "id": "minecraft:mycelium",
     "category": "block",
     "name": "Mycelium",
-    "description": "Dirt covered in fungus. Found in mushroom fields. Great for growing mushrooms.",
+    "description": "Mycelium is a Minecraft block. Mined with a shovel (wood+ tier). Found mushroom fields. Drops: dirt.",
     "tags": [
-      "block",
+      "dirt",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "minecraft:mycelium_get",
+    "category": "block",
+    "name": "Getting Mycelium",
+    "description": "To obtain Mycelium: mined with a shovel (wood+ tier) where it generates mushroom fields. Dirt.",
+    "tags": [
+      "strategy",
+      "mining",
+      "dirt",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "minecraft:mycelium_use",
+    "category": "block",
+    "name": "Building with Mycelium",
+    "description": "Mycelium is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
       "dirt",
       "mushroom"
     ]
@@ -162,44 +581,101 @@
     "id": "minecraft:podzol",
     "category": "block",
     "name": "Podzol",
-    "description": "Dirt covered in pine needles. Found in old-growth taiga.",
+    "description": "Podzol is a Minecraft block. Mined with a shovel (wood+ tier). Found old growth taiga. Drops: dirt.",
     "tags": [
-      "block",
       "dirt",
-      "taiga",
-      "building"
+      "cold"
+    ]
+  },
+  {
+    "id": "minecraft:podzol_get",
+    "category": "block",
+    "name": "Getting Podzol",
+    "description": "To obtain Podzol: mined with a shovel (wood+ tier) where it generates old growth taiga. Dirt.",
+    "tags": [
+      "strategy",
+      "mining",
+      "dirt",
+      "cold"
+    ]
+  },
+  {
+    "id": "minecraft:podzol_use",
+    "category": "block",
+    "name": "Building with Podzol",
+    "description": "Podzol is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "dirt",
+      "cold"
     ]
   },
   {
     "id": "minecraft:coarse_dirt",
     "category": "block",
     "name": "Coarse Dirt",
-    "description": "Dirt that cannot be tilled. Crafted from dirt and gravel.",
+    "description": "Coarse Dirt is a Minecraft block. Mined with a shovel (wood+ tier). Found crafted/taiga. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "dirt",
       "building"
     ]
   },
   {
-    "id": "minecraft:rooted_dirt",
+    "id": "minecraft:coarse_dirt_get",
     "category": "block",
-    "name": "Rooted Dirt",
-    "description": "Dirt with roots under azalea trees. Can be converted to dirt.",
+    "name": "Getting Coarse Dirt",
+    "description": "To obtain Coarse Dirt: mined with a shovel (wood+ tier) where it generates crafted/taiga. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
       "dirt",
-      "roots"
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:coarse_dirt_use",
+    "category": "block",
+    "name": "Building with Coarse Dirt",
+    "description": "Coarse Dirt is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "dirt",
+      "building"
     ]
   },
   {
     "id": "minecraft:mud",
     "category": "block",
     "name": "Mud",
-    "description": "Found in mangrove swamps. Can be packed into mud bricks or combined with wheat into packed mud.",
+    "description": "Mud is a Minecraft block. Mined with a shovel (wood+ tier). Found mangrove swamps. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "mud",
+      "dirt",
+      "swamp"
+    ]
+  },
+  {
+    "id": "minecraft:mud_get",
+    "category": "block",
+    "name": "Getting Mud",
+    "description": "To obtain Mud: mined with a shovel (wood+ tier) where it generates mangrove swamps. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "dirt",
+      "swamp"
+    ]
+  },
+  {
+    "id": "minecraft:mud_use",
+    "category": "block",
+    "name": "Building with Mud",
+    "description": "Mud is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "dirt",
       "swamp"
     ]
   },
@@ -207,42 +683,235 @@
     "id": "minecraft:clay",
     "category": "block",
     "name": "Clay",
-    "description": "Found underwater in rivers and lakes. Smelt into bricks or terracotta.",
+    "description": "Clay is a Minecraft block. Mined with a shovel (wood+ tier). Found underwater. Drops: clay_balls.",
     "tags": [
-      "block",
-      "clay",
+      "dirt",
       "water"
     ]
   },
   {
-    "id": "minecraft:terracotta",
+    "id": "minecraft:clay_get",
     "category": "block",
-    "name": "Terracotta",
-    "description": "A hardened clay block found in Badlands. Can be dyed into colored variants.",
+    "name": "Getting Clay",
+    "description": "To obtain Clay: mined with a shovel (wood+ tier) where it generates underwater. Clay_balls.",
     "tags": [
-      "block",
-      "building",
-      "decorative"
+      "strategy",
+      "mining",
+      "dirt",
+      "water"
     ]
   },
   {
-    "id": "minecraft:white_terracotta",
+    "id": "minecraft:clay_use",
     "category": "block",
-    "name": "White Terracotta",
-    "description": "Dyed terracotta. Used for decorative building.",
+    "name": "Building with Clay",
+    "description": "Clay is used for building and decorative purposes. ",
     "tags": [
-      "block",
+      "strategy",
       "building",
-      "decorative"
+      "dirt",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:sand",
+    "category": "block",
+    "name": "Sand",
+    "description": "Sand is a Minecraft block. Mined with a shovel (wood+ tier). Found deserts/beaches. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "sand",
+      "gravity"
+    ]
+  },
+  {
+    "id": "minecraft:sand_get",
+    "category": "block",
+    "name": "Getting Sand",
+    "description": "To obtain Sand: mined with a shovel (wood+ tier) where it generates deserts/beaches. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "sand",
+      "gravity"
+    ]
+  },
+  {
+    "id": "minecraft:sand_use",
+    "category": "block",
+    "name": "Building with Sand",
+    "description": "Sand is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sand",
+      "gravity"
+    ]
+  },
+  {
+    "id": "minecraft:red_sand",
+    "category": "block",
+    "name": "Red Sand",
+    "description": "Red Sand is a Minecraft block. Mined with a shovel (wood+ tier). Found badlands. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "sand",
+      "badlands"
+    ]
+  },
+  {
+    "id": "minecraft:red_sand_get",
+    "category": "block",
+    "name": "Getting Red Sand",
+    "description": "To obtain Red Sand: mined with a shovel (wood+ tier) where it generates badlands. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "sand",
+      "badlands"
+    ]
+  },
+  {
+    "id": "minecraft:red_sand_use",
+    "category": "block",
+    "name": "Building with Red Sand",
+    "description": "Red Sand is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sand",
+      "badlands"
+    ]
+  },
+  {
+    "id": "minecraft:suspicious_sand",
+    "category": "block",
+    "name": "Suspicious Sand",
+    "description": "Suspicious Sand is a Minecraft block. Mined with a brush (none+ tier). Found desert wells/temples. Drops: treasure.",
+    "tags": [
+      "sand",
+      "treasure"
+    ]
+  },
+  {
+    "id": "minecraft:suspicious_sand_get",
+    "category": "block",
+    "name": "Getting Suspicious Sand",
+    "description": "To obtain Suspicious Sand: mined with a brush (none+ tier) where it generates desert wells/temples. Treasure.",
+    "tags": [
+      "strategy",
+      "mining",
+      "sand",
+      "treasure"
+    ]
+  },
+  {
+    "id": "minecraft:suspicious_sand_use",
+    "category": "block",
+    "name": "Building with Suspicious Sand",
+    "description": "Suspicious Sand is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sand",
+      "treasure"
+    ]
+  },
+  {
+    "id": "minecraft:gravel",
+    "category": "block",
+    "name": "Gravel",
+    "description": "Gravel is a Minecraft block. Mined with a shovel (wood+ tier). Found underground/beaches. Drops: self,flint.",
+    "tags": [
+      "gravel",
+      "gravity"
+    ]
+  },
+  {
+    "id": "minecraft:gravel_get",
+    "category": "block",
+    "name": "Getting Gravel",
+    "description": "To obtain Gravel: mined with a shovel (wood+ tier) where it generates underground/beaches. Self,flint.",
+    "tags": [
+      "strategy",
+      "mining",
+      "gravel",
+      "gravity"
+    ]
+  },
+  {
+    "id": "minecraft:gravel_use",
+    "category": "block",
+    "name": "Building with Gravel",
+    "description": "Gravel is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "gravel",
+      "gravity"
+    ]
+  },
+  {
+    "id": "minecraft:coal_ore",
+    "category": "block",
+    "name": "Coal Ore",
+    "description": "Coal Ore is a Minecraft block. Mined with a pick (wood+ tier). Found any elevation. Smelt coal in a furnace for resources.",
+    "tags": [
+      "ore",
+      "coal"
+    ]
+  },
+  {
+    "id": "minecraft:coal_ore_get",
+    "category": "block",
+    "name": "Getting Coal Ore",
+    "description": "To obtain Coal Ore: mined with a pick (wood+ tier) where it generates any elevation. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "coal"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_coal_ore",
+    "category": "block",
+    "name": "Deepslate Coal Ore",
+    "description": "Deepslate Coal Ore is a Minecraft block. Mined with a pick (wood+ tier). Found deepslate layers. Smelt coal in a furnace for resources.",
+    "tags": [
+      "ore",
+      "coal",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_coal_ore_get",
+    "category": "block",
+    "name": "Getting Deepslate Coal Ore",
+    "description": "To obtain Deepslate Coal Ore: mined with a pick (wood+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "coal",
+      "deep"
     ]
   },
   {
     "id": "minecraft:iron_ore",
     "category": "block",
     "name": "Iron Ore",
-    "description": "Iron ore is found underground, usually between Y=-64 and Y=72. Requires a stone pickaxe or better. Smelt it to get iron ingots.",
+    "description": "Iron Ore is a Minecraft block. Mined with a pick (stone+ tier). Found Y=-64-72. Smelt raw_iron in a furnace for resources.",
     "tags": [
-      "block",
+      "ore",
+      "iron"
+    ]
+  },
+  {
+    "id": "minecraft:iron_ore_get",
+    "category": "block",
+    "name": "Getting Iron Ore",
+    "description": "To obtain Iron Ore: mined with a pick (stone+ tier) where it generates Y=-64-72. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
       "mining",
       "ore",
       "iron"
@@ -252,143 +921,43 @@
     "id": "minecraft:deepslate_iron_ore",
     "category": "block",
     "name": "Deepslate Iron Ore",
-    "description": "Iron ore embedded in deepslate. Requires a stone pickaxe or better. Drops iron ore.",
+    "description": "Deepslate Iron Ore is a Minecraft block. Mined with a pick (stone+ tier). Found deepslate layers. Smelt raw_iron in a furnace for resources.",
     "tags": [
-      "block",
-      "mining",
       "ore",
-      "iron"
+      "iron",
+      "deep"
     ]
   },
   {
-    "id": "minecraft:gold_ore",
+    "id": "minecraft:deepslate_iron_ore_get",
     "category": "block",
-    "name": "Gold Ore",
-    "description": "Gold ore found around Y=-16 and abundantly in Badlands. Requires an iron pickaxe or better.",
+    "name": "Getting Deepslate Iron Ore",
+    "description": "To obtain Deepslate Iron Ore: mined with a pick (stone+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
     "tags": [
-      "block",
+      "strategy",
       "mining",
       "ore",
-      "gold"
-    ]
-  },
-  {
-    "id": "minecraft:deepslate_gold_ore",
-    "category": "block",
-    "name": "Deepslate Gold Ore",
-    "description": "Gold ore embedded in deepslate. Requires an iron pickaxe or better.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "gold"
-    ]
-  },
-  {
-    "id": "minecraft:diamond_ore",
-    "category": "block",
-    "name": "Diamond Ore",
-    "description": "Diamond ore is found deep underground, most commonly around Y=-59. Requires an iron pickaxe or better.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "diamond"
-    ]
-  },
-  {
-    "id": "minecraft:deepslate_diamond_ore",
-    "category": "block",
-    "name": "Deepslate Diamond Ore",
-    "description": "Diamond ore embedded in deepslate. Requires an iron pickaxe or better.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "diamond"
-    ]
-  },
-  {
-    "id": "minecraft:coal_ore",
-    "category": "block",
-    "name": "Coal Ore",
-    "description": "Coal ore is common underground and in mountains. Mined with any pickaxe. Drops coal for torches and fuel.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "coal",
-      "fuel"
-    ]
-  },
-  {
-    "id": "minecraft:deepslate_coal_ore",
-    "category": "block",
-    "name": "Deepslate Coal Ore",
-    "description": "Coal ore embedded in deepslate. Mined with any pickaxe.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "coal",
-      "fuel"
-    ]
-  },
-  {
-    "id": "minecraft:redstone_ore",
-    "category": "block",
-    "name": "Redstone Ore",
-    "description": "Redstone ore is found deep underground. Requires an iron pickaxe or better. Drops redstone dust.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "redstone"
-    ]
-  },
-  {
-    "id": "minecraft:deepslate_redstone_ore",
-    "category": "block",
-    "name": "Deepslate Redstone Ore",
-    "description": "Redstone ore embedded in deepslate.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "redstone"
-    ]
-  },
-  {
-    "id": "minecraft:lapis_ore",
-    "category": "block",
-    "name": "Lapis Lazuli Ore",
-    "description": "Lapis ore is found underground. Requires a stone pickaxe or better. Drops lapis lazuli.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "lapis"
-    ]
-  },
-  {
-    "id": "minecraft:deepslate_lapis_ore",
-    "category": "block",
-    "name": "Deepslate Lapis Ore",
-    "description": "Lapis ore embedded in deepslate.",
-    "tags": [
-      "block",
-      "mining",
-      "ore",
-      "lapis"
+      "iron",
+      "deep"
     ]
   },
   {
     "id": "minecraft:copper_ore",
     "category": "block",
     "name": "Copper Ore",
-    "description": "Copper ore generates in larger ore blobs underground. Requires a stone pickaxe or better.",
+    "description": "Copper Ore is a Minecraft block. Mined with a pick (stone+ tier). Found Y=-16-112. Smelt raw_copper in a furnace for resources.",
     "tags": [
-      "block",
+      "ore",
+      "copper"
+    ]
+  },
+  {
+    "id": "minecraft:copper_ore_get",
+    "category": "block",
+    "name": "Getting Copper Ore",
+    "description": "To obtain Copper Ore: mined with a pick (stone+ tier) where it generates Y=-16-112. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
       "mining",
       "ore",
       "copper"
@@ -398,144 +967,838 @@
     "id": "minecraft:deepslate_copper_ore",
     "category": "block",
     "name": "Deepslate Copper Ore",
-    "description": "Copper ore embedded in deepslate.",
+    "description": "Deepslate Copper Ore is a Minecraft block. Mined with a pick (stone+ tier). Found deepslate layers. Smelt raw_copper in a furnace for resources.",
     "tags": [
-      "block",
-      "mining",
       "ore",
-      "copper"
+      "copper",
+      "deep"
     ]
   },
   {
-    "id": "minecraft:emerald_ore",
+    "id": "minecraft:deepslate_copper_ore_get",
     "category": "block",
-    "name": "Emerald Ore",
-    "description": "Emerald ore is found in mountain biomes. Requires an iron pickaxe or better.",
+    "name": "Getting Deepslate Copper Ore",
+    "description": "To obtain Deepslate Copper Ore: mined with a pick (stone+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
     "tags": [
-      "block",
+      "strategy",
       "mining",
       "ore",
-      "emerald"
+      "copper",
+      "deep"
     ]
   },
   {
-    "id": "minecraft:deepslate_emerald_ore",
+    "id": "minecraft:gold_ore",
     "category": "block",
-    "name": "Deepslate Emerald Ore",
-    "description": "Emerald ore embedded in deepslate.",
+    "name": "Gold Ore",
+    "description": "Gold Ore is a Minecraft block. Mined with a pick (iron+ tier). Found Y=-64-32. Smelt raw_gold in a furnace for resources.",
     "tags": [
-      "block",
-      "mining",
       "ore",
-      "emerald"
+      "gold"
     ]
   },
   {
-    "id": "minecraft:nether_gold_ore",
+    "id": "minecraft:gold_ore_get",
     "category": "block",
-    "name": "Nether Gold Ore",
-    "description": "Gold ore found in the Nether. Drops gold nuggets when mined.",
+    "name": "Getting Gold Ore",
+    "description": "To obtain Gold Ore: mined with a pick (iron+ tier) where it generates Y=-64-32. Use fortune enchantment for more drops.",
     "tags": [
-      "block",
-      "nether",
+      "strategy",
       "mining",
       "ore",
       "gold"
     ]
   },
   {
+    "id": "minecraft:deepslate_gold_ore",
+    "category": "block",
+    "name": "Deepslate Gold Ore",
+    "description": "Deepslate Gold Ore is a Minecraft block. Mined with a pick (iron+ tier). Found deepslate layers. Smelt raw_gold in a furnace for resources.",
+    "tags": [
+      "ore",
+      "gold",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_gold_ore_get",
+    "category": "block",
+    "name": "Getting Deepslate Gold Ore",
+    "description": "To obtain Deepslate Gold Ore: mined with a pick (iron+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "gold",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_ore",
+    "category": "block",
+    "name": "Redstone Ore",
+    "description": "Redstone Ore is a Minecraft block. Mined with a pick (iron+ tier). Found Y=-64-15. Smelt redstone in a furnace for resources.",
+    "tags": [
+      "ore",
+      "redstone"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_ore_get",
+    "category": "block",
+    "name": "Getting Redstone Ore",
+    "description": "To obtain Redstone Ore: mined with a pick (iron+ tier) where it generates Y=-64-15. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "redstone"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_redstone_ore",
+    "category": "block",
+    "name": "Deepslate Redstone Ore",
+    "description": "Deepslate Redstone Ore is a Minecraft block. Mined with a pick (iron+ tier). Found deepslate layers. Smelt redstone in a furnace for resources.",
+    "tags": [
+      "ore",
+      "redstone",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_redstone_ore_get",
+    "category": "block",
+    "name": "Getting Deepslate Redstone Ore",
+    "description": "To obtain Deepslate Redstone Ore: mined with a pick (iron+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "redstone",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:lapis_ore",
+    "category": "block",
+    "name": "Lapis Lazuli Ore",
+    "description": "Lapis Lazuli Ore is a Minecraft block. Mined with a pick (stone+ tier). Found Y=-64-64. Smelt lapis_lazuli in a furnace for resources.",
+    "tags": [
+      "ore",
+      "lapis"
+    ]
+  },
+  {
+    "id": "minecraft:lapis_ore_get",
+    "category": "block",
+    "name": "Getting Lapis Lazuli Ore",
+    "description": "To obtain Lapis Lazuli Ore: mined with a pick (stone+ tier) where it generates Y=-64-64. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "lapis"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_lapis_ore",
+    "category": "block",
+    "name": "Deepslate Lapis Ore",
+    "description": "Deepslate Lapis Ore is a Minecraft block. Mined with a pick (stone+ tier). Found deepslate layers. Smelt lapis_lazuli in a furnace for resources.",
+    "tags": [
+      "ore",
+      "lapis",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_lapis_ore_get",
+    "category": "block",
+    "name": "Getting Deepslate Lapis Ore",
+    "description": "To obtain Deepslate Lapis Ore: mined with a pick (stone+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "lapis",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:emerald_ore",
+    "category": "block",
+    "name": "Emerald Ore",
+    "description": "Emerald Ore is a Minecraft block. Mined with a pick (iron+ tier). Found mountains Y>0. Smelt emerald in a furnace for resources.",
+    "tags": [
+      "ore",
+      "emerald",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:emerald_ore_get",
+    "category": "block",
+    "name": "Getting Emerald Ore",
+    "description": "To obtain Emerald Ore: mined with a pick (iron+ tier) where it generates mountains Y>0. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "emerald",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_emerald_ore",
+    "category": "block",
+    "name": "Deepslate Emerald Ore",
+    "description": "Deepslate Emerald Ore is a Minecraft block. Mined with a pick (iron+ tier). Found deepslate mountains. Smelt emerald in a furnace for resources.",
+    "tags": [
+      "ore",
+      "emerald",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_emerald_ore_get",
+    "category": "block",
+    "name": "Getting Deepslate Emerald Ore",
+    "description": "To obtain Deepslate Emerald Ore: mined with a pick (iron+ tier) where it generates deepslate mountains. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "emerald",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_ore",
+    "category": "block",
+    "name": "Diamond Ore",
+    "description": "Diamond Ore is a Minecraft block. Mined with a pick (iron+ tier). Found Y=-59 best. Smelt diamond in a furnace for resources.",
+    "tags": [
+      "ore",
+      "diamond",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:diamond_ore_get",
+    "category": "block",
+    "name": "Getting Diamond Ore",
+    "description": "To obtain Diamond Ore: mined with a pick (iron+ tier) where it generates Y=-59 best. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "diamond",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_diamond_ore",
+    "category": "block",
+    "name": "Deepslate Diamond Ore",
+    "description": "Deepslate Diamond Ore is a Minecraft block. Mined with a pick (iron+ tier). Found deepslate layers. Smelt diamond in a furnace for resources.",
+    "tags": [
+      "ore",
+      "diamond",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:deepslate_diamond_ore_get",
+    "category": "block",
+    "name": "Getting Deepslate Diamond Ore",
+    "description": "To obtain Deepslate Diamond Ore: mined with a pick (iron+ tier) where it generates deepslate layers. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "diamond",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:nether_gold_ore",
+    "category": "block",
+    "name": "Nether Gold Ore",
+    "description": "Nether Gold Ore is a Minecraft block. Mined with a pick (wood+ tier). Found nether wastes. Smelt gold_nuggets in a furnace for resources.",
+    "tags": [
+      "ore",
+      "gold",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:nether_gold_ore_get",
+    "category": "block",
+    "name": "Getting Nether Gold Ore",
+    "description": "To obtain Nether Gold Ore: mined with a pick (wood+ tier) where it generates nether wastes. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
+      "mining",
+      "ore",
+      "gold",
+      "nether"
+    ]
+  },
+  {
     "id": "minecraft:nether_quartz_ore",
     "category": "block",
     "name": "Nether Quartz Ore",
-    "description": "Quartz ore found in the Nether. Drops nether quartz.",
+    "description": "Nether Quartz Ore is a Minecraft block. Mined with a pick (wood+ tier). Found nether wastes. Smelt quartz in a furnace for resources.",
     "tags": [
-      "block",
-      "nether",
+      "ore",
+      "quartz",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:nether_quartz_ore_get",
+    "category": "block",
+    "name": "Getting Nether Quartz Ore",
+    "description": "To obtain Nether Quartz Ore: mined with a pick (wood+ tier) where it generates nether wastes. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
       "mining",
       "ore",
-      "quartz"
+      "quartz",
+      "nether"
     ]
   },
   {
     "id": "minecraft:ancient_debris",
     "category": "block",
     "name": "Ancient Debris",
-    "description": "Rare ore found deep in the Nether. Smelted into netherite scrap. Blast-resistant.",
+    "description": "Ancient Debris is a Minecraft block. Mined with a pick (diamond+ tier). Found Y=8-22 nether. Smelt self in a furnace for resources.",
     "tags": [
-      "block",
-      "nether",
+      "ore",
+      "netherite",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:ancient_debris_get",
+    "category": "block",
+    "name": "Getting Ancient Debris",
+    "description": "To obtain Ancient Debris: mined with a pick (diamond+ tier) where it generates Y=8-22 nether. Use fortune enchantment for more drops.",
+    "tags": [
+      "strategy",
       "mining",
       "ore",
-      "netherite"
+      "netherite",
+      "rare"
     ]
   },
   {
-    "id": "minecraft:raw_iron_block",
+    "id": "minecraft:oak",
     "category": "block",
-    "name": "Block of Raw Iron",
-    "description": "A compact block of raw iron. Can be smelted directly.",
+    "name": "Oak",
+    "description": "Oak is a Minecraft block. Mined with a axe (wood+ tier). Found Oak trees. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "ore",
-      "metal",
-      "storage"
+      "wood",
+      "natural"
     ]
   },
   {
-    "id": "minecraft:raw_gold_block",
+    "id": "minecraft:oak_get",
     "category": "block",
-    "name": "Block of Raw Gold",
-    "description": "A compact block of raw gold.",
+    "name": "Getting Oak",
+    "description": "To obtain Oak: mined with a axe (wood+ tier) where it generates Oak trees. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "ore",
-      "metal",
-      "storage"
-    ]
-  },
-  {
-    "id": "minecraft:raw_copper_block",
-    "category": "block",
-    "name": "Block of Raw Copper",
-    "description": "A compact block of raw copper.",
-    "tags": [
-      "block",
-      "ore",
-      "metal",
-      "storage"
-    ]
-  },
-  {
-    "id": "minecraft:obsidian",
-    "category": "block",
-    "name": "Obsidian",
-    "description": "Created when water touches a lava source. Requires a diamond or netherite pickaxe. Used for nether portals and enchanting tables.",
-    "tags": [
-      "block",
+      "strategy",
       "mining",
-      "portal",
-      "enchanting"
+      "wood",
+      "natural"
     ]
   },
   {
-    "id": "minecraft:crying_obsidian",
+    "id": "minecraft:oak_use",
     "category": "block",
-    "name": "Crying Obsidian",
-    "description": "A decorative obsidian variant that emits purple particles. Used to craft respawn anchors.",
+    "name": "Building with Oak",
+    "description": "Oak is used for building and decorative purposes. It blends well with natural terrain.",
     "tags": [
-      "block",
-      "nether",
-      "portal",
-      "decorative"
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:spruce",
+    "category": "block",
+    "name": "Spruce",
+    "description": "Spruce is a Minecraft block. Mined with a axe (wood+ tier). Found Spruce trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:spruce_get",
+    "category": "block",
+    "name": "Getting Spruce",
+    "description": "To obtain Spruce: mined with a axe (wood+ tier) where it generates Spruce trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:spruce_use",
+    "category": "block",
+    "name": "Building with Spruce",
+    "description": "Spruce is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:birch",
+    "category": "block",
+    "name": "Birch",
+    "description": "Birch is a Minecraft block. Mined with a axe (wood+ tier). Found Birch trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:birch_get",
+    "category": "block",
+    "name": "Getting Birch",
+    "description": "To obtain Birch: mined with a axe (wood+ tier) where it generates Birch trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:birch_use",
+    "category": "block",
+    "name": "Building with Birch",
+    "description": "Birch is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:jungle",
+    "category": "block",
+    "name": "Jungle",
+    "description": "Jungle is a Minecraft block. Mined with a axe (wood+ tier). Found Jungle trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:jungle_get",
+    "category": "block",
+    "name": "Getting Jungle",
+    "description": "To obtain Jungle: mined with a axe (wood+ tier) where it generates Jungle trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:jungle_use",
+    "category": "block",
+    "name": "Building with Jungle",
+    "description": "Jungle is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:acacia",
+    "category": "block",
+    "name": "Acacia",
+    "description": "Acacia is a Minecraft block. Mined with a axe (wood+ tier). Found Acacia trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:acacia_get",
+    "category": "block",
+    "name": "Getting Acacia",
+    "description": "To obtain Acacia: mined with a axe (wood+ tier) where it generates Acacia trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:acacia_use",
+    "category": "block",
+    "name": "Building with Acacia",
+    "description": "Acacia is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:dark_oak",
+    "category": "block",
+    "name": "Dark Oak",
+    "description": "Dark Oak is a Minecraft block. Mined with a axe (wood+ tier). Found Dark Oak trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:dark_oak_get",
+    "category": "block",
+    "name": "Getting Dark Oak",
+    "description": "To obtain Dark Oak: mined with a axe (wood+ tier) where it generates Dark Oak trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:dark_oak_use",
+    "category": "block",
+    "name": "Building with Dark Oak",
+    "description": "Dark Oak is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:mangrove",
+    "category": "block",
+    "name": "Mangrove",
+    "description": "Mangrove is a Minecraft block. Mined with a axe (wood+ tier). Found Mangrove trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:mangrove_get",
+    "category": "block",
+    "name": "Getting Mangrove",
+    "description": "To obtain Mangrove: mined with a axe (wood+ tier) where it generates Mangrove trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:mangrove_use",
+    "category": "block",
+    "name": "Building with Mangrove",
+    "description": "Mangrove is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:cherry",
+    "category": "block",
+    "name": "Cherry",
+    "description": "Cherry is a Minecraft block. Mined with a axe (wood+ tier). Found Cherry trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:cherry_get",
+    "category": "block",
+    "name": "Getting Cherry",
+    "description": "To obtain Cherry: mined with a axe (wood+ tier) where it generates Cherry trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:cherry_use",
+    "category": "block",
+    "name": "Building with Cherry",
+    "description": "Cherry is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:crimson",
+    "category": "block",
+    "name": "Crimson Stem",
+    "description": "Crimson Stem is a Minecraft block. Mined with a axe (wood+ tier). Found Crimson Stem trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:crimson_get",
+    "category": "block",
+    "name": "Getting Crimson Stem",
+    "description": "To obtain Crimson Stem: mined with a axe (wood+ tier) where it generates Crimson Stem trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:crimson_use",
+    "category": "block",
+    "name": "Building with Crimson Stem",
+    "description": "Crimson Stem is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:warped",
+    "category": "block",
+    "name": "Warped Stem",
+    "description": "Warped Stem is a Minecraft block. Mined with a axe (wood+ tier). Found Warped Stem trees. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:warped_get",
+    "category": "block",
+    "name": "Getting Warped Stem",
+    "description": "To obtain Warped Stem: mined with a axe (wood+ tier) where it generates Warped Stem trees. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:warped_use",
+    "category": "block",
+    "name": "Building with Warped Stem",
+    "description": "Warped Stem is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "wood",
+      "natural"
+    ]
+  },
+  {
+    "id": "minecraft:torch",
+    "category": "block",
+    "name": "Torch",
+    "description": "Torch is a Minecraft block. Breakable by hand. Found crafted from stick+coal. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "light",
+      "crafted"
+    ]
+  },
+  {
+    "id": "minecraft:torch_get",
+    "category": "block",
+    "name": "Getting Torch",
+    "description": "To obtain Torch: breakable by hand where it generates crafted from stick+coal. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "light",
+      "crafted"
+    ]
+  },
+  {
+    "id": "minecraft:torch_use",
+    "category": "block",
+    "name": "Building with Torch",
+    "description": "Torch is used for illumination and mob-proofing. ",
+    "tags": [
+      "strategy",
+      "building",
+      "light",
+      "crafted"
+    ]
+  },
+  {
+    "id": "minecraft:soul_torch",
+    "category": "block",
+    "name": "Soul Torch",
+    "description": "Soul Torch is a Minecraft block. Breakable by hand. Found crafted from stick+soul soil. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "light",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_torch_get",
+    "category": "block",
+    "name": "Getting Soul Torch",
+    "description": "To obtain Soul Torch: breakable by hand where it generates crafted from stick+soul soil. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "light",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_torch_use",
+    "category": "block",
+    "name": "Building with Soul Torch",
+    "description": "Soul Torch is used for illumination and mob-proofing. ",
+    "tags": [
+      "strategy",
+      "building",
+      "light",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:lantern",
+    "category": "block",
+    "name": "Lantern",
+    "description": "Lantern is a Minecraft block. Breakable by hand. Found crafted from iron+nugget+torch. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "light",
+      "metal"
+    ]
+  },
+  {
+    "id": "minecraft:lantern_get",
+    "category": "block",
+    "name": "Getting Lantern",
+    "description": "To obtain Lantern: breakable by hand where it generates crafted from iron+nugget+torch. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "light",
+      "metal"
+    ]
+  },
+  {
+    "id": "minecraft:lantern_use",
+    "category": "block",
+    "name": "Building with Lantern",
+    "description": "Lantern is used for illumination and mob-proofing. ",
+    "tags": [
+      "strategy",
+      "building",
+      "light",
+      "metal"
+    ]
+  },
+  {
+    "id": "minecraft:soul_lantern",
+    "category": "block",
+    "name": "Soul Lantern",
+    "description": "Soul Lantern is a Minecraft block. Breakable by hand. Found crafted from iron+soul torch. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "light",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_lantern_get",
+    "category": "block",
+    "name": "Getting Soul Lantern",
+    "description": "To obtain Soul Lantern: breakable by hand where it generates crafted from iron+soul torch. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "light",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_lantern_use",
+    "category": "block",
+    "name": "Building with Soul Lantern",
+    "description": "Soul Lantern is used for illumination and mob-proofing. ",
+    "tags": [
+      "strategy",
+      "building",
+      "light",
+      "soul"
     ]
   },
   {
     "id": "minecraft:glowstone",
     "category": "block",
     "name": "Glowstone",
-    "description": "A bright light source found in the Nether. Drops glowstone dust.",
+    "description": "Glowstone is a Minecraft block. Breakable by hand. Found nether ceiling. Drops: glowstone_dust.",
     "tags": [
-      "block",
+      "light",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:glowstone_get",
+    "category": "block",
+    "name": "Getting Glowstone",
+    "description": "To obtain Glowstone: breakable by hand where it generates nether ceiling. Glowstone_dust.",
+    "tags": [
+      "strategy",
+      "mining",
+      "light",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:glowstone_use",
+    "category": "block",
+    "name": "Building with Glowstone",
+    "description": "Glowstone is used for illumination and mob-proofing. ",
+    "tags": [
+      "strategy",
+      "building",
       "light",
       "nether"
     ]
@@ -544,578 +1807,134 @@
     "id": "minecraft:shroomlight",
     "category": "block",
     "name": "Shroomlight",
-    "description": "A light-emitting block found in nether forests.",
+    "description": "Shroomlight is a Minecraft block. Breakable by hand. Found nether forests. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "light",
       "nether"
     ]
   },
   {
-    "id": "minecraft:ochre_froglight",
+    "id": "minecraft:shroomlight_get",
     "category": "block",
-    "name": "Ochre Froglight",
-    "description": "A warm yellow light block dropped by frogs eating small magma cubes.",
+    "name": "Getting Shroomlight",
+    "description": "To obtain Shroomlight: breakable by hand where it generates nether forests. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
       "light",
-      "decorative"
+      "nether"
     ]
   },
   {
-    "id": "minecraft:verdant_froglight",
+    "id": "minecraft:shroomlight_use",
     "category": "block",
-    "name": "Verdant Froglight",
-    "description": "A green light block dropped by frogs eating small magma cubes.",
+    "name": "Building with Shroomlight",
+    "description": "Shroomlight is used for illumination and mob-proofing. ",
     "tags": [
-      "block",
-      "light",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:pearlescent_froglight",
-    "category": "block",
-    "name": "Pearlescent Froglight",
-    "description": "A purple light block dropped by frogs eating small magma cubes.",
-    "tags": [
-      "block",
-      "light",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:crafting_table",
-    "category": "block",
-    "name": "Crafting Table",
-    "description": "Expands the crafting grid to 3x3. Crafted from 4 wooden planks.",
-    "tags": [
-      "block",
-      "crafting"
-    ]
-  },
-  {
-    "id": "minecraft:furnace",
-    "category": "block",
-    "name": "Furnace",
-    "description": "Smelts ores, food, and other items using fuel. Crafted from 8 cobblestone.",
-    "tags": [
-      "block",
-      "smelting",
-      "fuel"
-    ]
-  },
-  {
-    "id": "minecraft:blast_furnace",
-    "category": "block",
-    "name": "Blast Furnace",
-    "description": "Smelts ores and metal items twice as fast as a furnace.",
-    "tags": [
-      "block",
-      "smelting",
-      "ore"
-    ]
-  },
-  {
-    "id": "minecraft:smoker",
-    "category": "block",
-    "name": "Smoker",
-    "description": "Cooks food twice as fast as a furnace. Crafted from a furnace and logs.",
-    "tags": [
-      "block",
-      "smelting",
-      "food"
-    ]
-  },
-  {
-    "id": "minecraft:chest",
-    "category": "block",
-    "name": "Chest",
-    "description": "Stores up to 27 stacks of items. Crafted from 8 wooden planks.",
-    "tags": [
-      "block",
-      "storage"
-    ]
-  },
-  {
-    "id": "minecraft:trapped_chest",
-    "category": "block",
-    "name": "Trapped Chest",
-    "description": "A chest that emits a redstone signal when opened.",
-    "tags": [
-      "block",
-      "storage",
-      "redstone"
-    ]
-  },
-  {
-    "id": "minecraft:ender_chest",
-    "category": "block",
-    "name": "Ender Chest",
-    "description": "A chest whose contents are shared across all ender chests.",
-    "tags": [
-      "block",
-      "storage",
-      "end"
-    ]
-  },
-  {
-    "id": "minecraft:barrel",
-    "category": "block",
-    "name": "Barrel",
-    "description": "A storage block that can be opened even when blocks are placed on top.",
-    "tags": [
-      "block",
-      "storage"
-    ]
-  },
-  {
-    "id": "minecraft:enchanting_table",
-    "category": "block",
-    "name": "Enchanting Table",
-    "description": "Used to enchant tools, weapons, and armor.",
-    "tags": [
-      "block",
-      "enchanting"
-    ]
-  },
-  {
-    "id": "minecraft:anvil",
-    "category": "block",
-    "name": "Anvil",
-    "description": "Used to repair, rename, and combine enchanted items.",
-    "tags": [
-      "block",
-      "repair",
-      "enchanting"
-    ]
-  },
-  {
-    "id": "minecraft:grindstone",
-    "category": "block",
-    "name": "Grindstone",
-    "description": "Used to repair tools or remove enchantments. Returns some experience.",
-    "tags": [
-      "block",
-      "repair",
-      "enchanting"
-    ]
-  },
-  {
-    "id": "minecraft:stonecutter",
-    "category": "block",
-    "name": "Stonecutter",
-    "description": "Cuts stone blocks into slabs and stairs more efficiently.",
-    "tags": [
-      "block",
+      "strategy",
       "building",
-      "crafting"
-    ]
-  },
-  {
-    "id": "minecraft:loom",
-    "category": "block",
-    "name": "Loom",
-    "description": "Used to apply patterns to banners.",
-    "tags": [
-      "block",
-      "crafting",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:smithing_table",
-    "category": "block",
-    "name": "Smithing Table",
-    "description": "Used to upgrade diamond gear to netherite.",
-    "tags": [
-      "block",
-      "crafting",
-      "netherite"
-    ]
-  },
-  {
-    "id": "minecraft:cartography_table",
-    "category": "block",
-    "name": "Cartography Table",
-    "description": "Used to clone, expand, and lock maps.",
-    "tags": [
-      "block",
-      "crafting",
-      "navigation"
-    ]
-  },
-  {
-    "id": "minecraft:composter",
-    "category": "block",
-    "name": "Composter",
-    "description": "Converts crops and plants into bone meal.",
-    "tags": [
-      "block",
-      "farming"
-    ]
-  },
-  {
-    "id": "minecraft:lectern",
-    "category": "block",
-    "name": "Lectern",
-    "description": "Holds books for multiple players to read. Emits a redstone signal.",
-    "tags": [
-      "block",
-      "redstone",
-      "storage"
-    ]
-  },
-  {
-    "id": "minecraft:torch",
-    "category": "block",
-    "name": "Torch",
-    "description": "Provides light. Crafted from coal and a stick.",
-    "tags": [
-      "block",
       "light",
-      "torch"
-    ]
-  },
-  {
-    "id": "minecraft:soul_torch",
-    "category": "block",
-    "name": "Soul Torch",
-    "description": "A blue torch emitting less light.",
-    "tags": [
-      "block",
-      "light",
-      "soul_fire"
-    ]
-  },
-  {
-    "id": "minecraft:lantern",
-    "category": "block",
-    "name": "Lantern",
-    "description": "A brighter light source than a torch.",
-    "tags": [
-      "block",
-      "light"
-    ]
-  },
-  {
-    "id": "minecraft:soul_lantern",
-    "category": "block",
-    "name": "Soul Lantern",
-    "description": "A blue lantern variant.",
-    "tags": [
-      "block",
-      "light",
-      "soul_fire"
-    ]
-  },
-  {
-    "id": "minecraft:jack_o_lantern",
-    "category": "block",
-    "name": "Jack o'Lantern",
-    "description": "A carved pumpkin with a torch inside.",
-    "tags": [
-      "block",
-      "light",
-      "decorative"
+      "nether"
     ]
   },
   {
     "id": "minecraft:sea_lantern",
     "category": "block",
     "name": "Sea Lantern",
-    "description": "A bright underwater light source.",
+    "description": "Sea Lantern is a Minecraft block. Breakable by hand. Found ocean monuments. Drops: prismarine_crystals.",
     "tags": [
-      "block",
       "light",
       "water"
     ]
   },
   {
-    "id": "minecraft:redstone_lamp",
+    "id": "minecraft:sea_lantern_get",
     "category": "block",
-    "name": "Redstone Lamp",
-    "description": "A lamp that lights up when powered by redstone.",
+    "name": "Getting Sea Lantern",
+    "description": "To obtain Sea Lantern: breakable by hand where it generates ocean monuments. Prismarine_crystals.",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
       "light",
-      "redstone"
-    ]
-  },
-  {
-    "id": "minecraft:oak_log",
-    "category": "block",
-    "name": "Oak Log",
-    "description": "Wood from oak trees. Can be crafted into planks and sticks.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:spruce_log",
-    "category": "block",
-    "name": "Spruce Log",
-    "description": "Wood from spruce trees.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:birch_log",
-    "category": "block",
-    "name": "Birch Log",
-    "description": "Light-colored wood from birch trees.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:jungle_log",
-    "category": "block",
-    "name": "Jungle Log",
-    "description": "Wood from jungle trees.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:acacia_log",
-    "category": "block",
-    "name": "Acacia Log",
-    "description": "Wood from acacia trees. Crafted into reddish planks.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:dark_oak_log",
-    "category": "block",
-    "name": "Dark Oak Log",
-    "description": "Wood from dark oak trees.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:mangrove_log",
-    "category": "block",
-    "name": "Mangrove Log",
-    "description": "Wood from mangrove trees.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:cherry_log",
-    "category": "block",
-    "name": "Cherry Log",
-    "description": "Pink-tinted wood from cherry trees.",
-    "tags": [
-      "block",
-      "wood",
-      "building",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:crimson_stem",
-    "category": "block",
-    "name": "Crimson Stem",
-    "description": "The wood of crimson fungi in the Nether. Not flammable.",
-    "tags": [
-      "block",
-      "wood",
-      "nether",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:warped_stem",
-    "category": "block",
-    "name": "Warped Stem",
-    "description": "The wood of warped fungi in the Nether. Not flammable.",
-    "tags": [
-      "block",
-      "wood",
-      "nether",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:oak_planks",
-    "category": "block",
-    "name": "Oak Planks",
-    "description": "Basic wooden planks. Used for crafting, sticks, and building.",
-    "tags": [
-      "block",
-      "wood",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:glass",
-    "category": "block",
-    "name": "Glass",
-    "description": "Transparent block made by smelting sand.",
-    "tags": [
-      "block",
-      "glass",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:glass_pane",
-    "category": "block",
-    "name": "Glass Pane",
-    "description": "Thin glass that connects to adjacent panes.",
-    "tags": [
-      "block",
-      "glass",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:white_stained_glass",
-    "category": "block",
-    "name": "White Stained Glass",
-    "description": "Colored glass.",
-    "tags": [
-      "block",
-      "glass",
-      "building",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:sand",
-    "category": "block",
-    "name": "Sand",
-    "description": "A gravity-affected block found in deserts and beaches. Smelt into glass.",
-    "tags": [
-      "block",
-      "sand",
-      "glass"
-    ]
-  },
-  {
-    "id": "minecraft:red_sand",
-    "category": "block",
-    "name": "Red Sand",
-    "description": "A red variant of sand found in Badlands biomes.",
-    "tags": [
-      "block",
-      "sand",
-      "badlands"
-    ]
-  },
-  {
-    "id": "minecraft:suspicious_sand",
-    "category": "block",
-    "name": "Suspicious Sand",
-    "description": "Sand containing buried treasure.",
-    "tags": [
-      "block",
-      "sand",
-      "treasure"
-    ]
-  },
-  {
-    "id": "minecraft:suspicious_gravel",
-    "category": "block",
-    "name": "Suspicious Gravel",
-    "description": "Gravel containing buried treasure.",
-    "tags": [
-      "block",
-      "gravel",
-      "treasure"
-    ]
-  },
-  {
-    "id": "minecraft:gravel",
-    "category": "block",
-    "name": "Gravel",
-    "description": "A gravity-affected block. Drops flint occasionally.",
-    "tags": [
-      "block",
-      "gravel",
-      "flint"
-    ]
-  },
-  {
-    "id": "minecraft:snow",
-    "category": "block",
-    "name": "Snow",
-    "description": "A thin layer of snow on the ground.",
-    "tags": [
-      "block",
-      "cold"
-    ]
-  },
-  {
-    "id": "minecraft:snow_block",
-    "category": "block",
-    "name": "Snow Block",
-    "description": "A full block of snow.",
-    "tags": [
-      "block",
-      "cold",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:ice",
-    "category": "block",
-    "name": "Ice",
-    "description": "Slippery block that melts in light.",
-    "tags": [
-      "block",
-      "cold",
       "water"
     ]
   },
   {
-    "id": "minecraft:packed_ice",
+    "id": "minecraft:sea_lantern_use",
     "category": "block",
-    "name": "Packed Ice",
-    "description": "Solid ice block that does not melt.",
+    "name": "Building with Sea Lantern",
+    "description": "Sea Lantern is used for illumination and mob-proofing. ",
     "tags": [
-      "block",
-      "cold",
-      "building"
+      "strategy",
+      "building",
+      "light",
+      "water"
     ]
   },
   {
-    "id": "minecraft:blue_ice",
+    "id": "minecraft:jack_o_lantern",
     "category": "block",
-    "name": "Blue Ice",
-    "description": "Very dense ice for fast boat travel.",
+    "name": "Jack o'Lantern",
+    "description": "Jack o'Lantern is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from pumpkin+torch. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "cold",
-      "building"
+      "light",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:jack_o_lantern_get",
+    "category": "block",
+    "name": "Getting Jack o'Lantern",
+    "description": "To obtain Jack o'Lantern: mined with a axe (wood+ tier) where it generates crafted from pumpkin+torch. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "light",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:jack_o_lantern_use",
+    "category": "block",
+    "name": "Building with Jack o'Lantern",
+    "description": "Jack o'Lantern is used for illumination and mob-proofing. ",
+    "tags": [
+      "strategy",
+      "building",
+      "light",
+      "decorative"
     ]
   },
   {
     "id": "minecraft:netherrack",
     "category": "block",
     "name": "Netherrack",
-    "description": "The main stone of the Nether. Burns indefinitely when lit.",
+    "description": "Netherrack is a Minecraft block. Mined with a pick (wood+ tier). Found nether. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:netherrack_get",
+    "category": "block",
+    "name": "Getting Netherrack",
+    "description": "To obtain Netherrack: mined with a pick (wood+ tier) where it generates nether. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:netherrack_use",
+    "category": "block",
+    "name": "Building with Netherrack",
+    "description": "Netherrack is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
       "nether",
       "building"
     ]
@@ -1124,30 +1943,134 @@
     "id": "minecraft:soul_sand",
     "category": "block",
     "name": "Soul Sand",
-    "description": "Slows movement. Used for nether wart farms and soul fire.",
+    "description": "Soul Sand is a Minecraft block. Mined with a shovel (wood+ tier). Found soul sand valley. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "nether",
-      "soul_fire"
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_sand_get",
+    "category": "block",
+    "name": "Getting Soul Sand",
+    "description": "To obtain Soul Sand: mined with a shovel (wood+ tier) where it generates soul sand valley. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "nether",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_sand_use",
+    "category": "block",
+    "name": "Building with Soul Sand",
+    "description": "Soul Sand is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "nether",
+      "soul"
     ]
   },
   {
     "id": "minecraft:soul_soil",
     "category": "block",
     "name": "Soul Soil",
-    "description": "Found in soul sand valleys. Used to create soul fire.",
+    "description": "Soul Soil is a Minecraft block. Mined with a shovel (wood+ tier). Found soul sand valley. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "nether"
+      "nether",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_soil_get",
+    "category": "block",
+    "name": "Getting Soul Soil",
+    "description": "To obtain Soul Soil: mined with a shovel (wood+ tier) where it generates soul sand valley. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "nether",
+      "soul"
+    ]
+  },
+  {
+    "id": "minecraft:soul_soil_use",
+    "category": "block",
+    "name": "Building with Soul Soil",
+    "description": "Soul Soil is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "nether",
+      "soul"
     ]
   },
   {
     "id": "minecraft:blackstone",
     "category": "block",
     "name": "Blackstone",
-    "description": "A dark stone found in Bastion Remnants. Can substitute stone in recipes.",
+    "description": "Blackstone is a Minecraft block. Mined with a pick (wood+ tier). Found basalt deltas. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:blackstone_get",
+    "category": "block",
+    "name": "Getting Blackstone",
+    "description": "To obtain Blackstone: mined with a pick (wood+ tier) where it generates basalt deltas. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:blackstone_use",
+    "category": "block",
+    "name": "Building with Blackstone",
+    "description": "Blackstone is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:basalt",
+    "category": "block",
+    "name": "Basalt",
+    "description": "Basalt is a Minecraft block. Mined with a pick (wood+ tier). Found basalt deltas. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:basalt_get",
+    "category": "block",
+    "name": "Getting Basalt",
+    "description": "To obtain Basalt: mined with a pick (wood+ tier) where it generates basalt deltas. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "nether",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:basalt_use",
+    "category": "block",
+    "name": "Building with Basalt",
+    "description": "Basalt is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
       "nether",
       "building"
     ]
@@ -1156,115 +2079,101 @@
     "id": "minecraft:gilded_blackstone",
     "category": "block",
     "name": "Gilded Blackstone",
-    "description": "Blackstone that may drop gold nuggets when mined.",
+    "description": "Gilded Blackstone is a Minecraft block. Mined with a pick (wood+ tier). Found bastions. Drops: self,gold_nuggets.",
     "tags": [
-      "block",
       "nether",
-      "ore",
       "gold"
     ]
   },
   {
-    "id": "minecraft:basalt",
+    "id": "minecraft:gilded_blackstone_get",
     "category": "block",
-    "name": "Basalt",
-    "description": "A dark pillar-like block found in the Nether.",
+    "name": "Getting Gilded Blackstone",
+    "description": "To obtain Gilded Blackstone: mined with a pick (wood+ tier) where it generates bastions. Self,gold_nuggets.",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
       "nether",
-      "building"
+      "gold"
     ]
   },
   {
-    "id": "minecraft:smooth_basalt",
+    "id": "minecraft:gilded_blackstone_use",
     "category": "block",
-    "name": "Smooth Basalt",
-    "description": "Polished basalt.",
+    "name": "Building with Gilded Blackstone",
+    "description": "Gilded Blackstone is used for building and decorative purposes. ",
     "tags": [
-      "block",
+      "strategy",
+      "building",
       "nether",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:polished_blackstone",
-    "category": "block",
-    "name": "Polished Blackstone",
-    "description": "The polished form of blackstone.",
-    "tags": [
-      "block",
-      "nether",
-      "building",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:end_stone",
-    "category": "block",
-    "name": "End Stone",
-    "description": "The main block of the End islands.",
-    "tags": [
-      "block",
-      "end",
-      "building"
-    ]
-  },
-  {
-    "id": "minecraft:end_stone_bricks",
-    "category": "block",
-    "name": "End Stone Bricks",
-    "description": "A decorative variant of end stone.",
-    "tags": [
-      "block",
-      "end",
-      "building",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:purpur_block",
-    "category": "block",
-    "name": "Purpur Block",
-    "description": "A decorative block from End cities.",
-    "tags": [
-      "block",
-      "end",
-      "building",
-      "decorative"
-    ]
-  },
-  {
-    "id": "minecraft:purpur_pillar",
-    "category": "block",
-    "name": "Purpur Pillar",
-    "description": "A pillar variant of purpur.",
-    "tags": [
-      "block",
-      "end",
-      "building",
-      "decorative"
+      "gold"
     ]
   },
   {
     "id": "minecraft:prismarine",
     "category": "block",
     "name": "Prismarine",
-    "description": "A sea-themed block found in ocean monuments.",
+    "description": "Prismarine is a Minecraft block. Mined with a pick (wood+ tier). Found ocean monuments. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "water",
-      "ocean"
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:prismarine_get",
+    "category": "block",
+    "name": "Getting Prismarine",
+    "description": "To obtain Prismarine: mined with a pick (wood+ tier) where it generates ocean monuments. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "water",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:prismarine_use",
+    "category": "block",
+    "name": "Building with Prismarine",
+    "description": "Prismarine is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "water",
+      "building"
     ]
   },
   {
     "id": "minecraft:prismarine_bricks",
     "category": "block",
     "name": "Prismarine Bricks",
-    "description": "A brick variant of prismarine.",
+    "description": "Prismarine Bricks is a Minecraft block. Mined with a pick (wood+ tier). Found ocean monuments. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "water",
-      "ocean",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:prismarine_bricks_get",
+    "category": "block",
+    "name": "Getting Prismarine Bricks",
+    "description": "To obtain Prismarine Bricks: mined with a pick (wood+ tier) where it generates ocean monuments. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "water",
+      "building"
+    ]
+  },
+  {
+    "id": "minecraft:prismarine_bricks_use",
+    "category": "block",
+    "name": "Building with Prismarine Bricks",
+    "description": "Prismarine Bricks is used for construction and decoration. ",
+    "tags": [
+      "strategy",
+      "building",
+      "water",
       "building"
     ]
   },
@@ -1272,237 +2181,1262 @@
     "id": "minecraft:dark_prismarine",
     "category": "block",
     "name": "Dark Prismarine",
-    "description": "A dark variant of prismarine.",
+    "description": "Dark Prismarine is a Minecraft block. Mined with a pick (wood+ tier). Found ocean monuments. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
       "water",
-      "ocean",
       "building"
     ]
   },
   {
-    "id": "minecraft:sponge",
+    "id": "minecraft:dark_prismarine_get",
     "category": "block",
-    "name": "Sponge",
-    "description": "Absorbs water in a 7-block radius.",
+    "name": "Getting Dark Prismarine",
+    "description": "To obtain Dark Prismarine: mined with a pick (wood+ tier) where it generates ocean monuments. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
       "water",
-      "sponge"
+      "building"
     ]
   },
   {
-    "id": "minecraft:wet_sponge",
+    "id": "minecraft:dark_prismarine_use",
     "category": "block",
-    "name": "Wet Sponge",
-    "description": "A waterlogged sponge. Dry in a furnace.",
+    "name": "Building with Dark Prismarine",
+    "description": "Dark Prismarine is used for construction and decoration. ",
     "tags": [
-      "block",
+      "strategy",
+      "building",
       "water",
-      "sponge"
+      "building"
     ]
   },
   {
-    "id": "minecraft:melon",
+    "id": "minecraft:crafting_table",
     "category": "block",
-    "name": "Melon",
-    "description": "Grows from melon seeds.",
+    "name": "Crafting Table",
+    "description": "Crafting Table is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 4 planks. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "farming",
-      "food"
+      "utility",
+      "crafting"
     ]
   },
   {
-    "id": "minecraft:pumpkin",
+    "id": "minecraft:crafting_table_get",
     "category": "block",
-    "name": "Pumpkin",
-    "description": "Grows from pumpkin seeds.",
+    "name": "Getting Crafting Table",
+    "description": "To obtain Crafting Table: mined with a axe (wood+ tier) where it generates crafted from 4 planks. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "farming",
-      "decorative"
+      "strategy",
+      "mining",
+      "utility",
+      "crafting"
     ]
   },
   {
-    "id": "minecraft:carved_pumpkin",
+    "id": "minecraft:crafting_table_use",
     "category": "block",
-    "name": "Carved Pumpkin",
-    "description": "A pumpkin with a face.",
+    "name": "Building with Crafting Table",
+    "description": "Crafting Table is used for functional builds and machines. ",
     "tags": [
-      "block",
-      "decorative"
+      "strategy",
+      "building",
+      "utility",
+      "crafting"
     ]
   },
   {
-    "id": "minecraft:hay_bale",
+    "id": "minecraft:furnace",
     "category": "block",
-    "name": "Hay Bale",
-    "description": "A compact block of wheat.",
+    "name": "Furnace",
+    "description": "Furnace is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 8 cobblestone. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "farming",
-      "fuel",
+      "utility",
+      "smelting"
+    ]
+  },
+  {
+    "id": "minecraft:furnace_get",
+    "category": "block",
+    "name": "Getting Furnace",
+    "description": "To obtain Furnace: mined with a pick (wood+ tier) where it generates crafted from 8 cobblestone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "smelting"
+    ]
+  },
+  {
+    "id": "minecraft:furnace_use",
+    "category": "block",
+    "name": "Building with Furnace",
+    "description": "Furnace is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "smelting"
+    ]
+  },
+  {
+    "id": "minecraft:blast_furnace",
+    "category": "block",
+    "name": "Blast Furnace",
+    "description": "Blast Furnace is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 3 stone+5 iron. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "smelting"
+    ]
+  },
+  {
+    "id": "minecraft:blast_furnace_get",
+    "category": "block",
+    "name": "Getting Blast Furnace",
+    "description": "To obtain Blast Furnace: mined with a pick (wood+ tier) where it generates crafted from 3 stone+5 iron. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "smelting"
+    ]
+  },
+  {
+    "id": "minecraft:blast_furnace_use",
+    "category": "block",
+    "name": "Building with Blast Furnace",
+    "description": "Blast Furnace is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "smelting"
+    ]
+  },
+  {
+    "id": "minecraft:smoker",
+    "category": "block",
+    "name": "Smoker",
+    "description": "Smoker is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 4 wood+1 furnace. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "cooking"
+    ]
+  },
+  {
+    "id": "minecraft:smoker_get",
+    "category": "block",
+    "name": "Getting Smoker",
+    "description": "To obtain Smoker: mined with a axe (wood+ tier) where it generates crafted from 4 wood+1 furnace. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "cooking"
+    ]
+  },
+  {
+    "id": "minecraft:smoker_use",
+    "category": "block",
+    "name": "Building with Smoker",
+    "description": "Smoker is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "cooking"
+    ]
+  },
+  {
+    "id": "minecraft:chest",
+    "category": "block",
+    "name": "Chest",
+    "description": "Chest is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 8 planks. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
       "storage"
     ]
   },
   {
-    "id": "minecraft:dried_kelp_block",
+    "id": "minecraft:chest_get",
     "category": "block",
-    "name": "Dried Kelp Block",
-    "description": "A fuel block.",
+    "name": "Getting Chest",
+    "description": "To obtain Chest: mined with a axe (wood+ tier) where it generates crafted from 8 planks. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "fuel"
+      "strategy",
+      "mining",
+      "utility",
+      "storage"
     ]
   },
   {
-    "id": "minecraft:honey_block",
+    "id": "minecraft:chest_use",
     "category": "block",
-    "name": "Honey Block",
-    "description": "A sticky block that slows movement.",
+    "name": "Building with Chest",
+    "description": "Chest is used for functional builds and machines. ",
     "tags": [
-      "block",
-      "redstone",
-      "sticky"
-    ]
-  },
-  {
-    "id": "minecraft:honeycomb_block",
-    "category": "block",
-    "name": "Honeycomb Block",
-    "description": "A decorative block crafted from honeycombs.",
-    "tags": [
-      "block",
+      "strategy",
       "building",
+      "utility",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:barrel",
+    "category": "block",
+    "name": "Barrel",
+    "description": "Barrel is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 6 planks+2 slabs. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:barrel_get",
+    "category": "block",
+    "name": "Getting Barrel",
+    "description": "To obtain Barrel: mined with a axe (wood+ tier) where it generates crafted from 6 planks+2 slabs. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:barrel_use",
+    "category": "block",
+    "name": "Building with Barrel",
+    "description": "Barrel is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "storage"
+    ]
+  },
+  {
+    "id": "minecraft:ender_chest",
+    "category": "block",
+    "name": "Ender Chest",
+    "description": "Ender Chest is a Minecraft block. Mined with a pick (silk+ tier). Found crafted from 8 obsidian+eye. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "storage",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:ender_chest_get",
+    "category": "block",
+    "name": "Getting Ender Chest",
+    "description": "To obtain Ender Chest: mined with a pick (silk+ tier) where it generates crafted from 8 obsidian+eye. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "storage",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:ender_chest_use",
+    "category": "block",
+    "name": "Building with Ender Chest",
+    "description": "Ender Chest is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "storage",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:enchanting_table",
+    "category": "block",
+    "name": "Enchanting Table",
+    "description": "Enchanting Table is a Minecraft block. Mined with a pick (silk+ tier). Found crafted from 4 obsidian+book+diamond. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:enchanting_table_get",
+    "category": "block",
+    "name": "Getting Enchanting Table",
+    "description": "To obtain Enchanting Table: mined with a pick (silk+ tier) where it generates crafted from 4 obsidian+book+diamond. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:enchanting_table_use",
+    "category": "block",
+    "name": "Building with Enchanting Table",
+    "description": "Enchanting Table is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:anvil",
+    "category": "block",
+    "name": "Anvil",
+    "description": "Anvil is a Minecraft block. Mined with a pick (iron+ tier). Found crafted from 3 blocks+4 iron ingots. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "repair"
+    ]
+  },
+  {
+    "id": "minecraft:anvil_get",
+    "category": "block",
+    "name": "Getting Anvil",
+    "description": "To obtain Anvil: mined with a pick (iron+ tier) where it generates crafted from 3 blocks+4 iron ingots. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "repair"
+    ]
+  },
+  {
+    "id": "minecraft:anvil_use",
+    "category": "block",
+    "name": "Building with Anvil",
+    "description": "Anvil is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "repair"
+    ]
+  },
+  {
+    "id": "minecraft:grindstone",
+    "category": "block",
+    "name": "Grindstone",
+    "description": "Grindstone is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 2 sticks+stone+planks. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "repair"
+    ]
+  },
+  {
+    "id": "minecraft:grindstone_get",
+    "category": "block",
+    "name": "Getting Grindstone",
+    "description": "To obtain Grindstone: mined with a pick (wood+ tier) where it generates crafted from 2 sticks+stone+planks. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "repair"
+    ]
+  },
+  {
+    "id": "minecraft:grindstone_use",
+    "category": "block",
+    "name": "Building with Grindstone",
+    "description": "Grindstone is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "repair"
+    ]
+  },
+  {
+    "id": "minecraft:stonecutter",
+    "category": "block",
+    "name": "Stonecutter",
+    "description": "Stonecutter is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 1 iron+3 stone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "cutting"
+    ]
+  },
+  {
+    "id": "minecraft:stonecutter_get",
+    "category": "block",
+    "name": "Getting Stonecutter",
+    "description": "To obtain Stonecutter: mined with a pick (wood+ tier) where it generates crafted from 1 iron+3 stone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "cutting"
+    ]
+  },
+  {
+    "id": "minecraft:stonecutter_use",
+    "category": "block",
+    "name": "Building with Stonecutter",
+    "description": "Stonecutter is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "cutting"
+    ]
+  },
+  {
+    "id": "minecraft:loom",
+    "category": "block",
+    "name": "Loom",
+    "description": "Loom is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 2 planks+2 string. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
       "decorative"
     ]
   },
   {
-    "id": "minecraft:beehive",
+    "id": "minecraft:loom_get",
     "category": "block",
-    "name": "Beehive",
-    "description": "A home for bees.",
+    "name": "Getting Loom",
+    "description": "To obtain Loom: mined with a axe (wood+ tier) where it generates crafted from 2 planks+2 string. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
+      "utility",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:loom_use",
+    "category": "block",
+    "name": "Building with Loom",
+    "description": "Loom is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:cartography_table",
+    "category": "block",
+    "name": "Cartography Table",
+    "description": "Cartography Table is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 2 paper+4 planks. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:cartography_table_get",
+    "category": "block",
+    "name": "Getting Cartography Table",
+    "description": "To obtain Cartography Table: mined with a axe (wood+ tier) where it generates crafted from 2 paper+4 planks. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:cartography_table_use",
+    "category": "block",
+    "name": "Building with Cartography Table",
+    "description": "Cartography Table is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:smithing_table",
+    "category": "block",
+    "name": "Smithing Table",
+    "description": "Smithing Table is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 4 iron+2 planks. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "upgrade"
+    ]
+  },
+  {
+    "id": "minecraft:smithing_table_get",
+    "category": "block",
+    "name": "Getting Smithing Table",
+    "description": "To obtain Smithing Table: mined with a axe (wood+ tier) where it generates crafted from 4 iron+2 planks. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "upgrade"
+    ]
+  },
+  {
+    "id": "minecraft:smithing_table_use",
+    "category": "block",
+    "name": "Building with Smithing Table",
+    "description": "Smithing Table is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "upgrade"
+    ]
+  },
+  {
+    "id": "minecraft:composter",
+    "category": "block",
+    "name": "Composter",
+    "description": "Composter is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 7 any slabs. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
       "farming"
     ]
   },
   {
-    "id": "minecraft:bee_nest",
+    "id": "minecraft:composter_get",
     "category": "block",
-    "name": "Bee Nest",
-    "description": "A naturally generated bee home.",
+    "name": "Getting Composter",
+    "description": "To obtain Composter: mined with a axe (wood+ tier) where it generates crafted from 7 any slabs. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
+      "strategy",
+      "mining",
+      "utility",
       "farming"
     ]
   },
   {
-    "id": "minecraft:cactus",
+    "id": "minecraft:composter_use",
     "category": "block",
-    "name": "Cactus",
-    "description": "A desert plant that damages on contact.",
+    "name": "Building with Composter",
+    "description": "Composter is used for functional builds and machines. ",
     "tags": [
-      "block",
-      "desert",
-      "plant"
+      "strategy",
+      "building",
+      "utility",
+      "farming"
     ]
   },
   {
-    "id": "minecraft:sugar_cane",
+    "id": "minecraft:lectern",
     "category": "block",
-    "name": "Sugar Cane",
-    "description": "Grows near water.",
+    "name": "Lectern",
+    "description": "Lectern is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 6 slabs+1 bookshelf. Drops: drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "farming",
-      "plant"
+      "utility",
+      "redstone"
     ]
   },
   {
-    "id": "minecraft:bamboo",
+    "id": "minecraft:lectern_get",
     "category": "block",
-    "name": "Bamboo",
-    "description": "Fast-growing plant.",
+    "name": "Getting Lectern",
+    "description": "To obtain Lectern: mined with a axe (wood+ tier) where it generates crafted from 6 slabs+1 bookshelf. Drops itself (can be picked up with the correct tool).",
     "tags": [
-      "block",
-      "farming",
-      "plant"
+      "strategy",
+      "mining",
+      "utility",
+      "redstone"
     ]
   },
   {
-    "id": "minecraft:vine",
+    "id": "minecraft:lectern_use",
     "category": "block",
-    "name": "Vines",
-    "description": "Climbable vines found in jungles and swamps.",
+    "name": "Building with Lectern",
+    "description": "Lectern is used for functional builds and machines. ",
     "tags": [
-      "block",
-      "plant"
+      "strategy",
+      "building",
+      "utility",
+      "redstone"
     ]
   },
   {
-    "id": "minecraft:twisting_vines",
+    "id": "minecraft:bookshelf",
     "category": "block",
-    "name": "Twisting Vines",
-    "description": "Climbable vines in warped forests.",
+    "name": "Bookshelf",
+    "description": "Bookshelf is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 6 planks+3 books. Drops: 3 books.",
     "tags": [
-      "block",
-      "nether",
-      "plant"
+      "utility",
+      "enchanting"
     ]
   },
   {
-    "id": "minecraft:weeping_vines",
+    "id": "minecraft:bookshelf_get",
     "category": "block",
-    "name": "Weeping Vines",
-    "description": "Vines from crimson forests.",
+    "name": "Getting Bookshelf",
+    "description": "To obtain Bookshelf: mined with a axe (wood+ tier) where it generates crafted from 6 planks+3 books. 3 books.",
     "tags": [
-      "block",
-      "nether",
-      "plant"
+      "strategy",
+      "mining",
+      "utility",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:bookshelf_use",
+    "category": "block",
+    "name": "Building with Bookshelf",
+    "description": "Bookshelf is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:beacon",
+    "category": "block",
+    "name": "Beacon",
+    "description": "Beacon is a Minecraft block. Mined with a pick (iron+ tier). Found crafted from nether star+glass+obsidian. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "buff"
+    ]
+  },
+  {
+    "id": "minecraft:beacon_get",
+    "category": "block",
+    "name": "Getting Beacon",
+    "description": "To obtain Beacon: mined with a pick (iron+ tier) where it generates crafted from nether star+glass+obsidian. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "buff"
+    ]
+  },
+  {
+    "id": "minecraft:beacon_use",
+    "category": "block",
+    "name": "Building with Beacon",
+    "description": "Beacon is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "buff"
+    ]
+  },
+  {
+    "id": "minecraft:conduit",
+    "category": "block",
+    "name": "Conduit",
+    "description": "Conduit is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from heart of sea+nautilus. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:conduit_get",
+    "category": "block",
+    "name": "Getting Conduit",
+    "description": "To obtain Conduit: mined with a pick (wood+ tier) where it generates crafted from heart of sea+nautilus. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:conduit_use",
+    "category": "block",
+    "name": "Building with Conduit",
+    "description": "Conduit is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:respawn_anchor",
+    "category": "block",
+    "name": "Respawn Anchor",
+    "description": "Respawn Anchor is a Minecraft block. Mined with a pick (diamond+ tier). Found crafted from crying obsidian+glowstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "utility",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:respawn_anchor_get",
+    "category": "block",
+    "name": "Getting Respawn Anchor",
+    "description": "To obtain Respawn Anchor: mined with a pick (diamond+ tier) where it generates crafted from crying obsidian+glowstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "utility",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:respawn_anchor_use",
+    "category": "block",
+    "name": "Building with Respawn Anchor",
+    "description": "Respawn Anchor is used for functional builds and machines. ",
+    "tags": [
+      "strategy",
+      "building",
+      "utility",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_torch",
+    "category": "block",
+    "name": "Redstone Torch",
+    "description": "Redstone Torch is a Minecraft block. Breakable by hand. Found crafted from stick+redstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_torch_get",
+    "category": "block",
+    "name": "Getting Redstone Torch",
+    "description": "To obtain Redstone Torch: breakable by hand where it generates crafted from stick+redstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_torch_use",
+    "category": "block",
+    "name": "Building with Redstone Torch",
+    "description": "Redstone Torch is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:repeater",
+    "category": "block",
+    "name": "Redstone Repeater",
+    "description": "Redstone Repeater is a Minecraft block. Breakable by hand. Found crafted from 2 torches+redstone+stone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:repeater_get",
+    "category": "block",
+    "name": "Getting Redstone Repeater",
+    "description": "To obtain Redstone Repeater: breakable by hand where it generates crafted from 2 torches+redstone+stone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:repeater_use",
+    "category": "block",
+    "name": "Building with Redstone Repeater",
+    "description": "Redstone Repeater is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:comparator",
+    "category": "block",
+    "name": "Redstone Comparator",
+    "description": "Redstone Comparator is a Minecraft block. Breakable by hand. Found crafted from 3 torches+quartz+stone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:comparator_get",
+    "category": "block",
+    "name": "Getting Redstone Comparator",
+    "description": "To obtain Redstone Comparator: breakable by hand where it generates crafted from 3 torches+quartz+stone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:comparator_use",
+    "category": "block",
+    "name": "Building with Redstone Comparator",
+    "description": "Redstone Comparator is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:observer",
+    "category": "block",
+    "name": "Observer",
+    "description": "Observer is a Minecraft block. Breakable by hand. Found crafted from 6 cobblestone+2 redstone+quartz. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:observer_get",
+    "category": "block",
+    "name": "Getting Observer",
+    "description": "To obtain Observer: breakable by hand where it generates crafted from 6 cobblestone+2 redstone+quartz. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:observer_use",
+    "category": "block",
+    "name": "Building with Observer",
+    "description": "Observer is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "component"
+    ]
+  },
+  {
+    "id": "minecraft:piston",
+    "category": "block",
+    "name": "Piston",
+    "description": "Piston is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 4 cobble+3 planks+iron+redstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:piston_get",
+    "category": "block",
+    "name": "Getting Piston",
+    "description": "To obtain Piston: mined with a pick (wood+ tier) where it generates crafted from 4 cobble+3 planks+iron+redstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:piston_use",
+    "category": "block",
+    "name": "Building with Piston",
+    "description": "Piston is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:sticky_piston",
+    "category": "block",
+    "name": "Sticky Piston",
+    "description": "Sticky Piston is a Minecraft block. Mined with a pick (wood+ tier). Found piston+slime ball. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:sticky_piston_get",
+    "category": "block",
+    "name": "Getting Sticky Piston",
+    "description": "To obtain Sticky Piston: mined with a pick (wood+ tier) where it generates piston+slime ball. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:sticky_piston_use",
+    "category": "block",
+    "name": "Building with Sticky Piston",
+    "description": "Sticky Piston is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:dispenser",
+    "category": "block",
+    "name": "Dispenser",
+    "description": "Dispenser is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 7 cobble+bow+redstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:dispenser_get",
+    "category": "block",
+    "name": "Getting Dispenser",
+    "description": "To obtain Dispenser: mined with a pick (wood+ tier) where it generates crafted from 7 cobble+bow+redstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:dispenser_use",
+    "category": "block",
+    "name": "Building with Dispenser",
+    "description": "Dispenser is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:dropper",
+    "category": "block",
+    "name": "Dropper",
+    "description": "Dropper is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 7 cobble+redstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:dropper_get",
+    "category": "block",
+    "name": "Getting Dropper",
+    "description": "To obtain Dropper: mined with a pick (wood+ tier) where it generates crafted from 7 cobble+redstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:dropper_use",
+    "category": "block",
+    "name": "Building with Dropper",
+    "description": "Dropper is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "mechanical"
+    ]
+  },
+  {
+    "id": "minecraft:hopper",
+    "category": "block",
+    "name": "Hopper",
+    "description": "Hopper is a Minecraft block. Mined with a pick (wood+ tier). Found crafted from 5 iron+chest. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:hopper_get",
+    "category": "block",
+    "name": "Getting Hopper",
+    "description": "To obtain Hopper: mined with a pick (wood+ tier) where it generates crafted from 5 iron+chest. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:hopper_use",
+    "category": "block",
+    "name": "Building with Hopper",
+    "description": "Hopper is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "transport"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_lamp",
+    "category": "block",
+    "name": "Redstone Lamp",
+    "description": "Redstone Lamp is a Minecraft block. Breakable by hand. Found glowstone+4 redstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "light"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_lamp_get",
+    "category": "block",
+    "name": "Getting Redstone Lamp",
+    "description": "To obtain Redstone Lamp: breakable by hand where it generates glowstone+4 redstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "light"
+    ]
+  },
+  {
+    "id": "minecraft:redstone_lamp_use",
+    "category": "block",
+    "name": "Building with Redstone Lamp",
+    "description": "Redstone Lamp is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "light"
+    ]
+  },
+  {
+    "id": "minecraft:target",
+    "category": "block",
+    "name": "Target Block",
+    "description": "Target Block is a Minecraft block. Breakable by hand. Found 4 hay bale+redstone. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "interaction"
+    ]
+  },
+  {
+    "id": "minecraft:target_get",
+    "category": "block",
+    "name": "Getting Target Block",
+    "description": "To obtain Target Block: breakable by hand where it generates 4 hay bale+redstone. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "interaction"
+    ]
+  },
+  {
+    "id": "minecraft:target_use",
+    "category": "block",
+    "name": "Building with Target Block",
+    "description": "Target Block is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "interaction"
+    ]
+  },
+  {
+    "id": "minecraft:tnt",
+    "category": "block",
+    "name": "TNT",
+    "description": "TNT is a Minecraft block. Breakable by hand. Found 5 gunpowder+4 sand. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "explosive"
+    ]
+  },
+  {
+    "id": "minecraft:tnt_get",
+    "category": "block",
+    "name": "Getting TNT",
+    "description": "To obtain TNT: breakable by hand where it generates 5 gunpowder+4 sand. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "explosive"
+    ]
+  },
+  {
+    "id": "minecraft:tnt_use",
+    "category": "block",
+    "name": "Building with TNT",
+    "description": "TNT is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "explosive"
     ]
   },
   {
     "id": "minecraft:sculk",
     "category": "block",
     "name": "Sculk",
-    "description": "A block that spreads by consuming experience.",
+    "description": "Sculk is a Minecraft block. Mined with a hoe (wood+ tier). Found deep dark. Drops: xp.",
     "tags": [
-      "block",
-      "deep",
-      "redstone"
+      "sculk",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_get",
+    "category": "block",
+    "name": "Getting Sculk",
+    "description": "To obtain Sculk: mined with a hoe (wood+ tier) where it generates deep dark. Xp.",
+    "tags": [
+      "strategy",
+      "mining",
+      "sculk",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_use",
+    "category": "block",
+    "name": "Building with Sculk",
+    "description": "Sculk is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sculk",
+      "deep"
     ]
   },
   {
     "id": "minecraft:sculk_catalyst",
     "category": "block",
     "name": "Sculk Catalyst",
-    "description": "A sculk block that spreads when a mob dies nearby.",
+    "description": "Sculk Catalyst is a Minecraft block. Mined with a hoe (wood+ tier). Found deep dark. Drops: xp.",
     "tags": [
-      "block",
-      "deep",
-      "redstone"
+      "sculk",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_catalyst_get",
+    "category": "block",
+    "name": "Getting Sculk Catalyst",
+    "description": "To obtain Sculk Catalyst: mined with a hoe (wood+ tier) where it generates deep dark. Xp.",
+    "tags": [
+      "strategy",
+      "mining",
+      "sculk",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_catalyst_use",
+    "category": "block",
+    "name": "Building with Sculk Catalyst",
+    "description": "Sculk Catalyst is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sculk",
+      "deep"
     ]
   },
   {
     "id": "minecraft:sculk_shrieker",
     "category": "block",
     "name": "Sculk Shrieker",
-    "description": "Summons the warden when triggered.",
+    "description": "Sculk Shrieker is a Minecraft block. Mined with a hoe (wood+ tier). Found deep dark. Drops: xp.",
     "tags": [
-      "block",
-      "deep",
-      "redstone"
+      "sculk",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_shrieker_get",
+    "category": "block",
+    "name": "Getting Sculk Shrieker",
+    "description": "To obtain Sculk Shrieker: mined with a hoe (wood+ tier) where it generates deep dark. Xp.",
+    "tags": [
+      "strategy",
+      "mining",
+      "sculk",
+      "deep"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_shrieker_use",
+    "category": "block",
+    "name": "Building with Sculk Shrieker",
+    "description": "Sculk Shrieker is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sculk",
+      "deep"
     ]
   },
   {
     "id": "minecraft:sculk_sensor",
     "category": "block",
     "name": "Sculk Sensor",
-    "description": "A redstone component that detects vibrations.",
+    "description": "Sculk Sensor is a Minecraft block. Mined with a hoe (wood+ tier). Found deep dark. Drops: xp.",
     "tags": [
-      "block",
+      "sculk",
+      "deep",
+      "redstone"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_sensor_get",
+    "category": "block",
+    "name": "Getting Sculk Sensor",
+    "description": "To obtain Sculk Sensor: mined with a hoe (wood+ tier) where it generates deep dark. Xp.",
+    "tags": [
+      "strategy",
+      "mining",
+      "sculk",
+      "deep",
+      "redstone"
+    ]
+  },
+  {
+    "id": "minecraft:sculk_sensor_use",
+    "category": "block",
+    "name": "Building with Sculk Sensor",
+    "description": "Sculk Sensor is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "sculk",
       "deep",
       "redstone"
     ]
@@ -1511,33 +3445,723 @@
     "id": "minecraft:calibrated_sculk_sensor",
     "category": "block",
     "name": "Calibrated Sculk Sensor",
-    "description": "A sculk sensor that filters specific vibration frequencies.",
+    "description": "Calibrated Sculk Sensor is a Minecraft block. Mined with a hoe (wood+ tier). Found deep dark. Drops: xp.",
     "tags": [
-      "block",
+      "sculk",
       "deep",
       "redstone"
     ]
   },
   {
-    "id": "minecraft:white_wool",
+    "id": "minecraft:calibrated_sculk_sensor_get",
     "category": "block",
-    "name": "White Wool",
-    "description": "Dropped from sheep or crafted from string.",
+    "name": "Getting Calibrated Sculk Sensor",
+    "description": "To obtain Calibrated Sculk Sensor: mined with a hoe (wood+ tier) where it generates deep dark. Xp.",
     "tags": [
-      "block",
-      "wool",
-      "bed"
+      "strategy",
+      "mining",
+      "sculk",
+      "deep",
+      "redstone"
     ]
   },
   {
-    "id": "minecraft:bookshelf",
+    "id": "minecraft:calibrated_sculk_sensor_use",
     "category": "block",
-    "name": "Bookshelf",
-    "description": "Bookshelves around an enchanting table improve enchantment levels.",
+    "name": "Building with Calibrated Sculk Sensor",
+    "description": "Calibrated Sculk Sensor is used for redstone circuits and contraptions. ",
     "tags": [
-      "block",
-      "enchanting",
-      "building"
+      "strategy",
+      "building",
+      "sculk",
+      "deep",
+      "redstone"
+    ]
+  },
+  {
+    "id": "minecraft:hay_bale",
+    "category": "block",
+    "name": "Hay Bale",
+    "description": "Hay Bale is a Minecraft block. Mined with a hoe (wood+ tier). Found crafted from 9 wheat. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "farming",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:hay_bale_get",
+    "category": "block",
+    "name": "Getting Hay Bale",
+    "description": "To obtain Hay Bale: mined with a hoe (wood+ tier) where it generates crafted from 9 wheat. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "farming",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:hay_bale_use",
+    "category": "block",
+    "name": "Building with Hay Bale",
+    "description": "Hay Bale is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "farming",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:melon",
+    "category": "block",
+    "name": "Melon",
+    "description": "Melon is a Minecraft block. Mined with a axe (wood+ tier). Found farmed or jungles. Drops: melon_slices.",
+    "tags": [
+      "farming",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:melon_get",
+    "category": "block",
+    "name": "Getting Melon",
+    "description": "To obtain Melon: mined with a axe (wood+ tier) where it generates farmed or jungles. Melon_slices.",
+    "tags": [
+      "strategy",
+      "mining",
+      "farming",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:melon_use",
+    "category": "block",
+    "name": "Building with Melon",
+    "description": "Melon is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "farming",
+      "food"
+    ]
+  },
+  {
+    "id": "minecraft:pumpkin",
+    "category": "block",
+    "name": "Pumpkin",
+    "description": "Pumpkin is a Minecraft block. Mined with a axe (wood+ tier). Found farmed or plains. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "farming",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:pumpkin_get",
+    "category": "block",
+    "name": "Getting Pumpkin",
+    "description": "To obtain Pumpkin: mined with a axe (wood+ tier) where it generates farmed or plains. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "farming",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:pumpkin_use",
+    "category": "block",
+    "name": "Building with Pumpkin",
+    "description": "Pumpkin is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "farming",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:beehive",
+    "category": "block",
+    "name": "Beehive",
+    "description": "Beehive is a Minecraft block. Mined with a axe (wood+ tier). Found crafted from 6 planks+3 honeycomb. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "farming",
+      "bee"
+    ]
+  },
+  {
+    "id": "minecraft:beehive_get",
+    "category": "block",
+    "name": "Getting Beehive",
+    "description": "To obtain Beehive: mined with a axe (wood+ tier) where it generates crafted from 6 planks+3 honeycomb. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "farming",
+      "bee"
+    ]
+  },
+  {
+    "id": "minecraft:beehive_use",
+    "category": "block",
+    "name": "Building with Beehive",
+    "description": "Beehive is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "farming",
+      "bee"
+    ]
+  },
+  {
+    "id": "minecraft:honey_block",
+    "category": "block",
+    "name": "Honey Block",
+    "description": "Honey Block is a Minecraft block. Breakable by hand. Found crafted from 4 honey bottles. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "redstone",
+      "sticky"
+    ]
+  },
+  {
+    "id": "minecraft:honey_block_get",
+    "category": "block",
+    "name": "Getting Honey Block",
+    "description": "To obtain Honey Block: breakable by hand where it generates crafted from 4 honey bottles. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "redstone",
+      "sticky"
+    ]
+  },
+  {
+    "id": "minecraft:honey_block_use",
+    "category": "block",
+    "name": "Building with Honey Block",
+    "description": "Honey Block is used for redstone circuits and contraptions. ",
+    "tags": [
+      "strategy",
+      "building",
+      "redstone",
+      "sticky"
+    ]
+  },
+  {
+    "id": "minecraft:honeycomb_block",
+    "category": "block",
+    "name": "Honeycomb Block",
+    "description": "Honeycomb Block is a Minecraft block. Breakable by hand. Found crafted from 4 honeycomb. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "decorative",
+      "bee"
+    ]
+  },
+  {
+    "id": "minecraft:honeycomb_block_get",
+    "category": "block",
+    "name": "Getting Honeycomb Block",
+    "description": "To obtain Honeycomb Block: breakable by hand where it generates crafted from 4 honeycomb. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "decorative",
+      "bee"
+    ]
+  },
+  {
+    "id": "minecraft:honeycomb_block_use",
+    "category": "block",
+    "name": "Building with Honeycomb Block",
+    "description": "Honeycomb Block is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "decorative",
+      "bee"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_block",
+    "category": "block",
+    "name": "Purpur Block",
+    "description": "Purpur Block is a Minecraft block. Mined with a pick (wood+ tier). Found end cities. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_block_get",
+    "category": "block",
+    "name": "Getting Purpur Block",
+    "description": "To obtain Purpur Block: mined with a pick (wood+ tier) where it generates end cities. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_block_use",
+    "category": "block",
+    "name": "Building with Purpur Block",
+    "description": "Purpur Block is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_pillar",
+    "category": "block",
+    "name": "Purpur Pillar",
+    "description": "Purpur Pillar is a Minecraft block. Mined with a pick (wood+ tier). Found end cities. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_pillar_get",
+    "category": "block",
+    "name": "Getting Purpur Pillar",
+    "description": "To obtain Purpur Pillar: mined with a pick (wood+ tier) where it generates end cities. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:purpur_pillar_use",
+    "category": "block",
+    "name": "Building with Purpur Pillar",
+    "description": "Purpur Pillar is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "end",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:dragon_egg",
+    "category": "block",
+    "name": "Dragon Egg",
+    "description": "Dragon Egg is a Minecraft block. Breakable by hand. Found defeating ender dragon. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "end",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:dragon_egg_get",
+    "category": "block",
+    "name": "Getting Dragon Egg",
+    "description": "To obtain Dragon Egg: breakable by hand where it generates defeating ender dragon. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "end",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:dragon_egg_use",
+    "category": "block",
+    "name": "Building with Dragon Egg",
+    "description": "Dragon Egg is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "end",
+      "rare"
+    ]
+  },
+  {
+    "id": "minecraft:cactus",
+    "category": "block",
+    "name": "Cactus",
+    "description": "Cactus is a Minecraft block. Mined with a axe (wood+ tier). Found deserts. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "desert"
+    ]
+  },
+  {
+    "id": "minecraft:cactus_get",
+    "category": "block",
+    "name": "Getting Cactus",
+    "description": "To obtain Cactus: mined with a axe (wood+ tier) where it generates deserts. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "desert"
+    ]
+  },
+  {
+    "id": "minecraft:cactus_use",
+    "category": "block",
+    "name": "Building with Cactus",
+    "description": "Cactus is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "desert"
+    ]
+  },
+  {
+    "id": "minecraft:sugar_cane",
+    "category": "block",
+    "name": "Sugar Cane",
+    "description": "Sugar Cane is a Minecraft block. Breakable by hand. Found water's edge. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:sugar_cane_get",
+    "category": "block",
+    "name": "Getting Sugar Cane",
+    "description": "To obtain Sugar Cane: breakable by hand where it generates water's edge. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:sugar_cane_use",
+    "category": "block",
+    "name": "Building with Sugar Cane",
+    "description": "Sugar Cane is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "water"
+    ]
+  },
+  {
+    "id": "minecraft:bamboo",
+    "category": "block",
+    "name": "Bamboo",
+    "description": "Bamboo is a Minecraft block. Mined with a axe (wood+ tier). Found jungles. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "jungle",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:bamboo_get",
+    "category": "block",
+    "name": "Getting Bamboo",
+    "description": "To obtain Bamboo: mined with a axe (wood+ tier) where it generates jungles. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "jungle",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:bamboo_use",
+    "category": "block",
+    "name": "Building with Bamboo",
+    "description": "Bamboo is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "jungle",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:kelp",
+    "category": "block",
+    "name": "Kelp",
+    "description": "Kelp is a Minecraft block. Breakable by hand. Found oceans. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "water",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:kelp_get",
+    "category": "block",
+    "name": "Getting Kelp",
+    "description": "To obtain Kelp: breakable by hand where it generates oceans. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "water",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:kelp_use",
+    "category": "block",
+    "name": "Building with Kelp",
+    "description": "Kelp is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "water",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:vine",
+    "category": "block",
+    "name": "Vines",
+    "description": "Vines is a Minecraft block. Mined with a axe (wood+ tier). Found jungles/swamps. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "climbing"
+    ]
+  },
+  {
+    "id": "minecraft:vine_get",
+    "category": "block",
+    "name": "Getting Vines",
+    "description": "To obtain Vines: mined with a axe (wood+ tier) where it generates jungles/swamps. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "climbing"
+    ]
+  },
+  {
+    "id": "minecraft:vine_use",
+    "category": "block",
+    "name": "Building with Vines",
+    "description": "Vines is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "climbing"
+    ]
+  },
+  {
+    "id": "minecraft:twisting_vines",
+    "category": "block",
+    "name": "Twisting Vines",
+    "description": "Twisting Vines is a Minecraft block. Breakable by hand. Found warped forest. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:twisting_vines_get",
+    "category": "block",
+    "name": "Getting Twisting Vines",
+    "description": "To obtain Twisting Vines: breakable by hand where it generates warped forest. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:twisting_vines_use",
+    "category": "block",
+    "name": "Building with Twisting Vines",
+    "description": "Twisting Vines is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:sponge",
+    "category": "block",
+    "name": "Sponge",
+    "description": "Sponge is a Minecraft block. Mined with a hoe (wood+ tier). Found ocean monuments. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "water",
+      "sponge"
+    ]
+  },
+  {
+    "id": "minecraft:sponge_get",
+    "category": "block",
+    "name": "Getting Sponge",
+    "description": "To obtain Sponge: mined with a hoe (wood+ tier) where it generates ocean monuments. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "water",
+      "sponge"
+    ]
+  },
+  {
+    "id": "minecraft:sponge_use",
+    "category": "block",
+    "name": "Building with Sponge",
+    "description": "Sponge is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "water",
+      "sponge"
+    ]
+  },
+  {
+    "id": "minecraft:wet_sponge",
+    "category": "block",
+    "name": "Wet Sponge",
+    "description": "Wet Sponge is a Minecraft block. Mined with a hoe (wood+ tier). Found smelted sponge. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "water",
+      "sponge"
+    ]
+  },
+  {
+    "id": "minecraft:wet_sponge_get",
+    "category": "block",
+    "name": "Getting Wet Sponge",
+    "description": "To obtain Wet Sponge: mined with a hoe (wood+ tier) where it generates smelted sponge. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "water",
+      "sponge"
+    ]
+  },
+  {
+    "id": "minecraft:wet_sponge_use",
+    "category": "block",
+    "name": "Building with Wet Sponge",
+    "description": "Wet Sponge is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "water",
+      "sponge"
+    ]
+  },
+  {
+    "id": "minecraft:moss_block",
+    "category": "block",
+    "name": "Moss Block",
+    "description": "Moss Block is a Minecraft block. Mined with a hoe (wood+ tier). Found lush caves. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "natural",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:moss_block_get",
+    "category": "block",
+    "name": "Getting Moss Block",
+    "description": "To obtain Moss Block: mined with a hoe (wood+ tier) where it generates lush caves. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "natural",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:moss_block_use",
+    "category": "block",
+    "name": "Building with Moss Block",
+    "description": "Moss Block is used for building and decorative purposes. It blends well with natural terrain.",
+    "tags": [
+      "strategy",
+      "building",
+      "natural",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:azalea",
+    "category": "block",
+    "name": "Azalea",
+    "description": "Azalea is a Minecraft block. Mined with a axe (wood+ tier). Found lush caves surface. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:azalea_get",
+    "category": "block",
+    "name": "Getting Azalea",
+    "description": "To obtain Azalea: mined with a axe (wood+ tier) where it generates lush caves surface. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:azalea_use",
+    "category": "block",
+    "name": "Building with Azalea",
+    "description": "Azalea is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:flowering_azalea",
+    "category": "block",
+    "name": "Flowering Azalea",
+    "description": "Flowering Azalea is a Minecraft block. Mined with a axe (wood+ tier). Found lush caves surface. Drops: drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "plant",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:flowering_azalea_get",
+    "category": "block",
+    "name": "Getting Flowering Azalea",
+    "description": "To obtain Flowering Azalea: mined with a axe (wood+ tier) where it generates lush caves surface. Drops itself (can be picked up with the correct tool).",
+    "tags": [
+      "strategy",
+      "mining",
+      "plant",
+      "decorative"
+    ]
+  },
+  {
+    "id": "minecraft:flowering_azalea_use",
+    "category": "block",
+    "name": "Building with Flowering Azalea",
+    "description": "Flowering Azalea is used for building and decorative purposes. ",
+    "tags": [
+      "strategy",
+      "building",
+      "plant",
+      "decorative"
     ]
   }
 ]

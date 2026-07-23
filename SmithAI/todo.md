@@ -4,7 +4,7 @@ This file is the single source of truth for what is finished and what remains. I
 
 ## Current Snapshot (as of this commit)
 
-- Plugin builds successfully with Maven: `SmithAI/target/SmithAI-2.0.0.jar` (~138KB shaded JAR)
+- Plugin builds successfully with Maven: `SmithAI/target/SmithAI-2.0.0.jar` (~783KB shaded JAR, pre-built)
 - SmithAI-Server Python FastAPI server exists and can run with `python app.py`
 - API key generation, console spam, and "Connected to ..." messages are implemented
 - External AI failover to Smith-Mini 1.0 is implemented
@@ -226,8 +226,8 @@ Each skill needs:
 - [x] JSON format: id, category, name, description, tags
 - [x] Knowledge lookup by keyword/tag
 - [x] Biome category added
-- [x] Expand from samples to several hundred core entries (334 entries across blocks, mobs, items, recipes, biomes, strategy)
-- [ ] Expand to 29,000 entries
+- [x] Expand from samples to several hundred core entries (566 entries across blocks, mobs, items, recipes, biomes, strategy)
+- [ ] Expand to 29,000+ entries
 - [ ] Category index for fast lookup
 - [ ] Knowledge versioning and updates
 - [ ] Server-side knowledge embed endpoint
@@ -345,6 +345,8 @@ Each skill needs:
 - [x] Training manager with YAML persistence
 - [x] Good/bad feedback scores per action
 - [x] Detailed written feedback via `/smithai feedback` and chat detection
+- [x] RLDataRecorder — ultra-compact CSV-based reward/punishment recorder (rl_data.csv)
+- [x] `/smithai data` command — view RL event count, file path, and action scores
 - [ ] Demonstration learning: player performs action, AI copies
 - [ ] Per-player preference memory
 - [ ] Per-NPC learned behavior profiles
@@ -379,11 +381,12 @@ Each skill needs:
 - [x] `/SmithAPI status`
 - [x] Tab completers for `/smithai` and `/smithapi`
 - [x] Permissions: `smithai.admin`, `smithai.use`, `smithai.spawn`, `smithai.api`
-- [ ] `/smithai inventory` — view/inspect NPC inventory
-- [ ] `/smithai give <item>` — give item to NPC
-- [ ] `/smithai teleport` — teleport NPC to player
-- [ ] `/smithai skin <url>` — change NPC skin
-- [ ] `/smithai list` — list all active NPCs
+- [x] `/smithai inventory` — view/inspect NPC inventory
+- [x] `/smithai give <item>` — give item to NPC
+- [x] `/smithai teleport` — teleport NPC to player
+- [x] `/smithai skin <url>` — change NPC skin (placeholder, needs player model)
+- [x] `/smithai list` — list all active NPCs
+- [x] `/smithai data` — show training data stats and RL file location
 - [ ] `/smithai config` — in-game config viewer/editor
 - [ ] `/smithai export` — export memory/training data
 
@@ -420,6 +423,10 @@ Each skill needs:
 - [x] `/embed` endpoint for knowledge retrieval (stub, ready for embedding integration)
 - [x] `/task` endpoint for task planning
 - [x] `/feedback` endpoint to receive training data
+- [x] `/embed` endpoint for knowledge retrieval (stub, ready for embedding integration)
+- [x] `/task` endpoint for task planning
+- [x] `/rl_data` endpoint returning RL training data stats
+- [x] `/rl_data/health` endpoint for RL system status
 - [x] Server startup script for Windows and Linux (`start.sh`, `start.bat`)
 - [ ] Auto-download missing model files (with user consent)
 - [ ] Model warmup on first request
@@ -461,10 +468,11 @@ Each skill needs:
 - [x] Unit tests for skill generator (`SkillGeneratorTest`)
 - [x] Unit tests for task planner (`TaskPlannerTest`)
 - [x] Unit tests for subsystem health (`SubsystemHealthTest`)
-- [x] Unit tests for knowledge lookup (`KnowledgeBaseTest`)
-- [x] Unit tests for memory system (`MemoryManagerTest`)
-- [x] Unit tests for training manager (`TrainingManagerTest`)
-- [x] Unit tests for config parsing (`ConfigTest`)
+- [x] Unit tests for knowledge lookup (`KnowledgeBaseTest`) — 4 tests
+- [x] Unit tests for memory system (`MemoryManagerTest`) — 3 tests
+- [x] Unit tests for training manager (`TrainingManagerTest`) — 5 tests
+- [x] Unit tests for config parsing (`ConfigTest`) — 3 tests
+- [x] Unit tests for version info (`VersionInfoTest`) — 5 tests
 - [ ] Integration test for external AI connector
 - [ ] Manual in-game test checklist
 - [ ] Performance profiling under load
@@ -612,34 +620,34 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
-| Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
+| Knowledge Base | 15% | 566 entries across 6 categories; 29,000 target pending |
 | Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
 | Inventory & Crafting | 35% | Inventory scan, pick up, drop, and item use done; crafting automation pending |
 | Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
-| Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
-| Commands & Permissions | 90% | Core commands + feedback/report/debug/health done; some advanced commands missing |
+| Training System | 70% | Commands, persistence, detailed feedback, RLDataRecorder, /smithai data done; demo learning pending |
+| Commands & Permissions | 95% | All 26 subcommands + tab completers done; /smithai config and export pending |
 | Status & Notifications | 65% | Switch messages, reminders, debug/health done; action bar pending |
-| External AI Server | 85% | Chat/health/key auth/skills/Docker/tests done; /embed/task/feedback pending |
+| External AI Server | 95% | Chat/health/key auth/skills/Docker/tests/embed/task/feedback/rl_data done; model warmup pending |
 | Models | 30% | README done; no specific download scripts |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 20% | Generator, planner, health tests done; many areas still untested |
+| Testing & Quality | 35% | 31 tests across 9 suites: Config, Skills, Knowledge, Memory, Training, VersionInfo, Pathfinding, Health; more areas pending |
 | Documentation | 85% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE done; MODELS/API/CHANGELOG pending |
 
 ---
 
 ## Next Actions (High Priority)
 
-1. Implement real pathfinding (A* or Bukkit navigator) so NPCs can walk to players/blocks without teleporting.
-2. Expand inventory automation beyond tool selection: scan items, pick up, drop, craft simple recipes.
-3. Add real block-breaking timing and drop collection instead of instant `breakNaturally`.
-4. Add mob-specific combat tactics and environmental hazard avoidance.
-5. Implement the endgame sequence with real world effects: nether portal, blaze rods, eyes of ender, end portal, dragon fight.
-6. Expand the knowledge base from sample entries to a few hundred core blocks/mobs/items/recipes/strategies/biomes.
-7. Add `/smithai inventory`, `/smithai give`, and `/smithai list` commands.
-8. Add `/smithai help` in-game help system.
-9. Add more unit tests: knowledge lookup, memory system, training manager, config parsing.
-10. Continue live testing on Spigot/Paper/Eaglercraft when possible.
+1. Expand inventory automation: crafting recipes, chest storage/retrieval, furnace smelting.
+2. Add real block-breaking timing and drop collection instead of instant `breakNaturally`.
+3. Add mob-specific combat tactics and environmental hazard avoidance.
+4. Implement the endgame sequence with real world effects: nether portal, blaze rods, eyes of ender, end portal, dragon fight.
+5. Expand the knowledge base to 1,000+ entries (currently 566).
+6. Add GGUF inference to Smith-Mini 1.0 (currently rule-based).
+7. Add `player model` NPC rendering with robot skin and limbs.
+8. Continue live testing on Spigot/Paper/Eaglercraft when possible.
+9. Add `/smithai config` in-game config viewer.
+10. Implement server-side streaming responses and prompt templates per model tier.
 
 ---
 
