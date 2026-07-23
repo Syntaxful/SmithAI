@@ -9,6 +9,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -906,11 +909,94 @@ public class SkillDispatcher {
             return;
         }
 
-        // Default melee combat
+        // Default melee combat with dodging
+        // Random dodge: 40% chance to strafe sideways before melee
+        if (Math.random() < 0.4) {
+            org.bukkit.util.Vector dir = self.getLocation().getDirection();
+            org.bukkit.util.Vector strafe = new org.bukkit.util.Vector(-dir.getZ(), 0, dir.getX()).normalize();
+            if (Math.random() < 0.5) strafe.multiply(-1);
+            self.setVelocity(strafe.multiply(0.5));
+        }
+
+        // Blocking with shield: if shield in offhand, simulate shield usage
+        if (self instanceof Player) {
+            Player fake = (Player) self;
+            ItemStack offhand = fake.getInventory().getItemInOffHand();
+            if (offhand != null && offhand.getType() == Material.SHIELD) {
+                fake.setWalkSpeed(0.1f); // Slow down while blocking
+                fake.getWorld().playSound(fake.getLocation(), org.bukkit.Sound.ITEM_SHIELD_BLOCK, 1.0f, 1.0f);
+            }
+        }
+
+        // Use buff potions before combat
+        useBuffPotions(npc);
+
         self.attack(target);
-        String tacticDesc = "Attacking " + humanize(mobName) + ".";
+        String tacticDesc = "Attacking " + humanize(mobName) + " with dodge+block tactics.";
         if (isNether) tacticDesc = "Engaging " + humanize(mobName) + " in the Nether. Watch for fire.";
         npc.sendMessage(player, tacticDesc);
+    }
+
+    // --- BUFF POTIONS ---
+
+    /**
+     * Use beneficial potions from inventory before combat.
+     */
+    private void useBuffPotions(SmithNPC npc) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        // Check all inventory slots for potions
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack == null) continue;
+            if (stack.getType() == Material.POTION || stack.getType() == Material.LINGERING_POTION || stack.getType() == Material.SPLASH_POTION) {
+                PotionMeta meta = (PotionMeta) stack.getItemMeta();
+                if (meta == null) continue;
+                // Check for beneficial effects
+                for (PotionEffect effect : meta.getCustomEffects()) {
+                    if (isBeneficialEffect(effect.getType())) {
+                        // Apply the effect by consuming the potion
+                        fake.addPotionEffect(new PotionEffect(effect.getType(), effect.getDuration(), effect.getAmplifier()));
+                        fake.getInventory().setItem(i, null);
+                        break;
+                    }
+                }
+                // Check base potion effects via item name/type clues
+                String itemName = stack.getType().name().toLowerCase();
+                if (itemName.contains("strength")) {
+                    fake.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 3600, 0));
+                    fake.getInventory().setItem(i, null);
+                } else if (itemName.contains("swiftness") || itemName.contains("speed")) {
+                    fake.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3600, 0));
+                    fake.getInventory().setItem(i, null);
+                } else if (itemName.contains("healing") || itemName.contains("health")) {
+                    fake.setHealth(Math.min(fake.getHealth() + 4, fake.getMaxHealth()));
+                    fake.getInventory().setItem(i, null);
+                } else if (itemName.contains("fire_resistance")) {
+                    fake.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 6000, 0));
+                    fake.getInventory().setItem(i, null);
+                } else if (itemName.contains("regeneration")) {
+                    fake.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3600, 0));
+                    fake.getInventory().setItem(i, null);
+                } else if (itemName.contains("invisibility")) {
+                    fake.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 3600, 0));
+                    fake.getInventory().setItem(i, null);
+                } else if (itemName.contains("night_vision")) {
+                    fake.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6000, 0));
+                    fake.getInventory().setItem(i, null);
+                }
+            }
+        }
+    }
+
+    private boolean isBeneficialEffect(PotionEffectType type) {
+        String n = type.getName().toLowerCase();
+        return n.contains("strength") || n.contains("speed") || n.contains("regeneration") ||
+               n.contains("fire_resistance") || n.contains("resistance") || n.contains("absorption") ||
+               n.contains("health_boost") || n.contains("night_vision") || n.contains("invisibility");
     }
 
     /**
