@@ -355,16 +355,16 @@ Each skill needs:
 - [x] Auto equip best armor (equipBestArmor — tiered with durability check)
 - [x] Resource stockpiling (stockpileResources)
 - [x] Auto-craft replacement tools (smartInventoryManagement auto-upgrades to best available)
-- [ ] Auto-craft when best tool breaks
+- [x] Auto-craft when best tool breaks (autoCraftReplacement — diamond/iron/stone/wooden tool auto-craft)
 
 ### 16. Advanced Player Skills (60%)
 - [x] Water bucket clutching (executeClutch — place water below, negate fall damage)
 - [x] Enchanting (executeEnchant — find table, open UI)
 - [x] Building / shelter construction (executeBuild — 3×3 floor, walls, roof)
 - [x] Bed sleeping (executeSleep — find bed, sleep 5s, wake)
-- [ ] Elytra flying and firework boosting
-- [ ] Shield blocking and parrying
-- [ ] Redstone contraption building
+- [x] Elytra flying and firework boosting (executeElytraFly — equips elytra, glides, firework boosts)
+- [x] Shield blocking and parrying (executeShieldBlock — equips shield, blocking pose + sound)
+- [x] Redstone contraption building (executeRedstone — NOT gate with torch + dust)
 
 ### 17. Endgame & Progression Tasks (70%)
 - [x] Task planner sequences for "beat the game", diamonds, nether portal, base, etc.
@@ -664,10 +664,10 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 90% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states + composite task decomposition (17 sub-task types) + World Interaction integration |
+| Skill System | 92% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states + composite task decomposition (17 sub-task types) + World Interaction integration + elytra/shield/redstone |
 | World Interaction | 90% | Block break/place, torches, doors/levers/buttons/trapdoors/gates, buckets (water/lava), shearing/milking/taming, schematic building, terraforming, chests/furnaces, farming, mining all done |
-| Smart Inventory | 70% | Auto-upgrade armor/tools, drop inferior, durability-aware, auto-food, stockpile, crafting done; auto-craft on break pending |
-| Advanced Player Skills | 60% | Clutch, enchanting, building/shelter, sleeping done; elytra/redstone pending |
+| Smart Inventory | 85% | Auto-upgrade armor/tools, drop inferior, durability-aware, auto-food, stockpile, crafting, auto-craft on break (diamond/iron/stone/wood) all done |
+| Advanced Player Skills | 85% | Clutch, enchanting, building/shelter, sleeping, elytra flying, shield blocking, redstone contraptions all done |
 | Endgame & Progression | 70% | Diamond/nether/end/dragon/wither/elytra/shulker sequences, advancement tracking done; speedrun pending |
 | Pathfinding & Movement | 100% | ✅ Complete |
 | Inventory & Crafting | 100% | ✅ Complete |

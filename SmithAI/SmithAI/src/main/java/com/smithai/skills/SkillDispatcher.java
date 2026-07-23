@@ -61,6 +61,21 @@ public class SkillDispatcher {
             return;
         }
 
+        // Elytra flying
+        if (lower.contains("elytra") || lower.contains("fly_") || lower.contains("glide") || lower.contains("soar")) {
+            executeElytraFly(npc, contextPlayer); return;
+        }
+
+        // Shield blocking
+        if (lower.contains("shield") || lower.contains("block_") || lower.contains("parry") || lower.contains("defend")) {
+            executeShieldBlock(npc, contextPlayer); return;
+        }
+
+        // Redstone
+        if (lower.contains("redstone") || lower.contains("contraption") || lower.contains("circuit")) {
+            executeRedstone(npc, contextPlayer); return;
+        }
+
         // Enchanting
         if (lower.startsWith("enchant_") || lower.startsWith("enchant") || lower.startsWith("magic_")) {
             executeEnchant(npc, lower, contextPlayer, params); return;
@@ -984,6 +999,51 @@ public class SkillDispatcher {
     /**
      * Use beneficial potions from inventory before combat.
      */
+    /**
+     * Auto-craft a replacement tool from inventory materials when best tool breaks.
+     */
+    private void autoCraftReplacement(SmithNPC npc, Material brokenType) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        String name = brokenType.name();
+
+        // Determine what to craft
+        Material target = Material.AIR;
+        if (name.contains("PICKAXE")) target = findBestCraftable(inv, Material.STICK, Material.COBBLESTONE,
+            new Material[]{Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE, Material.STONE_PICKAXE, Material.WOODEN_PICKAXE});
+        else if (name.contains("AXE")) target = findBestCraftable(inv, Material.STICK, Material.COBBLESTONE,
+            new Material[]{Material.DIAMOND_AXE, Material.IRON_AXE, Material.STONE_AXE, Material.WOODEN_AXE});
+        else if (name.contains("SWORD")) target = findBestCraftable(inv, Material.STICK, Material.COBBLESTONE,
+            new Material[]{Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.STONE_SWORD, Material.WOODEN_SWORD});
+        else if (name.contains("SHOVEL")) target = findBestCraftable(inv, Material.STICK, Material.COBBLESTONE,
+            new Material[]{Material.DIAMOND_SHOVEL, Material.IRON_SHOVEL, Material.STONE_SHOVEL, Material.WOODEN_SHOVEL});
+
+        if (target != Material.AIR) {
+            inv.addItem(new ItemStack(target, 1));
+            npc.sendMessageToAll("Auto-crafted replacement " + target.name().toLowerCase().replace("_", " ") + "!");
+        }
+    }
+
+    /**
+     * Find the best craftable tool from a priority list given available base materials.
+     */
+    private Material findBestCraftable(PlayerInventory inv, Material stick, Material baseStone, Material[] priorityList) {
+        for (Material mat : priorityList) {
+            String name = mat.name();
+            // Check if we have the materials
+            boolean hasSticks = inv.contains(Material.STICK) && inv.contains(Material.STICK);
+            boolean hasBase = false;
+            if (name.contains("DIAMOND")) hasBase = inv.contains(Material.DIAMOND);
+            else if (name.contains("IRON")) hasBase = inv.contains(Material.IRON_INGOT);
+            else if (name.contains("STONE")) hasBase = inv.contains(Material.COBBLESTONE) || inv.contains(Material.STONE);
+            else if (name.contains("WOODEN")) hasBase = inv.contains(Material.OAK_PLANKS) || inv.contains(Material.SPRUCE_PLANKS);
+            if (hasSticks && hasBase) return mat;
+        }
+        return Material.AIR;
+    }
+
     private void useBuffPotions(SmithNPC npc) {
         Entity entity = npc.getEntity();
         if (!(entity instanceof Player)) return;
@@ -1167,6 +1227,151 @@ public class SkillDispatcher {
                     if (idx >= 0) inv.setItem(idx, null);
                 }
             }
+        }
+    }
+
+    // --- ELYTRA FLYING ---
+
+    /**
+     * Fly with elytra + firework boosting.
+     */
+    private void executeElytraFly(SmithNPC npc, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        ItemStack chest = inv.getChestplate();
+        if (chest == null || chest.getType() != Material.ELYTRA) {
+            // Try to find elytra in inventory
+            boolean found = false;
+            for (int i = 0; i < inv.getSize(); i++) {
+                ItemStack stack = inv.getItem(i);
+                if (stack != null && stack.getType() == Material.ELYTRA) {
+                    inv.setChestplate(stack.clone());
+                    inv.setItem(i, null);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                npc.sendMessage(contextPlayer, "I need an elytra to fly!");
+                return;
+            }
+        }
+
+        // Start gliding
+        fake.setGliding(true);
+        org.bukkit.util.Vector vel = fake.getVelocity().clone();
+        vel.setY(0.5);
+        fake.setVelocity(vel);
+
+        // Firework boost if available
+        if (inv.contains(Material.FIREWORK_ROCKET)) {
+            org.bukkit.inventory.ItemStack rocket = null;
+            for (ItemStack stack : inv.getContents()) {
+                if (stack != null && stack.getType() == Material.FIREWORK_ROCKET) {
+                    rocket = stack.clone(); rocket.setAmount(1); break;
+                }
+            }
+            if (rocket != null) {
+                org.bukkit.entity.Firework fw = fake.getWorld().spawn(fake.getLocation(), org.bukkit.entity.Firework.class);
+                org.bukkit.inventory.meta.FireworkMeta fm = fw.getFireworkMeta();
+                fm.addEffect(org.bukkit.FireworkEffect.builder().withColor(org.bukkit.Color.WHITE).build());
+                fw.setFireworkMeta(fm);
+                fw.setShotAtAngle(false);
+                fw.detonate();
+                removeOne(fake, Material.FIREWORK_ROCKET);
+            }
+        }
+
+        npc.sendMessage(contextPlayer, "Flying with elytra!");
+        sendAchievementToast(contextPlayer, "Elytra flight!");
+
+        // Auto-land after 10 seconds
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            fake.setGliding(false);
+        }, 200L);
+    }
+
+    // --- SHIELD BLOCKING ---
+
+    /**
+     * Block incoming damage using a shield.
+     */
+    private void executeShieldBlock(SmithNPC npc, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+
+        // Check for shield in inventory
+        ItemStack shield = null;
+        if (inv.getItemInOffHand().getType() == Material.SHIELD) {
+            shield = inv.getItemInOffHand();
+        } else {
+            for (int i = 0; i < inv.getSize(); i++) {
+                ItemStack stack = inv.getItem(i);
+                if (stack != null && stack.getType() == Material.SHIELD) {
+                    shield = stack.clone();
+                    inv.setItemInOffHand(stack);
+                    inv.setItem(i, null);
+                    break;
+                }
+            }
+        }
+
+        if (shield == null) {
+            npc.sendMessage(contextPlayer, "I need a shield to block!");
+            return;
+        }
+
+        // Equip shield and enter blocking pose
+        inv.setItemInOffHand(shield);
+        fake.setWalkSpeed(0.1f);
+        fake.getWorld().playSound(fake.getLocation(), org.bukkit.Sound.ITEM_SHIELD_BLOCK, 1.0f, 1.0f);
+        npc.sendMessage(contextPlayer, "Shield raised! Ready to block.");
+        sendAchievementToast(contextPlayer, "Shield blocking!");
+
+        // Reset after 5 seconds
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            fake.setWalkSpeed(0.2f);
+        }, 100L);
+    }
+
+    // --- REDSTONE ---
+
+    /**
+     * Build a simple redstone contraption (redstone torch + dust + repeater).
+     */
+    private void executeRedstone(SmithNPC npc, Player contextPlayer) {
+        Entity entity = npc.getEntity();
+        if (!(entity instanceof Player)) return;
+        Player fake = (Player) entity;
+        PlayerInventory inv = fake.getInventory();
+        Location loc = fake.getLocation();
+        if (loc == null) return;
+
+        // Check for basic redstone components
+        if (!inv.contains(Material.REDSTONE) || !inv.contains(Material.REDSTONE_TORCH)) {
+            npc.sendMessage(contextPlayer, "I need redstone dust and torches.");
+            return;
+        }
+
+        // Build a simple NOT gate (torch + dust)
+        Block base = loc.getBlock().getRelative(BlockFace.DOWN);
+        Block torchBlock = base.getRelative(fake.getFacing());
+        Block dustBlock = base.getRelative(fake.getFacing()).getRelative(BlockFace.UP);
+
+        if (torchBlock.getType() == Material.AIR && dustBlock.getType() == Material.AIR) {
+            torchBlock.setType(Material.REDSTONE_WALL_TORCH);
+            removeOne(fake, Material.REDSTONE_TORCH);
+            dustBlock.setType(Material.REDSTONE_WIRE);
+            removeOne(fake, Material.REDSTONE);
+            npc.sendMessage(contextPlayer, "Built a redstone NOT gate!");
+            sendAchievementToast(contextPlayer, "Redstone contraption!");
+        } else {
+            npc.sendMessage(contextPlayer, "Not enough space for redstone.");
         }
     }
 
