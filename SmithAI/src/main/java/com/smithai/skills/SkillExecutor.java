@@ -2,6 +2,8 @@ package com.smithai.skills;
 
 import com.smithai.SmithAIPlugin;
 import com.smithai.npc.SmithNPC;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -25,6 +27,9 @@ public class SkillExecutor {
         int delay = plugin.getPluginConfig().getSkillStepDelay();
         taskId = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             if (current == null || current.isDone()) {
+                if (current != null) {
+                    clearActionBar(current.contextPlayer);
+                }
                 current = queue.poll();
                 if (current != null) {
                     current.start();
@@ -32,8 +37,23 @@ public class SkillExecutor {
             }
             if (current != null) {
                 current.tick();
+                updateActionBar(current);
             }
         }, delay, delay).getTaskId();
+    }
+
+    private void updateActionBar(SkillTask task) {
+        if (task.contextPlayer == null || !task.contextPlayer.isOnline()) return;
+        String name = task.skillName.replace("_", " ");
+        int remaining = queue.size();
+        String msg = "§e" + task.npc.getName() + " §f» §7" + name + (remaining > 0 ? " §7(§f" + remaining + "§7 queued)" : "");
+        task.contextPlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(msg));
+    }
+
+    private void clearActionBar(Player player) {
+        if (player != null && player.isOnline()) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(""));
+        }
     }
 
     public void stop() {

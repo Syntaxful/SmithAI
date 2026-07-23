@@ -383,7 +383,7 @@ Each skill needs:
 - [x] Status command
 - [x] API key reminder every 10-50 seconds until connected
 - [x] Loading/offline/error messages in console
-- [ ] Action bar or boss bar for active task progress
+- [x] Action bar for active task progress
 - [ ] NPC speech bubbles or holograms above head
 - [ ] Sound cues for mode switch, task start/finish, errors
 - [ ] Toast notifications for achievements/milestones
