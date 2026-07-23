@@ -655,23 +655,23 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 |--------|--------|-------|
 | Build & Packaging | 100% | ✅ Complete |
 | Plugin Lifecycle | 100% | ✅ Complete |
-| Config System | 87% | Core keys done; trainingDataPrivacy toggle added; some advanced keys missing |
-| NPC System | 60% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble); player model pending |
-| External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
+| Config System | 100% | ✅ Complete |
+| NPC System | 65% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble, lookAt, playSound); player model pending |
+| External AI Connector | 88% | Chat/health/failover/action parsing, multi-endpoint support done; streaming pending |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 75% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep, skill preconditions added |
+| Skill System | 78% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions; composites still message-based |
 | Pathfinding & Movement | 100% | ✅ Complete |
-| Inventory & Crafting | 93% | Smart inventory management (auto-upgrade armor/tools, drop inferior), durability-aware, auto food, stockpile, CraftingManager done |
-| Combat & Survival | 65% | Mob-specific tactics, hazard avoidance, auto-equip (tiered armor + durability check), durability-aware tools, auto-heal, auto-food, retreat, boss strategies, water clutch, NPCMesh done |
+| Inventory & Crafting | 95% | Smart inventory (auto-upgrade + drop inferior), durability-aware, auto food, stockpile, CraftingManager, enchanting support done |
+| Combat & Survival | 68% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, water clutch, NPCMesh done |
 | Training System | 100% | ✅ Complete |
 | Commands & Permissions | 100% | ✅ Complete |
-| Status & Notifications | 78% | Switch messages, reminders, debug/health, action bar, sound cues, toasts done; locale pending |
+| Status & Notifications | 82% | Messages, reminders, debug/health, action bar, sound cues, toasts, speech bubbles, nametags done; locale/per-player settings pending |
 | External AI Server | 100% | ✅ Complete |
-| Models | 60% | README done with Hugging Face instructions, license notes, model cards |
+| Models | 65% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader done |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 50% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing |
+| Testing & Quality | 52% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; more coverage needed |
 | Documentation | 100% | ✅ Complete |
 
 ---
