@@ -601,8 +601,8 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 - [x] Server-side broad skill list by tier
 - [x] Server action tag parsing from LLM responses
 - [ ] Real Smith-Mini GGUF inference
-- [ ] Server-side prompt templates per model
-- [ ] Streaming responses
+- [x] Server-side prompt templates per model (gpt1/gpt2 — app.py)
+- [x] Streaming responses (chatStreaming — ExternalAIConnector)
 
 ### Phase 3: Chat & Memory — PARTIAL
 - [x] Chat listener + AI name detection
@@ -611,9 +611,9 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 - [x] Basic responses
 - [x] Training feedback detection
 - [x] Negative feedback and report detection in chat
-- [ ] Long-term memory summarization
-- [ ] Player-specific preferences
-- [ ] Emotion/mood tracking
+- [x] Long-term memory summarization (MemoryEnhancer.summarizeMessages)
+- [x] Player-specific preferences (MemoryEnhancer.PlayerPreferences)
+- [x] Emotion/mood tracking (MemoryEnhancer.MoodState)
 
 ### Phase 4: Knowledge & Skills — IN PROGRESS
 - [x] Knowledge base loader + expanded sample entries
@@ -625,10 +625,10 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 - [x] `/smithai do` queues skill plans
 - [x] `/smithai stop` cancels queue
 - [x] `/smithai goto` coordinates command
-- [ ] Primitive skill executors for most common skills (partial)
-- [ ] Composite skill execution with real world effects (partial)
-- [ ] Skill preconditions and failure handling
-- [ ] Skill parameters from LLM fully wired
+- [x] Primitive skill executors for all 9000 skills (SkillGenerator + 20+ Dispatcher categories)
+- [x] Composite skill execution with real world effects (17 sub-task types decomposed)
+- [x] Skill preconditions and failure handling (checkPrecondition + retry/recovery)
+- [x] Skill parameters from LLM fully wired (material/target/count params in execute chain)
 
 ### Phase 5: Advanced Gameplay — IN PROGRESS
 - [x] Basic velocity-based movement and step-up/jump
@@ -661,10 +661,10 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Config System | 100% | ✅ Complete |
 | NPC System | 84% | Spawn/follow/stay/goto, NPCMesh (player model with skin + blue armor, IDLE/WALKING/MINING/FIGHTING animations, nametag, health/damage/death/respawn, speech bubble, lookAt, playSound); Eaglercraft-compatible |
 | External AI Connector | 100% | ✅ Complete |
-| Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
+| Local AI (Smith-Mini) | 42% | Rule-based fallback + action tags + streaming + prompt templates + telemetry; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 95% | 13,500 skills, dispatcher with all managers + full primitive executors + retry/recovery + action tags fully integrated |
+| Skill System | 97% | 13,500 skills, dispatcher with all managers + full primitive executors + retry/recovery + action tags + composite decomposition + preconditions + params all done |
 | World Interaction | 93% | Block break/place, torches, doors/levers/buttons/trapdoors/gates, buckets, shearing/milking/taming, schematic building, terraforming, chests/furnaces, farming, mining, flint/steel (ignition/TNT), ender pearls all done |
 | Smart Inventory | 85% | Auto-upgrade armor/tools, drop inferior, durability-aware, auto-food, stockpile, crafting, auto-craft on break (diamond/iron/stone/wood) all done |
 | Advanced Player Skills | 85% | Clutch, enchanting, building/shelter, sleeping, elytra flying, shield blocking, redstone contraptions all done |
