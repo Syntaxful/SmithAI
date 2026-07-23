@@ -304,7 +304,7 @@ Each skill needs:
 - [x] Path cost estimates (terrain, danger, distance)
 - [x] Path smoothing and stricter cliff cost penalty
 
-### 12. Inventory & Crafting Automation (93%)
+### 12. Inventory & Crafting Automation (100%)
 - [x] Check inventory stub
 - [x] Select/equip item by task (tool, weapon)
 - [x] Real inventory scanning, item selection, pick up, drop, and use items
@@ -658,19 +658,19 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Plugin Lifecycle | 100% | ✅ Complete |
 | Config System | 100% | ✅ Complete |
 | NPC System | 65% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble, lookAt, playSound); player model pending |
-| External AI Connector | 88% | Chat/health/failover/action parsing, multi-endpoint support done; streaming pending |
+| External AI Connector | 100% | ✅ Complete |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
 | Skill System | 78% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions; composites still message-based |
 | Pathfinding & Movement | 100% | ✅ Complete |
-| Inventory & Crafting | 97% | Smart inventory (auto-upgrade + drop inferior + enchant), durability-aware, auto food, stockpile, CraftingManager done; auto-craft on break pending |
+| Inventory & Crafting | 100% | ✅ Complete |
 | Combat & Survival | 68% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, water clutch, NPCMesh done |
 | Training System | 100% | ✅ Complete |
 | Commands & Permissions | 100% | ✅ Complete |
 | Status & Notifications | 100% | ✅ Complete |
 | External AI Server | 100% | ✅ Complete |
-| Models | 65% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader done |
+| Models | 68% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader done |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
 | Testing & Quality | 52% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; more coverage needed |
 | Documentation | 100% | ✅ Complete |

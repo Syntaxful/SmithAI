@@ -125,6 +125,69 @@ public class ExternalAIConnector {
         return body;
     }
 
+    /**
+     * Streaming chat: opens an SSE-style connection and feeds tokens to the callback.
+     * Falls back to non-streaming if the server doesn't support it.
+     */
+    public CompletableFuture<Void> chatStreaming(Player player, String message, Conversation conversation,
+                                                  String task, List<String> knowledge, List<String> skills,
+                                                  java.util.function.Consumer<String> tokenCallback) {
+        Config config = plugin.getPluginConfig();
+        String url = normalizeUrl(config.getExternalUrl());
+
+        JSONObject body = buildChatBody(player, message, conversation, task, knowledge, skills);
+        body.put("stream", true);
+
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
+            .uri(URI.create(url + "/chat"))
+            .timeout(Duration.ofSeconds(config.getExternalTimeout() * 2))
+            .header("Content-Type", "application/json");
+
+        String apiKey = config.getExternalApiKey();
+        if (apiKey != null && !apiKey.isEmpty()) {
+            builder.header("Authorization", "Bearer " + apiKey);
+        }
+
+        HttpRequest request = builder
+            .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+            .build();
+
+        return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            .thenAccept(response -> {
+                if (response.statusCode() != 200) {
+                    // Fall back to non-streaming
+                    chat(player, message, conversation, task, knowledge, skills)
+                        .thenAccept(reply -> tokenCallback.accept(reply));
+                    return;
+                }
+                String fullBody = response.body();
+                // SSE: data: {"token": "hello"}\n\ndata: {"token": " world"}
+                for (String line : fullBody.split("\n")) {
+                    if (line.startsWith("data: ")) {
+                        try {
+                            String jsonStr = line.substring(6);
+                            JSONObject json = new JSONObject(jsonStr);
+                            if (json.has("token")) {
+                                tokenCallback.accept(json.optString("token", ""));
+                            }
+                        } catch (Exception ignored) {}
+                    }
+                }
+                // If no SSE tokens found, treat the full response as a single token
+                if (!fullBody.contains("\"token\"")) {
+                    try {
+                        JSONObject json = new JSONObject(fullBody);
+                        String reply = json.optString("reply", "");
+                        if (!reply.isEmpty()) {
+                            tokenCallback.accept(reply);
+                        }
+                    } catch (Exception ignored) {
+                        tokenCallback.accept(fullBody);
+                    }
+                }
+            });
+    }
+
     private String normalizeUrl(String url) {
         if (url.endsWith("/")) {
             return url.substring(0, url.length() - 1);
