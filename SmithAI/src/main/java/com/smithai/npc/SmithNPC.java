@@ -2,6 +2,7 @@ package com.smithai.npc;
 
 import com.smithai.SmithAIPlugin;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -25,6 +26,12 @@ public class SmithNPC {
     private List<Location> path = Collections.emptyList();
     private int pathIndex = 0;
     private long lastPathRecalc = 0;
+
+    private Location lastStuckCheckLocation = null;
+    private long lastStuckCheckTime = 0;
+    private int stuckTicks = 0;
+    private static final int STUCK_TICK_THRESHOLD = 3;
+    private static final double STUCK_DISTANCE_SQ = 0.15 * 0.15;
 
     public SmithNPC(UUID id, Entity entity, String name) {
         this.id = id;
@@ -113,6 +120,11 @@ public class SmithNPC {
     }
 
     public void setMoveTarget(Location target) {
+        Location current = getLocation();
+        if (current != null && target != null && !current.getWorld().equals(target.getWorld())) {
+            teleport(target);
+            return;
+        }
         this.moveTarget = target != null ? target.clone() : null;
         this.pathfinding = target != null;
         this.pathStartTime = System.currentTimeMillis();
@@ -150,7 +162,11 @@ public class SmithNPC {
     private void tickFollow(double followDistance) {
         Location target = following.getLocation();
         Location current = getLocation();
-        if (current == null || !current.getWorld().equals(target.getWorld())) {
+        if (current == null) {
+            return;
+        }
+        if (!current.getWorld().equals(target.getWorld())) {
+            teleport(target);
             return;
         }
         double distSq = current.distanceSquared(target);
@@ -162,7 +178,8 @@ public class SmithNPC {
             teleport(target);
             return;
         }
-        moveToward(target, 0.25);
+        double speed = distSq > 8 * 8 ? 0.45 : distSq > 4 * 4 ? 0.35 : 0.25;
+        moveToward(target, speed);
         lookAt(target);
     }
 
@@ -208,10 +225,27 @@ public class SmithNPC {
 
         long now = System.currentTimeMillis();
         if (now - lastMoveTime > 150) {
-            moveToward(waypoint, 0.25);
+            double speed = current.distanceSquared(waypoint) > 4 * 4 ? 0.35 : 0.25;
+            moveToward(waypoint, speed);
             lastMoveTime = now;
         }
         lookAt(waypoint);
+
+        // Stuck detection: if the NPC hasn't moved in a few checks, recalculate and try to jump.
+        if (now - lastStuckCheckTime > 1000) {
+            if (lastStuckCheckLocation != null && current.distanceSquared(lastStuckCheckLocation) <= STUCK_DISTANCE_SQ) {
+                stuckTicks++;
+                if (stuckTicks >= STUCK_TICK_THRESHOLD) {
+                    recalculatePath();
+                    jump();
+                    stuckTicks = 0;
+                }
+            } else {
+                stuckTicks = 0;
+            }
+            lastStuckCheckLocation = current.clone();
+            lastStuckCheckTime = now;
+        }
     }
 
     private void recalculatePath() {
@@ -242,10 +276,17 @@ public class SmithNPC {
         Block blockAboveAhead = blockAhead.getRelative(0, 1, 0);
         Block blockFeet = current.getBlock();
         Block blockGround = current.clone().add(0, -1, 0).getBlock();
+        boolean inWater = blockFeet.getType() == Material.WATER;
+        boolean climbing = isClimbable(blockAhead) || isClimbable(blockFeet);
 
         // Simple step-up / jump logic
-        if (!blockAhead.isPassable() && blockAboveAhead.isPassable() && blockFeet.isPassable()) {
+        if (climbing) {
+            velocity.setY(0.3);
+        } else if (!blockAhead.isPassable() && blockAboveAhead.isPassable() && blockFeet.isPassable()) {
             velocity.setY(0.45);
+        } else if (inWater) {
+            // Swim upward to stay at the surface and move through water.
+            velocity.setY(0.15);
         } else if (blockGround.isPassable() && blockFeet.isPassable()) {
             // falling, keep gravity
         } else {
@@ -253,6 +294,11 @@ public class SmithNPC {
         }
 
         entity.setVelocity(velocity);
+    }
+
+    private boolean isClimbable(Block block) {
+        Material type = block.getType();
+        return type == Material.LADDER || type == Material.VINE || type == Material.TWISTING_VINES || type == Material.WEEPING_VINES;
     }
 
     public void jump() {

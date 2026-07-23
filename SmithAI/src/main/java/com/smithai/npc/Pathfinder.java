@@ -1,6 +1,7 @@
 package com.smithai.npc;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -13,6 +14,19 @@ import java.util.*;
  * This is a starter implementation; it does not handle ladders, water, or complex jumps.
  */
 public class Pathfinder {
+
+    // Blocks that damage the NPC or otherwise cannot be safely walked through.
+    private static final EnumSet<Material> HAZARDOUS = EnumSet.of(
+        Material.LAVA, Material.FIRE, Material.SOUL_FIRE, Material.CACTUS,
+        Material.SWEET_BERRY_BUSH, Material.WITHER_ROSE, Material.CAMPFIRE,
+        Material.SOUL_CAMPFIRE, Material.MAGMA_BLOCK
+    );
+
+    // Blocks the NPC can swim through, but with a movement cost penalty.
+    private static final EnumSet<Material> LIQUID_PASSABLE = EnumSet.of(Material.WATER);
+
+    // Blocks that slow the NPC down.
+    private static final EnumSet<Material> SLOW = EnumSet.of(Material.SOUL_SAND, Material.SOUL_SOIL, Material.COBWEB);
 
     private final World world;
     private final int maxNodes;
@@ -64,7 +78,7 @@ public class Pathfinder {
                 String nKey = key(neighbor);
                 if (closed.contains(nKey)) continue;
 
-                double moveCost = current.pos.distanceSquared(neighbor.pos);
+                double moveCost = current.pos.distanceSquared(neighbor.pos) + costFor(neighbor);
                 double tentativeG = current.g + moveCost;
 
                 Node existing = allNodes.get(nKey);
@@ -135,6 +149,11 @@ public class Pathfinder {
         Block head = feet.getRelative(BlockFace.UP);
         Block ground = feet.getRelative(BlockFace.DOWN);
 
+        if (isHazardous(feet) || isHazardous(head) || isHazardous(ground)) return false;
+
+        // Allow swimming through water if the head is clear.
+        if (isLiquidPassable(feet) && head.isPassable()) return true;
+
         if (!feet.isPassable() || !head.isPassable()) return false;
         if (ground.isPassable()) {
             // allow falling up to fallHeight
@@ -145,6 +164,22 @@ public class Pathfinder {
             return false;
         }
         return true;
+    }
+
+    private double costFor(Node node) {
+        Block feet = world.getBlockAt(node.pos.getBlockX(), node.pos.getBlockY(), node.pos.getBlockZ());
+        Block ground = feet.getRelative(BlockFace.DOWN);
+        if (isLiquidPassable(feet)) return 2.0;
+        if (SLOW.contains(ground.getType())) return 1.5;
+        return 0.0;
+    }
+
+    private boolean isHazardous(Block block) {
+        return HAZARDOUS.contains(block.getType());
+    }
+
+    private boolean isLiquidPassable(Block block) {
+        return LIQUID_PASSABLE.contains(block.getType());
     }
 
     private static class Node {
