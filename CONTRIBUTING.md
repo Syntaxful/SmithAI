@@ -36,7 +36,7 @@ python SmithAI-Server/test_app.py
 
 ## Code style
 
-- Java 17 target
+- Java 8 target
 - Bukkit/Paper API 1.21.x
 - Python 3.10+ for SmithAI-Server
 - Keep dependencies minimal and clearly documented in `requirements.txt` or `pom.xml`

@@ -26,7 +26,7 @@ public class NPCManager {
             for (SmithNPC npc : npcs.values()) {
                 npc.tick(plugin.getPluginConfig().getFollowDistance());
             }
-        }, 5L, 5L).getTaskId();
+        }, 1L, 1L).getTaskId();
     }
 
     public SmithNPC spawn(Location location) {

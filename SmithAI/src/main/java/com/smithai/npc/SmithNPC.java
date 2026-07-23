@@ -26,7 +26,6 @@ public class SmithNPC {
     private Location moveTarget = null;
     private boolean pathfinding = false;
     private long pathStartTime = 0;
-    private long lastMoveTime = 0;
     private List<Location> path = Collections.emptyList();
     private int pathIndex = 0;
     private long lastPathRecalc = 0;
@@ -34,10 +33,12 @@ public class SmithNPC {
     private Location lastStuckCheckLocation = null;
     private long lastStuckCheckTime = 0;
     private int stuckTicks = 0;
-    private static final int STUCK_TICK_THRESHOLD = 3;
-    private static final double STUCK_DISTANCE_SQ = 0.15 * 0.15;
+    private static final int STUCK_TICK_THRESHOLD = 4;
+    private static final double STUCK_DISTANCE_SQ = 0.12 * 0.12;
     private long lastBridgeTime = 0;
     private static final long BRIDGE_COOLDOWN_MS = 250;
+    private long lastLookTime = 0;
+    private static final long LOOK_INTERVAL_MS = 200;
 
     private static final Material[] BRIDGE_MATERIALS = initBridgeMaterials();
 
@@ -83,7 +84,15 @@ public class SmithNPC {
     }
 
     public void remove() {
-        if (entity != null && !entity.isDead()) {
+        if (entity == null || entity.isDead()) return;
+        Object handle = PlayerModelHelper.getCitizensHandle(entity);
+        if (handle != null) {
+            try {
+                handle.getClass().getMethod("destroy").invoke(handle);
+            } catch (Exception e) {
+                entity.remove();
+            }
+        } else {
             entity.remove();
         }
     }
@@ -110,11 +119,15 @@ public class SmithNPC {
     }
 
     public void lookAt(Location target) {
+        long now = System.currentTimeMillis();
+        if (now - lastLookTime < LOOK_INTERVAL_MS) return;
+        lastLookTime = now;
         Location loc = getLocation();
-        if (loc != null && target != null && target.getWorld().equals(loc.getWorld())) {
-            loc.setDirection(target.clone().subtract(loc).toVector());
-            entity.teleport(loc);
-        }
+        if (loc == null || target == null || !target.getWorld().equals(loc.getWorld())) return;
+        Vector direction = target.clone().subtract(loc).toVector();
+        if (direction.lengthSquared() < 0.0001) return;
+        loc.setDirection(direction);
+        entity.teleport(loc);
     }
 
     public void teleport(Location location) {
@@ -152,7 +165,6 @@ public class SmithNPC {
         this.moveTarget = target != null ? target.clone() : null;
         this.pathfinding = target != null;
         this.pathStartTime = System.currentTimeMillis();
-        this.lastMoveTime = System.currentTimeMillis();
         this.path = Collections.emptyList();
         this.pathIndex = 0;
         recalculatePath();
@@ -176,6 +188,7 @@ public class SmithNPC {
     }
 
     public void tick(double followDistance) {
+        if (entity == null || entity.isDead()) return;
         if (following != null && following.isOnline()) {
             tickFollow(followDistance);
             return;
@@ -190,9 +203,7 @@ public class SmithNPC {
     private void tickFollow(double followDistance) {
         Location target = following.getLocation();
         Location current = getLocation();
-        if (current == null) {
-            return;
-        }
+        if (current == null) return;
         if (!current.getWorld().equals(target.getWorld())) {
             teleport(target);
             setSprinting(false);
@@ -227,16 +238,10 @@ public class SmithNPC {
             return;
         }
 
-        // Recalculate path periodically if stale or empty
         if (path.isEmpty() || pathIndex >= path.size() || (System.currentTimeMillis() - lastPathRecalc) > 3000) {
             recalculatePath();
             if (path.isEmpty()) {
-                // Fallback to direct movement if no path found
-                long now = System.currentTimeMillis();
-                if (now - lastMoveTime > 150) {
-                    moveToward(moveTarget, 0.25);
-                    lastMoveTime = now;
-                }
+                moveToward(moveTarget, 0.30);
                 lookAt(moveTarget);
                 return;
             }
@@ -246,7 +251,6 @@ public class SmithNPC {
         if (current.distanceSquared(waypoint) <= 1.5 * 1.5) {
             pathIndex++;
             if (pathIndex >= path.size()) {
-                // Reached end of path, recalculate for remaining distance
                 recalculatePath();
             }
             if (pathIndex < path.size()) {
@@ -256,15 +260,11 @@ public class SmithNPC {
             }
         }
 
-        long now = System.currentTimeMillis();
-        if (now - lastMoveTime > 150) {
-            double speed = current.distanceSquared(waypoint) > 4 * 4 ? 0.35 : 0.25;
-            moveToward(waypoint, speed);
-            lastMoveTime = now;
-        }
+        double speed = current.distanceSquared(waypoint) > 4 * 4 ? 0.35 : 0.25;
+        moveToward(waypoint, speed);
         lookAt(waypoint);
 
-        // Stuck detection: if the NPC hasn't moved in a few checks, recalculate and try to jump.
+        long now = System.currentTimeMillis();
         if (now - lastStuckCheckTime > 1000) {
             if (lastStuckCheckLocation != null && current.distanceSquared(lastStuckCheckLocation) <= STUCK_DISTANCE_SQ) {
                 stuckTicks++;
@@ -284,6 +284,7 @@ public class SmithNPC {
     private void recalculatePath() {
         Location current = getLocation();
         if (current == null || moveTarget == null || !current.getWorld().equals(moveTarget.getWorld())) {
+            path = Collections.emptyList();
             return;
         }
         SmithAIPlugin plugin = SmithAIPlugin.getInstance();
@@ -302,36 +303,37 @@ public class SmithNPC {
         Location current = getLocation();
         if (current == null) return;
 
-        Vector direction = target.toVector().subtract(current.toVector()).normalize();
-        Vector velocity = direction.multiply(speed).setY(entity.getVelocity().getY());
+        Vector offset = target.toVector().subtract(current.toVector());
+        double flatLen = Math.sqrt(offset.getX() * offset.getX() + offset.getZ() * offset.getZ());
+        if (flatLen < 0.0001) return;
+
+        Vector direction = offset.clone().normalize();
+        // Preserve existing vertical velocity; only push horizontally.
+        Vector velocity = direction.clone().multiply(speed).setY(entity.getVelocity().getY());
 
         Block blockAhead = current.clone().add(direction.getX(), 0, direction.getZ()).getBlock();
         Block blockAboveAhead = blockAhead.getRelative(0, 1, 0);
         Block blockFeet = current.getBlock();
         Block blockGround = current.clone().add(0, -1, 0).getBlock();
-        boolean inWater = blockFeet.getType() == Material.WATER;
+        boolean inWater = blockFeet.getType() == Material.WATER || blockFeet.getType() == MaterialCompat.get("STATIONARY_WATER");
         boolean climbing = isClimbable(blockAhead) || isClimbable(blockFeet);
 
-        // Simple step-up / jump logic
         if (climbing) {
             velocity.setY(0.3);
         } else if (!BlockCompat.isPassable(blockAhead) && BlockCompat.isPassable(blockAboveAhead) && BlockCompat.isPassable(blockFeet)) {
+            // Step up a single block.
             velocity.setY(0.45);
         } else if (inWater) {
-            // Swim upward to stay at the surface and move through water.
             velocity.setY(0.15);
         } else if (BlockCompat.isPassable(blockGround) && BlockCompat.isPassable(blockFeet)) {
-            // falling, keep gravity
+            // Falling; keep gravity.
         } else {
             velocity.setY(Math.min(0.0, velocity.getY()));
         }
 
         entity.setVelocity(velocity);
-
-        // Bridge / speedbridge: place blocks ahead or below when crossing gaps.
         tryBridge(current, direction);
 
-        // Sneak near an edge to avoid walking off a cliff.
         boolean nearEdge = BlockCompat.isPassable(blockGround) && !inWater && !climbing;
         setSneaking(nearEdge);
     }
@@ -370,7 +372,6 @@ public class SmithNPC {
         Material mat = findBridgeMaterial();
         if (mat == null) return;
 
-        // Speedbridge: place a block one step ahead in the direction of travel.
         Location ahead = current.clone().add(horizontal);
         Block aheadGround = ahead.clone().add(0, -1, 0).getBlock();
         if (BlockCompat.isPassable(aheadGround) && !isLiquidPassable(aheadGround)) {
@@ -379,7 +380,6 @@ public class SmithNPC {
             return;
         }
 
-        // Fallback: place a block under the current position to catch a fall.
         Block currentGround = current.clone().add(0, -1, 0).getBlock();
         if (BlockCompat.isPassable(currentGround) && !isLiquidPassable(currentGround)) {
             placeBlockAt(currentGround.getLocation(), mat);

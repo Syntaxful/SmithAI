@@ -32,6 +32,15 @@ if [ ! -f "$MODEL_FILE" ]; then
     exit 1
 fi
 
+# --- Generate API key if missing ---
+API_KEY=""
+if [ -f "config.yml" ] && python -c "import yaml" 2>/dev/null; then
+    API_KEY="$(python -c "import yaml; print(yaml.safe_load(open('config.yml')).get('security',{}).get('api_key',''))")" || true
+fi
+if [ -z "$API_KEY" ]; then
+    API_KEY="SMA-$(python -c 'import secrets; print(secrets.token_hex(16))')"
+fi
+
 # --- Write config ---
 cat > config.yml <<YAML
 # SmithAI-Server configuration — SmithGPT 2.0
@@ -46,14 +55,22 @@ model:
   max_tokens: 400
   n_threads: 4
 security:
-  api_key: ""
+  api_key: "${API_KEY}"
 YAML
 
 echo "Switched config to ${MODEL_NAME}."
+echo "API key: ${API_KEY}"
+echo ""
 
-# --- Activate venv if present ---
-if [ -d "venv" ]; then
-    source venv/bin/activate
+# --- Create venv and install deps if needed ---
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
+fi
+source venv/bin/activate
+if ! python -c "import fastapi, uvicorn" 2>/dev/null; then
+    echo "Installing server dependencies..."
+    pip install -r requirements.txt
 fi
 
 # --- Start server in background, save PID ---
@@ -64,5 +81,5 @@ SERVER_PID=$!
 echo "$SERVER_PID" > "$PID_FILE"
 echo "Server started (PID $SERVER_PID). Logs: /tmp/smithai-server.log"
 echo ""
-echo "Set API key in Minecraft: /SmithAPI set <key-from-log>"
+echo "Set API key in Minecraft: /SmithAPI set ${API_KEY}"
 echo "Stop the server:  kill \$(cat $PID_FILE)"

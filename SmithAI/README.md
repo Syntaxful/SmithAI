@@ -180,7 +180,7 @@ Output:
 ## Requirements
 
 - Minecraft server: Spigot, Paper, or compatible (1.21.x)
-- Java 17 or newer
+- Java 8 or newer
 - For SmithGPT: a machine with enough RAM for the chosen model
 
 ## License

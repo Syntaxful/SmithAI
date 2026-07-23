@@ -3,6 +3,7 @@ package com.smithai.skills;
 import com.smithai.SmithAIPlugin;
 import com.smithai.npc.SmithNPC;
 import com.smithai.util.BlockCompat;
+import com.smithai.util.LivingEntityCompat;
 import com.smithai.util.MaterialCompat;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -455,7 +456,7 @@ public class SkillDispatcher {
         }
         if (target != null) {
             selectBestTool(npc, "sword");
-            self.attack(target);
+            LivingEntityCompat.attack(self, target);
             npc.sendMessage(player, "Attacking " + humanize(target.getType().name().toLowerCase()) + ".");
         } else {
             npc.sendMessage(player, "No hostile target found.");
