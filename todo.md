@@ -131,16 +131,16 @@ Each skill needs:
 - [x] `training.persist`
 - [x] `debug.enabled`
 - [x] `metrics.bstats`
-- [ ] `ai.pathfinding.maxDistance`
-- [ ] `ai.pathfinding.maxNodes`
-- [ ] `ai.pathfinding.tickRate`
-- [ ] `ai.combat.retreatHealth`
-- [ ] `ai.combat.minFood`
-- [ ] `ai.crafting.preferCraftingTable`
-- [ ] `ai.permissions.restrictByModel`
-- [ ] `ai.models.mini.skillTier` (default: 900)
-- [ ] `ai.models.gpt1.skillTier` (default: 1800)
-- [ ] `ai.models.gpt2.skillTier` (default: 6300)
+- [x] `ai.pathfinding.maxDistance`
+- [x] `ai.pathfinding.maxNodes`
+- [x] `ai.pathfinding.tickRate`
+- [x] `ai.combat.retreatHealth`
+- [x] `ai.combat.minFood`
+- [x] `ai.crafting.preferCraftingTable`
+- [x] `ai.permissions.restrictByModel`
+- [x] `ai.models.mini.skillTier` (default: 900)
+- [x] `ai.models.gpt1.skillTier` (default: 1800)
+- [x] `ai.models.gpt2.skillTier` (default: 6300)
 
 ### 4. Plugin Commands
 - [x] `/smithai` base command with tab completer

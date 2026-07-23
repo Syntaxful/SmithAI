@@ -31,6 +31,16 @@ public class Config {
     private int pathfinderTimeout;
     private boolean debugEnabled;
     private boolean bstatsEnabled;
+    private double pathfindingMaxDistance;
+    private int pathfindingMaxNodes;
+    private int pathfindingTickRate;
+    private double combatRetreatHealth;
+    private double combatMinFood;
+    private boolean craftingPreferCraftingTable;
+    private boolean permissionsRestrictByModel;
+    private int miniSkillTier;
+    private int gpt1SkillTier;
+    private int gpt2SkillTier;
 
     public Config(FileConfiguration config) {
         this.config = config;
@@ -62,6 +72,16 @@ public class Config {
         this.persistTraining = config.getBoolean("training.persist", true);
         this.followDistance = config.getDouble("npc.followDistance", 3.0);
         this.pathfinderTimeout = config.getInt("npc.pathfinderTimeout", 30);
+        this.pathfindingMaxDistance = config.getDouble("ai.pathfinding.maxDistance", 128.0);
+        this.pathfindingMaxNodes = config.getInt("ai.pathfinding.maxNodes", 5000);
+        this.pathfindingTickRate = config.getInt("ai.pathfinding.tickRate", 5);
+        this.combatRetreatHealth = config.getDouble("ai.combat.retreatHealth", 0.3);
+        this.combatMinFood = config.getDouble("ai.combat.minFood", 6.0);
+        this.craftingPreferCraftingTable = config.getBoolean("ai.crafting.preferCraftingTable", true);
+        this.permissionsRestrictByModel = config.getBoolean("ai.permissions.restrictByModel", false);
+        this.miniSkillTier = config.getInt("ai.models.mini.skillTier", 900);
+        this.gpt1SkillTier = config.getInt("ai.models.gpt1.skillTier", 1800);
+        this.gpt2SkillTier = config.getInt("ai.models.gpt2.skillTier", 6300);
         this.debugEnabled = config.getBoolean("debug.enabled", false);
         this.bstatsEnabled = config.getBoolean("metrics.bstats", false);
     }
@@ -96,4 +116,14 @@ public class Config {
     public int getPathfinderTimeout() { return pathfinderTimeout; }
     public boolean isDebugEnabled() { return debugEnabled; }
     public boolean isBstatsEnabled() { return bstatsEnabled; }
+    public double getPathfindingMaxDistance() { return pathfindingMaxDistance; }
+    public int getPathfindingMaxNodes() { return pathfindingMaxNodes; }
+    public int getPathfindingTickRate() { return pathfindingTickRate; }
+    public double getCombatRetreatHealth() { return combatRetreatHealth; }
+    public double getCombatMinFood() { return combatMinFood; }
+    public boolean isCraftingPreferCraftingTable() { return craftingPreferCraftingTable; }
+    public boolean isPermissionsRestrictByModel() { return permissionsRestrictByModel; }
+    public int getMiniSkillTier() { return miniSkillTier; }
+    public int getGpt1SkillTier() { return gpt1SkillTier; }
+    public int getGpt2SkillTier() { return gpt2SkillTier; }
 }

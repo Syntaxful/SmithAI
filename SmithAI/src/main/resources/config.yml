@@ -5,6 +5,24 @@ ai:
   skin: "robot"
   memory:
     maxMessages: 17
+  pathfinding:
+    maxDistance: 128
+    maxNodes: 5000
+    tickRate: 5
+  combat:
+    retreatHealth: 0.3
+    minFood: 6
+  crafting:
+    preferCraftingTable: true
+  permissions:
+    restrictByModel: false
+  models:
+    mini:
+      skillTier: 900
+    gpt1:
+      skillTier: 1800
+    gpt2:
+      skillTier: 6300
   external:
     enabled: false
     url: "http://localhost:8000"
