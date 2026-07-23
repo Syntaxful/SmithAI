@@ -57,4 +57,22 @@ public class KnowledgeBaseTest {
         KnowledgeBase kb = new KnowledgeBase(mockPlugin());
         assertTrue(kb.findRelevant("a").size() <= 5, "Should limit results to 5");
     }
+
+    @Test
+    public void testKnowledgeVersionAndStats() {
+        KnowledgeBase kb = new KnowledgeBase(mockPlugin());
+        assertNotNull(kb.getVersion(), "Version should not be null");
+        assertTrue(kb.getLoadedAt() > 0, "Loaded timestamp should be set");
+        java.util.Map<String, Object> stats = kb.getStats();
+        assertNotNull(stats.get("version"), "Stats should include version");
+        assertEquals(6, stats.get("total_entries"), "Stats should show correct total entries");
+    }
+
+    @Test
+    public void testGetCategoryCounts() {
+        KnowledgeBase kb = new KnowledgeBase(mockPlugin());
+        java.util.Map<String, Integer> counts = kb.getCategoryCounts();
+        assertEquals(1, counts.get("block").intValue(), "Should have 1 block entry");
+        assertEquals(1, counts.get("mob").intValue(), "Should have 1 mob entry");
+    }
 }

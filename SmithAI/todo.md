@@ -232,8 +232,8 @@ Each skill needs:
 - [x] Expand from samples to several hundred core entries (566 entries across blocks, mobs, items, recipes, biomes, strategy)
 - [x] Expand to 29,000+ entries (32,581 entries generated and baked into JAR)
 - [x] Category index for fast lookup
-- [ ] Knowledge versioning and updates
-- [ ] Server-side knowledge embed endpoint
+- [x] Knowledge versioning and updates (KnowledgeBase version + getStats)
+- [x] Server-side knowledge embed endpoint (/embed — keyword overlap)
 - [x] Knowledge context window management (KnowledgeBase returns relevant entries within token budget)
 
 ### 9. Skill System (MAJOR UPDATE THIS COMMIT)
@@ -627,7 +627,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | NPC System | 60% | Spawn/follow/stay/goto, NPCMesh (nametag, robot skin, health/damage/death/respawn, speech bubble); player model pending |
 | External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
-| Chat & Memory | 90% | MemoryManager + MemoryEnhancer (summarization, per-player preferences, mood/emotion, conversation threading) done |
+| Chat & Memory | 92% | MemoryManager (searchByTopic + getTopics) + MemoryEnhancer (summarization, preferences, mood/emotion, threading) done |
 | Knowledge Base | 88% | 32,581 entries across 6 categories; category index added |
 | Skill System | 70% | 13,500 skills (2000 Mini + 5200 GPT1 + 6300 GPT2), dispatcher/executor with CraftingManager/FarmingManager/MiningManager/EndGameManager wired; most composite skills still message-based |
 | Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
@@ -639,7 +639,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard, knowledge embed endpoint done |
 | Models | 60% | README done with Hugging Face instructions, license notes, model cards |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 42% | 34 tests across 9 suites; all passing with new 13,500 skill counts; more coverage pending |
+| Testing & Quality | 46% | 39 tests across 10 suites; all passing; memory search, knowledge stats tests added |
 | Documentation | 93% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE, MODELS, models/README done; SmithGPT1.0/2.0 hosting scripts documented |
 
 ---

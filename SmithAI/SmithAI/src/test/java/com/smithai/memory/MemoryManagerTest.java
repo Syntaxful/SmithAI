@@ -46,6 +46,37 @@ public class MemoryManagerTest {
     }
 
     @Test
+    public void testMemorySearchByTopic(@TempDir File tempDir) {
+        MemoryManager mm = new MemoryManager(mockPlugin(tempDir, 20));
+        UUID id = UUID.randomUUID();
+        Conversation conv = mm.getConversation(id);
+        conv.addMessage("user", "let's go mining for diamonds");
+        conv.addMessage("assistant", "I'll get my pickaxe");
+        conv.addMessage("user", "build a house near the village");
+        mm.saveAll();
+
+        String query = "mining";
+        java.util.List<String> results = mm.searchByTopic(query);
+        assertFalse(results.isEmpty(), "Should find messages about mining");
+        boolean found = results.stream().anyMatch(r -> r.contains("diamonds"));
+        assertTrue(found, "Should find the diamond mining message");
+    }
+
+    @Test
+    public void testGetTopics(@TempDir File tempDir) {
+        MemoryManager mm = new MemoryManager(mockPlugin(tempDir, 20));
+        UUID id = UUID.randomUUID();
+        Conversation conv = mm.getConversation(id);
+        conv.addMessage("user", "let's go mine some diamonds");
+        conv.addMessage("user", "craft me a pickaxe please");
+        mm.saveAll();
+
+        java.util.List<String> topics = mm.getTopics();
+        assertTrue(topics.contains("mining"), "Should detect mining topic");
+        assertTrue(topics.contains("crafting"), "Should detect crafting topic");
+    }
+
+    @Test
     public void testConversationMaxMessages(@TempDir File tempDir) {
         MemoryManager mm = new MemoryManager(mockPlugin(tempDir, 3));
         UUID id = UUID.randomUUID();

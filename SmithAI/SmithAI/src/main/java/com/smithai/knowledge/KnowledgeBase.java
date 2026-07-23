@@ -93,6 +93,15 @@ public class KnowledgeBase {
         return index;
     }
 
+    public java.util.Map<String, Object> getStats() {
+        java.util.Map<String, Object> stats = new java.util.LinkedHashMap<>();
+        stats.put("version", version);
+        stats.put("loaded_at", new java.util.Date(loadedAt).toString());
+        stats.put("total_entries", entries.size());
+        stats.put("categories", getCategoryCounts());
+        return stats;
+    }
+
     public java.util.Map<String, Integer> getCategoryCounts() {
         java.util.Map<String, Integer> counts = new java.util.LinkedHashMap<>();
         counts.put("block", 0); counts.put("mob", 0); counts.put("item", 0);
