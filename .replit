@@ -1,5 +1,5 @@
 modules = ["python-3.11"]
-run = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-replit.txt && python3 app.py"
+run = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-server.txt && python3 app.py"
 
 [nix]
 channel = "stable-25_05"
@@ -14,15 +14,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "SmithAI Server"
+args = "Server"
 
 [[workflows.workflow]]
-name = "SmithAI Server"
+name = "Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-replit.txt && python3 app.py"
+args = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-server.txt && python3 app.py"
 waitForPort = 8000
 
 [workflows.workflow.metadata]
@@ -31,3 +31,7 @@ outputType = "webview"
 [[ports]]
 localPort = 8000
 externalPort = 80
+
+[[ports]]
+localPort = 8080
+externalPort = 8080

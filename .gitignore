@@ -39,7 +39,7 @@ SmithAI-Server/models/*.gguf
 SmithAI-Server/models/*.bin
 SmithAI-Server/__pycache__/
 
-# Replit / Nix workspace files
+# Workspace / Nix environment files
 .replit.bak
 .cache/
 .pythonlibs/

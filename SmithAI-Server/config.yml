@@ -3,7 +3,7 @@
 
 server:
   host: 0.0.0.0
-  # Default port is 8000. Replit and some hosts set the PORT environment variable,
+  # Default port is 8000. Many hosting platforms set the PORT environment variable,
   # which the server uses automatically if present.
   port: 8000
 

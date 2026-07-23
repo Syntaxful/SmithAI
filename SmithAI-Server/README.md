@@ -91,5 +91,5 @@ All endpoints except `/health` require the `Authorization: Bearer SMA-...` heade
 
 ## Environment variables
 
-- `PORT` — overrides `server.port` (used by Replit and some hosts)
+- `PORT` — overrides `server.port` (used by many hosting platforms)
 - `SMITHAI_CONFIG` — path to a custom `config.yml`

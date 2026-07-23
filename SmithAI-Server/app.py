@@ -1,7 +1,7 @@
 # SmithAI-Server
 # Official external AI server for SmithAI Minecraft plugin.
 # Supports SmithGPT 1.0 (4GB) and SmithGPT 2.0 (7.5GB) models.
-# User runs this on their own host: Replit, Codespaces, Linux, Windows, VPS, etc.
+# User runs this on their own host: Codespaces, Linux, Windows, VPS, or any cloud IDE.
 
 import os
 import sys
