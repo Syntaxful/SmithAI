@@ -16,11 +16,17 @@ public class KnowledgeBase {
 
     private final SmithAIPlugin plugin;
     private final List<KnowledgeEntry> entries = new ArrayList<>();
+    private String version = "2.0.0";
+    private long loadedAt;
 
     public KnowledgeBase(SmithAIPlugin plugin) {
         this.plugin = plugin;
+        this.loadedAt = System.currentTimeMillis();
         loadDefaults();
     }
+
+    public String getVersion() { return version; }
+    public long getLoadedAt() { return loadedAt; }
 
     private void loadDefaults() {
         loadResource("knowledge/blocks.json");

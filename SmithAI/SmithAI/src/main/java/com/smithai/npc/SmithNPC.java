@@ -86,11 +86,39 @@ public class SmithNPC {
     public void sendMessage(Player player, String message) {
         if (player != null && player.isOnline()) {
             player.sendMessage("§b[" + name + "] §f" + message);
+            playSound(player, org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, 0.6f, 1.2f);
         }
     }
 
     public void sendMessageToAll(String message) {
         org.bukkit.Bukkit.broadcastMessage("§b[" + name + "] §f" + message);
+        for (org.bukkit.entity.Player p : org.bukkit.Bukkit.getOnlinePlayers()) {
+            p.playSound(p.getLocation(), org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, 0.6f, 1.2f);
+        }
+    }
+
+    /**
+     * Play a sound effect at the NPC's location for nearby players.
+     */
+    public void playSound(Player player, org.bukkit.Sound sound, float volume, float pitch) {
+        if (entity != null && !entity.isDead() && player != null && player.isOnline()) {
+            player.playSound(entity.getLocation(), sound, volume, pitch);
+        }
+    }
+
+    /**
+     * Play a task-related sound (start, complete, error).
+     */
+    public void playTaskSound(boolean success) {
+        org.bukkit.Sound sound = success ? org.bukkit.Sound.ENTITY_PLAYER_LEVELUP : org.bukkit.Sound.ENTITY_VILLAGER_NO;
+        float pitch = success ? 1.0f : 0.8f;
+        if (entity != null && !entity.isDead()) {
+            for (org.bukkit.entity.Entity e : entity.getNearbyEntities(16, 16, 16)) {
+                if (e instanceof Player) {
+                    ((Player) e).playSound(entity.getLocation(), sound, 0.8f, pitch);
+                }
+            }
+        }
     }
 
     public void lookAt(Location target) {

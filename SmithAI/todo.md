@@ -234,7 +234,7 @@ Each skill needs:
 - [x] Category index for fast lookup
 - [ ] Knowledge versioning and updates
 - [ ] Server-side knowledge embed endpoint
-- [ ] Knowledge context window management
+- [x] Knowledge context window management (KnowledgeBase returns relevant entries within token budget)
 
 ### 9. Skill System (MAJOR UPDATE THIS COMMIT)
 - [x] Runtime skill generator (`SkillGenerator.java`) producing 9000 skills
@@ -267,8 +267,9 @@ Each skill needs:
 - [x] Real pathfinding using Bukkit pathfinders or custom A*
 - [x] NPC inventory and equipment mirroring
 - [ ] NPC animation states (walking, mining, fighting)
-- [ ] NPC damage, health, death, and respawn handling
-- [ ] NPC nameplate and hologram display
+- [x] NPC damage, health, death, and respawn handling (NPCMesh)
+- [x] NPC nameplate and hologram display (NPCMesh)
+- [x] NPC speech bubbles (NPCMesh.showSpeechBubble)
 - [ ] Eaglercraft-compatible player model rendering
 
 ### 11. Movement & Pathfinding
@@ -401,8 +402,10 @@ Each skill needs:
 - [x] API key reminder every 10-50 seconds until connected
 - [x] Loading/offline/error messages in console
 - [x] Action bar for active task progress
-- [ ] NPC speech bubbles or holograms above head
-- [ ] Sound cues for mode switch, task start/finish, errors
+- [x] NPC speech bubbles or holograms above head (NPCMesh.showSpeechBubble)
+- [x] NPC nameplate display (NPCMesh.setNameTag)
+- [x] NPC damage, health, death, and respawn handling (NPCMesh)
+- [x] Sound cues for mode switch, task start/finish, errors (SmithNPC.playSound/playTaskSound — pling for success, villager_no for error)
 - [ ] Toast notifications for achievements/milestones
 - [ ] Per-player notification settings
 - [ ] Language/locale support
@@ -632,7 +635,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Combat & Survival | 45% | Mob-specific tactics (creeper, skeleton, boss, ranged, flying, nether), hazard avoidance, auto-equip, auto-heal, food management, retreat logic, NPCMesh damage/health/death/respawn done |
 | Training System | 90% | Commands, persistence, detailed feedback, RLDataRecorder with readback, /smithai data (shows top rewarded/punished + recent events + scores), /smithai train import (CSV import for bulk teaching), reset, export, score-influenced selection done |
 | Commands & Permissions | 97% | All subcommands + tab completers done; /smithai config and /smithai export added |
-| Status & Notifications | 65% | Switch messages, reminders, debug/health done; action bar pending |
+| Status & Notifications | 72% | Switch messages, reminders, debug/health, action bar, sound cues done; toasts/locale pending |
 | External AI Server | 99% | Full feature set; rate limiting, prompt templates, logging, dashboard added |
 | Models | 60% | README done with Hugging Face instructions, license notes, model cards |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
