@@ -474,10 +474,10 @@ Each skill needs:
 - [x] SKILLS.md (overview of 9000 skills, how to add, implementation status)
 - [x] CONTRIBUTING.md (coding style, build instructions, rules)
 - [x] REPORT_TEMPLATE.md (bug report template)
-- [ ] MODELS.md (detailed model cards and downloads)
-- [ ] API.md (SmithAI-Server API reference)
-- [ ] CHANGELOG.md
-- [ ] In-game help system (`/smithai help`)
+- [x] MODELS.md (detailed model cards and downloads)
+- [x] API.md (SmithAI-Server API reference)
+- [x] CHANGELOG.md
+- [x] In-game help system (`/smithai help`)
 - [ ] Video tutorial script (optional)
 - [ ] Troubleshooting guide
 - [ ] Privacy policy (no data collection, free forever)

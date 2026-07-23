@@ -54,7 +54,9 @@ You choose which model to run on your external server. The plugin only connects 
 For SmithGPT 1.0 or 2.0, see:
 - `SmithAI-Server/README.md` — how to run the server
 - `HOSTING.md` — how to host on Replit, Codespaces, Linux, Windows, VPS
-- `models/README.md` — which model files to download
+- `MODELS.md` — recommended model files and quantization guidance
+- `API.md` — full SmithAI-Server API reference
+- `models/README.md` — general model format guidance
 - `Dockerfile` and `docker-compose.yml` — Docker deployment
 
 ## Commands
