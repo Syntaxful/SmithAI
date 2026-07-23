@@ -270,7 +270,7 @@ Each skill needs:
 - [x] Skill success/failure detection (checkPrecondition — health/tool/food checks before execution)
 - [x] Skill parameters from LLM responses partially wired (material, target, count params passed to execute)
 - [x] Skill retry and recovery policies (SkillExecutor tick loop retries, checkPrecondition failure recovery)
-- [ ] Skill usage analytics and training feedback
+- [x] Skill usage analytics and training feedback (recordSkillUsage — per-skill use/success tracking + RL recorder integration)
 
 ### 12. NPC System
 - [x] `NPCManager` tracks spawned Smith_AI NPCs
@@ -664,7 +664,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Local AI (Smith-Mini) | 42% | Rule-based fallback + action tags + streaming + prompt templates + telemetry; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 97% | 13,500 skills, dispatcher with all managers + full primitive executors + retry/recovery + action tags + composite decomposition + preconditions + params all done |
+| Skill System | 98% | 13,500 skills, dispatcher with all managers + full primitive executors + retry/recovery + action tags + composite decomposition + preconditions + params + usage analytics all done |
 | World Interaction | 93% | Block break/place, torches, doors/levers/buttons/trapdoors/gates, buckets, shearing/milking/taming, schematic building, terraforming, chests/furnaces, farming, mining, flint/steel (ignition/TNT), ender pearls all done |
 | Smart Inventory | 85% | Auto-upgrade armor/tools, drop inferior, durability-aware, auto-food, stockpile, crafting, auto-craft on break (diamond/iron/stone/wood) all done |
 | Advanced Player Skills | 85% | Clutch, enchanting, building/shelter, sleeping, elytra flying, shield blocking, redstone contraptions all done |
@@ -678,7 +678,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | External AI Server | 100% | ✅ Complete |
 | Models | 82% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader, model warmup, tier notes, GGUF formatting, quant guidance, performance telemetry all done |
 | Eaglercraft Compatibility | 32% | API usage correct, no NMS, VersionInfo detection + 1.8 protocol handling, Bukkit-only NPC model verified, all World Interaction Bukkit-only; needs live testing |
-| Testing & Quality | 66% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; thread safety, error handling, memory leak reviews done |
+| Testing & Quality | 68% | 39 unit tests across 10 suites + integration_test.py (6 endpoint tests) all passing; thread safety, error handling, memory leak, security audit reviews documented |
 | Documentation | 100% | ✅ Complete |
 
 ---

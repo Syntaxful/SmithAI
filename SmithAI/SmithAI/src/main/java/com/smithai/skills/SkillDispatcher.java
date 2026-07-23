@@ -26,6 +26,7 @@ import java.util.logging.Level;
 public class SkillDispatcher {
 
     private final SmithAIPlugin plugin;
+    private final java.util.Map<String, int[]> skillUsage = new java.util.HashMap<>(); // skill -> [uses, successes]
     private final CraftingManager crafting;
     private final FarmingManager farming;
     private final MiningManager mining;
@@ -136,22 +137,24 @@ public class SkillDispatcher {
             executeCombat(npc, lower, contextPlayer, params);
             // After combat, do smart inventory management
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> smartInventoryManagement(npc), 5L);
+            recordSkillUsage(lower, true, npc, contextPlayer);
             return;
         }
 
         // Gather / resource / farming / crafting / building
-        if (isResourceSkill(lower)) { executeResource(npc, lower, contextPlayer, params); return; }
+        if (isResourceSkill(lower)) { executeResource(npc, lower, contextPlayer, params); recordSkillUsage(lower, true, npc, contextPlayer); return; }
 
         // Endgame / progression tasks
-        if (isEndgameSkill(lower)) { endgame.execute(npc, lower, params, contextPlayer); return; }
+        if (isEndgameSkill(lower)) { endgame.execute(npc, lower, params, contextPlayer); recordSkillUsage(lower, true, npc, contextPlayer); return; }
         // Mining operations (safe strip, branch, diamond)
-        if (isMiningSkill(lower)) { mining.execute(npc, lower, params, contextPlayer); return; }
+        if (isMiningSkill(lower)) { mining.execute(npc, lower, params, contextPlayer); recordSkillUsage(lower, true, npc, contextPlayer); return; }
         // Farming operations (plant, water, fertilize, harvest, breed)
-        if (isFarmingSkill(lower)) { farming.execute(npc, lower, params, contextPlayer); return; }
+        if (isFarmingSkill(lower)) { farming.execute(npc, lower, params, contextPlayer); recordSkillUsage(lower, true, npc, contextPlayer); return; }
         // Crafting / smelting / brewing / chest operations
-        if (isCraftingSkill(lower)) { crafting.execute(npc, lower, params, contextPlayer); return; }
+        if (isCraftingSkill(lower)) { crafting.execute(npc, lower, params, contextPlayer); recordSkillUsage(lower, true, npc, contextPlayer); return; }
 
         executeComposite(npc, lower, contextPlayer, "I'll plan and execute that advanced objective: " + humanize(skillName));
+        recordSkillUsage(lower, true, npc, contextPlayer);
     }
 
     /**
@@ -679,6 +682,28 @@ public class SkillDispatcher {
             }
         }
     }
+
+    // --- SKILL USAGE ANALYTICS ---
+
+    /**
+     * Track skill usage for analytics and RL training feedback.
+     */
+    private void recordSkillUsage(String skillName, boolean success, SmithNPC npc, Player contextPlayer) {
+        skillUsage.compute(skillName, (k, v) -> {
+            if (v == null) v = new int[2];
+            v[0]++; if (success) v[1]++;
+            return v;
+        });
+        try {
+            com.smithai.training.TrainingManager tm = plugin.getTrainingManager();
+            if (tm != null) {
+                int score = success ? 1 : -1;
+                tm.getRlRecorder().record("skill_usage", skillName, score);
+            }
+        } catch (Exception ignored) {}
+    }
+
+    public Map<String, int[]> getSkillUsage() { return new java.util.HashMap<>(skillUsage); }
 
     // --- ITEM USE / FOOD MANAGEMENT ---
 
