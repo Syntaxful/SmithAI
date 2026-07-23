@@ -3,175 +3,690 @@
     "id": "recipe:crafting_table",
     "category": "recipe",
     "name": "Crafting Table",
-    "description": "Place 4 wooden planks in a 2x2 square in the inventory crafting grid. Expands the crafting grid to 3x3.",
-    "tags": ["recipe", "crafting", "wood"]
-  },
-  {
-    "id": "recipe:wooden_pickaxe",
-    "category": "recipe",
-    "name": "Wooden Pickaxe",
-    "description": "In a crafting table, place 3 wooden planks across the top row and 2 sticks in the middle column.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:stone_pickaxe",
-    "category": "recipe",
-    "name": "Stone Pickaxe",
-    "description": "In a crafting table, place 3 cobblestone across the top row and 2 sticks in the middle column.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:iron_pickaxe",
-    "category": "recipe",
-    "name": "Iron Pickaxe",
-    "description": "In a crafting table, place 3 iron ingots across the top row and 2 sticks in the middle column.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:diamond_pickaxe",
-    "category": "recipe",
-    "name": "Diamond Pickaxe",
-    "description": "In a crafting table, place 3 diamonds across the top row and 2 sticks in the middle column.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:wooden_axe",
-    "category": "recipe",
-    "name": "Wooden Axe",
-    "description": "In a crafting table, place 3 wooden planks in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:stone_axe",
-    "category": "recipe",
-    "name": "Stone Axe",
-    "description": "In a crafting table, place 3 cobblestone in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:iron_axe",
-    "category": "recipe",
-    "name": "Iron Axe",
-    "description": "In a crafting table, place 3 iron ingots in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:diamond_axe",
-    "category": "recipe",
-    "name": "Diamond Axe",
-    "description": "In a crafting table, place 3 diamonds in the top-left, top-middle, and middle-left, plus 2 sticks vertically in the middle-right.",
-    "tags": ["recipe", "crafting", "tool"]
-  },
-  {
-    "id": "recipe:iron_sword",
-    "category": "recipe",
-    "name": "Iron Sword",
-    "description": "In a crafting table, place 2 iron ingots vertically in the middle column and 1 stick below them.",
-    "tags": ["recipe", "crafting", "weapon"]
-  },
-  {
-    "id": "recipe:diamond_sword",
-    "category": "recipe",
-    "name": "Diamond Sword",
-    "description": "In a crafting table, place 2 diamonds vertically in the middle column and 1 stick below them.",
-    "tags": ["recipe", "crafting", "weapon"]
-  },
-  {
-    "id": "recipe:furnace",
-    "category": "recipe",
-    "name": "Furnace",
-    "description": "In a crafting table, place 8 cobblestone in a ring, leaving the center empty.",
-    "tags": ["recipe", "crafting", "smelting"]
-  },
-  {
-    "id": "recipe:chest",
-    "category": "recipe",
-    "name": "Chest",
-    "description": "In a crafting table, place 8 wooden planks in a ring, leaving the center empty.",
-    "tags": ["recipe", "crafting", "storage"]
-  },
-  {
-    "id": "recipe:torch",
-    "category": "recipe",
-    "name": "Torch",
-    "description": "Place coal or charcoal above a stick in the crafting grid. Makes 4 torches.",
-    "tags": ["recipe", "crafting", "light"]
+    "description": "Place 4 wooden planks in a 2x2 square in the inventory crafting grid. Expands the grid to 3x3.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "wood"
+    ]
   },
   {
     "id": "recipe:stick",
     "category": "recipe",
     "name": "Stick",
-    "description": "Place 2 wooden planks vertically in the crafting grid. Makes 4 sticks.",
-    "tags": ["recipe", "crafting", "material"]
+    "description": "Place 2 wooden planks vertically in the crafting grid. Used for tools and torches.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:torch",
+    "category": "recipe",
+    "name": "Torch",
+    "description": "Place coal above a stick in the crafting grid. Provides light.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "light"
+    ]
+  },
+  {
+    "id": "recipe:wooden_pickaxe",
+    "category": "recipe",
+    "name": "Wooden Pickaxe",
+    "description": "3 planks across the top row and 2 sticks vertically in the middle column of a crafting table.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:stone_pickaxe",
+    "category": "recipe",
+    "name": "Stone Pickaxe",
+    "description": "3 cobblestone across the top row and 2 sticks vertically in the middle column.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:iron_pickaxe",
+    "category": "recipe",
+    "name": "Iron Pickaxe",
+    "description": "3 iron ingots across the top row and 2 sticks vertically in the middle column.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:diamond_pickaxe",
+    "category": "recipe",
+    "name": "Diamond Pickaxe",
+    "description": "3 diamonds across the top row and 2 sticks vertically in the middle column.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:wooden_axe",
+    "category": "recipe",
+    "name": "Wooden Axe",
+    "description": "3 planks in top-left, top-middle, and middle-left, plus 2 sticks vertically in middle-right.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:stone_axe",
+    "category": "recipe",
+    "name": "Stone Axe",
+    "description": "3 cobblestone in top-left, top-middle, and middle-left, plus 2 sticks vertically in middle-right.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:iron_axe",
+    "category": "recipe",
+    "name": "Iron Axe",
+    "description": "3 iron ingots in top-left, top-middle, and middle-left, plus 2 sticks vertically in middle-right.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "tool"
+    ]
+  },
+  {
+    "id": "recipe:wooden_sword",
+    "category": "recipe",
+    "name": "Wooden Sword",
+    "description": "2 planks in the top-middle and middle-middle, plus 1 stick in the bottom-middle.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "weapon"
+    ]
+  },
+  {
+    "id": "recipe:stone_sword",
+    "category": "recipe",
+    "name": "Stone Sword",
+    "description": "2 cobblestone in the top-middle and middle-middle, plus 1 stick in the bottom-middle.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "weapon"
+    ]
+  },
+  {
+    "id": "recipe:iron_sword",
+    "category": "recipe",
+    "name": "Iron Sword",
+    "description": "2 iron ingots in the top-middle and middle-middle, plus 1 stick in the bottom-middle.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "weapon"
+    ]
+  },
+  {
+    "id": "recipe:diamond_sword",
+    "category": "recipe",
+    "name": "Diamond Sword",
+    "description": "2 diamonds in the top-middle and middle-middle, plus 1 stick in the bottom-middle.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "weapon"
+    ]
   },
   {
     "id": "recipe:bucket",
     "category": "recipe",
     "name": "Bucket",
-    "description": "In a crafting table, place 3 iron ingots in a V shape. Used to collect and place liquids.",
-    "tags": ["recipe", "crafting", "tool"]
+    "description": "3 iron ingots in a V shape in the crafting grid.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
   },
   {
-    "id": "recipe:flint_and_steel",
+    "id": "recipe:furnace",
     "category": "recipe",
-    "name": "Flint and Steel",
-    "description": "Place 1 iron ingot and 1 flint diagonally in the crafting grid. Used to ignite portals and TNT.",
-    "tags": ["recipe", "crafting", "tool"]
+    "name": "Furnace",
+    "description": "8 cobblestone around the edge of the crafting grid, leaving the center empty.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "smelting"
+    ]
   },
   {
-    "id": "recipe:nether_portal",
+    "id": "recipe:chest",
     "category": "recipe",
-    "name": "Nether Portal",
-    "description": "Build a rectangular frame of obsidian at least 4 blocks wide and 5 blocks tall, leaving a 2x3 hole. Ignite the inside with flint and steel.",
-    "tags": ["recipe", "structure", "nether", "portal"]
+    "name": "Chest",
+    "description": "8 wooden planks around the edge of the crafting grid, leaving the center empty.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "storage"
+    ]
   },
   {
-    "id": "recipe:iron_ingot",
+    "id": "recipe:bed",
     "category": "recipe",
-    "name": "Iron Ingot",
-    "description": "Smelt raw iron or iron ore in a furnace with fuel such as coal or charcoal.",
-    "tags": ["recipe", "smelting", "iron"]
+    "name": "Bed",
+    "description": "3 wool across the top row and 3 wooden planks across the middle row.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "bed"
+    ]
   },
   {
-    "id": "recipe:gold_ingot",
+    "id": "recipe:shield",
     "category": "recipe",
-    "name": "Gold Ingot",
-    "description": "Smelt raw gold or gold ore in a furnace with fuel such as coal or charcoal.",
-    "tags": ["recipe", "smelting", "gold"]
+    "name": "Shield",
+    "description": "6 wood planks in a Y shape plus an iron ingot in the top-middle.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "defense"
+    ]
   },
   {
-    "id": "recipe:glass",
+    "id": "recipe:bow",
     "category": "recipe",
-    "name": "Glass",
-    "description": "Smelt sand in a furnace. Glass is transparent and used for windows and bottles.",
-    "tags": ["recipe", "smelting", "building"]
+    "name": "Bow",
+    "description": "3 sticks and 3 string arranged in a U shape with string on the right.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "weapon"
+    ]
   },
   {
-    "id": "recipe:stone_bricks",
+    "id": "recipe:arrow",
     "category": "recipe",
-    "name": "Stone Bricks",
-    "description": "Place 4 stone blocks in a 2x2 square in the crafting grid. Used for strong building blocks.",
-    "tags": ["recipe", "crafting", "building"]
-  },
-  {
-    "id": "recipe:planks",
-    "category": "recipe",
-    "name": "Wooden Planks",
-    "description": "Place any log in the crafting grid to get 4 matching planks. Used for crafting and building.",
-    "tags": ["recipe", "crafting", "wood"]
+    "name": "Arrow",
+    "description": "Flint on top, stick in middle, feather on bottom.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "ammo"
+    ]
   },
   {
     "id": "recipe:paper",
     "category": "recipe",
     "name": "Paper",
-    "description": "Place 3 sugar canes horizontally in the crafting grid. Used for books, maps, and banners.",
-    "tags": ["recipe", "crafting", "material"]
+    "description": "3 sugar canes horizontally in the crafting grid.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
   },
   {
     "id": "recipe:book",
     "category": "recipe",
     "name": "Book",
-    "description": "Place 3 paper and 1 leather in the crafting grid in a 2x2 pattern with leather in the bottom-right. Used for bookshelves and enchanting.",
-    "tags": ["recipe", "crafting", "material"]
+    "description": "3 paper and 1 leather.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:bookshelf",
+    "category": "recipe",
+    "name": "Bookshelf",
+    "description": "3 books in the middle row and 6 wood planks around them.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "recipe:enchanting_table",
+    "category": "recipe",
+    "name": "Enchanting Table",
+    "description": "4 obsidian on the bottom, 2 diamonds on the sides, 1 book on top.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "recipe:anvil",
+    "category": "recipe",
+    "name": "Anvil",
+    "description": "3 iron blocks across the top row, 1 iron ingot in the center, 3 iron ingots in a line at the bottom.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "repair"
+    ]
+  },
+  {
+    "id": "recipe:iron_helmet",
+    "category": "recipe",
+    "name": "Iron Helmet",
+    "description": "5 iron ingots in an upside-down U shape in the crafting grid.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "armor"
+    ]
+  },
+  {
+    "id": "recipe:iron_chestplate",
+    "category": "recipe",
+    "name": "Iron Chestplate",
+    "description": "8 iron ingots filling all slots except the top-middle.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "armor"
+    ]
+  },
+  {
+    "id": "recipe:iron_leggings",
+    "category": "recipe",
+    "name": "Iron Leggings",
+    "description": "7 iron ingots in a U shape leaving the center and top-middle empty.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "armor"
+    ]
+  },
+  {
+    "id": "recipe:iron_boots",
+    "category": "recipe",
+    "name": "Iron Boots",
+    "description": "4 iron ingots in a U shape leaving the top and middle empty.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "armor"
+    ]
+  },
+  {
+    "id": "recipe:compass",
+    "category": "recipe",
+    "name": "Compass",
+    "description": "4 iron ingots around redstone in the center.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:clock",
+    "category": "recipe",
+    "name": "Clock",
+    "description": "4 gold ingots around redstone in the center.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:flint_and_steel",
+    "category": "recipe",
+    "name": "Flint and Steel",
+    "description": "Flint and iron ingot diagonally in the crafting grid.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:glass_bottle",
+    "category": "recipe",
+    "name": "Glass Bottle",
+    "description": "3 glass blocks in a V shape.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "brewing"
+    ]
+  },
+  {
+    "id": "recipe:brewing_stand",
+    "category": "recipe",
+    "name": "Brewing Stand",
+    "description": "3 cobblestone across the bottom and 1 blaze rod in the center.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "brewing"
+    ]
+  },
+  {
+    "id": "recipe:cauldron",
+    "category": "recipe",
+    "name": "Cauldron",
+    "description": "7 iron ingots in a U shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:iron_door",
+    "category": "recipe",
+    "name": "Iron Door",
+    "description": "6 iron ingots in two vertical columns.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:wooden_door",
+    "category": "recipe",
+    "name": "Wooden Door",
+    "description": "6 wood planks in two vertical columns.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:trapdoor",
+    "category": "recipe",
+    "name": "Trapdoor",
+    "description": "6 wood planks in two rows of three.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:fence",
+    "category": "recipe",
+    "name": "Fence",
+    "description": "4 wood planks and 2 sticks in alternating columns.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:gate",
+    "category": "recipe",
+    "name": "Fence Gate",
+    "description": "2 sticks and 4 wood planks in a gate shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:ladder",
+    "category": "recipe",
+    "name": "Ladder",
+    "description": "7 sticks in a H shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:sign",
+    "category": "recipe",
+    "name": "Sign",
+    "description": "6 wood planks in the top two rows and 1 stick in the bottom-middle.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:boat",
+    "category": "recipe",
+    "name": "Boat",
+    "description": "5 wood planks in a U shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:minecart",
+    "category": "recipe",
+    "name": "Minecart",
+    "description": "5 iron ingots in a U shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:rail",
+    "category": "recipe",
+    "name": "Rail",
+    "description": "6 iron ingots and 1 stick in a zigzag pattern.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:powered_rail",
+    "category": "recipe",
+    "name": "Powered Rail",
+    "description": "6 gold ingots, 1 stick, and 1 redstone.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:detector_rail",
+    "category": "recipe",
+    "name": "Detector Rail",
+    "description": "6 iron ingots, 1 stone pressure plate, and 1 redstone.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:hopper",
+    "category": "recipe",
+    "name": "Hopper",
+    "description": "5 iron ingots and 1 chest in a V shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:dispenser",
+    "category": "recipe",
+    "name": "Dispenser",
+    "description": "7 cobblestone, 1 bow, and 1 redstone in a U shape with bow in center.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:dropper",
+    "category": "recipe",
+    "name": "Dropper",
+    "description": "7 cobblestone and 1 redstone in a U shape.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:piston",
+    "category": "recipe",
+    "name": "Piston",
+    "description": "3 wood planks, 4 cobblestone, 1 iron ingot, and 1 redstone.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:sticky_piston",
+    "category": "recipe",
+    "name": "Sticky Piston",
+    "description": "1 piston and 1 slime ball.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:redstone_torch",
+    "category": "recipe",
+    "name": "Redstone Torch",
+    "description": "1 redstone above 1 stick.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:repeater",
+    "category": "recipe",
+    "name": "Redstone Repeater",
+    "description": "3 stone blocks, 2 redstone torches, and 1 redstone.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:comparator",
+    "category": "recipe",
+    "name": "Redstone Comparator",
+    "description": "3 stone blocks, 3 redstone torches, and 1 nether quartz.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:daylight_detector",
+    "category": "recipe",
+    "name": "Daylight Detector",
+    "description": "3 glass, 3 nether quartz, and 3 wood slabs.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:observer",
+    "category": "recipe",
+    "name": "Observer",
+    "description": "6 cobblestone, 2 redstone, and 1 nether quartz.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:note_block",
+    "category": "recipe",
+    "name": "Note Block",
+    "description": "8 wood planks around 1 redstone.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:jukebox",
+    "category": "recipe",
+    "name": "Jukebox",
+    "description": "8 wood planks around 1 diamond.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:tnt",
+    "category": "recipe",
+    "name": "TNT",
+    "description": "5 gunpowder in an X and 4 sand around them.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:fire_charge",
+    "category": "recipe",
+    "name": "Fire Charge",
+    "description": "1 coal, 1 gunpowder, and 1 blaze powder.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:firework_rocket",
+    "category": "recipe",
+    "name": "Firework Rocket",
+    "description": "1 paper and 1 gunpowder. Add firework stars for effects.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:lead",
+    "category": "recipe",
+    "name": "Lead",
+    "description": "4 string and 1 slime ball.",
+    "tags": [
+      "recipe",
+      "crafting"
+    ]
+  },
+  {
+    "id": "recipe:nametag",
+    "category": "recipe",
+    "name": "Name Tag",
+    "description": "Cannot be crafted. Found in chests, fishing, or trading with villagers.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "unavailable"
+    ]
+  },
+  {
+    "id": "recipe:saddle",
+    "category": "recipe",
+    "name": "Saddle",
+    "description": "Cannot be crafted. Found in chests, fishing, or trading with villagers.",
+    "tags": [
+      "recipe",
+      "crafting",
+      "unavailable"
+    ]
   }
 ]
