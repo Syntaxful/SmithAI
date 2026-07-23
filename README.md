@@ -7,8 +7,8 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 - **One official plugin:** `SmithAI`
 - **Built-in brain:** `Smith-Mini 1.0` — works without any external hosting
 - **Optional big brains:**
-  - `SmithGPT 1.0` — 7.5GB external model
-  - `SmithGPT 2.0` — 15GB external model
+  - `SmithGPT 1.0` — 4GB external model
+  - `SmithGPT 2.0` — 7.5GB external model
 - **Robot skin** for `Smith_AI`
 - **Chat, memory, tasks, skills, and training**
 - **Specific feedback system** — tell the AI exactly what it did wrong with `/smithai feedback`
@@ -36,8 +36,8 @@ You choose which model to run on your external server. The plugin only connects 
 | Model | Size | Recommended server RAM | How it runs |
 |-------|------|------------------------|-------------|
 | Smith-Mini 1.0 | ~500MB–1.5GB | 2GB+ | Built into the plugin, no external server |
-| SmithGPT 1.0 | 7.5GB | 12GB+ | External SmithAI-Server |
-| SmithGPT 2.0 | 15GB | 24GB+ | External SmithAI-Server |
+| SmithGPT 1.0 | 4GB | 8GB+ | External SmithAI-Server |
+| SmithGPT 2.0 | 7.5GB | 12GB+ | External SmithAI-Server |
 
 ## Quick start
 
@@ -68,8 +68,9 @@ For SmithGPT 1.0 or 2.0, see:
 - `/smithai goto <x> <y> <z>` — send nearby `Smith_AI` to coordinates
 - `/smithai do <task>` — ask it to do something (e.g., `get diamonds`, `build nether portal`, `beat the game`)
 - `/smithai stop` — cancel all queued tasks
-- `/smithai status` — show which brain is active
+- `/smithai status` — show which brain is active and server version info
 - `/smithai model` — show available models and active model
+- `/smithai version` — show the detected Minecraft/Eaglercraft version and feature flags
 - `/smithai reload` — reload config
 - `/smithai train good|bad` — reward or punish the AI
 - `/smithai feedback <what it did wrong>` — tell the AI exactly what it did wrong
@@ -111,7 +112,7 @@ ai:
     enabled: false
     url: "http://localhost:8000"
     apiKey: ""
-    model: "smithgpt-1.0-7.5"
+    model: "smithgpt-1.0"
   local:
     enabled: true
     modelPath: "plugins/SmithAI/models/smith-mini-1.0.gguf"

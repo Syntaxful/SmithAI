@@ -56,7 +56,7 @@ public class Config {
         this.externalUrl = config.getString("ai.external.url", "http://localhost:8000");
         this.externalTimeout = config.getInt("ai.external.timeout", 10);
         this.externalApiKey = config.getString("ai.external.apiKey", "");
-        this.externalModel = config.getString("ai.external.model", "smithgpt-1.0-7.5");
+        this.externalModel = config.getString("ai.external.model", "smithgpt-1.0");
         this.localEnabled = config.getBoolean("ai.local.enabled", true);
         this.localModelPath = config.getString("ai.local.modelPath", "plugins/SmithAI/models/smith-mini-1.0.gguf");
         this.localFallbackToRules = config.getBoolean("ai.local.fallbackToRules", true);

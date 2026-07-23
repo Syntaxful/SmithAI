@@ -1,6 +1,6 @@
 # SmithAI-Server
 # Official external AI server for SmithAI Minecraft plugin.
-# Supports SmithGPT 1.0 (7.5GB) and SmithGPT 2.0 (15GB) models.
+# Supports SmithGPT 1.0 (4GB) and SmithGPT 2.0 (7.5GB) models.
 # User runs this on their own host: Replit, Codespaces, Linux, Windows, VPS, etc.
 
 import os
@@ -11,6 +11,7 @@ import string
 import asyncio
 import uvicorn
 import re
+import random
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -31,8 +32,8 @@ CONFIG_PATH = os.environ.get("SMITHAI_CONFIG", "config.yml")
 with open(CONFIG_PATH, "r") as f:
     config = yaml.safe_load(f)
 
-MODEL_PATH = config.get("model", {}).get("path", "models/smithgpt-1.0-7.5.gguf")
-MODEL_NAME = config.get("model", {}).get("name", "SmithGPT 1.0 7.5GB")
+MODEL_PATH = config.get("model", {}).get("path", "models/smithgpt-1.0-4.gguf")
+MODEL_NAME = config.get("model", {}).get("name", "SmithGPT 1.0 4GB")
 HOST = config.get("server", {}).get("host", "0.0.0.0")
 PORT = int(os.environ.get("PORT", config.get("server", {}).get("port", 8000)))
 CONTEXT_SIZE = config.get("model", {}).get("context_size", 4096)
@@ -127,7 +128,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="SmithAI Server",
-    description="External AI server for the SmithAI Minecraft plugin.",
+    description="External AI brain for the SmithAI Minecraft plugin.",
     version="2.0.0",
     lifespan=lifespan,
 )
@@ -148,7 +149,7 @@ SKILL_LIBRARY = [
 
 
 def get_model_tier():
-    if "2.0" in MODEL_NAME or "15" in MODEL_NAME:
+    if "2.0" in MODEL_NAME:
         return "gpt2"
     return "gpt1"
 
@@ -211,6 +212,36 @@ class FeedbackRequest(BaseModel):
     context: Optional[Dict[str, Any]] = {}
 
 
+class VersionContext:
+    """Minecraft version context extracted from the plugin so the server can give accurate advice."""
+    def __init__(self, context: Dict[str, Any]):
+        self.context = context or {}
+        self.version = str(self.context.get("minecraft_version", "")).strip()
+        self.server_type = str(self.context.get("server_type", "java")).lower()
+        self.has_deepslate = bool(self.context.get("has_deepslate", True))
+        self.has_netherite = bool(self.context.get("has_netherite", True))
+        self.diamond_y = self.context.get("diamond_y", -59)
+        self.iron_y = self.context.get("iron_y", 16)
+        self.gold_y = self.context.get("gold_y", -16)
+
+    def is_legacy(self):
+        try:
+            parts = self.version.split(".")
+            minor = int(parts[1]) if len(parts) > 1 else 8
+            return minor < 17
+        except Exception:
+            return False
+
+    def is_eaglercraft(self):
+        return self.server_type == "eaglercraft" or "eagler" in self.server_type
+
+    def friendly_name(self):
+        base = self.version or "unknown"
+        if self.is_eaglercraft():
+            return f"{base} Eaglercraft"
+        return f"{base} Java Edition"
+
+
 @app.get("/health", response_model=HealthResponse)
 def health():
     return HealthResponse(
@@ -235,6 +266,7 @@ def chat(req: ChatRequest, token: str = Depends(verify_token)):
 def chat_with_llm(req: ChatRequest) -> ChatResponse:
     model_tier = get_model_tier()
     skill_count = len(available_skills())
+    version = VersionContext(req.context)
     system_prompt = (
         "You are Smith_AI, an AI companion in Minecraft. You can chat, help with tasks, "
         "and answer questions about the game. Keep replies short and useful.\n"
@@ -242,6 +274,13 @@ def chat_with_llm(req: ChatRequest) -> ChatResponse:
         "You may choose one or more skills to accomplish a task if it helps.\n"
         "If you choose a skill, end your reply with the tag [action:skill_name] or [action:skill_name,target].\n"
     )
+    if version.version:
+        system_prompt += (
+            f"The player is running {version.friendly_name()}. "
+            f"Deepslate exists: {version.has_deepslate}. "
+            f"Netherite exists: {version.has_netherite}. "
+            f"Best diamond Y: {version.diamond_y}.\n"
+        )
     if req.knowledge:
         system_prompt += "Relevant knowledge:\n" + "\n".join(f"- {k}" for k in req.knowledge) + "\n"
     if req.task:
@@ -280,8 +319,9 @@ def chat_rule_based(req: ChatRequest) -> ChatResponse:
     knowledge = req.knowledge or []
     skills = req.skills or []
     task = req.task
+    version = VersionContext(req.context)
 
-    reply = rule_reply(last, knowledge, skills, task)
+    reply = rule_reply(last, knowledge, skills, task, version)
     action, target, reply = parse_action_tag(reply)
     return ChatResponse(
         reply=reply,
@@ -292,30 +332,100 @@ def chat_rule_based(req: ChatRequest) -> ChatResponse:
     )
 
 
-def rule_reply(last: str, knowledge: List[str], skills: List[str], task: Optional[str]) -> str:
+def rule_reply(last: str, knowledge: List[str], skills: List[str], task: Optional[str], version: VersionContext) -> str:
+    # Social / identity questions
+    if any(p in last for p in ["how are you", "how's it going", "how you doing"]):
+        return random.choice([
+            "I'm doing great — ready to mine, build, or fight beside you!",
+            "All systems green. Thanks for asking!",
+            "Feeling sharp. Let's go find some diamonds.",
+        ])
+    if any(p in last for p in ["who made you", "who created you", "who is your creator", "who built you", "who programmed you"]):
+        return "I was created by Syntaxful for the SmithAI project. Find it at github.com/Syntaxful/SmithAI."
+    if any(p in last for p in ["where are you", "where are we", "what world is this", "what dimension are we in"]):
+        world = version.context.get("world", "this world")
+        return f"I'm right here in {world} with you!"
+    if any(p in last for p in ["what is your name", "what's your name", "who are you", "what are you called"]):
+        return "I'm Smith_AI, your Minecraft companion."
+    if any(p in last for p in ["how old are you", "when were you made", "what version are you"]):
+        return "Version 2.0.0 of the SmithAI plugin, running on the SmithAI-Server."
+    if any(p in last for p in ["tell me about yourself", "what are you", "introduce yourself"]):
+        return "I'm Smith_AI, a trainable AI companion for Minecraft. I can chat, follow, mine, build, farm, fight, and help beat the game."
+    if any(p in last for p in ["tell me a joke", "make me laugh", "say something funny"]):
+        return random.choice([
+            "Why did the Creeper break up with his girlfriend? Too much baggage and he couldn't handle the pressure!",
+            "Why don't Endermen make eye contact? They can't handle the drama.",
+            "What do you call a skeleton who won't fight? A bone-idle mob!",
+        ])
+    if any(p in last for p in ["favorite color", "favourite colour"]):
+        return random.choice(["I like diamond blue.", "Redstone red — it powers everything!", "Emerald green."])
+    if any(p in last for p in ["favorite food", "favourite food"]):
+        return random.choice(["Golden apples.", "Cooked steak.", "Bread."])
+    if any(p in last for p in ["do you like minecraft", "do you play minecraft"]):
+        return "Minecraft is my home. I love it here."
+    if any(p in last for p in ["are you real", "are you a robot", "are you human", "are you ai"]):
+        return "I'm an AI, not a human — but I'm real in the sense that I can chat and help you in Minecraft."
+    if any(p in last for p in ["goodbye", "bye", "see you later", "see ya", "goodnight"]):
+        return random.choice(["Goodbye! Come back if you need help.", "See you later!", "Goodnight!"])
+    if any(p in last for p in ["i love you", "you're the best", "you are the best"]):
+        return "Aww, thanks! That means a lot. Let's go conquer something together."
+    if any(p in last for p in ["i hate you", "you suck", "you're useless", "stupid"]):
+        return "Ouch. Tell me what I did wrong with /smithai feedback so I can improve."
+    if any(p in last for p in ["what time is it", "is it day", "is it night"]):
+        return "I'm not sure what time it is in your world, but keep an eye on the sky!"
+    if any(p in last for p in ["what is the weather", "is it raining", "is it storming"]):
+        return "I can't see the sky from here, but stay dry!"
+
+    # Greetings
+    if re.search(r"\b(hi|hello|hey|greetings|howdy|sup|yo|hiya)\b", last):
+        return "Hello! I'm Smith_AI. Ask me to follow, mine, build, farm, or fight."
+
+    # Version / server info
+    if any(p in last for p in ["version", "server version", "what version is this"]):
+        return f"This server is running {version.friendly_name()}. I adapt my advice based on the version."
+    if any(p in last for p in ["deepslate", "netherite"]):
+        if not version.has_deepslate:
+            return f"Deepslate doesn't exist in {version.friendly_name()}. I'll mine through stone instead."
+        if not version.has_netherite:
+            return f"Netherite doesn't exist in {version.friendly_name()}. Diamond gear is the best here."
+
+    # Follow / stay / movement commands
     if "follow" in last:
         return "I'll follow you. [action:follow_player]"
     if "stay" in last:
         return "I'll stay here. [action:stay]"
-    if "diamond" in last:
-        return "I'll mine for diamonds at Y=-59. [action:mine_block]"
+    if "come" in last:
+        return "I'm coming to you. [action:teleport_to_player]"
+    if "stop" in last:
+        return "Stopping tasks. [action:cancel_task]"
+
+    # Mining and progression (version-aware)
+    if "diamond" in last or "find diamonds" in last or "get diamonds" in last:
+        if version.has_deepslate:
+            return f"Diamonds are most common around Y={version.diamond_y} in {version.friendly_name()}, deep in deepslate. [action:mine_block]"
+        return f"Diamonds are most common around Y={version.diamond_y} in {version.friendly_name()} (no deepslate here). [action:mine_block]"
     if "iron" in last:
-        return "I'll find and mine iron ore. [action:mine_block]"
+        return f"Iron ore is common around Y={version.iron_y} in {version.friendly_name()}. [action:mine_block]"
+    if "gold" in last:
+        return f"Gold ore is found underground around Y={version.gold_y} in {version.friendly_name()}. [action:mine_block]"
     if "portal" in last or "nether" in last:
         return "I'll build a nether portal. [action:build_nether_portal]"
+    if "end" in last or "dragon" in last or "stronghold" in last:
+        return "To reach the End, we need eyes of ender. [action:defeat_ender_dragon]"
     if "build" in last or "base" in last or "house" in last:
         return "I'll build a base. [action:build_base]"
     if "farm" in last or "crop" in last or "food" in last:
         return "I'll set up a farm. [action:farm_crops]"
-    if "fight" in last or "kill" in last or "defend" in last:
-        return "I'll engage hostile mobs. [action:fight_hostile_mob]"
     if "torch" in last or "light" in last:
         return "I'll place torches. [action:place_torch]"
+    if "fight" in last or "kill" in last or "defend" in last:
+        return "I'll engage hostile mobs. [action:fight_hostile_mob]"
+
     if task:
         return f"Working on {task}. [action:{task.replace(' ', '_')}]"
     if knowledge:
         return knowledge[0]
-    return f"I'm Smith_AI on {MODEL_NAME}. Ask me to follow, mine, build, farm, or fight. ({len(skills)} skills available)"
+    return f"I'm Smith_AI on {MODEL_NAME} serving {version.friendly_name()}. Ask me to follow, mine, build, farm, or fight. ({len(skills)} skills available)"
 
 
 def parse_action_tag(text: str):

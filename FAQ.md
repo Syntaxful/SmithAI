@@ -11,8 +11,8 @@ No. Players just talk to `Smith_AI` in chat. Only the server admin needs to set 
 ## What is the difference between Smith-Mini, SmithGPT 1.0, and SmithGPT 2.0?
 
 - **Smith-Mini 1.0** — small model that runs inside the Minecraft server. No setup needed.
-- **SmithGPT 1.0** — 7.5GB external model. Requires SmithAI-Server hosted elsewhere.
-- **SmithGPT 2.0** — 15GB external model. Requires more RAM but gives better replies.
+- **SmithGPT 1.0** — 4GB external model. Requires SmithAI-Server hosted elsewhere.
+- **SmithGPT 2.0** — 7.5GB external model. Requires more RAM but gives better replies.
 
 ## Can I run SmithAI without any external hosting?
 

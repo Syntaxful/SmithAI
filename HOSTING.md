@@ -5,10 +5,18 @@ The `SmithAI-Server` is the external AI host for the SmithGPT models. This guide
 ## What you need
 
 - A machine with enough RAM for your chosen model:
-  - SmithGPT 1.0 (7.5GB) → 12GB+ RAM recommended
-  - SmithGPT 2.0 (15GB) → 24GB+ RAM recommended
-- The GGUF model file for the model you want to run
+  - Smith-Mini 1.0 → built into the plugin, no external server needed
+  - SmithGPT 1.0 (4GB) → 8GB+ RAM recommended
+  - SmithGPT 2.0 (7.5GB) → 12GB+ RAM recommended
+- The GGUF model file for the model you want to run (SmithGPT only)
 - A way to expose the server URL to the Minecraft plugin
+
+### Replit RAM limits
+
+Replit Reserved VM deployments currently top out at **16GB RAM** (4 vCPU / 16GB). That means:
+- **Smith-Mini 1.0** — no server needed; runs inside the plugin on any Replit plan.
+- **SmithGPT 1.0** — fits comfortably on the largest Replit machine (16GB) and most mid-range VPS plans.
+- **SmithGPT 2.0** — *may* fit on the largest Replit machine (16GB) but is tight; a 12GB+ VPS is more reliable.
 
 ## General setup
 
@@ -25,8 +33,8 @@ The `SmithAI-Server` is the external AI host for the SmithGPT models. This guide
    pip install -r requirements.txt
    ```
 6. Put your GGUF model file in `SmithAI-Server/models/`:
-   - `smithgpt-1.0-7.5.gguf` for SmithGPT 1.0
-   - `smithgpt-2.0-15.gguf` for SmithGPT 2.0
+   - `smithgpt-1.0-4.gguf` for SmithGPT 1.0
+   - `smithgpt-2.0-7.5.gguf` for SmithGPT 2.0
 7. Edit `SmithAI-Server/config.yml` and set `model.path` and `model.name`.
 8. Run the server:
    ```bash

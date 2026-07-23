@@ -42,14 +42,19 @@ This file is the single source of truth for what is finished and what remains. I
 - Docker support for SmithAI-Server: `Dockerfile`, `docker-compose.yml`, `.dockerignore`
 - Unit tests added: `SkillGeneratorTest`, `TaskPlannerTest`, `SubsystemHealthTest`
 - Server-side test added: `SmithAI-Server/test_app.py`
-- README, SKILLS.md, FAQ.md, HOSTING.md, CONTRIBUTING.md, REPORT_TEMPLATE.md, and models README updated
-- GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is not used for commits without explicit authorization
+- README, SKILLS.md, FAQ.md, HOSTING.md, CONTRIBUTING.md, REPORT_TEMPLATE.md, MODELS.md, API.md, TROUBLESHOOTING.md, PRIVACY.md, and models README updated
+- Smarter Smith-Mini 1.0 with expanded conversational intents and version-aware mining advice
+- VersionInfo detector for Bukkit/Eaglercraft with `hasDeepslate`, `hasNetherite`, `bestDiamondY`, etc.
+- `/smithai version` command showing detected server version and feature flags
+- SmithGPT model sizes reduced: SmithGPT 1.0 → 4GB, SmithGPT 2.0 → 7.5GB, with updated docs, configs, and tier detection
+- Server startup scripts (`start.sh`, `start.bat`) and model download helper (`download_model.py`, `.sh`, `.bat`)
+- GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is used only with explicit authorization
 
 ---
 
 ## Project Goal (unchanged)
 
-Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-controlled NPCs (`Smith_AI`) with player-like models, natural chat, long-term memory, and a task engine. The plugin includes a built-in small model (`Smith-Mini 1.0`) and can connect to an optional external model (`SmithGPT 1.0` 7.5GB or `SmithGPT 2.0` 15GB) hosted on Replit, Codespaces, Linux, Windows, VPS, or any machine the user chooses. The user picks the model by running the matching `SmithAI-Server` and pointing the plugin at its URL/IP/port. No signup, free forever.
+Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-controlled NPCs (`Smith_AI`) with player-like models, natural chat, long-term memory, and a task engine. The plugin includes a built-in small model (`Smith-Mini 1.0`) and can connect to an optional external model (`SmithGPT 1.0` 4GB or `SmithGPT 2.0` 7.5GB) hosted on Replit, Codespaces, Linux, Windows, VPS, or any machine the user chooses. The user picks the model by running the matching `SmithAI-Server` and pointing the plugin at its URL/IP/port. No signup, free forever.
 
 ---
 
@@ -58,8 +63,8 @@ Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-c
 Each brain has a fixed set of core skills it can execute. Higher brains can use all lower-brain skills too.
 
 - **Smith-Mini 1.0** — 900 core skills (built-in, runs in plugin)
-- **SmithGPT 1.0** — 1800 core skills (external, 7.5GB model)
-- **SmithGPT 2.0** — 6300 core skills (external, 15GB model)
+- **SmithGPT 1.0** — 1800 core skills (external, 4GB model)
+- **SmithGPT 2.0** — 6300 core skills (external, 7.5GB model)
 - **Total core skills** — 9000 (overlapping tiers)
 
 Skills are generated at runtime by `SkillGenerator` into `plugins/SmithAI/skills.yml` so the plugin JAR stays small (~138KB). Higher-tier models include all lower-tier skills.
@@ -411,7 +416,7 @@ Each skill needs:
 - [x] `/embed` endpoint for knowledge retrieval (stub, ready for embedding integration)
 - [x] `/task` endpoint for task planning
 - [x] `/feedback` endpoint to receive training data
-- [ ] Server startup script for Windows and Linux
+- [x] Server startup script for Windows and Linux (`start.sh`, `start.bat`)
 - [ ] Auto-download missing model files (with user consent)
 - [ ] Model warmup on first request
 - [ ] Logging to file with rotation
@@ -426,10 +431,10 @@ Each skill needs:
 - [x] GGUF format guidance
 - [x] Quantization notes
 - [x] Tier guidance (Mini, GPT 1.0, GPT 2.0)
-- [ ] Specific recommended model downloads for SmithGPT 1.0 (7.5GB)
-- [ ] Specific recommended model downloads for SmithGPT 2.0 (15GB)
-- [ ] Specific recommended model downloads for Smith-Mini 1.0
-- [ ] Model download scripts
+- [x] Specific recommended model downloads for SmithGPT 1.0 (4GB)
+- [x] Specific recommended model downloads for SmithGPT 2.0 (7.5GB)
+- [x] Specific recommended model downloads for Smith-Mini 1.0
+- [x] Model download scripts (`download_model.py`, `.sh`, `.bat`)
 - [ ] Hugging Face integration or `huggingface-cli` instructions
 - [ ] Model checksums / verification
 - [ ] License compliance notes for each recommended model
@@ -478,9 +483,9 @@ Each skill needs:
 - [x] API.md (SmithAI-Server API reference)
 - [x] CHANGELOG.md
 - [x] In-game help system (`/smithai help`)
+- [x] TROUBLESHOOTING.md
+- [x] PRIVACY.md
 - [ ] Video tutorial script (optional)
-- [ ] Troubleshooting guide
-- [ ] Privacy policy (no data collection, free forever)
 
 ---
 

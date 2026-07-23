@@ -82,8 +82,8 @@ public class SkillRegistry {
     public String getTierForModel(String modelName) {
         String lower = modelName.toLowerCase();
         if (lower.contains("mini")) return "mini";
-        if (lower.contains("2.0") || lower.contains("15")) return "gpt2";
-        if (lower.contains("1.0") || lower.contains("7.5") || lower.contains("gpt")) return "gpt1";
+        if (lower.contains("2.0")) return "gpt2";
+        if (lower.contains("1.0") || lower.contains("gpt")) return "gpt1";
         return "gpt2";
     }
 

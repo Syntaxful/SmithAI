@@ -1,6 +1,6 @@
 # SmithAI-Server
 
-The official external AI server for the SmithAI Minecraft plugin. It hosts the larger `SmithGPT` models (1.0 / 7.5GB and 2.0 / 15GB) that the plugin can connect to over the network.
+The official external AI server for the SmithAI Minecraft plugin. It hosts the larger `SmithGPT` models (1.0 / 4GB and 2.0 / 7.5GB) that the plugin can connect to over the network.
 
 ## Run anywhere
 
@@ -10,6 +10,22 @@ The official external AI server for the SmithAI Minecraft plugin. It hosts the l
 - VPS / dedicated server
 
 ## Quick start
+
+### Linux / macOS
+
+```bash
+cd SmithAI-Server
+./start.sh
+```
+
+### Windows
+
+```cmd
+cd SmithAI-Server
+start.bat
+```
+
+The startup scripts create a virtual environment if needed, install dependencies, and start the server. You can also run it manually:
 
 ```bash
 cd SmithAI-Server
@@ -33,8 +49,8 @@ server:
   port: 8000
 
 model:
-  name: "SmithGPT 1.0 7.5GB"
-  path: "models/smithgpt-1.0-7.5.gguf"
+  name: "SmithGPT 1.0 4GB"
+  path: "models/smithgpt-1.0-4.gguf"
   context_size: 4096
   max_tokens: 200
   n_threads: 2
@@ -48,6 +64,21 @@ If `security.api_key` is empty, the server creates one automatically and saves i
 ## Model files
 
 Place your `.gguf` model files in `SmithAI-Server/models/` and update the `path` in `config.yml`. The server will warn and fall back to rule-based responses if no model is found.
+
+You can also use the included helper to download a model from a direct URL or Hugging Face:
+
+```bash
+# Linux / macOS
+./download_model.sh --url <direct-gguf-url> --name smithgpt-1.0-4.gguf
+
+# Windows
+download_model.bat --url <direct-gguf-url> --name smithgpt-1.0-4.gguf
+
+# Or use the Python script directly
+python download_model.py --url <direct-gguf-url> --name smithgpt-1.0-4.gguf
+```
+
+For Hugging Face repos, use `--huggingface <repo_id>` and `--file <filename>` instead of `--url`.
 
 ## Endpoints
 

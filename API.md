@@ -24,7 +24,7 @@ Public health check. Returns model status and loaded tier.
 ```json
 {
   "status": "ok",
-  "model": "SmithGPT 1.0 7.5GB",
+  "model": "SmithGPT 1.0 4GB",
   "tier": "gpt1",
   "skills": 40,
   "model_loaded": true
@@ -45,7 +45,17 @@ Main chat endpoint. Accepts conversation messages and optional context.
   "task": "get diamonds",
   "knowledge": ["Diamond ore is found deep underground..."],
   "skills": ["mine_block", "gather_diamonds"],
-  "context": { "player": "Steve", "world": "world" }
+  "context": {
+    "player": "Steve",
+    "world": "world",
+    "minecraft_version": "1.21.1",
+    "server_type": "java",
+    "has_deepslate": true,
+    "has_netherite": true,
+    "diamond_y": -59,
+    "iron_y": 16,
+    "gold_y": -16
+  }
 }
 ```
 
@@ -56,7 +66,7 @@ Main chat endpoint. Accepts conversation messages and optional context.
   "action": "mine_block",
   "target": null,
   "reasoning": "Rule-based fallback",
-  "model": "SmithGPT 1.0 7.5GB"
+  "model": "SmithGPT 1.0 4GB"
 }
 ```
 
@@ -91,7 +101,7 @@ Returns a suggested step plan for a given task.
 {
   "task": "get diamonds",
   "plan": ["chop_tree", "craft_pickaxe", "mine_stone", "craft_stone_pickaxe", "explore_cave", "mine_diamonds"],
-  "model": "SmithGPT 1.0 7.5GB"
+  "model": "SmithGPT 1.0 4GB"
 }
 ```
 
@@ -120,7 +130,7 @@ Receives training feedback from the plugin.
   "category": "general",
   "rating": -1,
   "message": "you mined the wrong block",
-  "model": "SmithGPT 1.0 7.5GB"
+  "model": "SmithGPT 1.0 4GB"
 }
 ```
 
@@ -158,8 +168,8 @@ server:
   host: "0.0.0.0"
   port: 8000
 model:
-  path: "models/smithgpt-1.0-7.5.gguf"
-  name: "SmithGPT 1.0 7.5GB"
+  path: "models/smithgpt-1.0-4.gguf"
+  name: "SmithGPT 1.0 4GB"
   context_size: 4096
   max_tokens: 200
   n_threads: 4

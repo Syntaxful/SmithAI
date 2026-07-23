@@ -10,8 +10,8 @@ Place your model files in this directory.
 
 ## Server-side models (SmithAI-Server)
 
-- `smithgpt-1.0-7.5.gguf` — 7.5GB model for SmithGPT 1.0
-- `smithgpt-2.0-15.gguf` — 15GB model for SmithGPT 2.0
+- `smithgpt-1.0-4.gguf` — 4GB model for SmithGPT 1.0
+- `smithgpt-2.0-7.5.gguf` — 7.5GB model for SmithGPT 2.0
 
 These go in the `SmithAI-Server/models/` directory of the host running the Python server.
 

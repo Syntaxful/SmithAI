@@ -3,6 +3,7 @@ package com.smithai.ai;
 import com.smithai.SmithAIPlugin;
 import com.smithai.config.Config;
 import com.smithai.memory.Conversation;
+import com.smithai.util.VersionInfo;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,9 +20,11 @@ public class ExternalAIConnector {
 
     private final SmithAIPlugin plugin;
     private final HttpClient httpClient;
+    private final VersionInfo versionInfo;
 
     public ExternalAIConnector(SmithAIPlugin plugin) {
         this.plugin = plugin;
+        this.versionInfo = new VersionInfo();
         this.httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
             .build();
@@ -108,7 +111,17 @@ public class ExternalAIConnector {
         if (skills != null && !skills.isEmpty()) {
             body.put("skills", new JSONArray(skills));
         }
-        body.put("context", new JSONObject().put("player", player.getName()));
+        JSONObject context = new JSONObject();
+        context.put("player", player.getName());
+        context.put("world", player.getWorld() != null ? player.getWorld().getName() : "unknown");
+        context.put("minecraft_version", versionInfo.getMinecraftVersion());
+        context.put("server_type", versionInfo.isEaglercraft() ? "eaglercraft" : "java");
+        context.put("has_deepslate", versionInfo.hasDeepslate());
+        context.put("has_netherite", versionInfo.hasNetherite());
+        context.put("diamond_y", versionInfo.bestDiamondY());
+        context.put("iron_y", versionInfo.bestIronY());
+        context.put("gold_y", versionInfo.bestGoldY());
+        body.put("context", context);
         return body;
     }
 

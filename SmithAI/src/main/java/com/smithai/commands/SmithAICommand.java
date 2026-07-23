@@ -5,6 +5,7 @@ import com.smithai.health.SubsystemHealth;
 import com.smithai.npc.NPCManager;
 import com.smithai.npc.SmithNPC;
 import com.smithai.skills.TaskPlanner;
+import com.smithai.util.VersionInfo;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,7 +30,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin>");
             return true;
         }
 
@@ -183,16 +184,28 @@ public class SmithAICommand implements CommandExecutor {
                 return true;
 
             case "status":
+                VersionInfo statusVersion = new VersionInfo();
                 sender.sendMessage("§eActive brain: §f" + plugin.getAiManager().getActiveModelName());
                 sender.sendMessage("§eExternal connected: §f" + plugin.getAiManager().isExternalConnected());
+                sender.sendMessage("§eServer: §f" + statusVersion.getFriendlyName());
+                sender.sendMessage("§eDeepslate: §f" + (statusVersion.hasDeepslate() ? "yes" : "no") + " §7| §eNetherite: §f" + (statusVersion.hasNetherite() ? "yes" : "no"));
                 return true;
 
             case "model":
                 sender.sendMessage("§eAvailable models:");
                 sender.sendMessage("§7- Smith-Mini 1.0 (built-in)");
-                sender.sendMessage("§7- SmithGPT 1.0 (7.5GB, external)");
-                sender.sendMessage("§7- SmithGPT 2.0 (15GB, external)");
+                sender.sendMessage("§7- SmithGPT 1.0 (4GB, external)");
+                sender.sendMessage("§7- SmithGPT 2.0 (7.5GB, external)");
                 sender.sendMessage("§eActive: §f" + plugin.getAiManager().getActiveModelName());
+                return true;
+
+            case "version":
+                VersionInfo versionInfo = new VersionInfo();
+                sender.sendMessage("§eSmithAI version: §f" + plugin.getDescription().getVersion());
+                sender.sendMessage("§eServer version: §f" + versionInfo.getFriendlyName());
+                sender.sendMessage("§eBukkit version: §f" + versionInfo.getRawBukkitVersion());
+                sender.sendMessage("§eDeepslate: §f" + (versionInfo.hasDeepslate() ? "yes" : "no") + " §7| §eNetherite: §f" + (versionInfo.hasNetherite() ? "yes" : "no"));
+                sender.sendMessage("§eBest diamond Y: §f" + versionInfo.bestDiamondY() + " §7| §eiron Y: §f" + versionInfo.bestIronY() + " §7| §egold Y: §f" + versionInfo.bestGoldY());
                 return true;
 
             case "reload":
@@ -315,12 +328,15 @@ public class SmithAICommand implements CommandExecutor {
                 body.append("(describe what you expected to happen)\n\n");
                 body.append("### Steps to reproduce\n");
                 body.append("1. \n2. \n3. \n\n");
+                VersionInfo reportVersion = new VersionInfo();
                 body.append("### Details\n");
-                body.append("- Server type: ").append(reporter.getServer().getName()).append("\n");
-                body.append("- SmithAI version: 2.0.0\n");
+                body.append("- Server type: ").append(reportVersion.getFriendlyName()).append("\n");
+                body.append("- SmithAI version: ").append(plugin.getDescription().getVersion()).append("\n");
                 body.append("- Active brain: ").append(plugin.getAiManager().getActiveModelName()).append("\n");
                 body.append("- External connected: ").append(plugin.getAiManager().isExternalConnected()).append("\n");
                 body.append("- NPC task busy: ").append(plugin.getSkillExecutor().isBusy()).append("\n");
+                body.append("- Deepslate available: ").append(reportVersion.hasDeepslate()).append("\n");
+                body.append("- Netherite available: ").append(reportVersion.hasNetherite()).append("\n");
 
                 String issueTitle = "[Bug Report] " + reporter.getName() + " - " + (args.length >= 2 ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, Math.min(args.length, 5))) : "SmithAI issue");
                 String encodedTitle = encode(issueTitle);
@@ -487,6 +503,7 @@ public class SmithAICommand implements CommandExecutor {
                 sender.sendMessage("§7/smithai report <description> §f- open a prefilled GitHub issue");
                 sender.sendMessage("§7/smithai memory §f- show recent conversation");
                 sender.sendMessage("§7/smithai status §f- show active brain/model");
+                sender.sendMessage("§7/smithai version §f- show detected server and SmithAI version");
                 sender.sendMessage("§7/smithai reload §f- reload configuration (admin)");
                 sender.sendMessage("§7/smithai health §f- show subsystem health (admin)");
                 return true;

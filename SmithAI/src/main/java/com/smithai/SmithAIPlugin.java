@@ -15,6 +15,7 @@ import com.smithai.skills.SkillRegistry;
 import com.smithai.training.FeedbackManager;
 import com.smithai.training.IssueReportManager;
 import com.smithai.training.TrainingManager;
+import com.smithai.util.VersionInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,7 +72,9 @@ public class SmithAIPlugin extends JavaPlugin {
             startApiKeyReminder();
             sendApiKeyStartupReminder();
 
+            VersionInfo startupVersion = new VersionInfo();
             getLogger().info("SmithAI enabled in " + (System.currentTimeMillis() - startTime) + "ms");
+            getLogger().info("Server detected: " + startupVersion.getFriendlyName());
             getLogger().info("Knowledge base loaded: " + aiManager.getKnowledgeBase().size() + " entries");
             getLogger().info("Skill library loaded: " + skillRegistry.count() + " skills");
             getLogger().info("Active skill tier: " + aiManager.getActiveSkillTier() + " (" + aiManager.getAvailableSkills().size() + " skills)");
