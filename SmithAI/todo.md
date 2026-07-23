@@ -664,7 +664,7 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
 | Chat & Memory | 100% | ✅ Complete |
 | Knowledge Base | 100% | ✅ Complete |
-| Skill System | 82% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states; composites still message-based |
+| Skill System | 88% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions + dodge/block/buffs + animation states + composite task decomposition (17 sub-task types) |
 | Pathfinding & Movement | 100% | ✅ Complete |
 | Inventory & Crafting | 100% | ✅ Complete |
 | Combat & Survival | 78% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, dodge/strafe/block, buff potions, water clutch, FIGHTING animation done |

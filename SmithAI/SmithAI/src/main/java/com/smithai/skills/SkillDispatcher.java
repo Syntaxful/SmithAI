@@ -1345,6 +1345,70 @@ public class SkillDispatcher {
 
     private void executeComposite(SmithNPC npc, String skill, Player player, String defaultMessage) {
         npc.sendMessage(player, defaultMessage);
+
+        // Decompose into sub-skills and execute them in sequence
+        String lower = skill.toLowerCase();
+        String[] subTasks = decomposeTask(lower);
+        if (subTasks.length == 0) return;
+
+        npc.sendMessage(player, "Breaking this down into " + subTasks.length + " steps...");
+        for (int i = 0; i < subTasks.length; i++) {
+            final int step = i;
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                if (npc.getEntity() == null || npc.getEntity().isDead()) return;
+                npc.sendMessage(player, "Step " + (step + 1) + "/" + subTasks.length + ": " + humanize(subTasks[step]));
+                execute(npc, subTasks[step], new HashMap<>(), player);
+            }, 20L * (i + 1)); // 1 second between steps
+        }
+    }
+
+    /**
+     * Decompose a high-level task into concrete sub-skills.
+     */
+    private String[] decomposeTask(String lower) {
+        // Gather/craft goals
+        if (lower.contains("diamond") && (lower.contains("get") || lower.contains("mine") || lower.contains("find") || lower.contains("craft"))) {
+            return new String[]{"strip_mine", "mine_diamond", "collect_all_items", "craft_diamond_pickaxe"};
+        }
+        if (lower.contains("iron") && (lower.contains("get") || lower.contains("mine"))) {
+            return new String[]{"mine_iron_ore", "smelt_iron_ingot", "craft_iron_pickaxe"};
+        }
+        if (lower.contains("food") || lower.contains("hunt") || lower.contains("cook")) {
+            return new String[]{"hunt_animal", "collect_all_items", "cook_food", "eat_food"};
+        }
+        if (lower.contains("base") || lower.contains("home") || lower.contains("shelter")) {
+            return new String[]{"collect_wood", "make_shelter", "place_torch", "place_bed", "chest_storage"};
+        }
+        if (lower.contains("nether") || lower.contains("portal")) {
+            return new String[]{"mine_obsidian", "build_nether_portal", "light_portal", "enter_nether"};
+        }
+        if (lower.contains("enchant") || lower.contains("magic")) {
+            return new String[]{"mine_diamond", "craft_enchanting_table", "enchant_item"};
+        }
+        if (lower.contains("farm") || lower.contains("plant") || lower.contains("grow")) {
+            return new String[]{"till_soil", "plant_seed", "water_crop", "fertilize_crop"};
+        }
+        if (lower.contains("explore") || lower.contains("find") || lower.contains("locate")) {
+            return new String[]{"wander", "look_around", "teleport_home"};
+        }
+        if (lower.contains("armor") || lower.contains("protect")) {
+            return new String[]{"mine_iron", "smelt_iron_ingot", "craft_iron_chestplate", "craft_iron_leggings", "equip_best_armor"};
+        }
+        if (lower.contains("animal") || lower.contains("breed") || lower.contains("feed")) {
+            return new String[]{"find_animal", "feed_animal", "breed_animal", "collect_all_items"};
+        }
+        if (lower.contains("collect") || lower.contains("gather")) {
+            return new String[]{"wander", "collect_all_items", "stockpile_items"};
+        }
+        if (lower.contains("build_house") || lower.contains("construct")) {
+            return new String[]{"make_shelter", "place_torch", "place_bed", "chest_storage"};
+        }
+        if (lower.contains("tree") || lower.contains("wood") || lower.contains("chop")) {
+            return new String[]{"chop_tree", "collect_all_items", "plant_sapling"};
+        }
+
+        // Default: just do the single task
+        return new String[0];
     }
 
     // ── SKILL PRECONDITIONS ──
