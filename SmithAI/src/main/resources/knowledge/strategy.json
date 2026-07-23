@@ -1,0 +1,37 @@
+[
+  {
+    "id": "strategy:find_diamonds",
+    "category": "strategy",
+    "name": "Finding Diamonds",
+    "description": "Diamonds generate most commonly between Y=-64 and Y=16, with peak frequency around Y=-59. Strip mine at Y=-59 with an iron or better pickaxe. Place torches to prevent mob spawns.",
+    "tags": ["strategy", "mining", "diamond"]
+  },
+  {
+    "id": "strategy:beat_game",
+    "category": "strategy",
+    "name": "Beating the Game",
+    "description": "The standard progression is: gather wood, make tools, mine iron, get diamonds, make a diamond pickaxe, build a nether portal, find a fortress, collect blaze rods, craft eyes of ender, locate a stronghold, enter the End, and defeat the Ender Dragon.",
+    "tags": ["strategy", "end", "dragon", "progression"]
+  },
+  {
+    "id": "strategy:nether_fortress",
+    "category": "strategy",
+    "name": "Finding a Nether Fortress",
+    "description": "Nether fortresses generate in lines along the Z axis in the Nether. Travel north or south along the Z axis, or use the /locate command if cheats are enabled. Blazes and Nether Wart spawn inside.",
+    "tags": ["strategy", "nether", "fortress", "blaze"]
+  },
+  {
+    "id": "strategy:stronghold",
+    "category": "strategy",
+    "name": "Locating a Stronghold",
+    "description": "Throw eyes of ender and follow the direction they fly. Eyes of ender have a chance to break when thrown. Strongholds generate underground, often under villages or other surface features.",
+    "tags": ["strategy", "end", "stronghold", "eyes"]
+  },
+  {
+    "id": "strategy:ender_dragon",
+    "category": "strategy",
+    "name": "Defeating the Ender Dragon",
+    "description": "Destroy the obsidian towers with end crystals first. Use a bow or bed explosions to damage the dragon when it perches. Avoid dragon breath and stay away from the dragon's head when it charges.",
+    "tags": ["strategy", "end", "dragon", "boss"]
+  }
+]

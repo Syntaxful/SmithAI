@@ -1,0 +1,37 @@
+[
+  {
+    "id": "minecraft:zombie",
+    "category": "mob",
+    "name": "Zombie",
+    "description": "A hostile mob that spawns in dark areas. It burns in sunlight and drops rotten flesh. Attacks in melee range.",
+    "tags": ["mob", "hostile", "overworld"]
+  },
+  {
+    "id": "minecraft:skeleton",
+    "category": "mob",
+    "name": "Skeleton",
+    "description": "A hostile mob that shoots arrows. It burns in sunlight. Drops bones, arrows, and sometimes a bow.",
+    "tags": ["mob", "hostile", "overworld", "ranged"]
+  },
+  {
+    "id": "minecraft:creeper",
+    "category": "mob",
+    "name": "Creeper",
+    "description": "A hostile mob that silently approaches players and explodes. Drops gunpowder. Can be killed by a charged Creeper to drop a music disc.",
+    "tags": ["mob", "hostile", "overworld", "explosive"]
+  },
+  {
+    "id": "minecraft:blaze",
+    "category": "mob",
+    "name": "Blaze",
+    "description": "A hostile mob found in Nether fortresses. It flies and shoots fireballs. Drops blaze rods, which are needed for eyes of ender and brewing.",
+    "tags": ["mob", "hostile", "nether", "blaze"]
+  },
+  {
+    "id": "minecraft:ender_dragon",
+    "category": "mob",
+    "name": "Ender Dragon",
+    "description": "The final boss of Minecraft. It lives in the End and is defeated by destroying the end crystals, then attacking the dragon when it perches.",
+    "tags": ["mob", "boss", "end", "dragon"]
+  }
+]

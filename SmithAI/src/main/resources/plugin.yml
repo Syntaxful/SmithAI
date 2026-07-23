@@ -1,0 +1,30 @@
+name: SmithAI
+version: ${project.version}
+main: com.smithai.SmithAIPlugin
+api-version: '1.21'
+author: SmithAI Team
+description: Official SmithAI plugin - trainable AI companion with Smith-Mini, SmithGPT 1.0, and SmithGPT 2.0 support.
+
+commands:
+  smithai:
+    description: Main SmithAI command.
+    usage: /smithai <spawn|despawn|follow|stay|do|status|reload|train|memory|model>
+    aliases: [sai]
+  smithapi:
+    description: Set the API key for the external SmithGPT server.
+    usage: /smithapi [set <key>|status]
+    aliases: [SmithAPI]
+
+permissions:
+  smithai.admin:
+    description: Full admin access to SmithAI.
+    default: op
+  smithai.use:
+    description: Basic SmithAI usage.
+    default: true
+  smithai.spawn:
+    description: Permission to spawn Smith_AI NPCs.
+    default: op
+  smithai.api:
+    description: Permission to set the SmithAI API key.
+    default: op

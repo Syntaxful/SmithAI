@@ -1,0 +1,37 @@
+[
+  {
+    "id": "minecraft:wooden_pickaxe",
+    "category": "item",
+    "name": "Wooden Pickaxe",
+    "description": "The lowest tier pickaxe. Can mine stone and coal ore. Crafted from 3 planks and 2 sticks.",
+    "tags": ["item", "tool", "pickaxe", "wood"]
+  },
+  {
+    "id": "minecraft:stone_pickaxe",
+    "category": "item",
+    "name": "Stone Pickaxe",
+    "description": "A pickaxe made from cobblestone. Can mine iron ore and lapis lazuli. Crafted from 3 cobblestone and 2 sticks.",
+    "tags": ["item", "tool", "pickaxe", "stone"]
+  },
+  {
+    "id": "minecraft:iron_pickaxe",
+    "category": "item",
+    "name": "Iron Pickaxe",
+    "description": "A pickaxe made from iron ingots. Can mine diamond ore, redstone ore, and gold ore. Crafted from 3 iron ingots and 2 sticks.",
+    "tags": ["item", "tool", "pickaxe", "iron"]
+  },
+  {
+    "id": "minecraft:diamond_pickaxe",
+    "category": "item",
+    "name": "Diamond Pickaxe",
+    "description": "A fast, durable pickaxe. Can mine obsidian. Crafted from 3 diamonds and 2 sticks.",
+    "tags": ["item", "tool", "pickaxe", "diamond"]
+  },
+  {
+    "id": "minecraft:flint_and_steel",
+    "category": "item",
+    "name": "Flint and Steel",
+    "description": "Used to ignite nether portals and TNT. Crafted from 1 iron ingot and 1 flint.",
+    "tags": ["item", "tool", "fire", "portal"]
+  }
+]

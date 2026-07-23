@@ -1,0 +1,37 @@
+[
+  {
+    "id": "recipe:crafting_table",
+    "category": "recipe",
+    "name": "Crafting Table",
+    "description": "Place 4 wooden planks in a 2x2 square in the inventory crafting grid. Expands the crafting grid to 3x3.",
+    "tags": ["recipe", "crafting", "wood"]
+  },
+  {
+    "id": "recipe:wooden_pickaxe",
+    "category": "recipe",
+    "name": "Wooden Pickaxe",
+    "description": "In a crafting table, place 3 wooden planks across the top row and 2 sticks in the middle column.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:stone_pickaxe",
+    "category": "recipe",
+    "name": "Stone Pickaxe",
+    "description": "In a crafting table, place 3 cobblestone across the top row and 2 sticks in the middle column.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:iron_pickaxe",
+    "category": "recipe",
+    "name": "Iron Pickaxe",
+    "description": "In a crafting table, place 3 iron ingots across the top row and 2 sticks in the middle column.",
+    "tags": ["recipe", "crafting", "tool"]
+  },
+  {
+    "id": "recipe:nether_portal",
+    "category": "recipe",
+    "name": "Nether Portal",
+    "description": "Build a rectangular frame of obsidian at least 4 blocks wide and 5 blocks tall, leaving a 2x3 hole. Ignite the inside with flint and steel.",
+    "tags": ["recipe", "structure", "nether", "portal"]
+  }
+]

@@ -1,0 +1,40 @@
+# Build outputs
+SmithAI/target/
+*.jar
+*.class
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+*.project
+*.classpath
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+SmithAI-Server/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Models (large files, do not commit)
+*.gguf
+*.bin
+models/*.gguf
+models/*.bin
+
+# SmithAI runtime data
+SmithAI/memory/
+SmithAI/models/
+SmithAI/skills.yml
+SmithAI/training.yml
+
+# SmithAI-Server runtime
+SmithAI-Server/models/*.gguf
+SmithAI-Server/models/*.bin
+SmithAI-Server/__pycache__/

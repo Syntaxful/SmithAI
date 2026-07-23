@@ -1,0 +1,37 @@
+[
+  {
+    "id": "minecraft:stone",
+    "category": "block",
+    "name": "Stone",
+    "description": "A common solid block found underground. Mined fastest with a pickaxe. Drops cobblestone unless mined with Silk Touch.",
+    "tags": ["block", "mining", "building"]
+  },
+  {
+    "id": "minecraft:iron_ore",
+    "category": "block",
+    "name": "Iron Ore",
+    "description": "Iron ore is found underground, usually between Y=-64 and Y=72. It requires a stone pickaxe or better. Smelt it in a furnace to get iron ingots.",
+    "tags": ["block", "mining", "ore", "iron"]
+  },
+  {
+    "id": "minecraft:diamond_ore",
+    "category": "block",
+    "name": "Diamond Ore",
+    "description": "Diamond ore is found deep underground, most commonly around Y=-59. It requires an iron pickaxe or better. Drops diamonds when mined.",
+    "tags": ["block", "mining", "ore", "diamond"]
+  },
+  {
+    "id": "minecraft:obsidian",
+    "category": "block",
+    "name": "Obsidian",
+    "description": "Obsidian is created when water touches a lava source block. It requires a diamond or netherite pickaxe to mine. Used for nether portals and enchanting tables.",
+    "tags": ["block", "mining", "portal", "enchanting"]
+  },
+  {
+    "id": "minecraft:crafting_table",
+    "category": "block",
+    "name": "Crafting Table",
+    "description": "A crafting table expands the player's crafting grid to 3x3, allowing more complex recipes. Crafted from 4 wooden planks.",
+    "tags": ["block", "crafting"]
+  }
+]
