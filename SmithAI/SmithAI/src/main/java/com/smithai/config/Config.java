@@ -41,6 +41,10 @@ public class Config {
     private int miniSkillTier;
     private int gpt1SkillTier;
     private int gpt2SkillTier;
+    private boolean notificationsEnabled;
+    private boolean notificationsToasts;
+    private boolean notificationsSounds;
+    private String locale;
 
     public Config(FileConfiguration config) {
         this.config = config;
@@ -85,10 +89,19 @@ public class Config {
         this.debugEnabled = config.getBoolean("debug.enabled", false);
         this.bstatsEnabled = config.getBoolean("metrics.bstats", false);
         this.trainingDataPrivacy = config.getBoolean("training.dataPrivacy", false);
+        this.notificationsEnabled = config.getBoolean("notifications.enabled", true);
+        this.notificationsToasts = config.getBoolean("notifications.toasts", true);
+        this.notificationsSounds = config.getBoolean("notifications.sounds", true);
+        this.locale = config.getString("locale", "en_US");
     }
 
     private boolean trainingDataPrivacy;
+    private boolean notificationSoundCues; private boolean localizationEnabled;
     public boolean isTrainingDataPrivacy() { return trainingDataPrivacy; }
+    public boolean isNotificationsEnabled() { return notificationsEnabled; }
+    public boolean isNotificationsToasts() { return notificationsToasts; }
+    public boolean isNotificationsSounds() { return notificationsSounds; }
+    public String getLocale() { return locale; }
 
     public void setExternalApiKey(String apiKey) {
         this.externalApiKey = apiKey;

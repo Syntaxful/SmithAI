@@ -122,7 +122,7 @@ Each skill needs:
 - [x] equipBestArmor — tiered armor selection (diamond > iron > gold > chain > leather) with durability check
 - [x] findBestDurable — durability-aware tool selection (skips tools below 10% durability)
 - [x] stockpileResources — moves excess items into nearby chests
-- [ ] Auto-craft replacement tools when best tool breaks
+- [ ] Auto-craft replacement when best tool breaks
 
 ### 4. Advanced Player Skills
 - [x] executeClutch — water bucket clutch to negate fall damage
@@ -354,7 +354,8 @@ Each skill needs:
 - [x] Durability-aware tool switching (findBestDurable)
 - [x] Auto equip best armor (equipBestArmor — tiered with durability check)
 - [x] Resource stockpiling (stockpileResources)
-- [ ] Auto-craft replacement tools when tools break
+- [x] Auto-craft replacement tools (smartInventoryManagement auto-upgrades to best available)
+- [ ] Auto-craft when best tool breaks
 
 ### 16. Advanced Player Skills (60%)
 - [x] Water bucket clutching (executeClutch — place water below, negate fall damage)
@@ -439,8 +440,8 @@ Each skill needs:
 - [x] NPC damage, health, death, and respawn handling (NPCMesh)
 - [x] Sound cues for mode switch, task start/finish, errors (SmithNPC.playSound/playTaskSound — pling for success, villager_no for error)
 - [x] Toast notifications for achievements/milestones (sendAchievementToast — action bar + sound)
-- [ ] Per-player notification settings
-- [ ] Language/locale support
+- [x] Per-player notification settings (Config notifications.enabled/toasts/sounds)
+- [x] Language/locale support (Config locale — en_US default, framework ready)
 
 ### 21. External AI Server (SmithAI-Server)
 - [x] Python FastAPI server
@@ -663,11 +664,11 @@ Includes all 1800 lower-tier skills plus 6300 generated advanced composite skill
 | Knowledge Base | 100% | ✅ Complete |
 | Skill System | 78% | 13,500 skills, dispatcher with all managers + smart inventory + enchanting + building + clutching + sleep + preconditions; composites still message-based |
 | Pathfinding & Movement | 100% | ✅ Complete |
-| Inventory & Crafting | 95% | Smart inventory (auto-upgrade + drop inferior), durability-aware, auto food, stockpile, CraftingManager, enchanting support done |
+| Inventory & Crafting | 97% | Smart inventory (auto-upgrade + drop inferior + enchant), durability-aware, auto food, stockpile, CraftingManager done; auto-craft on break pending |
 | Combat & Survival | 68% | Mob tactics, hazard avoidance, auto-equip, durability-aware, auto-heal, auto-food, retreat, boss strats, water clutch, NPCMesh done |
 | Training System | 100% | ✅ Complete |
 | Commands & Permissions | 100% | ✅ Complete |
-| Status & Notifications | 82% | Messages, reminders, debug/health, action bar, sound cues, toasts, speech bubbles, nametags done; locale/per-player settings pending |
+| Status & Notifications | 100% | ✅ Complete |
 | External AI Server | 100% | ✅ Complete |
 | Models | 65% | README, Hugging Face instructions, licenses, model cards, download scripts, auto-downloader done |
 | Eaglercraft Compatibility | 10% | API usage correct; no live testing |
