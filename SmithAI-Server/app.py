@@ -134,6 +134,19 @@ app = FastAPI(
 )
 
 
+@app.get("/", include_in_schema=False)
+async def root():
+    return {
+        "status": "ok",
+        "name": "SmithAI Server",
+        "version": "2.0.0",
+        "model": MODEL_NAME,
+        "llama_available": LLAMA_AVAILABLE,
+        "model_exists": os.path.exists(MODEL_PATH),
+        "authenticated": authenticated,
+    }
+
+
 # In-memory skill library (subset used for prompting)
 SKILL_LIBRARY = [
     "follow_player", "stay", "move_to_location", "teleport_to_player", "report_location",

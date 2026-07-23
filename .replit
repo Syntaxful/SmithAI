@@ -1,1 +1,33 @@
-modules = ["python-base-3.13"]
+modules = ["python-3.11"]
+run = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-replit.txt && python3 app.py"
+
+[nix]
+channel = "stable-25_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "SmithAI Server"
+
+[[workflows.workflow]]
+name = "SmithAI Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd SmithAI-Server && python3 -m pip install --break-system-packages -r requirements-replit.txt && python3 app.py"
+waitForPort = 8000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 8000
+externalPort = 80

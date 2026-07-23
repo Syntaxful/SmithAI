@@ -38,3 +38,10 @@ SmithAI/training.yml
 SmithAI-Server/models/*.gguf
 SmithAI-Server/models/*.bin
 SmithAI-Server/__pycache__/
+
+# Replit / Nix workspace files
+.replit.bak
+.cache/
+.pythonlibs/
+node_modules/
+.agents/
