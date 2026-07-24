@@ -37,7 +37,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|tasks|clear|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
             return true;
         }
 
@@ -226,6 +226,7 @@ public class SmithAICommand implements CommandExecutor {
                 return true;
 
             case "stop":
+            case "clear":
                 if (!(sender instanceof Player)) {
                     sender.sendMessage("§cOnly players can use this.");
                     return true;
@@ -238,6 +239,21 @@ public class SmithAICommand implements CommandExecutor {
                 }
                 plugin.getSkillExecutor().cancelAll();
                 nearbyStop.get(0).sendMessage(stopper, "All tasks stopped.");
+                return true;
+
+            case "tasks":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player taskPlayer = (Player) sender;
+                List<String> queued = plugin.getSkillExecutor().getQueuedSkills();
+                if (queued.isEmpty()) {
+                    sender.sendMessage("§eNo active tasks.");
+                } else {
+                    sender.sendMessage("§eActive tasks for " + plugin.getPluginConfig().getAiName() + ":");
+                    queued.forEach(s -> sender.sendMessage("§7- §f" + s));
+                }
                 return true;
 
             case "memory":

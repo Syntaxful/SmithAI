@@ -69,6 +69,22 @@ public class ChatManager implements Listener {
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
                     conversation.addMessage("assistant", reply);
                     npc.sendMessage(player, reply);
+                    // Queue any action tag the AI returned, e.g. [action:follow_player]
+                    java.util.Map<String, String> parsed = parseActionTag(reply);
+                    if (parsed != null) {
+                        String action = parsed.get("action");
+                        String target = parsed.get("target");
+                        java.util.Map<String, Object> params = new java.util.HashMap<>();
+                        if (target != null) params.put("target", target);
+                        plugin.getSkillExecutor().queue(npc, action, params, player);
+                    }
+                    // If the player's message matched a known task, also queue its plan
+                    if (task != null) {
+                        java.util.List<String> plan = TaskPlanner.plan(task);
+                        if (!plan.isEmpty()) {
+                            plugin.getSkillExecutor().queuePlan(npc, plan, player);
+                        }
+                    }
                 });
             });
     }
@@ -140,5 +156,21 @@ public class ChatManager implements Listener {
             }
         }
         return null;
+    }
+
+    /**
+     * Parses an [action:skillName] or [action:skillName,target] tag from an AI reply.
+     * Returns a map with "action" and optionally "target", or null if no tag is found.
+     */
+    private java.util.Map<String, String> parseActionTag(String reply) {
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\[action:([^\\],]+)(?:,([^\\]]+))?\\]");
+        java.util.regex.Matcher matcher = pattern.matcher(reply);
+        if (!matcher.find()) return null;
+        java.util.Map<String, String> result = new java.util.HashMap<>();
+        result.put("action", matcher.group(1).trim().toLowerCase().replace(" ", "_"));
+        if (matcher.group(2) != null) {
+            result.put("target", matcher.group(2).trim());
+        }
+        return result;
     }
 }

@@ -91,6 +91,21 @@ public class SkillExecutor {
         return current != null || !queue.isEmpty();
     }
 
+    public List<String> getQueuedSkills() {
+        List<String> result = new ArrayList<>();
+        if (current != null && !current.isDone()) {
+            result.add("[active] " + current.skillName);
+        }
+        for (SkillTask task : queue) {
+            result.add(task.skillName);
+        }
+        return result;
+    }
+
+    public int getQueueSize() {
+        return queue.size() + (current != null && !current.isDone() ? 1 : 0);
+    }
+
     public static class SkillTask {
         private final SmithNPC npc;
         private final String skillName;

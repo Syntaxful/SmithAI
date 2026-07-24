@@ -9,8 +9,8 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Core AI / LLM
 
-- [ ] 1. add core_ai_llm validation
-- [ ] 2. add core_ai_llm serialization
+- [x] 1. Parse [action:skill,target] tags from AI replies and queue them
+- [x] 2. Route AI-generated action tags to the skill dispatcher
 - [ ] 3. add core_ai_llm migration path
 - [ ] 4. add core_ai_llm CLI flag
 - [ ] 5. add core_ai_llm status endpoint
@@ -311,9 +311,9 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Skills & Task Engine
 
-- [ ] 291. add skills_task_engine cancellation
-- [ ] 292. add skills_task_engine progress reporting
-- [ ] 293. add skills_task_engine history tracking
+- [x] 291. Add /smithai tasks command to inspect the active task queue
+- [x] 292. Add /smithai clear command to cancel all queued tasks
+- [x] 293. Queue TaskPlanner plans automatically when a player gives a task in chat
 - [ ] 294. add skills_task_engine rollback support
 - [ ] 295. implement skills_task_engine feature #5
 - [ ] 296. add skills_task_engine configuration option
