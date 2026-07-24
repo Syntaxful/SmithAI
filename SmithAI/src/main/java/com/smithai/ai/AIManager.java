@@ -87,11 +87,16 @@ public class AIManager {
     }
 
     public CompletableFuture<String> getResponse(Player player, String message, Conversation conversation, String task) {
+        return getResponse(player, message, conversation, task, java.util.Collections.emptyMap());
+    }
+
+    public CompletableFuture<String> getResponse(Player player, String message, Conversation conversation, String task, java.util.Map<String, Integer> inventory) {
         Config config = plugin.getPluginConfig();
         List<String> knowledge = knowledgeBase.findRelevant(message);
         List<String> skills = getAvailableSkills();
+        java.util.Map<String, Integer> safeInventory = inventory != null ? inventory : java.util.Collections.emptyMap();
         if (config.isExternalEnabled() && usingExternal && externalAvailable) {
-            return externalAI.chat(player, message, conversation, task, knowledge, skills)
+            return externalAI.chat(player, message, conversation, task, knowledge, skills, safeInventory)
                 .exceptionally(ex -> {
                     plugin.getLogger().warning("External AI request failed: " + ex.getMessage());
                     usingExternal = false;
@@ -99,7 +104,7 @@ public class AIManager {
                     return fallbackMessage();
                 });
         }
-        return CompletableFuture.completedFuture(localAI.getResponse(player, message, conversation, task, knowledge, skills));
+        return CompletableFuture.completedFuture(localAI.getResponse(player, message, conversation, task, knowledge, skills, safeInventory));
     }
 
     private String fallbackMessage() {

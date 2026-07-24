@@ -38,7 +38,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|patrol|guard|info|equip|unequip|distance|come|teleport|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.1.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|patrol|guard|info|equip|unequip|distance|come|teleport|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|getme|needs|list|help|skin|config|export>");
             return true;
         }
 
@@ -345,13 +345,26 @@ public class SmithAICommand implements CommandExecutor {
                     sender.sendMessage("§cOnly players can use this.");
                     return true;
                 }
-                Player taskPlayer = (Player) sender;
+                com.smithai.skills.SkillExecutor.SkillTask current = plugin.getSkillExecutor().getCurrent();
+                java.util.Map<String, Integer> stats = plugin.getSkillExecutor().getQueueStats();
                 List<String> queued = plugin.getSkillExecutor().getQueuedSkills();
                 if (queued.isEmpty()) {
-                    sender.sendMessage("§eNo active tasks.");
+                    sender.sendMessage("§eNo active tasks. Use §f/smithai do <task>§e or §f/smithai getme <count> <item>§e.");
                 } else {
-                    sender.sendMessage("§eActive tasks for " + plugin.getPluginConfig().getAiName() + ":");
-                    queued.forEach(s -> sender.sendMessage("§7- §f" + s));
+                    sender.sendMessage("§eActive tasks for " + plugin.getPluginConfig().getAiName() + " §7(total=" + stats.getOrDefault("total", 0) + "):");
+                    if (current != null) {
+                        String name = current.getSkillName().replace('_', ' ');
+                        if (current.getRequiredCount() > 0) {
+                            sender.sendMessage("§a[active] §f" + name + " §7" + current.getProgress() + "/" + current.getRequiredCount() + " (" + Math.min(100, (int) (100.0 * current.getProgress() / Math.max(1, current.getRequiredCount()))) + "%)");
+                        } else {
+                            sender.sendMessage("§a[active] §f" + name);
+                        }
+                    }
+                    for (String s : queued) {
+                        if (!s.startsWith("[active]")) {
+                            sender.sendMessage("§7- §f" + s);
+                        }
+                    }
                 }
                 return true;
 
@@ -677,6 +690,58 @@ public class SmithAICommand implements CommandExecutor {
                 }
                 return true;
 
+            case "getme":
+            case "fetch":
+            case "needs":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 3) {
+                    sender.sendMessage("§eUsage: §f/smithai getme <count> <item>");
+                    sender.sendMessage("§7Example: §f/smithai getme 64 diamond");
+                    sender.sendMessage("§7Example: §f/smithai getme 1 netherite_ingot");
+                    return true;
+                }
+                Player gp = (Player) sender;
+                SmithNPC gn = nearest(gp);
+                if (gn == null) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                int gmCount;
+                try {
+                    gmCount = Math.max(1, Integer.parseInt(args[1]));
+                } catch (NumberFormatException ex) {
+                    sender.sendMessage("§cCount must be a number, e.g. /smithai getme 64 diamond");
+                    return true;
+                }
+                String gmItem = args[2].toLowerCase().replace(' ', '_');
+                gmItem = gmItem.replaceAll("[^a-z0-9_]", "");
+                if (gmItem.isEmpty()) {
+                    sender.sendMessage("§cItem name is empty.");
+                    return true;
+                }
+                int gmHave = 0;
+                for (ItemStack stack : gp.getInventory().getContents()) {
+                    if (stack != null && stack.getType() != null
+                        && stack.getType().name().toLowerCase().replace('_', ' ').contains(gmItem.replace('_', ' '))) {
+                        gmHave += stack.getAmount();
+                    }
+                }
+                int gmNeeded = Math.max(1, gmCount - gmHave);
+                java.util.Map<String, Object> gmParams = new java.util.HashMap<>();
+                gmParams.put("target", gmItem);
+                gmParams.put("count", gmNeeded);
+                plugin.getSkillExecutor().queue(gn, "gather_item", gmParams, gp);
+                gn.sendMessage(gp, "On it. I'll fetch " + gmNeeded + " more " + gmItem.replace('_', ' ') + " for you (you have " + gmHave + ", want " + gmCount + ").");
+                if (gmHave >= gmCount) {
+                    sender.sendMessage("§eYou already have " + gmHave + " " + gmItem.replace('_', ' ') + ". Nothing to fetch.");
+                } else {
+                    sender.sendMessage("§eFetching §f" + gmNeeded + "§e more " + gmItem.replace('_', ' ') + ". Watch §f/smithai tasks§e for progress.");
+                }
+                return true;
+
             case "list":
                 List<SmithNPC> all = npcManager.getAllNPCs();
                 sender.sendMessage("§eActive Smith_AI NPCs: §f" + all.size());
@@ -805,6 +870,9 @@ public class SmithAICommand implements CommandExecutor {
                 sender.sendMessage("§7/smithai stop §f- cancel all tasks");
                 sender.sendMessage("§7/smithai inventory §f- view nearby Smith_AI inventory");
                 sender.sendMessage("§7/smithai give <item> [amount] §f- give an item to Smith_AI");
+                sender.sendMessage("§7/smithai getme <count> <item> §f- have Smith_AI fetch N more of an item");
+                sender.sendMessage("§7/smithai needs <task> §f- show item quantities required for a task");
+                sender.sendMessage("§7/smithai tasks §f- list live task queue with progress");
                 sender.sendMessage("§7/smithai list §f- list all active Smith_AI NPCs");
                 sender.sendMessage("§7/smithai teleport §f- teleport nearby Smith_AI to you");
                 sender.sendMessage("§7/smithai config §f- show current configuration (admin)");

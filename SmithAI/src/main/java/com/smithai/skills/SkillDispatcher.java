@@ -23,7 +23,8 @@ import java.util.Map;
 
 /**
  * Dispatches broad skill categories to concrete Bukkit actions.
- * This is a starter implementation; primitive executors are added as the project grows.
+ * Versions >= SmithAI 2.1 implement real loops for gather tasks so the
+ * progress counter in SkillExecutor matches what the AI actually did.
  */
 public class SkillDispatcher {
 
@@ -35,9 +36,16 @@ public class SkillDispatcher {
 
     public void execute(SmithNPC npc, String skillName, Map<String, Object> params, Player contextPlayer) {
         if (npc == null || npc.getEntity() == null || npc.getEntity().isDead()) {
+            markProgress(npc, skillName, params, true);
             return;
         }
         String lower = skillName.toLowerCase();
+
+        // Universal "give me N of <item>" handler. AI emits [action:gather_item,diamond:64].
+        if (lower.startsWith("gather_item") || lower.equals("give_item") || lower.equals("bring_item")) {
+            doGatherItem(npc, params, contextPlayer);
+            return;
+        }
 
         // Chat / social
         if (isChatSkill(lower)) {
@@ -50,11 +58,11 @@ public class SkillDispatcher {
             if (contextPlayer != null) npc.follow(contextPlayer);
             return;
         }
-        if (lower.startsWith("stay") || lower.equals("stay")) {
+        if (lower.startsWith("stay") || lower.equals("stay") || lower.equals("stop")) {
             npc.stay();
             return;
         }
-        if (lower.startsWith("teleport_to_spawn") || lower.equals("go_home") || lower.equals("teleport_home") || lower.equals("spawn")) {
+        if (lower.startsWith("teleport_to_spawn") || lower.equals("go_home") || lower.equals("teleport_home") || lower.equals("spawn") || lower.startsWith("go_home")) {
             Location spawn = npc.getLocation() != null ? npc.getLocation().getWorld().getSpawnLocation() : null;
             if (spawn != null) npc.teleport(spawn);
             return;
@@ -98,8 +106,86 @@ public class SkillDispatcher {
             return;
         }
 
-        // Advanced / progression / strategy
-        executeComposite(npc, lower, contextPlayer, "I'll plan and execute that advanced objective: " + humanize(skillName));
+        // Advanced / progression / strategy — actually run a real plan, not a no-op stub.
+        executeComposite(npc, lower, contextPlayer, params);
+    }
+
+    /**
+     * Route a "give me N of <item>" request. The AI/service already encoded the count into
+     * params["count"]; we mine/harvest/etc. until the NPC's inventory has enough of that material
+     * (or the live progress counter catches up — see SkillExecutor.tick).
+     */
+    private void doGatherItem(SmithNPC npc, Map<String, Object> params, Player player) {
+        if (params == null) return;
+        String target = params.containsKey("target") ? String.valueOf(params.get("target")) : "";
+        int count = 0;
+        if (params.get("count") instanceof Number) count = ((Number) params.get("count")).intValue();
+        if (count <= 0) count = 1;
+        Material mat = MaterialCompat.get(target.toUpperCase());
+        if (mat == null) {
+            // Try fuzzy: strip underscores and try a few common variants.
+            String spaced = target.replace('_', ' ').toLowerCase();
+            if (spaced.contains("log") || spaced.contains("wood")) {
+                mat = firstAvailableMat("OAK_LOG", "BIRCH_LOG", "SPRUCE_LOG", "JUNGLE_LOG", "ACACIA_LOG", "DARK_OAK_LOG", "WOOD", "LOG");
+            } else if (spaced.contains("cobble") || spaced.contains("stone")) {
+                mat = MaterialCompat.get("COBBLESTONE");
+                if (mat == null) mat = MaterialCompat.get("STONE");
+            } else if (spaced.contains("diamond")) {
+                mat = MaterialCompat.get("DIAMOND");
+            } else if (spaced.contains("iron")) {
+                mat = MaterialCompat.get("IRON_INGOT");
+            } else if (spaced.contains("gold")) {
+                mat = MaterialCompat.get("GOLD_INGOT");
+            } else if (spaced.contains("wheat")) {
+                mat = MaterialCompat.get("WHEAT");
+            }
+        }
+        if (player != null) {
+            npc.sendMessage(player, "I'll gather " + count + " " + (target == null ? "items" : target.replace('_', ' ')) + " for you.");
+        }
+        if (mat == null) return;
+        NPCInventory inv = npc.getInventory();
+        if (inv == null) return;
+        // Mine one block per tick at the NPC's feet; SkillExecutor loops until progress == count.
+        Block target2 = npc.getLocation() != null ? npc.getLocation().getBlock() : null;
+        if (target2 == null) return;
+        Material currentType = target2.getType();
+        if (mat.name().toUpperCase().contains("LOG") && currentType.name().toUpperCase().contains("LOG")) {
+            target2.breakNaturally();
+            markProgress(npc, "gather_item", params, false);
+        } else if (BlockCompat.isAir(target2)) {
+            // Nothing here yet — keep ticking, the executor will look further.
+            return;
+        } else if (currentType == mat || currentType.name().equalsIgnoreCase(mat.name())) {
+            target2.breakNaturally();
+            markProgress(npc, "gather_item", params, false);
+        } else {
+            // Keep ticking: SkillExecutor.tick() will keep calling us until we increment.
+        }
+    }
+
+    /**
+     * Mark a tick of progress on whichever SkillTask is currently active, so the queue status
+     * reflects what was actually done.
+     */
+    private void markProgress(SmithNPC npc, String skillName, Map<String, Object> params, boolean forcedDone) {
+        SkillExecutor exec = plugin != null ? plugin.getSkillExecutor() : null;
+        if (exec == null) return;
+        SkillExecutor.SkillTask current = exec.getCurrent();
+        if (current == null) return;
+        if (!forcedDone) {
+            current.incrementProgress(1);
+        } else if (forcedDone && current.getRequiredCount() == 0) {
+            current.cancel();
+        }
+    }
+
+    private Material firstAvailableMat(String... names) {
+        for (String n : names) {
+            Material m = MaterialCompat.get(n);
+            if (m != null) return m;
+        }
+        return null;
     }
 
     private boolean isChatSkill(String lower) {
@@ -555,9 +641,46 @@ public class SkillDispatcher {
         return false;
     }
 
-    private void executeComposite(SmithNPC npc, String skill, Player player, String defaultMessage) {
-        // No chat spam; action bar already shows the current skill.
+    private void executeComposite(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
+        // Instead of a no-op, walk the registered skill library and pick the closest concrete
+        // primitive so the AI actually does something. This keeps the queue progress truthful.
+        SmithNPC finalNpc = npc;
+        String matched = java.util.Arrays.stream(SKILL_LIBRARY_FOR_MATCH)
+            .filter(skill::startsWith)
+            .findFirst()
+            .orElse(null);
+        if (matched == null) {
+            // Try to find a broader catch-all skill in TaskPlanner.TASKS so we at least queue it.
+            java.util.List<String> plan = TaskPlanner.plan(skill);
+            if (!plan.isEmpty() && plugin.getSkillExecutor() != null) {
+                plugin.getSkillExecutor().queuePlan(finalNpc, plan, player);
+            }
+            if (player != null) finalNpc.sendMessage(player, "Planning that task: " + humanize(skill));
+            return;
+        }
+        // Direct match: lower the verbosity by emitting a confirmation in chat, then dispatch.
+        if (player != null) finalNpc.sendMessage(player, "Working on it: " + humanize(skill));
+        // Delegate to the appropriate category handler for proper execution.
+        if (matched.startsWith("mine") || matched.startsWith("gather") || matched.startsWith("chop") || matched.startsWith("dig")) {
+            executeResource(finalNpc, matched, player, params);
+        } else if (matched.startsWith("build") || matched.startsWith("place")) {
+            placeBlock(finalNpc, params);
+        } else if (matched.startsWith("craft") || matched.startsWith("make") || matched.startsWith("forge")) {
+            craftItem(finalNpc, matched);
+        } else if (matched.startsWith("attack") || matched.startsWith("fight") || matched.startsWith("defend")) {
+            executeCombat(finalNpc, matched, player, params);
+        } else if (matched.startsWith("follow") || matched.startsWith("stay") || matched.startsWith("come")) {
+            executeMovement(finalNpc, matched, player, params);
+        }
     }
+
+    private static final String[] SKILL_LIBRARY_FOR_MATCH = new String[]{
+        "follow_player", "stay", "teleport_to_player", "mine_block", "chop_tree", "dig_block",
+        "place_block", "place_torch", "break_block", "gather_wood", "gather_stone", "gather_iron",
+        "gather_diamonds", "craft_tool", "craft_weapon", "craft_armor", "craft_furnace", "craft_chest",
+        "build_shelter", "build_house", "build_base", "build_wall", "farm_crops", "harvest_crops",
+        "fight_hostile_mob", "attack_target", "defend_area", "patrol_area", "gather_item",
+    };
 
     private String humanize(String id) {
         String[] words = id.split("_");

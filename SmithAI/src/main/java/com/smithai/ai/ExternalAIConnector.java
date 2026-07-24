@@ -52,11 +52,11 @@ public class ExternalAIConnector {
             .exceptionally(ex -> false);
     }
 
-    public CompletableFuture<String> chat(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills) {
+    public CompletableFuture<String> chat(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills, java.util.Map<String, Integer> inventory) {
         Config config = plugin.getPluginConfig();
         String url = normalizeUrl(config.getExternalUrl());
 
-        JSONObject body = buildChatBody(player, message, conversation, task, knowledge, skills);
+        JSONObject body = buildChatBody(player, message, conversation, task, knowledge, skills, inventory);
 
         return sendChatWithRetry(url, body, config.getExternalApiKey(), config.getExternalTimeout(), 3);
     }
@@ -103,7 +103,7 @@ public class ExternalAIConnector {
         return future.orTimeout(timeout, TimeUnit.SECONDS);
     }
 
-    private JSONObject buildChatBody(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills) {
+    private JSONObject buildChatBody(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills, java.util.Map<String, Integer> inventory) {
         JSONObject body = new JSONObject();
         JSONArray messages = new JSONArray();
         for (Conversation.Message msg : conversation.getMessages()) {
@@ -128,6 +128,9 @@ public class ExternalAIConnector {
         if (skills != null && !skills.isEmpty()) {
             body.put("skills", new JSONArray(skills));
         }
+        if (conversation != null && conversation.getId() != null) {
+            body.put("conversation_id", conversation.getId());
+        }
         JSONObject context = new JSONObject();
         context.put("player", player.getName());
         context.put("world", player.getWorld() != null ? player.getWorld().getName() : "unknown");
@@ -138,6 +141,13 @@ public class ExternalAIConnector {
         context.put("diamond_y", versionInfo.bestDiamondY());
         context.put("iron_y", versionInfo.bestIronY());
         context.put("gold_y", versionInfo.bestGoldY());
+        if (inventory != null && !inventory.isEmpty()) {
+            JSONObject inv = new JSONObject();
+            for (java.util.Map.Entry<String, Integer> e : inventory.entrySet()) {
+                inv.put(e.getKey(), e.getValue());
+            }
+            context.put("inventory", inv);
+        }
         body.put("context", context);
         return body;
     }

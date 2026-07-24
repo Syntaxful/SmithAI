@@ -6,6 +6,9 @@ import com.smithai.util.VersionInfo;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LocalMiniAI {
 
@@ -18,7 +21,43 @@ public class LocalMiniAI {
     }
 
     public String getResponse(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills) {
+        return getResponse(player, message, conversation, task, knowledge, skills, java.util.Collections.emptyMap());
+    }
+
+    public String getResponse(Player player, String message, Conversation conversation, String task,
+                              List<String> knowledge, List<String> skills, Map<String, Integer> inventory) {
         String lower = message.toLowerCase();
+
+        // "give me / get me / find me N of <item>" — express as a counted fetch so the queue
+        // shows real progress instead of stopping after one block.
+        Matcher giveMe = Pattern.compile("\\b(?:give|get|fetch|bring|find)\\s+(?:me\\s+)?(\\d+)\\s+(?:of\\s+)?([a-z_][a-z0-9_]+)").matcher(lower);
+        if (giveMe.find()) {
+            int qty;
+            String item;
+            try {
+                qty = Math.max(1, Integer.parseInt(giveMe.group(1)));
+                item = giveMe.group(2).replaceAll("[^a-z0-9_]", "");
+            } catch (Exception ignored) {
+                qty = 0;
+                item = null;
+            }
+            if (qty > 0 && item != null && !item.isEmpty()) {
+                int have = inventory.getOrDefault(item, 0);
+                int stillNeed = Math.max(0, qty - have);
+                String tail = stillNeed == 0
+                    ? "you already have " + have + " " + item + " on you."
+                    : "I'm going to gather " + stillNeed + " more (you have " + have + "). [action:gather_item," + item + ":" + stillNeed + "]";
+                return "Sure, " + player.getName() + ". I'll get you " + qty + " " + item + " — " + tail;
+            }
+        }
+
+        // Inventory question ("how many ___ do I have").
+        Matcher howMany = Pattern.compile("\\bhow\\s+many\\s+([a-z_][a-z0-9_ ]+?)(?:\\s+do\\s+i\\s+have|\\s+do\\s+you\\s+have|\\s+are\\s+there|\\?|\\.)?").matcher(lower);
+        if (howMany.find()) {
+            String which = howMany.group(1).trim().replace(' ', '_').replaceAll("[^a-z0-9_]", "");
+            int have = inventory.getOrDefault(which, 0);
+            return "Looking at your inventory, you have " + have + " " + which.replace('_', ' ') + " right now.";
+        }
 
         // Negative feedback / correction detection
         if (isNegativeFeedback(lower)) {
@@ -120,6 +159,23 @@ public class LocalMiniAI {
         }
 
         return "I'm running on Smith-Mini 1.0 with " + skills.size() + " core skills. Ask me to follow you, mine, build, farm, fight, or explore.";
+    }
+
+    /**
+     * Helper so the rest of the plugin can ask the local brain for a short summary of what the
+     * AI needs to do a known task, including item quantities ("get me 64 of these").
+     */
+    public String summarizeTask(String taskName) {
+        Map<String, Integer> materials = com.smithai.skills.TaskPlanner.materialsFor(taskName);
+        if (materials.isEmpty()) return "I can plan that, but I don't have item counts yet.";
+        StringBuilder sb = new StringBuilder("For " + taskName + " you'll need: ");
+        boolean first = true;
+        for (Map.Entry<String, Integer> e : materials.entrySet()) {
+            if (!first) sb.append(", ");
+            sb.append(e.getValue()).append(' ').append(e.getKey().replace('_', ' '));
+            first = false;
+        }
+        return sb.toString();
     }
 
     /**
