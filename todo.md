@@ -288,7 +288,7 @@ Each skill needs:
 - [x] Check inventory stub
 - [x] Select/equip item by task (tool, weapon)
 - [x] Real inventory scanning, item selection, pick up, drop, and use items
-- [ ] Crafting recipes by name and available ingredients
+- [x] Crafting recipes by name and available ingredients
 - [ ] Crafting table / furnace / brewing stand interaction
 - [ ] Smelting, fueling, and result collection
 - [ ] Chest storage and retrieval
