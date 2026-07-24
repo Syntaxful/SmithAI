@@ -907,5 +907,227 @@
       "water",
       "brewing"
     ]
+  },
+  {
+    "id": "minecraft:shield",
+    "category": "item",
+    "name": "Shield",
+    "description": "Blocks incoming damage when held. Crafted with wood planks and an iron ingot.",
+    "tags": [
+      "item",
+      "combat",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:bucket",
+    "category": "item",
+    "name": "Bucket",
+    "description": "Carries liquids, fish, milk, or lava. Useful for farming, water elevators, and obsidian creation.",
+    "tags": [
+      "item",
+      "tool",
+      "fluid"
+    ]
+  },
+  {
+    "id": "minecraft:water_bucket",
+    "category": "item",
+    "name": "Water Bucket",
+    "description": "Bucket filled with water. Used to hydrate farmland, transport water, or create obsidian with lava.",
+    "tags": [
+      "item",
+      "tool",
+      "fluid"
+    ]
+  },
+  {
+    "id": "minecraft:lava_bucket",
+    "category": "item",
+    "name": "Lava Bucket",
+    "description": "Bucket filled with lava. Used as furnace fuel or to create obsidian with water.",
+    "tags": [
+      "item",
+      "tool",
+      "fluid",
+      "fuel"
+    ]
+  },
+  {
+    "id": "minecraft:flint_and_steel",
+    "category": "item",
+    "name": "Flint and Steel",
+    "description": "Ignites fires, activates nether portals, and detonates TNT.",
+    "tags": [
+      "item",
+      "tool",
+      "nether"
+    ]
+  },
+  {
+    "id": "minecraft:compass",
+    "category": "item",
+    "name": "Compass",
+    "description": "Points toward the world spawn point. Useful for navigation and finding your way back home.",
+    "tags": [
+      "item",
+      "tool",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:clock",
+    "category": "item",
+    "name": "Clock",
+    "description": "Shows the time of day in the Overworld. Useful for planning surface activities.",
+    "tags": [
+      "item",
+      "tool",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:map",
+    "category": "item",
+    "name": "Map",
+    "description": "Paper map of the surrounding area. Can be upgraded to show a larger region or framed on a wall.",
+    "tags": [
+      "item",
+      "tool",
+      "navigation"
+    ]
+  },
+  {
+    "id": "minecraft:ender_pearl",
+    "category": "item",
+    "name": "Ender Pearl",
+    "description": "Thrown to teleport to the impact location. Also used to craft eyes of ender.",
+    "tags": [
+      "item",
+      "tool",
+      "teleport",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:eye_of_ender",
+    "category": "item",
+    "name": "Eye of Ender",
+    "description": "Crafted from blaze powder and ender pearls. Used to locate strongholds and activate end portals.",
+    "tags": [
+      "item",
+      "tool",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:saddle",
+    "category": "item",
+    "name": "Saddle",
+    "description": "Required to ride pigs, horses, donkeys, mules, striders, and camels.",
+    "tags": [
+      "item",
+      "transport",
+      "mount"
+    ]
+  },
+  {
+    "id": "minecraft:name_tag",
+    "category": "item",
+    "name": "Name Tag",
+    "description": "Renames a mob when used on it. Prevents passive mobs from despawning.",
+    "tags": [
+      "item",
+      "tool",
+      "mob"
+    ]
+  },
+  {
+    "id": "minecraft:lead",
+    "category": "item",
+    "name": "Lead",
+    "description": "Tethers mobs to a fence or a player. Useful for moving animals and villagers.",
+    "tags": [
+      "item",
+      "tool",
+      "mob"
+    ]
+  },
+  {
+    "id": "minecraft:bone_meal",
+    "category": "item",
+    "name": "Bone Meal",
+    "description": "Crafted from bones. Speeds up crop and plant growth, and can be used to create white dye.",
+    "tags": [
+      "item",
+      "farming",
+      "dye"
+    ]
+  },
+  {
+    "id": "minecraft:totem_of_undying",
+    "category": "item",
+    "name": "Totem of Undying",
+    "description": "Dropped by evokers. When held in the off-hand, prevents death once and grants regeneration.",
+    "tags": [
+      "item",
+      "combat",
+      "survival"
+    ]
+  },
+  {
+    "id": "minecraft:elytra",
+    "category": "item",
+    "name": "Elytra",
+    "description": "Wings found in end ships. Allows gliding and flight when boosted with fireworks.",
+    "tags": [
+      "item",
+      "transport",
+      "end"
+    ]
+  },
+  {
+    "id": "minecraft:firework_rocket",
+    "category": "item",
+    "name": "Firework Rocket",
+    "description": "Launches fireworks. When used while gliding with elytra, it propels the player forward.",
+    "tags": [
+      "item",
+      "transport",
+      "tool"
+    ]
+  },
+  {
+    "id": "minecraft:experience_bottle",
+    "category": "item",
+    "name": "Bottle o' Enchanting",
+    "description": "Breaks on impact to drop experience orbs. Useful for enchanting and repairs.",
+    "tags": [
+      "item",
+      "magic",
+      "xp"
+    ]
+  },
+  {
+    "id": "minecraft:enchanted_book",
+    "category": "item",
+    "name": "Enchanted Book",
+    "description": "Book containing an enchantment. Can be applied to gear using an anvil.",
+    "tags": [
+      "item",
+      "magic",
+      "enchanting"
+    ]
+  },
+  {
+    "id": "minecraft:book_and_quill",
+    "category": "item",
+    "name": "Book and Quill",
+    "description": "Writable book for notes. Can be signed to become a written book.",
+    "tags": [
+      "item",
+      "tool",
+      "book"
+    ]
   }
 ]
