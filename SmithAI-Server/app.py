@@ -53,8 +53,13 @@ except ImportError:
 # ---------------------------------------------------------------------------
 
 CONFIG_PATH = os.environ.get("SMITHAI_CONFIG", "config.yml")
-with open(CONFIG_PATH, "r") as f:
-    config: Dict[str, Any] = yaml.safe_load(f) or {}
+config: Dict[str, Any] = {}
+if os.path.exists(CONFIG_PATH):
+    try:
+        with open(CONFIG_PATH, "r") as f:
+            config = yaml.safe_load(f) or {}
+    except Exception as exc:
+        print(f"WARNING: could not read {CONFIG_PATH}: {exc}")
 
 MODEL_PATH = config.get("model", {}).get("path", "models/smithgpt-1.0-2.2gb.gguf")
 MODEL_NAME = config.get("model", {}).get("name", "SmithGPT 1.0 2.2GB")
