@@ -38,7 +38,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|tasks|clear|info|equip|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|info|equip|unequip|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
             return true;
         }
 
@@ -160,6 +160,30 @@ public class SmithAICommand implements CommandExecutor {
                 } else {
                     dnpc.sendMessage(doer, "I don't know how to do that yet.");
                 }
+                return true;
+
+            case "ask":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 2) {
+                    sender.sendMessage("§eUsage: §f/smithai ask <question>");
+                    return true;
+                }
+                Player asker = (Player) sender;
+                List<SmithNPC> nearbyAsk = npcManager.getNearbyNPCs(asker.getLocation(), 16);
+                if (nearbyAsk.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC askNpc = nearbyAsk.get(0);
+                String question = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
+                plugin.getAiManager().getResponse(asker, question, plugin.getMemoryManager().getConversation(askNpc.getId()), null)
+                    .thenAccept(reply -> plugin.getServer().getScheduler().runTask(plugin, () -> {
+                        plugin.getMemoryManager().getConversation(askNpc.getId()).addMessage("assistant", reply);
+                        askNpc.sendMessage(asker, reply);
+                    }));
                 return true;
 
             case "debug":
@@ -326,6 +350,48 @@ public class SmithAICommand implements CommandExecutor {
                         return true;
                 }
                 equipNpc.sendMessage(equipPlayer, "Equipped " + slot + " with " + equipMat.name().toLowerCase().replace("_", " ") + ".");
+                return true;
+
+            case "unequip":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 2) {
+                    sender.sendMessage("§eUsage: §f/smithai unequip <slot>");
+                    sender.sendMessage("§7Slots: §fhelmet, chestplate, leggings, boots, mainhand, offhand, all");
+                    return true;
+                }
+                Player unequipPlayer = (Player) sender;
+                List<SmithNPC> nearbyUnequip = npcManager.getNearbyNPCs(unequipPlayer.getLocation(), 16);
+                if (nearbyUnequip.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC unequipNpc = nearbyUnequip.get(0);
+                if (!unequipNpc.hasInventory()) {
+                    sender.sendMessage("§cThis Smith_AI has no inventory.");
+                    return true;
+                }
+                NPCInventory unequipInv = unequipNpc.getInventory();
+                String unequipSlot = args[1].toLowerCase();
+                switch (unequipSlot) {
+                    case "helmet": unequipInv.setArmor(null, unequipInv.getChestplate(), unequipInv.getLeggings(), unequipInv.getBoots()); break;
+                    case "chestplate": unequipInv.setArmor(unequipInv.getHelmet(), null, unequipInv.getLeggings(), unequipInv.getBoots()); break;
+                    case "leggings": unequipInv.setArmor(unequipInv.getHelmet(), unequipInv.getChestplate(), null, unequipInv.getBoots()); break;
+                    case "boots": unequipInv.setArmor(unequipInv.getHelmet(), unequipInv.getChestplate(), unequipInv.getLeggings(), null); break;
+                    case "mainhand": unequipInv.setMainHand(null); break;
+                    case "offhand": unequipInv.setOffHand(null); break;
+                    case "all":
+                        unequipInv.setArmor(null, null, null, null);
+                        unequipInv.setMainHand(null);
+                        unequipInv.setOffHand(null);
+                        break;
+                    default:
+                        sender.sendMessage("§cUnknown slot. Use: helmet, chestplate, leggings, boots, mainhand, offhand, all");
+                        return true;
+                }
+                unequipNpc.sendMessage(unequipPlayer, "Unequipped " + unequipSlot + ".");
                 return true;
 
             case "memory":

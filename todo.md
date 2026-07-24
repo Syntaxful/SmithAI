@@ -155,7 +155,7 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Chat & Dialogue
 
-- [ ] 141. add chat_dialogue migration path
+- [x] 141. Add /smithai ask command for direct questions without task planning
 - [ ] 142. add chat_dialogue CLI flag
 - [ ] 143. add chat_dialogue status endpoint
 - [ ] 144. add chat_dialogue health check
@@ -907,6 +907,7 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 - [x] 861. Add /smithai equip command to set NPC armor, mainhand, and offhand
 - [x] 862. Persist equipped items through the NPCInventory wrapper
+- [x] 863. Add /smithai unequip command to remove NPC armor or held items
 - [ ] 863. add npc_rendering_equipment logging
 - [ ] 864. add npc_rendering_equipment error handling
 - [ ] 865. add npc_rendering_equipment unit tests
