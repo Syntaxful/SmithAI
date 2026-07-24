@@ -60,7 +60,17 @@ public class SkillDispatcher {
             return;
         }
         if (lower.startsWith("look") || lower.startsWith("turn") || lower.startsWith("inspect") || lower.startsWith("check_")) {
-            if (contextPlayer != null) npc.lookAt(contextPlayer.getLocation());
+            Location lookTarget = contextPlayer != null ? contextPlayer.getLocation() : null;
+            if (params != null && params.containsKey("x") && params.containsKey("y") && params.containsKey("z")) {
+                try {
+                    int x = ((Number) params.get("x")).intValue();
+                    int y = ((Number) params.get("y")).intValue();
+                    int z = ((Number) params.get("z")).intValue();
+                    Location base = npc.getLocation();
+                    if (base != null) lookTarget = new Location(base.getWorld(), x + 0.5, y + 0.5, z + 0.5);
+                } catch (Exception ignored) {}
+            }
+            if (lookTarget != null) npc.lookAt(lookTarget);
             return;
         }
         if (lower.startsWith("move") || lower.startsWith("jump") || lower.startsWith("sneak") || lower.startsWith("sprint") ||

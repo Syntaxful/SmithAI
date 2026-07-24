@@ -218,7 +218,7 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Movement & Navigation
 
-- [ ] 201. add movement_navigation progress reporting
+- [x] 201. Support look_at skill parameters with x/y/z coordinates
 - [ ] 202. add movement_navigation history tracking
 - [ ] 203. add movement_navigation rollback support
 - [ ] 204. implement movement_navigation feature #4
@@ -905,8 +905,8 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## NPC Rendering & Equipment
 
-- [ ] 861. add npc_rendering_equipment configuration option
-- [ ] 862. optimize npc_rendering_equipment performance
+- [x] 861. Add /smithai equip command to set NPC armor, mainhand, and offhand
+- [x] 862. Persist equipped items through the NPCInventory wrapper
 - [ ] 863. add npc_rendering_equipment logging
 - [ ] 864. add npc_rendering_equipment error handling
 - [ ] 865. add npc_rendering_equipment unit tests
@@ -1283,7 +1283,7 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Metrics & Debugging
 
-- [ ] 1221. add metrics_debugging batching
+- [x] 1221. Add /smithai info command to show NPC health, location, and task count
 - [ ] 1222. add metrics_debugging cancellation
 - [ ] 1223. add metrics_debugging progress reporting
 - [ ] 1224. add metrics_debugging history tracking

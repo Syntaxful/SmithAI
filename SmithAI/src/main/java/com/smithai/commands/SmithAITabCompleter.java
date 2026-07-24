@@ -11,7 +11,7 @@ import java.util.List;
 public class SmithAITabCompleter implements TabCompleter {
 
     private static final List<String> SUBS = Arrays.asList(
-        "spawn", "despawn", "follow", "stay", "goto", "do", "tasks", "clear", "debug", "health", "stop", "status", "model", "version", "reload", "train", "feedback", "feedback-list", "report", "reports", "memory", "inventory", "give", "list", "help", "teleport", "skin", "config", "export"
+        "spawn", "despawn", "follow", "stay", "goto", "do", "tasks", "clear", "info", "equip", "debug", "health", "stop", "status", "model", "version", "reload", "train", "feedback", "feedback-list", "report", "reports", "memory", "inventory", "give", "list", "help", "teleport", "skin", "config", "export"
     );
     private static final List<String> TRAIN_OPTIONS = Arrays.asList("good", "bad");
     private static final List<String> DO_SUGGESTIONS = Arrays.asList(

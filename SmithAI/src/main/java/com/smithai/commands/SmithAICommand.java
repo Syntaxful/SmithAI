@@ -3,6 +3,7 @@ package com.smithai.commands;
 import com.smithai.SmithAIPlugin;
 import com.smithai.config.Config;
 import com.smithai.health.SubsystemHealth;
+import com.smithai.npc.NPCInventory;
 import com.smithai.npc.NPCManager;
 import com.smithai.npc.SmithNPC;
 import com.smithai.skills.TaskPlanner;
@@ -37,7 +38,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|tasks|clear|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|tasks|clear|info|equip|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
             return true;
         }
 
@@ -254,6 +255,77 @@ public class SmithAICommand implements CommandExecutor {
                     sender.sendMessage("§eActive tasks for " + plugin.getPluginConfig().getAiName() + ":");
                     queued.forEach(s -> sender.sendMessage("§7- §f" + s));
                 }
+                return true;
+
+            case "info":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player infoPlayer = (Player) sender;
+                List<SmithNPC> nearbyInfo = npcManager.getNearbyNPCs(infoPlayer.getLocation(), 16);
+                if (nearbyInfo.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC infoNpc = nearbyInfo.get(0);
+                sender.sendMessage("§e" + infoNpc.getName() + " info:");
+                Location infoLoc = infoNpc.getLocation();
+                sender.sendMessage("§7Location: §f" + (infoLoc != null ? infoLoc.getWorld().getName() + " " + infoLoc.getBlockX() + ", " + infoLoc.getBlockY() + ", " + infoLoc.getBlockZ() : "unknown"));
+                sender.sendMessage("§7Health: §f" + String.format("%.1f", infoNpc.getHealth()) + " / " + String.format("%.1f", infoNpc.getMaxHealth()));
+                sender.sendMessage("§7Food: §f" + infoNpc.getFoodLevel());
+                sender.sendMessage("§7Tasks: §f" + plugin.getSkillExecutor().getQueueSize());
+                sender.sendMessage("§7Brain: §f" + plugin.getAiManager().getActiveModelName());
+                return true;
+
+            case "equip":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 3) {
+                    sender.sendMessage("§eUsage: §f/smithai equip <slot> <item> [amount]");
+                    sender.sendMessage("§7Slots: §fhelmet, chestplate, leggings, boots, mainhand, offhand");
+                    return true;
+                }
+                Player equipPlayer = (Player) sender;
+                List<SmithNPC> nearbyEquip = npcManager.getNearbyNPCs(equipPlayer.getLocation(), 16);
+                if (nearbyEquip.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC equipNpc = nearbyEquip.get(0);
+                if (!equipNpc.hasInventory()) {
+                    sender.sendMessage("§cThis Smith_AI has no inventory.");
+                    return true;
+                }
+                String slot = args[1].toLowerCase();
+                Material equipMat = Material.matchMaterial(args[2]);
+                if (equipMat == null || equipMat == Material.AIR) {
+                    sender.sendMessage("§cUnknown item: §f" + args[2]);
+                    return true;
+                }
+                int equipAmount = 1;
+                if (args.length >= 4) {
+                    try { equipAmount = Integer.parseInt(args[3]); } catch (NumberFormatException e) {
+                        sender.sendMessage("§cAmount must be a number.");
+                        return true;
+                    }
+                }
+                ItemStack equipItem = new ItemStack(equipMat, Math.max(1, equipAmount));
+                NPCInventory equipInv = equipNpc.getInventory();
+                switch (slot) {
+                    case "helmet": equipInv.setArmor(equipItem, equipInv.getChestplate(), equipInv.getLeggings(), equipInv.getBoots()); break;
+                    case "chestplate": equipInv.setArmor(equipInv.getHelmet(), equipItem, equipInv.getLeggings(), equipInv.getBoots()); break;
+                    case "leggings": equipInv.setArmor(equipInv.getHelmet(), equipInv.getChestplate(), equipItem, equipInv.getBoots()); break;
+                    case "boots": equipInv.setArmor(equipInv.getHelmet(), equipInv.getChestplate(), equipInv.getLeggings(), equipItem); break;
+                    case "mainhand": equipInv.setMainHand(equipItem); break;
+                    case "offhand": equipInv.setOffHand(equipItem); break;
+                    default:
+                        sender.sendMessage("§cUnknown slot. Use: helmet, chestplate, leggings, boots, mainhand, offhand");
+                        return true;
+                }
+                equipNpc.sendMessage(equipPlayer, "Equipped " + slot + " with " + equipMat.name().toLowerCase().replace("_", " ") + ".");
                 return true;
 
             case "memory":

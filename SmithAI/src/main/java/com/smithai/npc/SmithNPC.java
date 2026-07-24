@@ -117,6 +117,18 @@ public class SmithNPC {
         org.bukkit.Bukkit.broadcastMessage("§b[" + name + "] §f" + message);
     }
 
+    public double getHealth() {
+        return entity instanceof LivingEntity ? ((LivingEntity) entity).getHealth() : 0;
+    }
+
+    public double getMaxHealth() {
+        return entity instanceof LivingEntity ? ((LivingEntity) entity).getMaxHealth() : 0;
+    }
+
+    public int getFoodLevel() {
+        return entity instanceof Player ? ((Player) entity).getFoodLevel() : 20;
+    }
+
     public void lookAt(Location target) {
         long now = System.currentTimeMillis();
         if (now - lastLookTime < LOOK_INTERVAL_MS) return;
