@@ -223,5 +223,176 @@
     "tags": [
       "strategy"
     ]
+  },
+  {
+    "id": "strategy:underwater_exploration",
+    "category": "strategy",
+    "name": "Underwater Exploration",
+    "description": "Use doors, conduits, or potions of water breathing to stay underwater. Bring a trident or aqua affinity helmet.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:ocean_monument",
+    "category": "strategy",
+    "name": "Ocean Monument",
+    "description": "Drink milk to remove mining fatigue. Kill guardians for prismarine and sponges. Watch for elder guardians.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:woodland_mansion",
+    "category": "strategy",
+    "name": "Woodland Mansion",
+    "description": "Bring food and a shield. Clear rooms carefully and collect totems of undying from evokers.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:bastion",
+    "category": "strategy",
+    "name": "Bastion",
+    "description": "Wear at least one piece of gold armor around piglin brutes. Loot chests quickly and have an escape route.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:fortress",
+    "category": "strategy",
+    "name": "Nether Fortress",
+    "description": "Find blazes for blaze rods. Bring fire resistance and blocks to bridge over lava. Mark your path.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:ancient_city",
+    "category": "strategy",
+    "name": "Ancient City",
+    "description": "Walk on wool and avoid vibrations. Use snowballs to distract the warden. Loot the chests silently.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:beekeeping",
+    "category": "strategy",
+    "name": "Beekeeping",
+    "description": "Place campfires under beehives to calm bees. Use glass bottles to collect honey and shears for honeycomb.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:tree_farm",
+    "category": "strategy",
+    "name": "Tree Farm",
+    "description": "Space saplings apart for large variants. Use bonemeal to grow quickly. Keep the area well lit.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:mob_grinder",
+    "category": "strategy",
+    "name": "Mob Grinder",
+    "description": "Build a dark room with water streams to funnel mobs into a drop chute. Collect drops and XP at the bottom.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:iron_farm",
+    "category": "strategy",
+    "name": "Iron Farm",
+    "description": "Group villagers with beds and a zombie to spawn iron golems. Transport golems to lava for iron ingots.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:villager_breeder",
+    "category": "strategy",
+    "name": "Villager Breeder",
+    "description": "Provide beds and food to villagers. Separate children until they grow and claim a profession block.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:trading_hall",
+    "category": "strategy",
+    "name": "Trading Hall",
+    "description": "Lock villagers into profession blocks in a safe hall. Cure zombie villagers for major discounts.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:elytra_flight",
+    "category": "strategy",
+    "name": "Elytra Flight",
+    "description": "Equip elytra and fireworks. Pitch up to gain altitude, down to glide faster. Avoid crashing at high speed.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:end_city",
+    "category": "strategy",
+    "name": "End City",
+    "description": "Bridge carefully between towers. Wear elytra if possible. Kill shulkers for shells and loot chests.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:beacon",
+    "category": "strategy",
+    "name": "Beacon",
+    "description": "Build a pyramid of iron, gold, emerald, diamond, or netherite blocks. Choose a primary power and optionally a secondary.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:conduit",
+    "category": "strategy",
+    "name": "Conduit",
+    "description": "Build a frame of prismarine around a conduit in water. It grants water breathing, night vision, and attacks nearby mobs.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:netherite_upgrade",
+    "category": "strategy",
+    "name": "Netherite Upgrade",
+    "description": "Mine ancient debris in the Nether at low Y levels. Smelt it into netherite scrap and combine with gold at a smithing table.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:archaeology",
+    "category": "strategy",
+    "name": "Archaeology",
+    "description": "Use a brush on suspicious sand or gravel in ruins and trail chambers. Pottery shards can be crafted into decorated pots.",
+    "tags": [
+      "strategy"
+    ]
+  },
+  {
+    "id": "strategy:trial_chambers",
+    "category": "strategy",
+    "name": "Trial Chambers",
+    "description": "Activate spawners and survive waves of mobs. Collect trial keys and open the vault for rewards.",
+    "tags": [
+      "strategy"
+    ]
   }
 ]
