@@ -10,6 +10,7 @@ public class SkillRegistry {
 
     private final SmithAIPlugin plugin;
     private final Map<String, SkillDefinition> skills = new HashMap<>();
+    private boolean generated = false;
 
     private static final Map<String, Integer> TIER_ORDER = new HashMap<>();
     static { TIER_ORDER.put("mini", 1); TIER_ORDER.put("gpt1", 2); TIER_ORDER.put("gpt2", 3); }
@@ -79,8 +80,13 @@ public class SkillRegistry {
 
     public SkillRegistry(SmithAIPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    private synchronized void ensureGenerated() {
+        if (generated) return;
         generateDefaults();
         loadFromDisk();
+        generated = true;
     }
 
     private void generateDefaults() {
@@ -134,10 +140,11 @@ public class SkillRegistry {
         return sb.toString().trim();
     }
 
-    public SkillDefinition getSkill(String name) { return skills.get(name.toLowerCase()); }
-    public List<String> getSkillNames() { return new ArrayList<>(skills.keySet()); }
+    public SkillDefinition getSkill(String name) { ensureGenerated(); return skills.get(name.toLowerCase()); }
+    public List<String> getSkillNames() { ensureGenerated(); return new ArrayList<>(skills.keySet()); }
 
     public List<String> getSkillNamesForTier(String tier) {
+        ensureGenerated();
         int target = TIER_ORDER.getOrDefault(tier.toLowerCase(), 3);
         List<String> result = new ArrayList<>();
         for (SkillDefinition skill : skills.values()) {
@@ -159,9 +166,10 @@ public class SkillRegistry {
     }
 
     public List<String> getSkillsForActiveModel(String modelName) { return getSkillNamesForTier(getTierForModel(modelName)); }
-    public int count() { return skills.size(); }
+    public int count() { ensureGenerated(); return skills.size(); }
 
     public int countByTier(String tier) {
+        ensureGenerated();
         int target = TIER_ORDER.getOrDefault(tier.toLowerCase(), 3);
         int count = 0;
         for (SkillDefinition skill : skills.values()) if (TIER_ORDER.getOrDefault(skill.getTier().toLowerCase(), 3) <= target) count++;

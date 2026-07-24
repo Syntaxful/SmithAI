@@ -73,8 +73,9 @@ public class PlayerModelHelper {
             if ((Boolean) npcSpawnMethod.invoke(npc, location)) {
                 Entity entity = (Entity) npcGetEntityMethod.invoke(npc);
                 if (entity != null) {
-                    entity.setSilent(true);
+                    entity.setSilent(false);
                     entity.setInvulnerable(true);
+                    entity.setCustomNameVisible(true);
                     entity.setMetadata("smithai_citizens_npc", new org.bukkit.metadata.FixedMetadataValue(
                             com.smithai.SmithAIPlugin.getInstance(), npc));
                 }

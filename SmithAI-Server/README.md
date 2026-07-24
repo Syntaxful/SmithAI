@@ -64,6 +64,22 @@ If `security.api_key` is empty, the server creates one automatically and saves i
 
 Place your `.gguf` model files in `SmithAI-Server/models/` and update the `path` in `config.yml`. The server will warn and fall back to rule-based responses if no model is found.
 
+### Model size vs capability trade-offs
+
+SmithAI supports three model tiers. The smaller the quantization, the smaller the file and the faster the inference, but response quality may degrade. Choose the smallest model that still satisfies the feature set you need:
+
+| Tier | Recommended size | Quantization | Notes |
+|------|------------------|--------------|-------|
+| Smith-Mini 1.0 | ~300 MB - 1 GB | Q4_0 / Q4_K_M | Runs inside the plugin or on low-end hosts. Rule-based fallback keeps the plugin working without any model. |
+| SmithGPT 1.0 | ~4 GB | Q4_K_M / Q5_K_M | Good for general chat, crafting, building, and combat planning. |
+| SmithGPT 2.0 | ~7.5 GB | Q4_K_M / Q5_K_M | Largest reasoning model for endgame progression, automation, and complex strategy. |
+
+- **Q4_0** is the smallest and fastest but can lose nuance in long responses.
+- **Q4_K_M / Q5_K_M** balance quality and size; recommended for most users.
+- **Q8_0** or **FP16** give the highest quality but double or triple the file size and RAM use.
+- Prefer **distilled** models (e.g., Llama-3.1-Instruct, DeepSeek-R1-Distill) when available, because they preserve instruction-following at smaller sizes.
+- If a model is too large for your host, lower the quantization first. If it still does not fit, switch to a smaller tier; the rule-based fallback always remains available.
+
 You can also use the included helper to download a model from a direct URL or Hugging Face:
 
 ```bash
