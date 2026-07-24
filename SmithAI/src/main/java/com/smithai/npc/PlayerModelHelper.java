@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 /**
  * Optional Citizens support that lets Smith_AI spawn as a real player-model NPC.
@@ -35,20 +36,27 @@ public class PlayerModelHelper {
             npcSpawnMethod = npcClass.getMethod("spawn", Location.class);
             npcGetEntityMethod = npcClass.getMethod("getEntity");
             npcDestroyMethod = npcClass.getMethod("destroy");
-            npcSetProtectedMethod = npcClass.getMethod("setProtected", boolean.class);
-            npcSetUseMinecraftAIMethod = npcClass.getMethod("setUseMinecraftAI", boolean.class);
 
-            // Try to set the NPC nameplate to always be visible and use a player skin.
+            // Optional: protected + use Minecraft AI. Older Citizens builds (e.g., 2.0.22) do not have setUseMinecraftAI.
+            try { npcSetProtectedMethod = npcClass.getMethod("setProtected", boolean.class); } catch (Exception ignored) {}
+            try { npcSetUseMinecraftAIMethod = npcClass.getMethod("setUseMinecraftAI", boolean.class); } catch (Exception ignored) {}
+
+            // Optional: metadata helpers. Class is MetadataStore in older builds, NPC.Data in newer ones.
             try {
                 Class<?> dataClass = Class.forName("net.citizensnpcs.api.npc.NPC$Data");
                 npcDataSetterMethod = npcClass.getMethod("data");
                 npcDataSetterValueMethod = dataClass.getMethod("set", String.class, Object.class);
             } catch (Exception ignored) {
+                try {
+                    Class<?> dataClass = Class.forName("net.citizensnpcs.api.npc.MetadataStore");
+                    npcDataSetterMethod = npcClass.getMethod("data");
+                    npcDataSetterValueMethod = dataClass.getMethod("set", String.class, Object.class);
+                } catch (Exception ignored2) {}
             }
 
             available = true;
         } catch (Exception e) {
-            // Citizens is not present. Fall back to villager.
+            // Citizens is not present or an incompatible version. Fall back to villager.
         }
         CITIZENS_AVAILABLE = available;
     }
@@ -66,8 +74,12 @@ public class PlayerModelHelper {
         if (!CITIZENS_AVAILABLE) return null;
         try {
             Object npc = createNPCMethod.invoke(registry, EntityType.PLAYER, name);
-            npcSetProtectedMethod.invoke(npc, true);
-            npcSetUseMinecraftAIMethod.invoke(npc, false);
+            if (npcSetProtectedMethod != null) {
+                npcSetProtectedMethod.invoke(npc, true);
+            }
+            if (npcSetUseMinecraftAIMethod != null) {
+                npcSetUseMinecraftAIMethod.invoke(npc, false);
+            }
             if (npcDataSetterMethod != null && npcDataSetterValueMethod != null) {
                 try {
                     Object data = npcDataSetterMethod.invoke(npc);
@@ -80,13 +92,18 @@ public class PlayerModelHelper {
             if (spawned) {
                 Entity entity = (Entity) npcGetEntityMethod.invoke(npc);
                 if (entity != null) {
+                    entity.setSilent(true);
+                    entity.setInvulnerable(true);
                     entity.setMetadata("smithai_citizens_npc", new org.bukkit.metadata.FixedMetadataValue(
                             com.smithai.SmithAIPlugin.getInstance(), npc));
                 }
                 return entity;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (com.smithai.SmithAIPlugin.getInstance() != null) {
+                com.smithai.SmithAIPlugin.getInstance().getLogger().log(Level.WARNING,
+                        "Failed to spawn Citizens player-model NPC, falling back to villager", e);
+            }
         }
         return null;
     }
