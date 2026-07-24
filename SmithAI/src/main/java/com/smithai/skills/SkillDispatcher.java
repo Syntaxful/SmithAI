@@ -9,6 +9,7 @@ import com.smithai.util.MaterialCompat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -457,9 +458,47 @@ public class SkillDispatcher {
         if (target == null) target = findNearestHostile(self, 8);
         if (target != null) {
             selectBestTool(npc, "sword");
+            applyCombatTactics(npc, self, target);
             LivingEntityCompat.attack(self, target);
             npc.setTaskLookTarget(target.getLocation().add(0, 1, 0), 1500);
         }
+    }
+
+    private void applyCombatTactics(SmithNPC npc, LivingEntity self, LivingEntity target) {
+        Location selfLoc = self.getLocation();
+        Location targetLoc = target.getLocation();
+        double distSq = selfLoc.distanceSquared(targetLoc);
+        String type = target.getType().name().toLowerCase();
+
+        if (type.contains("creeper")) {
+            // Keep a safe distance; explode radius is ~3 blocks.
+            if (distSq < 16) {
+                npc.setMoveTarget(moveAway(selfLoc, targetLoc, 6));
+            } else {
+                npc.setMoveTarget(targetLoc);
+            }
+        } else if (type.contains("skeleton")) {
+            // Close distance to force skeleton into melee.
+            npc.setMoveTarget(targetLoc);
+        } else if (type.contains("witch") || type.contains("evoker") || type.contains("illusioner")) {
+            // Rush casters to interrupt ranged attacks.
+            npc.setMoveTarget(targetLoc);
+        } else if (type.contains("enderman")) {
+            // Look at feet to avoid provoking the enderman.
+            npc.lookAt(targetLoc.clone().add(0, -1, 0));
+            npc.setMoveTarget(targetLoc);
+        } else if (type.contains("spider") || type.contains("cave_spider")) {
+            // Spiders are fast; just close in.
+            npc.setMoveTarget(targetLoc);
+        } else {
+            // Default: close in and attack.
+            npc.setMoveTarget(targetLoc);
+        }
+    }
+
+    private Location moveAway(Location from, Location threat, double distance) {
+        Vector away = from.toVector().subtract(threat.toVector()).setY(0).normalize().multiply(distance);
+        return from.clone().add(away).add(0, 0, 0);
     }
 
     private LivingEntity findNearestHostile(LivingEntity self, double radius) {

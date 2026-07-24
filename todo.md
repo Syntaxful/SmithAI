@@ -302,7 +302,7 @@ Each skill needs:
 - [x] Heal via food in `SkillDispatcher`
 - [x] Place torch in `SkillDispatcher`
 - [x] Mob-specific target selection via `target` parameter
-- [ ] Mob-specific combat tactics (creeper, skeleton, zombie, etc.)
+- [x] Mob-specific combat tactics (creeper, skeleton, zombie, etc.)
 - [ ] Equip best armor and weapon
 - [ ] Retreat when low health/hunger
 - [ ] Dodge, strafe, block, counter
