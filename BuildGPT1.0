@@ -1,50 +1,73 @@
 #!/usr/bin/env bash
-# Download and configure SmithGPT 1.0 (4GB) model.
+# Download and configure SmithGPT 1.0 (small 1B model, ~600MB).
 # Usage: ./BuildGPT1.0
-# The model uses ~4GB RAM. Requires llama-cpp-python.
+# The model uses ~1.5GB RAM. Requires llama-cpp-python.
 
 set -euo pipefail
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-echo "=== SmithGPT 1.0 (4GB) ==="
-echo "Target: $(pwd)/SmithAI-Server/models/smithgpt-1.0-4.gguf"
+SERVER_DIR="SmithAI-Server"
+MODEL_NAME="smithgpt-1.0-1b.gguf"
+MODEL_URL="https://huggingface.co/bartowski/Llama-3.2-1B-Instruct-GGUF/resolve/main/Llama-3.2-1B-Instruct-Q4_0.gguf"
+
+START_TIME=$(date +%s)
+
+echo "=== SmithGPT 1.0 (1B / Q4_0 / ~600MB) ==="
+echo "Target: $(pwd)/$SERVER_DIR/models/$MODEL_NAME"
 echo ""
 
-# Install llama-cpp-python if not present
-if ! python3 -c "import llama_cpp" 2>/dev/null; then
-    echo "[1/3] Installing llama-cpp-python..."
+# Create a local venv so we don't pollute the system and can reuse it.
+if [ ! -d "$SERVER_DIR/venv" ]; then
+    echo "[1/3] Creating virtual environment..."
+    python3 -m venv "$SERVER_DIR/venv"
+fi
+source "$SERVER_DIR/venv/bin/activate"
+
+# Install llama-cpp-python if not present (prefer CPU wheel, fallback to source).
+if ! python -c "import llama_cpp" 2>/dev/null; then
+    echo "[2/3] Installing llama-cpp-python..."
+    pip install --upgrade pip
     pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu 2>/dev/null || \
     pip install llama-cpp-python 2>/dev/null || \
     CMAKE_ARGS="-DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python
 fi
 
 # Ensure model directory
-mkdir -p SmithAI-Server/models
+mkdir -p "$SERVER_DIR/models"
 
-# Download SmithGPT 1.0 model
-echo "[2/3] Downloading SmithGPT 1.0 (4GB) — this may take a while..."
-cd SmithAI-Server
-python3 download_model.py \
-  --url "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf" \
-  --name "smithgpt-1.0-4.gguf"
+# Download model (skip if already present for fast re-runs).
+echo "[3/3] Downloading SmithGPT 1.0 (~600MB)..."
+cd "$SERVER_DIR"
+python download_model.py --url "$MODEL_URL" --name "$MODEL_NAME" --skip-existing
 
-# Update config
-echo "[3/3] Updating config.yml..."
-cat > config.yml << 'CONF'
+# Update config to GPT 1.0
+API_KEY=""
+if [ -f "config.yml" ] && python -c "import yaml" 2>/dev/null; then
+    API_KEY="$(python -c "import yaml; print(yaml.safe_load(open('config.yml')).get('security',{}).get('api_key',''))")" || true
+fi
+if [ -z "$API_KEY" ]; then
+    API_KEY="SMA-$(python -c 'import secrets; print(secrets.token_hex(16))')"
+fi
+
+cat > config.yml <<CONF
+# SmithAI-Server configuration — SmithGPT 1.0 (1B / Q4_0 / ~600MB)
+server:
+  host: 0.0.0.0
+  port: 8000
 model:
   context_size: 4096
   max_tokens: 200
   n_threads: 2
-  name: SmithGPT 1.0 4GB
-  path: models/smithgpt-1.0-4.gguf
+  name: SmithGPT 1.0 1B
+  path: models/$MODEL_NAME
 security:
-  api_key: SMA-dQdZM9NrHjSr2KEJc8mOkgY4NOEzVBoS
-server:
-  host: 0.0.0.0
-  port: 8000
+  api_key: $API_KEY
 CONF
 
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
 echo ""
-echo "✅ SmithGPT 1.0 ready!"
-echo "Start the server: cd SmithAI-Server && python3 app.py"
+echo "✅ SmithGPT 1.0 ready in ${ELAPSED}s!"
+echo "Start the server: cd SmithAI-Server && source venv/bin/activate && python app.py"
 echo "Or with Docker: docker-compose up -d"

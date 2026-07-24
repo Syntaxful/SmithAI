@@ -7,8 +7,8 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 - **One official plugin:** `SmithAI`
 - **Built-in brain:** `Smith-Mini 1.0` — works without any external hosting
 - **Optional big brains:**
-  - `SmithGPT 1.0` — 4GB external model
-  - `SmithGPT 2.0` — 7.5GB external model
+  - `SmithGPT 1.0` — ~600MB external model (1B Q4_0)
+  - `SmithGPT 2.0` — ~1.5GB external model (3B Q4_0)
 - **Robot skin** for `Smith_AI`
 - **Chat, memory, tasks, skills, and training**
 - **Specific feedback system** — tell the AI exactly what it did wrong with `/smithai feedback`
@@ -40,8 +40,8 @@ You choose which model to run on your external server. The plugin only connects 
 | Model | Size | Recommended server RAM | How it runs |
 |-------|------|------------------------|-------------|
 | Smith-Mini 1.0 | ~500MB–1.5GB | 2GB+ | Built into the plugin, no external server |
-| SmithGPT 1.0 | 4GB | 8GB+ | External SmithAI-Server |
-| SmithGPT 2.0 | 7.5GB | 12GB+ | External SmithAI-Server |
+| SmithGPT 1.0 | ~600MB | 2GB+ | External SmithAI-Server |
+| SmithGPT 2.0 | ~1.5GB | 4GB+ | External SmithAI-Server |
 
 ## Quick start
 
@@ -60,15 +60,15 @@ Pick the brain size that fits your server:
 | Model | RAM | Setup |
 |-------|-----|-------|
 | **Smith-Mini 1.0** (built-in) | ~500MB | Nothing to do — works out of the box |
-| **SmithGPT 1.0** (4GB) | 8GB+ | `./BuildGPT1.0` then start the server |
-| **SmithGPT 2.0** (7.5GB) | 12GB+ | `./BuildGPT2.0` then start the server |
+| **SmithGPT 1.0** (~600MB) | 2GB+ | `./BuildGPT1.0` then start the server |
+| **SmithGPT 2.0** (~1.5GB) | 4GB+ | `./BuildGPT2.0` then start the server |
 
 ### Switch between models anytime
 
 ```
 ./use-mini.sh       # Built-in (default, no server needed)
-./use-gpt1.0.sh     # Switch to SmithGPT 1.0 (4GB)
-./use-gpt2.0.sh     # Switch to SmithGPT 2.0 (7.5GB)
+./use-gpt1.0.sh     # Switch to SmithGPT 1.0 (~600MB)
+./use-gpt2.0.sh     # Switch to SmithGPT 2.0 (~1.5GB)
 ```
 
 After switching, just restart the server to apply.
@@ -76,7 +76,7 @@ After switching, just restart the server to apply.
 ### Build both models at once
 
 ```
-./BuildBoth.sh      # Downloads both models (~11.5GB total)
+./BuildBoth.sh      # Downloads both models (~2.1GB total)
 ./BuildGPT1.0       # Download + configure SmithGPT 1.0 only
 ./BuildGPT2.0       # Download + configure SmithGPT 2.0 only
 ```

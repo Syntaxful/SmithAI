@@ -1,6 +1,6 @@
 # SmithAI-Server
 
-The official external AI server for the SmithAI Minecraft plugin. It hosts the larger `SmithGPT` models (1.0 / 4GB and 2.0 / 7.5GB) that the plugin can connect to over the network.
+The official external AI server for the SmithAI Minecraft plugin. It hosts the optional `SmithGPT` models (1.0 / ~600MB and 2.0 / ~1.5GB) that the plugin can connect to over the network.
 
 ## Run anywhere
 
@@ -12,10 +12,28 @@ The official external AI server for the SmithAI Minecraft plugin. It hosts the l
 
 ### Linux / macOS
 
+From the repository root:
+
 ```bash
-cd SmithAI-Server
-./start.sh
+./BuildGPT1.0     # fastest: ~600MB, Llama 3.2 1B Instruct Q4_0
+./use-gpt1.0.sh   # start the server
 ```
+
+Or for the larger model:
+
+```bash
+./BuildGPT2.0     # ~1.5GB, Llama 3.2 3B Instruct Q4_0
+./use-gpt2.0.sh   # start the server
+```
+
+To download both and switch later:
+
+```bash
+./BuildBoth.sh
+./use-gpt1.0.sh   # or ./use-gpt2.0.sh
+```
+
+Re-runs are fast: the scripts reuse the virtual environment and skip already-downloaded model files.
 
 ### Windows
 
@@ -24,7 +42,7 @@ cd SmithAI-Server
 start.bat
 ```
 
-The startup scripts create a virtual environment if needed, install dependencies, and start the server. You can also run it manually:
+### Manual run
 
 ```bash
 cd SmithAI-Server
@@ -48,8 +66,8 @@ server:
   port: 8000
 
 model:
-  name: "SmithGPT 1.0 4GB"
-  path: "models/smithgpt-1.0-4.gguf"
+  name: "SmithGPT 1.0 1B"
+  path: "models/smithgpt-1.0-1b.gguf"
   context_size: 4096
   max_tokens: 200
   n_threads: 2
@@ -70,12 +88,12 @@ SmithAI supports three model tiers. The smaller the quantization, the smaller th
 
 | Tier | Recommended size | Quantization | Notes |
 |------|------------------|--------------|-------|
-| Smith-Mini 1.0 | ~300 MB - 1 GB | Q4_0 / Q4_K_M | Runs inside the plugin or on low-end hosts. Rule-based fallback keeps the plugin working without any model. |
-| SmithGPT 1.0 | ~4 GB | Q4_K_M / Q5_K_M | Good for general chat, crafting, building, and combat planning. |
-| SmithGPT 2.0 | ~7.5 GB | Q4_K_M / Q5_K_M | Largest reasoning model for endgame progression, automation, and complex strategy. |
+| Smith-Mini 1.0 | none | — | Runs inside the plugin. Rule-based fallback keeps the plugin working without any model. |
+| SmithGPT 1.0 | ~600MB | Q4_0 | Llama 3.2 1B Instruct. Fast chat, movement, crafting, building, combat. |
+| SmithGPT 2.0 | ~1.5GB | Q4_0 | Llama 3.2 3B Instruct. Better planning, strategy, richer chat. |
 
-- **Q4_0** is the smallest and fastest but can lose nuance in long responses.
-- **Q4_K_M / Q5_K_M** balance quality and size; recommended for most users.
+- **Q4_0** is the smallest and fastest. It is used by the default SmithGPT downloads to keep setup times short.
+- **Q4_K_M / Q5_K_M** balance quality and size; recommended for larger 7B–8B models if you want more quality than speed.
 - **Q8_0** or **FP16** give the highest quality but double or triple the file size and RAM use.
 - Prefer **distilled** models (e.g., Llama-3.1-Instruct, DeepSeek-R1-Distill) when available, because they preserve instruction-following at smaller sizes.
 - If a model is too large for your host, lower the quantization first. If it still does not fit, switch to a smaller tier; the rule-based fallback always remains available.
@@ -84,13 +102,13 @@ You can also use the included helper to download a model from a direct URL or Hu
 
 ```bash
 # Linux / macOS
-./download_model.sh --url <direct-gguf-url> --name smithgpt-1.0-4.gguf
+./download_model.sh --url <direct-gguf-url> --name my-model.gguf
 
 # Windows
-download_model.bat --url <direct-gguf-url> --name smithgpt-1.0-4.gguf
+download_model.bat --url <direct-gguf-url> --name my-model.gguf
 
 # Or use the Python script directly
-python download_model.py --url <direct-gguf-url> --name smithgpt-1.0-4.gguf
+python download_model.py --url <direct-gguf-url> --name my-model.gguf --skip-existing
 ```
 
 For Hugging Face repos, use `--huggingface <repo_id>` and `--file <filename>` instead of `--url`.
