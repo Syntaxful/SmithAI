@@ -18,8 +18,12 @@ public class MemoryManager {
     private final File dataFolder;
 
     public MemoryManager(SmithAIPlugin plugin) {
+        this(plugin, new File(plugin.getDataFolder(), "memory"));
+    }
+
+    public MemoryManager(SmithAIPlugin plugin, File dataFolder) {
         this.plugin = plugin;
-        this.dataFolder = new File(plugin.getDataFolder(), "memory");
+        this.dataFolder = dataFolder;
         if (!this.dataFolder.exists()) {
             this.dataFolder.mkdirs();
         }

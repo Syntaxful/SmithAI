@@ -15,8 +15,12 @@ public class TrainingManager {
     private final Map<String, Integer> feedbackScores = new HashMap<>();
 
     public TrainingManager(SmithAIPlugin plugin) {
+        this(plugin, new File(plugin.getDataFolder(), "training.yml"));
+    }
+
+    public TrainingManager(SmithAIPlugin plugin, File file) {
         this.plugin = plugin;
-        this.file = new File(plugin.getDataFolder(), "training.yml");
+        this.file = file;
         load();
     }
 
