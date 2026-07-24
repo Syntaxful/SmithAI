@@ -128,8 +128,8 @@ public class ExternalAIConnector {
         if (skills != null && !skills.isEmpty()) {
             body.put("skills", new JSONArray(skills));
         }
-        if (conversation != null && conversation.getId() != null) {
-            body.put("conversation_id", conversation.getId());
+        if (conversation != null && player != null) {
+            body.put("conversation_id", player.getUniqueId().toString() + ":smithai");
         }
         JSONObject context = new JSONObject();
         context.put("player", player.getName());

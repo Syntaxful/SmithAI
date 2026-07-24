@@ -58,7 +58,7 @@ with open(CONFIG_PATH, "r") as f:
 
 MODEL_PATH = config.get("model", {}).get("path", "models/smithgpt-1.0-2.2gb.gguf")
 MODEL_NAME = config.get("model", {}).get("name", "SmithGPT 1.0 2.2GB")
-MODEL_TIER = config.get("model", {}).get("tier", _infer_tier(MODEL_NAME) if (lambda: True) else "gpt1")
+MODEL_TIER = config.get("model", {}).get("tier") or "gpt1"  # resolved via _tier() -> _infer_tier() if unclear
 HOST = config.get("server", {}).get("host", "0.0.0.0")
 PORT = int(os.environ.get("PORT", config.get("server", {}).get("port", 8000)))
 CONTEXT_SIZE = config.get("model", {}).get("context_size", 4096)
@@ -618,7 +618,7 @@ def _chat_with_llm(req: ChatRequest) -> ChatResponse:
     action, target, quantity, cleaned = _parse_action(raw)
 
     if req.conversation_id and req.messages:
-        all_msgs = history + [req.messages[-1].dict()]
+        all_msgs = history + [req.messages[-1].model_dump()]
         _touch_cache(req.conversation_id, all_msgs)
 
     return ChatResponse(
@@ -724,7 +724,7 @@ async def list_skills(token: str = Depends(_verify_token)) -> Dict[str, Any]:
 async def chat(req: ChatRequest, token: str = Depends(_verify_token)) -> ChatResponse:
     _check_rate(token)
     if req.messages:
-        _touch_cache(req.conversation_id or "", [m.dict() for m in req.messages])
+        _touch_cache(req.conversation_id or "", [m.model_dump() for m in req.messages])
     if llm is not None:
         try:
             return _chat_with_llm(req)

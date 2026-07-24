@@ -100,7 +100,7 @@ if os.environ.get("SMITHAI_API_TOKEN"):
     cfg.setdefault("security", {})["api_key"] = os.environ["SMITHAI_API_TOKEN"]
 with open(cfg_path, "w") as f:
     yaml.safe_dump(cfg, f, default_flow_style=False)
-print(f"[bootstrap] Wrote {cfg_path} (model={model['name']}, tier=${TIER})")
+print(f"[bootstrap] Wrote {cfg_path} (model={model['name']}, tier={TIER})")
 PY
 
 echo "[bootstrap] Starting SmithAI-Server on port ${PORT:-8000}..."
