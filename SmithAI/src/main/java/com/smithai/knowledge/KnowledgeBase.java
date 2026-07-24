@@ -16,19 +16,21 @@ public class KnowledgeBase {
 
     private final SmithAIPlugin plugin;
     private final List<KnowledgeEntry> entries = new ArrayList<>();
+    private boolean loaded = false;
 
     public KnowledgeBase(SmithAIPlugin plugin) {
         this.plugin = plugin;
-        loadDefaults();
     }
 
-    private void loadDefaults() {
+    private synchronized void ensureLoaded() {
+        if (loaded) return;
         loadResource("knowledge/blocks.json");
         loadResource("knowledge/mobs.json");
         loadResource("knowledge/items.json");
         loadResource("knowledge/recipes.json");
         loadResource("knowledge/strategy.json");
         loadResource("knowledge/biomes.json");
+        loaded = true;
     }
 
     private void loadResource(String path) {
@@ -54,15 +56,12 @@ public class KnowledgeBase {
 
     private List<String> toTags(JSONArray array) {
         List<String> tags = new ArrayList<>();
-        if (array != null) {
-            for (int i = 0; i < array.length(); i++) {
-                tags.add(array.getString(i));
-            }
-        }
+        if (array != null) for (int i = 0; i < array.length(); i++) tags.add(array.getString(i));
         return tags;
     }
 
     public List<String> findRelevant(String query) {
+        ensureLoaded();
         String lower = query.toLowerCase();
         List<String> results = new ArrayList<>();
         for (KnowledgeEntry entry : entries) {
@@ -75,34 +74,23 @@ public class KnowledgeBase {
     }
 
     public int size() {
+        ensureLoaded();
         return entries.size();
     }
 
     public static class KnowledgeEntry {
-        private final String id;
-        private final String category;
-        private final String name;
-        private final String description;
+        private final String id, category, name, description;
         private final List<String> tags;
-
         public KnowledgeEntry(String id, String category, String name, String description, List<String> tags) {
-            this.id = id;
-            this.category = category;
-            this.name = name;
-            this.description = description;
-            this.tags = tags;
+            this.id = id; this.category = category; this.name = name; this.description = description; this.tags = tags;
         }
-
         public boolean matches(String query) {
             if (name.toLowerCase().contains(query)) return true;
             if (description.toLowerCase().contains(query)) return true;
             if (category.toLowerCase().contains(query)) return true;
-            for (String tag : tags) {
-                if (tag.toLowerCase().contains(query)) return true;
-            }
+            for (String tag : tags) if (tag.toLowerCase().contains(query)) return true;
             return false;
         }
-
         public String getId() { return id; }
         public String getCategory() { return category; }
         public String getName() { return name; }

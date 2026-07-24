@@ -27,6 +27,16 @@ When you pick up this project, do **all** of the items below before declaring th
 - [ ] External LLM server is optional. The plugin works with the built-in Smith-Mini 1.0 brain when no API is configured.
 - [ ] Do not require the user to set an API key for basic movement/equipment/chat behavior.
 
+## Startup Speed
+- [ ] The plugin must enable quickly. Do not synchronously generate large YAML files or parse huge JSON during `onEnable`.
+- [ ] Keep heavy initialization (e.g., skill registry generation, knowledge base loading) in-memory or lazy-loaded.
+- [ ] If a custom `skills.yml` exists, loading it must not block the server for seconds.
+
+## Model Files (AI / SmithAI-Server)
+- [ ] Keep model files (GGUF, checkpoints, weights) as small as possible while preserving all model capabilities and features.
+- [ ] Prefer smaller quantization levels or distilled models that still satisfy the feature set.
+- [ ] Document any trade-offs between model size and capability in the SmithAI-Server README.
+
 ## Code Quality
 - [ ] Keep files as small and direct as possible while preserving every feature and keeping the plugin working on 1.12–1.21.x.
 - [ ] Keep Java 8 bytecode and `spigot-api 1.12.2` target so the JAR loads on 1.12 servers.
