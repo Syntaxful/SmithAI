@@ -24,7 +24,8 @@ public class NPCSpawner {
         if (entity != null) {
             entity.setCustomName(name);
             entity.setCustomNameVisible(true);
-            entity.setSilent(true);
+            // Do NOT call setSilent(true) here: PlayerModelHelper already sets silent(false)
+            // so the NPC is audible and visible as required.
             entity.setInvulnerable(true);
             if (entity instanceof Player) equipPlayer((Player) entity);
             return new SmithNPC(UUID.randomUUID(), entity, name);
