@@ -19,6 +19,7 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 - **Docker support** for the Python server
 - **CI workflow** for GitHub Actions
 - **Pre-built JAR** (`SmithAI-2.0.0.jar`) — drop in and play
+- **Real player model** when Citizens2 is installed (falls back to a villager otherwise)
 - **Model scripts** (`./BuildBoth.sh`, `./BuildGPT1.0`, `./BuildGPT2.0`) — one-command model setup
 - **Switch scripts** (`./use-mini.sh`, `./use-gpt1.0.sh`, `./use-gpt2.0.sh`) — toggle between brains
 - **Release packaging** (`package-release.sh`) for distribution
@@ -180,6 +181,7 @@ Output:
 
 - Minecraft server: Spigot, Paper, or compatible (1.12 - 1.21.x)
 - Java 8 or newer
+- **Citizens2** (optional) — needed for the true player-model NPC; download a build matching your server version from https://ci.citizensnpcs.co/job/Citizens2/
 - For SmithGPT: a machine with enough RAM for the chosen model
 
 ## License
