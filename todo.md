@@ -623,7 +623,7 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Combat & PvE
 
-- [ ] 591. add combat_pve fallback behavior
+- [x] 591. Add /smithai attack command to queue fight_hostile_mob skill
 - [ ] 592. add combat_pve validation
 - [ ] 593. add combat_pve serialization
 - [ ] 594. add combat_pve migration path
@@ -822,7 +822,7 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 
 ## Inventory & Items
 
-- [ ] 781. add inventory_items status endpoint
+- [x] 781. Add /smithai drop command to drop items from the NPC inventory
 - [ ] 782. add inventory_items health check
 - [ ] 783. add inventory_items batching
 - [ ] 784. add inventory_items cancellation

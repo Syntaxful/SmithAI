@@ -38,7 +38,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|info|equip|unequip|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|info|equip|unequip|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
             return true;
         }
 
@@ -184,6 +184,48 @@ public class SmithAICommand implements CommandExecutor {
                         plugin.getMemoryManager().getConversation(askNpc.getId()).addMessage("assistant", reply);
                         askNpc.sendMessage(asker, reply);
                     }));
+                return true;
+
+            case "attack":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player attacker = (Player) sender;
+                List<SmithNPC> nearbyAttack = npcManager.getNearbyNPCs(attacker.getLocation(), 16);
+                if (nearbyAttack.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC attackNpc = nearbyAttack.get(0);
+                java.util.Map<String, Object> attackParams = new java.util.HashMap<>();
+                if (args.length >= 2) {
+                    attackParams.put("target", args[1].toLowerCase());
+                }
+                plugin.getSkillExecutor().queue(attackNpc, "fight_hostile_mob", attackParams, attacker);
+                attackNpc.sendMessage(attacker, "I'll attack the nearest hostile mob.");
+                return true;
+
+            case "drop":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 2) {
+                    sender.sendMessage("§eUsage: §f/smithai drop <item> §7or §f/smithai drop held");
+                    return true;
+                }
+                Player dropper = (Player) sender;
+                List<SmithNPC> nearbyDrop = npcManager.getNearbyNPCs(dropper.getLocation(), 16);
+                if (nearbyDrop.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC dropNpc = nearbyDrop.get(0);
+                java.util.Map<String, Object> dropParams = new java.util.HashMap<>();
+                dropParams.put("material", args[1].toUpperCase());
+                plugin.getSkillExecutor().queue(dropNpc, "drop_item", dropParams, dropper);
+                dropNpc.sendMessage(dropper, "Dropping item if I have it.");
                 return true;
 
             case "debug":
