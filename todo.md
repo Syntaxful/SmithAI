@@ -379,11 +379,11 @@ Each skill needs:
 - [x] `/SmithAPI status`
 - [x] Tab completers for `/smithai` and `/smithapi`
 - [x] Permissions: `smithai.admin`, `smithai.use`, `smithai.spawn`, `smithai.api`
-- [ ] `/smithai inventory` — view/inspect NPC inventory
-- [ ] `/smithai give <item>` — give item to NPC
-- [ ] `/smithai teleport` — teleport NPC to player
-- [ ] `/smithai skin <url>` — change NPC skin
-- [ ] `/smithai list` — list all active NPCs
+- [x] `/smithai inventory` — view/inspect NPC inventory
+- [x] `/smithai give <item>` — give item to NPC
+- [x] `/smithai teleport` — teleport NPC to player
+- [x] `/smithai skin <url>` — change NPC skin (placeholder; requires player-model renderer)
+- [x] `/smithai list` — list all active NPCs
 - [ ] `/smithai config` — in-game config viewer/editor
 - [ ] `/smithai export` — export memory/training data
 
