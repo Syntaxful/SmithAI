@@ -3,6 +3,7 @@ package com.smithai.skills;
 import com.smithai.SmithAIPlugin;
 import com.smithai.npc.SmithNPC;
 import com.smithai.util.BlockCompat;
+import com.smithai.util.CraftingHelper;
 import com.smithai.util.LivingEntityCompat;
 import com.smithai.util.MaterialCompat;
 import org.bukkit.Location;
@@ -487,11 +488,26 @@ public class SkillDispatcher {
             breakBlock(npc, skill, params);
             return;
         }
-        if (skill.contains("place_") || skill.contains("build_") || skill.contains("expand_") || skill.contains("make_") || skill.contains("wall")) {
+        if (skill.contains("craft_") || skill.contains("make_") || skill.contains("forge_") || skill.contains("assemble_") ||
+            skill.contains("repair_") || skill.contains("cook_") || skill.contains("bake_") || skill.contains("brew_") ||
+            skill.contains("smelt_")) {
+            if (craftItem(npc, skill)) return;
+        }
+        if (skill.contains("place_") || skill.contains("build_") || skill.contains("expand_") || skill.contains("wall")) {
             placeBlock(npc, params);
             return;
         }
         executeComposite(npc, skill, player, "I'll work on that task: " + humanize(skill));
+    }
+
+    private boolean craftItem(SmithNPC npc, String skill) {
+        if (!(npc.getEntity() instanceof Player)) return false;
+        Player fake = (Player) npc.getEntity();
+        if (CraftingHelper.craft(fake, skill)) {
+            npc.setTaskLookTarget(fake.getLocation().add(0, -1, 0), 1000);
+            return true;
+        }
+        return false;
     }
 
     private void executeComposite(SmithNPC npc, String skill, Player player, String defaultMessage) {
