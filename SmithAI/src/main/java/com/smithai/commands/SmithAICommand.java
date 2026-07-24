@@ -38,7 +38,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|info|equip|unequip|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|info|equip|unequip|distance|come|teleport|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|skin|config|export>");
             return true;
         }
 
@@ -656,6 +656,7 @@ public class SmithAICommand implements CommandExecutor {
                 return true;
 
             case "teleport":
+            case "come":
                 if (!(sender instanceof Player)) {
                     sender.sendMessage("§cOnly players can use this.");
                     return true;
@@ -668,6 +669,29 @@ public class SmithAICommand implements CommandExecutor {
                 }
                 tpNpc.teleport(tpPlayer.getLocation());
                 tpNpc.sendMessage(tpPlayer, "I'm here now.");
+                return true;
+
+            case "distance":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                if (args.length < 2) {
+                    sender.sendMessage("§eUsage: §f/smithai distance <blocks>");
+                    sender.sendMessage("§7Current follow distance: §f" + plugin.getPluginConfig().getFollowDistance());
+                    return true;
+                }
+                try {
+                    double newDistance = Double.parseDouble(args[1]);
+                    if (newDistance < 1.0 || newDistance > 32.0) {
+                        sender.sendMessage("§cDistance must be between 1.0 and 32.0.");
+                        return true;
+                    }
+                    plugin.getPluginConfig().setFollowDistance(newDistance);
+                    sender.sendMessage("§aFollow distance set to §f" + newDistance + " §ablocks.");
+                } catch (NumberFormatException e) {
+                    sender.sendMessage("§cDistance must be a number.");
+                }
                 return true;
 
             case "skin":

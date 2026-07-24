@@ -115,6 +115,10 @@ public class Config {
     public boolean isChatFeedback() { return chatFeedback; }
     public boolean isPersistTraining() { return persistTraining; }
     public double getFollowDistance() { return followDistance; }
+    public void setFollowDistance(double followDistance) {
+        this.followDistance = followDistance;
+        config.set("npc.followDistance", followDistance);
+    }
     public int getPathfinderTimeout() { return pathfinderTimeout; }
     public boolean isDebugEnabled() { return debugEnabled; }
     public boolean isBstatsEnabled() { return bstatsEnabled; }

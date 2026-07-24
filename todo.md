@@ -219,8 +219,8 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 ## Movement & Navigation
 
 - [x] 201. Support look_at skill parameters with x/y/z coordinates
-- [ ] 202. add movement_navigation history tracking
-- [ ] 203. add movement_navigation rollback support
+- [x] 202. Add /smithai come command as a friendly teleport shortcut
+- [x] 203. Add /smithai distance command to adjust follow distance at runtime
 - [ ] 204. implement movement_navigation feature #4
 - [ ] 205. add movement_navigation configuration option
 - [ ] 206. optimize movement_navigation performance
