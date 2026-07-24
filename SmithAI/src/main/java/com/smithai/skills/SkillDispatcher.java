@@ -194,11 +194,10 @@ public class SkillDispatcher {
         }
         if (target != null) {
             npc.setMoveTarget(target);
+            npc.setTaskLookTarget(target.clone().add(0, 1, 0), 1000);
             return;
         }
-        if (player != null) {
-            npc.lookAt(player.getLocation());
-        }
+        if (player != null) npc.lookAt(player.getLocation());
     }
 
     private void executeInteraction(SmithNPC npc, String skill, Player player, Map<String, Object> params) {
@@ -230,7 +229,7 @@ public class SkillDispatcher {
             breakBlock(npc, skill, params);
             return;
         }
-        npc.sendMessage(player, "Working on: " + humanize(skill));
+        // No chat spam; action bar shows the current skill.
     }
 
     private void selectBestTool(SmithNPC npc, String skill) {
@@ -278,6 +277,7 @@ public class SkillDispatcher {
         if (MaterialCompat.isSolid(placeOn.getType()) && BlockCompat.isAir(target)) {
             target.setType(torch);
             removeOne(fake, torch);
+            npc.setTaskLookTarget(target.getLocation().add(0.5, 0.5, 0.5), 1500);
         }
     }
 
@@ -296,6 +296,7 @@ public class SkillDispatcher {
         if (BlockCompat.isAir(target)) {
             target.setType(mat);
             removeOne(fake, mat);
+            npc.setTaskLookTarget(target.getLocation().add(0.5, 0.5, 0.5), 1500);
         }
     }
 
@@ -317,6 +318,7 @@ public class SkillDispatcher {
         }
         selectBestTool(npc, skill);
         target.breakNaturally();
+        npc.setTaskLookTarget(target.getLocation().add(0.5, 0.5, 0.5), 1500);
     }
 
     private void removeOne(Player player, Material mat) {
@@ -451,15 +453,11 @@ public class SkillDispatcher {
                 }
             }
         }
-        if (target == null) {
-            target = findNearestHostile(self, 8);
-        }
+        if (target == null) target = findNearestHostile(self, 8);
         if (target != null) {
             selectBestTool(npc, "sword");
             LivingEntityCompat.attack(self, target);
-            npc.sendMessage(player, "Attacking " + humanize(target.getType().name().toLowerCase()) + ".");
-        } else {
-            npc.sendMessage(player, "No hostile target found.");
+            npc.setTaskLookTarget(target.getLocation().add(0, 1, 0), 1500);
         }
     }
 
@@ -497,7 +495,7 @@ public class SkillDispatcher {
     }
 
     private void executeComposite(SmithNPC npc, String skill, Player player, String defaultMessage) {
-        npc.sendMessage(player, defaultMessage);
+        // No chat spam; action bar already shows the current skill.
     }
 
     private String humanize(String id) {

@@ -9,21 +9,26 @@ import java.util.logging.Level;
 
 /**
  * Optional Citizens support that lets Smith_AI spawn as a real player-model NPC.
- * This is entirely reflection-based so the plugin remains optional: if Citizens
- * is not installed, Smith_AI falls back to a villager with a custom name.
+ * Entirely reflection-based so Citizens remains optional: if not installed,
+ * Smith_AI falls back to a villager with a custom name.
  */
 public class PlayerModelHelper {
 
     private static final boolean CITIZENS_AVAILABLE;
     private static Object registry;
     private static Method createNPCMethod;
-    private static Method npcSpawnMethod;
-    private static Method npcGetEntityMethod;
     private static Method npcDestroyMethod;
+    private static Method npcGetEntityMethod;
+    private static Method npcSpawnMethod;
     private static Method npcSetProtectedMethod;
     private static Method npcSetUseMinecraftAIMethod;
-    private static Method npcDataSetterMethod;
-    private static Method npcDataSetterValueMethod;
+    private static Method npcFaceLocationMethod;
+    private static Method npcGetNavigatorMethod;
+    private static Method navigatorSetTargetLocMethod;
+    private static Method navigatorSetTargetEntityMethod;
+    private static Method navigatorCancelMethod;
+    private static Method navigatorDefaultParamsMethod;
+    private static Method paramsSpeedMethod;
 
     static {
         boolean available = false;
@@ -36,60 +41,36 @@ public class PlayerModelHelper {
             npcSpawnMethod = npcClass.getMethod("spawn", Location.class);
             npcGetEntityMethod = npcClass.getMethod("getEntity");
             npcDestroyMethod = npcClass.getMethod("destroy");
+            npcGetNavigatorMethod = npcClass.getMethod("getNavigator");
+            npcFaceLocationMethod = npcClass.getMethod("faceLocation", Location.class);
 
-            // Optional: protected + use Minecraft AI. Older Citizens builds (e.g., 2.0.22) do not have setUseMinecraftAI.
             try { npcSetProtectedMethod = npcClass.getMethod("setProtected", boolean.class); } catch (Exception ignored) {}
             try { npcSetUseMinecraftAIMethod = npcClass.getMethod("setUseMinecraftAI", boolean.class); } catch (Exception ignored) {}
 
-            // Optional: metadata helpers. Class is MetadataStore in older builds, NPC.Data in newer ones.
-            try {
-                Class<?> dataClass = Class.forName("net.citizensnpcs.api.npc.NPC$Data");
-                npcDataSetterMethod = npcClass.getMethod("data");
-                npcDataSetterValueMethod = dataClass.getMethod("set", String.class, Object.class);
-            } catch (Exception ignored) {
-                try {
-                    Class<?> dataClass = Class.forName("net.citizensnpcs.api.npc.MetadataStore");
-                    npcDataSetterMethod = npcClass.getMethod("data");
-                    npcDataSetterValueMethod = dataClass.getMethod("set", String.class, Object.class);
-                } catch (Exception ignored2) {}
-            }
+            Class<?> navigatorClass = Class.forName("net.citizensnpcs.api.ai.Navigator");
+            Class<?> paramsClass = Class.forName("net.citizensnpcs.api.ai.NavigatorParameters");
+            navigatorSetTargetLocMethod = navigatorClass.getMethod("setTarget", Location.class);
+            navigatorSetTargetEntityMethod = navigatorClass.getMethod("setTarget", Entity.class, boolean.class);
+            navigatorCancelMethod = navigatorClass.getMethod("cancelNavigation");
+            navigatorDefaultParamsMethod = navigatorClass.getMethod("getDefaultParameters");
+            paramsSpeedMethod = paramsClass.getMethod("speed", float.class);
 
             available = true;
         } catch (Exception e) {
-            // Citizens is not present or an incompatible version. Fall back to villager.
+            // Citizens is not present or incompatible. Fall back to villager.
         }
         CITIZENS_AVAILABLE = available;
     }
 
-    public static boolean isAvailable() {
-        return CITIZENS_AVAILABLE;
-    }
+    public static boolean isAvailable() { return CITIZENS_AVAILABLE; }
 
-    /**
-     * Spawn a player-model NPC at the given location.
-     * Returns the Bukkit entity, or null if Citizens is unavailable or spawn fails.
-     * The returned NPC handle is stored as a tag on the entity so SmithNPC can destroy it later.
-     */
     public static Entity spawnPlayer(Location location, String name) {
         if (!CITIZENS_AVAILABLE) return null;
         try {
             Object npc = createNPCMethod.invoke(registry, EntityType.PLAYER, name);
-            if (npcSetProtectedMethod != null) {
-                npcSetProtectedMethod.invoke(npc, true);
-            }
-            if (npcSetUseMinecraftAIMethod != null) {
-                npcSetUseMinecraftAIMethod.invoke(npc, false);
-            }
-            if (npcDataSetterMethod != null && npcDataSetterValueMethod != null) {
-                try {
-                    Object data = npcDataSetterMethod.invoke(npc);
-                    npcDataSetterValueMethod.invoke(data, "nameplate", true);
-                    npcDataSetterValueMethod.invoke(data, "persist", false);
-                } catch (Exception ignored) {
-                }
-            }
-            boolean spawned = (Boolean) npcSpawnMethod.invoke(npc, location);
-            if (spawned) {
+            if (npcSetProtectedMethod != null) npcSetProtectedMethod.invoke(npc, true);
+            if (npcSetUseMinecraftAIMethod != null) npcSetUseMinecraftAIMethod.invoke(npc, false);
+            if ((Boolean) npcSpawnMethod.invoke(npc, location)) {
                 Entity entity = (Entity) npcGetEntityMethod.invoke(npc);
                 if (entity != null) {
                     entity.setSilent(true);
@@ -100,19 +81,62 @@ public class PlayerModelHelper {
                 return entity;
             }
         } catch (Exception e) {
-            if (com.smithai.SmithAIPlugin.getInstance() != null) {
-                com.smithai.SmithAIPlugin.getInstance().getLogger().log(Level.WARNING,
-                        "Failed to spawn Citizens player-model NPC, falling back to villager", e);
-            }
+            log(Level.WARNING, "Failed to spawn Citizens player-model NPC", e);
         }
         return null;
     }
 
-    /**
-     * Retrieve the Citizens NPC handle stored on an entity (if any).
-     */
     public static Object getCitizensHandle(Entity entity) {
         if (entity == null || !entity.hasMetadata("smithai_citizens_npc")) return null;
         return entity.getMetadata("smithai_citizens_npc").get(0).value();
+    }
+
+    public static void destroyCitizensNpc(Entity entity) {
+        Object handle = getCitizensHandle(entity);
+        if (handle != null) {
+            try { npcDestroyMethod.invoke(handle); } catch (Exception e) { entity.remove(); }
+        } else {
+            entity.remove();
+        }
+    }
+
+    public static void setNavigatorSpeed(Object handle, float speed) {
+        if (handle == null || !CITIZENS_AVAILABLE) return;
+        try {
+            Object navigator = npcGetNavigatorMethod.invoke(handle);
+            Object params = navigatorDefaultParamsMethod.invoke(navigator);
+            paramsSpeedMethod.invoke(params, speed);
+        } catch (Exception ignored) {}
+    }
+
+    public static void navigateTo(Object handle, Location target) {
+        if (handle == null || !CITIZENS_AVAILABLE) return;
+        try {
+            Object navigator = npcGetNavigatorMethod.invoke(handle);
+            navigatorSetTargetLocMethod.invoke(navigator, target);
+        } catch (Exception ignored) {}
+    }
+
+    public static void followEntity(Object handle, Entity target) {
+        if (handle == null || !CITIZENS_AVAILABLE) return;
+        try {
+            Object navigator = npcGetNavigatorMethod.invoke(handle);
+            navigatorSetTargetEntityMethod.invoke(navigator, target, false);
+        } catch (Exception ignored) {}
+    }
+
+    public static void cancelNavigation(Object handle) {
+        if (handle == null || !CITIZENS_AVAILABLE) return;
+        try { navigatorCancelMethod.invoke(npcGetNavigatorMethod.invoke(handle)); } catch (Exception ignored) {}
+    }
+
+    public static void faceLocation(Object handle, Location target) {
+        if (handle == null || !CITIZENS_AVAILABLE) return;
+        try { npcFaceLocationMethod.invoke(handle, target); } catch (Exception ignored) {}
+    }
+
+    private static void log(Level level, String msg, Throwable t) {
+        com.smithai.SmithAIPlugin inst = com.smithai.SmithAIPlugin.getInstance();
+        if (inst != null) inst.getLogger().log(level, msg, t); else t.printStackTrace();
     }
 }

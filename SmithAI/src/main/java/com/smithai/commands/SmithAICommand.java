@@ -146,10 +146,11 @@ public class SmithAICommand implements CommandExecutor {
                 SmithNPC dnpc = nearbyDo.get(0);
                 String task = String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length));
                 List<String> plan = TaskPlanner.plan(task);
-                dnpc.sendMessage(doer, TaskPlanner.describePlan(task, plan));
                 if (!plan.isEmpty()) {
                     plugin.getSkillExecutor().queuePlan(dnpc, plan, doer);
                     plugin.getTrainingManager().recordGood("task:" + task);
+                } else {
+                    dnpc.sendMessage(doer, "I don't know how to do that yet.");
                 }
                 return true;
 

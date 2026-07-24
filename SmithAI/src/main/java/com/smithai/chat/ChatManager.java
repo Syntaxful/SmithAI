@@ -63,9 +63,6 @@ public class ChatManager implements Listener {
         }
 
         String task = detectTask(cleanedMessage);
-        if (task != null) {
-            npc.sendMessage(player, "Task understood: " + task + ". I'll use my " + aiManager.getActiveSkillTier() + " skill set (" + aiManager.getAvailableSkills().size() + " skills).");
-        }
 
         aiManager.getResponse(player, cleanedMessage, conversation, task)
             .thenAccept(reply -> {
