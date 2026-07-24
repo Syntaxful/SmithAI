@@ -624,8 +624,8 @@ This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. F
 ## Combat & PvE
 
 - [x] 591. Add /smithai attack command to queue fight_hostile_mob skill
-- [ ] 592. add combat_pve validation
-- [ ] 593. add combat_pve serialization
+- [x] 592. Add /smithai patrol command to queue area patrol behavior
+- [x] 593. Add /smithai guard command to queue area defense behavior
 - [ ] 594. add combat_pve migration path
 - [ ] 595. add combat_pve CLI flag
 - [ ] 596. add combat_pve status endpoint

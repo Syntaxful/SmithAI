@@ -38,7 +38,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|info|equip|unequip|distance|come|teleport|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|skin|config|export>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|ask|tasks|clear|attack|drop|patrol|guard|info|equip|unequip|distance|come|teleport|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|skin|config|export>");
             return true;
         }
 
@@ -226,6 +226,38 @@ public class SmithAICommand implements CommandExecutor {
                 dropParams.put("material", args[1].toUpperCase());
                 plugin.getSkillExecutor().queue(dropNpc, "drop_item", dropParams, dropper);
                 dropNpc.sendMessage(dropper, "Dropping item if I have it.");
+                return true;
+
+            case "patrol":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player patroller = (Player) sender;
+                List<SmithNPC> nearbyPatrol = npcManager.getNearbyNPCs(patroller.getLocation(), 16);
+                if (nearbyPatrol.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC patrolNpc = nearbyPatrol.get(0);
+                plugin.getSkillExecutor().queue(patrolNpc, "patrol_area", java.util.Collections.emptyMap(), patroller);
+                patrolNpc.sendMessage(patroller, "I'll patrol this area.");
+                return true;
+
+            case "guard":
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
+                Player guarder = (Player) sender;
+                List<SmithNPC> nearbyGuard = npcManager.getNearbyNPCs(guarder.getLocation(), 16);
+                if (nearbyGuard.isEmpty()) {
+                    sender.sendMessage("§cNo Smith_AI nearby.");
+                    return true;
+                }
+                SmithNPC guardNpc = nearbyGuard.get(0);
+                plugin.getSkillExecutor().queue(guardNpc, "defend_area", java.util.Collections.emptyMap(), guarder);
+                guardNpc.sendMessage(guarder, "I'll guard this area.");
                 return true;
 
             case "debug":
