@@ -293,8 +293,8 @@ Each skill needs:
 - [ ] Smelting, fueling, and result collection
 - [ ] Chest storage and retrieval
 - [ ] Item pickup and drop
-- [ ] Tool/food/weapon/armor selection by task (partial — tools done)
-- [ ] Durability-aware tool switching
+- [x] Tool/food/weapon/armor selection by task (partial — tools done)
+- [x] Durability-aware tool switching
 - [ ] Resource stockpiling and restocking
 
 ### 13. Combat & Survival

@@ -260,9 +260,25 @@ public class SkillDispatcher {
     private Material firstAvailable(PlayerInventory inv, String... names) {
         for (String name : names) {
             Material mat = MaterialCompat.get(name);
-            if (mat != null && inv.contains(mat)) return mat;
+            if (mat == null) continue;
+            for (int slot = 0; slot < inv.getSize(); slot++) {
+                ItemStack stack = inv.getItem(slot);
+                if (stack != null && stack.getType() == mat && isToolUsable(stack)) return mat;
+            }
         }
         return null;
+    }
+
+    /**
+     * Returns true if a tool still has usable durability. Non-damageable items are always usable.
+     * Items with fewer than 10 remaining durability are skipped to avoid breaking mid-task.
+     */
+    private boolean isToolUsable(ItemStack stack) {
+        if (stack == null || stack.getType() == Material.AIR) return false;
+        short max = stack.getType().getMaxDurability();
+        if (max <= 0) return true; // not a damageable tool
+        short remaining = (short) (max - stack.getDurability());
+        return remaining >= 10;
     }
 
     private void placeTorch(SmithNPC npc) {
