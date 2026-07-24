@@ -1,6 +1,7 @@
 package com.smithai.commands;
 
 import com.smithai.SmithAIPlugin;
+import com.smithai.config.Config;
 import com.smithai.health.SubsystemHealth;
 import com.smithai.npc.NPCManager;
 import com.smithai.npc.SmithNPC;
@@ -13,6 +14,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -30,7 +37,7 @@ public class SmithAICommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin>");
+            sender.sendMessage("§eSmithAI §7v2.0.0 §e- Usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>");
             return true;
         }
 
@@ -486,6 +493,55 @@ public class SmithAICommand implements CommandExecutor {
                 skinNpc.sendMessage(skinPlayer, "Skin change to " + args[1] + " is not yet implemented (requires player model).");
                 return true;
 
+            case "config":
+                if (!sender.hasPermission("smithai.admin")) {
+                    sender.sendMessage("§cYou need §fsmithai.admin§c to view config.");
+                    return true;
+                }
+                Config cfg = plugin.getPluginConfig();
+                sender.sendMessage("§eSmithAI configuration:");
+                sender.sendMessage("§7AI name: §f" + cfg.getAiName());
+                sender.sendMessage("§7External brain: §f" + (cfg.isExternalEnabled() ? "enabled" : "disabled") + " @ " + cfg.getExternalUrl());
+                sender.sendMessage("§7External model: §f" + cfg.getExternalModel());
+                sender.sendMessage("§7Local brain: §f" + (cfg.isLocalEnabled() ? "enabled" : "disabled") + " @ " + cfg.getLocalModelPath());
+                sender.sendMessage("§7Local fallback: §f" + cfg.isLocalFallbackToRules());
+                sender.sendMessage("§7Skill tiers: §fmini=" + cfg.getMiniSkillTier() + " gpt1=" + cfg.getGpt1SkillTier() + " gpt2=" + cfg.getGpt2SkillTier());
+                sender.sendMessage("§7Follow distance: §f" + cfg.getFollowDistance() + " §7pathfinder timeout: §f" + cfg.getPathfinderTimeout());
+                sender.sendMessage("§7Pathfinding: §fmaxDistance=" + cfg.getPathfindingMaxDistance() + " maxNodes=" + cfg.getPathfindingMaxNodes() + " tickRate=" + cfg.getPathfindingTickRate());
+                sender.sendMessage("§7Combat: §fretreatHealth=" + cfg.getCombatRetreatHealth() + " minFood=" + cfg.getCombatMinFood());
+                sender.sendMessage("§7Debug: §f" + cfg.isDebugEnabled() + " §7bStats: §f" + cfg.isBstatsEnabled());
+                return true;
+
+            case "export":
+                if (!sender.hasPermission("smithai.admin")) {
+                    sender.sendMessage("§cYou need §fsmithai.admin§c to export data.");
+                    return true;
+                }
+                String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+                File exportDir = new File(plugin.getDataFolder(), "exports/export-" + timestamp);
+                if (!exportDir.exists() && !exportDir.mkdirs()) {
+                    sender.sendMessage("§cFailed to create export directory.");
+                    return true;
+                }
+                plugin.getMemoryManager().saveAll();
+                plugin.getTrainingManager().save();
+                try {
+                    File trainingFile = new File(plugin.getDataFolder(), "training.yml");
+                    if (trainingFile.exists()) Files.copy(trainingFile.toPath(), new File(exportDir, "training.yml").toPath());
+                    File memoryDir = new File(plugin.getDataFolder(), "memory");
+                    if (memoryDir.exists()) {
+                        File destMemoryDir = new File(exportDir, "memory");
+                        destMemoryDir.mkdirs();
+                        for (File f : memoryDir.listFiles()) {
+                            if (f.isFile()) Files.copy(f.toPath(), new File(destMemoryDir, f.getName()).toPath());
+                        }
+                    }
+                    sender.sendMessage("§eExported memory and training data to: §f" + exportDir.getPath());
+                } catch (IOException e) {
+                    sender.sendMessage("§cExport failed: §f" + e.getMessage());
+                }
+                return true;
+
             case "help":
                 sender.sendMessage("§eSmithAI commands:");
                 sender.sendMessage("§7/smithai spawn §f- spawn Smith_AI");
@@ -499,6 +555,8 @@ public class SmithAICommand implements CommandExecutor {
                 sender.sendMessage("§7/smithai give <item> [amount] §f- give an item to Smith_AI");
                 sender.sendMessage("§7/smithai list §f- list all active Smith_AI NPCs");
                 sender.sendMessage("§7/smithai teleport §f- teleport nearby Smith_AI to you");
+                sender.sendMessage("§7/smithai config §f- show current configuration (admin)");
+                sender.sendMessage("§7/smithai export §f- export memory and training data (admin)");
                 sender.sendMessage("§7/smithai train good|bad §f- reward or punish the AI");
                 sender.sendMessage("§7/smithai feedback <message> §f- report a specific mistake");
                 sender.sendMessage("§7/smithai report <description> §f- open a prefilled GitHub issue");

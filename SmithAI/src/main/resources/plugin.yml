@@ -9,7 +9,7 @@ softdepend: [Citizens]
 commands:
   smithai:
     description: Main SmithAI command.
-    usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin>
+    usage: /smithai <spawn|despawn|follow|stay|goto|do|debug|health|status|model|version|reload|train|feedback|report|reports|memory|inventory|give|list|help|teleport|skin|config|export>
     aliases: [sai]
   smithapi:
     description: Set the API key for the external SmithGPT server.

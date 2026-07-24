@@ -384,8 +384,8 @@ Each skill needs:
 - [x] `/smithai teleport` — teleport NPC to player
 - [x] `/smithai skin <url>` — change NPC skin (placeholder; requires player-model renderer)
 - [x] `/smithai list` — list all active NPCs
-- [ ] `/smithai config` — in-game config viewer/editor
-- [ ] `/smithai export` — export memory/training data
+- [x] `/smithai config` — in-game config viewer (admin-only summary)
+- [x] `/smithai export` — export memory/training data
 
 ### 18. In-Game Status & Notifications
 - [x] Chat message when switching models
