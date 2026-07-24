@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
-# ==============================================================
-# SmithAI — Switch to Smith-Mini 1.0 (built-in, no server needed)
-# Stops any running SmithAI-Server — Mini runs inside the plugin.
-# Usage: ./use-mini.sh
-# ==============================================================
+# Switch SmithAI-Server to the built-in Smith-Mini 1.0 brain (~700MB parameters/skill data).
+# No external model download is required for Smith-Mini; the plugin runs it locally.
+
 set -euo pipefail
-PID_FILE="/tmp/smithai-server.pid"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-# --- Stop any running external server ---
-if [ -f "$PID_FILE" ]; then
-    OLD_PID="$(cat "$PID_FILE")"
-    if kill -0 "$OLD_PID" 2>/dev/null; then
-        echo "Stopping SmithAI-Server (PID $OLD_PID)..."
-        kill "$OLD_PID" && sleep 1
-        echo "Stopped."
-    fi
-    rm -f "$PID_FILE"
+SERVER_DIR="SmithAI-Server"
+
+API_KEY=""
+if [ -f "$SERVER_DIR/config.yml" ] && python -c "import yaml" 2>/dev/null; then
+    API_KEY="$(python -c "import yaml; print(yaml.safe_load(open('$SERVER_DIR/config.yml')).get('security',{}).get('api_key',''))")" || true
 fi
-pkill -f "python.*app\.py" 2>/dev/null || true
+if [ -z "$API_KEY" ]; then
+    API_KEY="SMA-$(python -c 'import secrets; print(secrets.token_hex(16))')"
+fi
 
-echo ""
-echo "✅ Switched to Smith-Mini 1.0 (built-in — no external server needed)."
-echo ""
-echo "   Drop SmithAI-2.0.0.jar in your server's plugins/ folder and start."
-echo "   Smith_AI will use Smith-Mini 1.0 automatically."
-echo ""
-echo "   To switch to an external model later:"
-echo "     ./use-gpt1.0.sh   (SmithGPT 1.0 — 4GB)"
-echo "     ./use-gpt2.0.sh   (SmithGPT 2.0 — 7.5GB)"
+cat > "$SERVER_DIR/config.yml" <<CONF
+# SmithAI-Server configuration — Smith-Mini 1.0 (built-in, ~700MB)
+server:
+  host: 0.0.0.0
+  port: 8000
+model:
+  context_size: 2048
+  max_tokens: 150
+  n_threads: 2
+  name: Smith-Mini 1.0 700MB
+  path: models/smith-mini-1.0.gguf
+security:
+  api_key: $API_KEY
+CONF
+
+echo "✅ Switched to Smith-Mini 1.0 (~700MB). No external model needed."
+echo "Start the server if you want an external endpoint: cd $SERVER_DIR && source venv/bin/activate && python app.py"

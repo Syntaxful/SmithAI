@@ -5,10 +5,10 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 ## What is included
 
 - **One official plugin:** `SmithAI`
-- **Built-in brain:** `Smith-Mini 1.0` — works without any external hosting
+- **Built-in brain:** `Smith-Mini 1.0` — works without any external hosting (~700MB parameter/skill footprint)
 - **Optional big brains:**
-  - `SmithGPT 1.0` — ~600MB external model (1B Q4_0)
-  - `SmithGPT 2.0` — ~1.5GB external model (3B Q4_0)
+  - `SmithGPT 1.0` — ~2.2GB external model (3B Q4_0)
+  - `SmithGPT 2.0` — ~4.4GB external model (8B Q4_K_M)
 - **Robot skin** for `Smith_AI`
 - **Chat, memory, tasks, skills, and training**
 - **Specific feedback system** — tell the AI exactly what it did wrong with `/smithai feedback`
@@ -23,6 +23,7 @@ The official `SmithAI` Minecraft/Eaglercraft plugin adds a trainable AI companio
 - **Model scripts** (`./BuildBoth.sh`, `./BuildGPT1.0`, `./BuildGPT2.0`) — one-command model setup
 - **Switch scripts** (`./use-mini.sh`, `./use-gpt1.0.sh`, `./use-gpt2.0.sh`) — toggle between brains
 - **Release packaging** (`package-release.sh`) for distribution
+- **Fast parallel model downloads** — downloads use multi-threaded HTTP ranges so large models finish quickly on fast connections
 
 ## How the brains work
 
@@ -39,9 +40,9 @@ You choose which model to run on your external server. The plugin only connects 
 
 | Model | Size | Recommended server RAM | How it runs |
 |-------|------|------------------------|-------------|
-| Smith-Mini 1.0 | ~500MB–1.5GB | 2GB+ | Built into the plugin, no external server |
-| SmithGPT 1.0 | ~600MB | 2GB+ | External SmithAI-Server |
-| SmithGPT 2.0 | ~1.5GB | 4GB+ | External SmithAI-Server |
+| Smith-Mini 1.0 | ~700MB | 2GB+ | Built into the plugin, no external server |
+| SmithGPT 1.0 | ~2.2GB | 4GB+ | External SmithAI-Server |
+| SmithGPT 2.0 | ~4.4GB | 8GB+ | External SmithAI-Server |
 
 ## Quick start
 
@@ -59,16 +60,16 @@ Pick the brain size that fits your server:
 
 | Model | RAM | Setup |
 |-------|-----|-------|
-| **Smith-Mini 1.0** (built-in) | ~500MB | Nothing to do — works out of the box |
-| **SmithGPT 1.0** (~600MB) | 2GB+ | `./BuildGPT1.0` then start the server |
-| **SmithGPT 2.0** (~1.5GB) | 4GB+ | `./BuildGPT2.0` then start the server |
+| **Smith-Mini 1.0** (built-in) | ~700MB | Nothing to do — works out of the box |
+| **SmithGPT 1.0** (~2.2GB) | 4GB+ | `./BuildGPT1.0` then start the server |
+| **SmithGPT 2.0** (~4.4GB) | 8GB+ | `./BuildGPT2.0` then start the server |
 
 ### Switch between models anytime
 
 ```
 ./use-mini.sh       # Built-in (default, no server needed)
-./use-gpt1.0.sh     # Switch to SmithGPT 1.0 (~600MB)
-./use-gpt2.0.sh     # Switch to SmithGPT 2.0 (~1.5GB)
+./use-gpt1.0.sh     # Switch to SmithGPT 1.0 (~2.2GB)
+./use-gpt2.0.sh     # Switch to SmithGPT 2.0 (~4.4GB)
 ```
 
 After switching, just restart the server to apply.
@@ -76,7 +77,7 @@ After switching, just restart the server to apply.
 ### Build both models at once
 
 ```
-./BuildBoth.sh      # Downloads both models (~2.1GB total)
+./BuildBoth.sh      # Downloads both models (~6.6GB total)
 ./BuildGPT1.0       # Download + configure SmithGPT 1.0 only
 ./BuildGPT2.0       # Download + configure SmithGPT 2.0 only
 ```
@@ -112,6 +113,9 @@ For SmithGPT 1.0 or 2.0, see:
 - `/smithai debug` — toggle debug messages for you (admin only)
 - `/smithai debug global` — toggle debug messages for all online players (admin only)
 - `/smithai health` — show subsystem health summary (admin only)
+- `/smithai inventory` — inspect NPC inventory
+- `/smithai give <item> [amount]` — give item to NPC
+- `/smithai teleport` — teleport NPC to player
 - `/SmithAPI set <key>` — set the API key for the external server
 - `/SmithAPI status` — show current API key and connection status (masked)
 
@@ -152,6 +156,11 @@ ai:
     enabled: true
     minSeconds: 10
     maxSeconds: 50
+
+npc:
+  followDistance: 3.0
+  pathfinderTimeout: 30
+  spawnEquipped: false   # set true to spawn with armor/sword/shield
 
 debug:
   enabled: false

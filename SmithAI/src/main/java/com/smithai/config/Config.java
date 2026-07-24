@@ -41,6 +41,7 @@ public class Config {
     private int miniSkillTier;
     private int gpt1SkillTier;
     private int gpt2SkillTier;
+    private boolean spawnEquipped;
 
     public Config(FileConfiguration config) {
         this.config = config;
@@ -84,6 +85,7 @@ public class Config {
         this.gpt2SkillTier = config.getInt("ai.models.gpt2.skillTier", 6300);
         this.debugEnabled = config.getBoolean("debug.enabled", false);
         this.bstatsEnabled = config.getBoolean("metrics.bstats", false);
+        this.spawnEquipped = config.getBoolean("npc.spawnEquipped", false);
     }
 
     public void setExternalApiKey(String apiKey) {
@@ -126,4 +128,5 @@ public class Config {
     public int getMiniSkillTier() { return miniSkillTier; }
     public int getGpt1SkillTier() { return gpt1SkillTier; }
     public int getGpt2SkillTier() { return gpt2SkillTier; }
+    public boolean isSpawnEquipped() { return spawnEquipped; }
 }

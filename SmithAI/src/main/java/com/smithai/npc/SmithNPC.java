@@ -28,6 +28,7 @@ public class SmithNPC {
     private final Entity entity;
     private final String name;
     private final Object citizensHandle;
+    private final NPCInventory inventory;
 
     private Player following = null;
     private Location moveTarget = null;
@@ -72,11 +73,16 @@ public class SmithNPC {
         return java.util.Arrays.stream(candidates).filter(m -> m != null).toArray(Material[]::new);
     }
 
-    public SmithNPC(UUID id, Entity entity, String name) {
+    public SmithNPC(UUID id, Entity entity, String name, NPCInventory inventory) {
         this.id = id;
         this.entity = entity;
         this.name = name;
         this.citizensHandle = PlayerModelHelper.getCitizensHandle(entity);
+        this.inventory = inventory;
+    }
+
+    public SmithNPC(UUID id, Entity entity, String name) {
+        this(id, entity, name, entity instanceof Player ? new NPCInventory((Player) entity) : new NPCInventory());
     }
 
     public UUID getId() { return id; }
@@ -93,9 +99,13 @@ public class SmithNPC {
         PlayerModelHelper.destroyCitizensNpc(entity);
     }
 
-    public boolean hasInventory() { return entity instanceof Player; }
+    public boolean hasInventory() { return inventory != null; }
 
-    public org.bukkit.inventory.Inventory getInventory() {
+    public NPCInventory getInventory() {
+        return inventory;
+    }
+
+    public org.bukkit.inventory.Inventory getBukkitInventory() {
         return entity instanceof Player ? ((Player) entity).getInventory() : null;
     }
 
@@ -408,9 +418,8 @@ public class SmithNPC {
     }
 
     private Material findBridgeMaterial() {
-        if (entity instanceof Player) {
-            PlayerInventory inv = ((Player) entity).getInventory();
-            for (Material mat : BRIDGE_MATERIALS) if (inv.contains(mat)) return mat;
+        if (inventory != null) {
+            for (Material mat : BRIDGE_MATERIALS) if (inventory.contains(mat)) return mat;
         }
         return Material.COBBLESTONE;
     }
@@ -419,20 +428,7 @@ public class SmithNPC {
         Block block = loc.getBlock();
         if (!BlockCompat.isAir(block)) return;
         block.setType(mat);
-        if (entity instanceof Player) removeOne((Player) entity, mat);
-    }
-
-    private void removeOne(Player player, Material mat) {
-        PlayerInventory inv = player.getInventory();
-        ItemStack[] contents = inv.getContents();
-        for (int i = 0; i < contents.length; i++) {
-            ItemStack stack = contents[i];
-            if (stack != null && stack.getType() == mat) {
-                if (stack.getAmount() <= 1) inv.setItem(i, null);
-                else { stack.setAmount(stack.getAmount() - 1); inv.setItem(i, stack); }
-                return;
-            }
-        }
+        if (inventory != null) inventory.remove(mat, 1);
     }
 
     public void jump() {

@@ -1,6 +1,7 @@
 package com.smithai.skills;
 
 import com.smithai.SmithAIPlugin;
+import com.smithai.npc.NPCInventory;
 import com.smithai.npc.SmithNPC;
 import com.smithai.util.BlockCompat;
 import com.smithai.util.CraftingHelper;
@@ -235,10 +236,8 @@ public class SkillDispatcher {
     }
 
     private void selectBestTool(SmithNPC npc, String skill) {
-        Entity entity = npc.getEntity();
-        if (!(entity instanceof Player)) return;
-        Player fake = (Player) entity;
-        PlayerInventory inv = fake.getInventory();
+        NPCInventory inv = npc.getInventory();
+        if (inv == null || !inv.isRealInventory()) return;
         Material preferred = null;
         if (skill.contains("pickaxe") || skill.contains("mine") || skill.contains("dig") || skill.contains("break_stone") || skill.contains("ore") || skill.contains("obsidian")) {
             preferred = firstAvailable(inv, "DIAMOND_PICKAXE", "IRON_PICKAXE", "STONE_PICKAXE", "WOODEN_PICKAXE", "WOOD_PICKAXE");
@@ -250,19 +249,15 @@ public class SkillDispatcher {
             preferred = firstAvailable(inv, "DIAMOND_SHOVEL", "IRON_SHOVEL", "STONE_SHOVEL", "WOODEN_SHOVEL", "WOOD_SPADE");
         }
         if (preferred != null && inv.contains(preferred)) {
-            int slot = inv.first(preferred);
-            if (slot >= 0 && slot < 9) {
-                inv.setHeldItemSlot(slot);
-            }
+            inv.setHeldItemSlot(0); // Prefer hotbar slot 0 for tools
         }
     }
 
-    private Material firstAvailable(PlayerInventory inv, String... names) {
+    private Material firstAvailable(NPCInventory inv, String... names) {
         for (String name : names) {
             Material mat = MaterialCompat.get(name);
             if (mat == null) continue;
-            for (int slot = 0; slot < inv.getSize(); slot++) {
-                ItemStack stack = inv.getItem(slot);
+            for (ItemStack stack : inv.getContents()) {
                 if (stack != null && stack.getType() == mat && isToolUsable(stack)) return mat;
             }
         }
@@ -284,17 +279,15 @@ public class SkillDispatcher {
     private void placeTorch(SmithNPC npc) {
         Location loc = npc.getLocation();
         if (loc == null) return;
-        Entity entity = npc.getEntity();
-        if (!(entity instanceof Player)) return;
-        Player fake = (Player) entity;
-        PlayerInventory inv = fake.getInventory();
+        NPCInventory inv = npc.getInventory();
+        if (inv == null) return;
         Material torch = MaterialCompat.get("TORCH", "LEGACY_TORCH");
         if (torch == null || !inv.contains(torch)) return;
         Block target = loc.getBlock();
         Block placeOn = target.getRelative(BlockFace.DOWN);
         if (MaterialCompat.isSolid(placeOn.getType()) && BlockCompat.isAir(target)) {
             target.setType(torch);
-            removeOne(fake, torch);
+            inv.remove(torch, 1);
             npc.setTaskLookTarget(target.getLocation().add(0.5, 0.5, 0.5), 1500);
         }
     }
@@ -302,18 +295,16 @@ public class SkillDispatcher {
     private void placeBlock(SmithNPC npc, Map<String, Object> params) {
         Location loc = npc.getLocation();
         if (loc == null) return;
-        Entity entity = npc.getEntity();
-        if (!(entity instanceof Player)) return;
-        Player fake = (Player) entity;
+        NPCInventory inv = npc.getInventory();
+        if (inv == null) return;
         String matName = String.valueOf(params.get("material")).toUpperCase();
         Material mat = Material.matchMaterial(matName);
         if (mat == null || !MaterialCompat.isBlock(mat)) mat = Material.DIRT;
-        PlayerInventory inv = fake.getInventory();
         if (!inv.contains(mat)) return;
         Block target = loc.getBlock();
         if (BlockCompat.isAir(target)) {
             target.setType(mat);
-            removeOne(fake, mat);
+            inv.remove(mat, 1);
             npc.setTaskLookTarget(target.getLocation().add(0.5, 0.5, 0.5), 1500);
         }
     }
@@ -339,28 +330,13 @@ public class SkillDispatcher {
         npc.setTaskLookTarget(target.getLocation().add(0.5, 0.5, 0.5), 1500);
     }
 
-    private void removeOne(Player player, Material mat) {
-        PlayerInventory inv = player.getInventory();
-        ItemStack[] contents = inv.getContents();
-        for (int i = 0; i < contents.length; i++) {
-            ItemStack stack = contents[i];
-            if (stack != null && stack.getType() == mat) {
-                if (stack.getAmount() <= 1) {
-                    inv.setItem(i, null);
-                } else {
-                    stack.setAmount(stack.getAmount() - 1);
-                    inv.setItem(i, stack);
-                }
-                return;
-            }
-        }
+    private void removeOne(NPCInventory inv, Material mat) {
+        if (inv != null) inv.remove(mat, 1);
     }
 
     private void useItem(SmithNPC npc, String skill, Map<String, Object> params) {
-        Entity entity = npc.getEntity();
-        if (!(entity instanceof Player)) return;
-        Player fake = (Player) entity;
-        PlayerInventory inv = fake.getInventory();
+        NPCInventory inv = npc.getInventory();
+        if (inv == null) return;
         Material mat = Material.AIR;
         if (params != null && params.containsKey("material")) {
             mat = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
@@ -390,13 +366,14 @@ public class SkillDispatcher {
             return;
         }
         // For food items, heal the NPC instead of consuming in the fake inventory
+        Entity entity = npc.getEntity();
         if (MaterialCompat.isEdible(mat) && entity instanceof LivingEntity) {
             LivingEntity le = (LivingEntity) entity;
             le.setHealth(Math.min(le.getHealth() + 4, le.getMaxHealth()));
-            removeOne(fake, mat);
+            removeOne(inv, mat);
         } else {
             // General item use: remove one and simulate usage (e.g., potions)
-            removeOne(fake, mat);
+            removeOne(inv, mat);
         }
     }
 
@@ -404,7 +381,8 @@ public class SkillDispatcher {
         Entity entity = npc.getEntity();
         if (!(entity instanceof Player)) return;
         Player fake = (Player) entity;
-        PlayerInventory inv = fake.getInventory();
+        NPCInventory inv = npc.getInventory();
+        if (inv == null) return;
         Material mat = Material.AIR;
         if (params != null && params.containsKey("material")) {
             mat = Material.matchMaterial(String.valueOf(params.get("material")).toUpperCase());
@@ -414,7 +392,7 @@ public class SkillDispatcher {
             ItemStack held = inv.getItemInMainHand();
             if (held != null && held.getType() != Material.AIR) {
                 fake.getWorld().dropItemNaturally(fake.getLocation(), held.clone());
-                inv.setItemInMainHand(null);
+                inv.setMainHand(null);
             }
             return;
         }
@@ -422,7 +400,7 @@ public class SkillDispatcher {
         for (ItemStack stack : inv.getContents()) {
             if (stack != null && stack.getType() == mat) {
                 fake.getWorld().dropItemNaturally(fake.getLocation(), stack.clone());
-                inv.remove(stack);
+                inv.remove(mat, stack.getAmount());
                 return;
             }
         }
@@ -432,6 +410,8 @@ public class SkillDispatcher {
         Entity entity = npc.getEntity();
         if (!(entity instanceof Player)) return;
         Player fake = (Player) entity;
+        NPCInventory inv = npc.getInventory();
+        if (inv == null) return;
         Location loc = npc.getLocation();
         if (loc == null) return;
         double radius = 3.0;
@@ -446,8 +426,8 @@ public class SkillDispatcher {
             if (drop == null || drop.isDead() || drop.getLocation().distanceSquared(loc) > radius * radius) continue;
             ItemStack stack = drop.getItemStack();
             if (filter != null && stack.getType() != filter) continue;
-            if (fake.getInventory().firstEmpty() >= 0) {
-                fake.getInventory().addItem(stack.clone());
+            if (inv.firstEmpty() >= 0) {
+                inv.addItem(stack.clone());
                 drop.remove();
             }
         }

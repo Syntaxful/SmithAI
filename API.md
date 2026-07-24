@@ -6,9 +6,11 @@ The SmithAI-Server is a Python FastAPI application that provides an external AI 
 
 The server runs at `http://HOST:PORT` as configured in `config.yml` or by the `PORT` environment variable.
 
+CORS is enabled for all origins so the plugin can connect from any host without cross-origin issues.
+
 ## Authentication
 
-All endpoints except `/health` require a Bearer token in the `Authorization` header. The server generates a key starting with `SMA-` on first startup and prints it to the console.
+All endpoints except `/health` and `/` require a Bearer token in the `Authorization` header. The server generates a key starting with `SMA-` on first startup and prints it to the console.
 
 ```bash
 curl -H "Authorization: Bearer SMA-xxxxxxxx" http://localhost:8000/chat
@@ -24,10 +26,27 @@ Public health check. Returns model status and loaded tier.
 ```json
 {
   "status": "ok",
-  "model": "SmithGPT 1.0 4GB",
+  "model": "SmithGPT 1.0 2.2GB",
   "tier": "gpt1",
   "skills": 40,
   "model_loaded": true
+}
+```
+
+### GET /
+
+Public status endpoint showing server name, version, model path, and authentication state.
+
+**Response:**
+```json
+{
+  "status": "ok",
+  "name": "SmithAI Server",
+  "version": "2.0.1",
+  "model": "SmithGPT 1.0 2.2GB",
+  "llama_available": true,
+  "model_exists": true,
+  "authenticated": false
 }
 ```
 
@@ -66,7 +85,7 @@ Main chat endpoint. Accepts conversation messages and optional context.
   "action": "mine_block",
   "target": null,
   "reasoning": "Rule-based fallback",
-  "model": "SmithGPT 1.0 4GB"
+  "model": "SmithGPT 1.0 2.2GB"
 }
 ```
 
@@ -101,7 +120,7 @@ Returns a suggested step plan for a given task.
 {
   "task": "get diamonds",
   "plan": ["chop_tree", "craft_pickaxe", "mine_stone", "craft_stone_pickaxe", "explore_cave", "mine_diamonds"],
-  "model": "SmithGPT 1.0 4GB"
+  "model": "SmithGPT 1.0 2.2GB"
 }
 ```
 
@@ -130,7 +149,7 @@ Receives training feedback from the plugin.
   "category": "general",
   "rating": -1,
   "message": "you mined the wrong block",
-  "model": "SmithGPT 1.0 4GB"
+  "model": "SmithGPT 1.0 2.2GB"
 }
 ```
 
@@ -168,8 +187,8 @@ server:
   host: "0.0.0.0"
   port: 8000
 model:
-  path: "models/smithgpt-1.0-4.gguf"
-  name: "SmithGPT 1.0 4GB"
+  path: "models/smithgpt-1.0-2.2gb.gguf"
+  name: "SmithGPT 1.0 2.2GB"
   context_size: 4096
   max_tokens: 200
   n_threads: 4

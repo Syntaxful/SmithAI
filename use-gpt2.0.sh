@@ -1,76 +1,36 @@
 #!/usr/bin/env bash
-# Switch to SmithGPT 2.0 (3B / Q4_0 / ~1.5GB).
+# Switch SmithAI-Server to SmithGPT 2.0 (~4.4GB).
+
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SERVER_DIR="$SCRIPT_DIR/SmithAI-Server"
-MODEL_FILE="models/smithgpt-2.0-3b.gguf"
-MODEL_NAME="SmithGPT 2.0 3B"
-PORT="${PORT:-8000}"
-PID_FILE="/tmp/smithai-server.pid"
+cd "$SCRIPT_DIR"
 
-if [ -f "$PID_FILE" ]; then
-    OLD_PID="$(cat "$PID_FILE")"
-    if kill -0 "$OLD_PID" 2>/dev/null; then
-        echo "Stopping current SmithAI-Server (PID $OLD_PID)..."
-        kill "$OLD_PID" && sleep 1
-        echo "Stopped."
-    fi
-    rm -f "$PID_FILE"
-fi
-pkill -f "python.*app\.py" 2>/dev/null || true
-
-cd "$SERVER_DIR"
-
-if [ ! -f "$MODEL_FILE" ]; then
-    echo "ERROR: SmithGPT 2.0 model not found at $MODEL_FILE"
-    echo "Run ./BuildGPT2.0 first to download the model."
-    exit 1
-fi
+SERVER_DIR="SmithAI-Server"
+MODEL_NAME="smithgpt-2.0-4.4gb.gguf"
 
 API_KEY=""
-if [ -f "config.yml" ] && python -c "import yaml" 2>/dev/null; then
-    API_KEY="$(python -c "import yaml; print(yaml.safe_load(open('config.yml')).get('security',{}).get('api_key',''))")" || true
+if [ -f "$SERVER_DIR/config.yml" ] && python -c "import yaml" 2>/dev/null; then
+    API_KEY="$(python -c "import yaml; print(yaml.safe_load(open('$SERVER_DIR/config.yml')).get('security',{}).get('api_key',''))")" || true
 fi
 if [ -z "$API_KEY" ]; then
     API_KEY="SMA-$(python -c 'import secrets; print(secrets.token_hex(16))')"
 fi
 
-cat > config.yml <<YAML
-# SmithAI-Server configuration — SmithGPT 2.0
+cat > "$SERVER_DIR/config.yml" <<CONF
+# SmithAI-Server configuration — SmithGPT 2.0 (8B / Q4_K_M / ~4.4GB)
 server:
   host: 0.0.0.0
-  port: ${PORT}
-  rate_limit: 8.0
+  port: 8000
 model:
-  name: "${MODEL_NAME}"
-  path: "${MODEL_FILE}"
   context_size: 4096
   max_tokens: 300
-  n_threads: 4
+  n_threads: 6
+  name: SmithGPT 2.0 4.4GB
+  path: models/$MODEL_NAME
 security:
-  api_key: "${API_KEY}"
-YAML
+  api_key: $API_KEY
+CONF
 
-echo "Switched config to ${MODEL_NAME}."
-echo "API key: ${API_KEY}"
-echo ""
-
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
-fi
-source venv/bin/activate
-if ! python -c "import fastapi, uvicorn" 2>/dev/null; then
-    echo "Installing server dependencies..."
-    pip install -r requirements.txt
-fi
-
-echo ""
-echo "=== Starting ${MODEL_NAME} on port ${PORT} ==="
-nohup python app.py > /tmp/smithai-server.log 2>&1 &
-SERVER_PID=$!
-echo "$SERVER_PID" > "$PID_FILE"
-echo "Server started (PID $SERVER_PID). Logs: /tmp/smithai-server.log"
-echo ""
-echo "Set API key in Minecraft: /SmithAPI set ${API_KEY}"
-echo "Stop the server:  kill \$(cat $PID_FILE)"
+echo "✅ Switched to SmithGPT 2.0 (~4.4GB)."
+echo "Download the model if missing: ./BuildGPT2.0"
+echo "Start the server: cd $SERVER_DIR && source venv/bin/activate && python app.py"

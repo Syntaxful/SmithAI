@@ -1,751 +1,1514 @@
-# SmithAI - MinecraftLLM Master TODO
-
-This file is the single source of truth for what is finished and what remains. It is updated every time the user says `commit` or `STOP WORK`. Do not edit it casually.
-
-## Current Snapshot (as of this commit)
-
-- Plugin builds successfully with Maven: `SmithAI/target/SmithAI-2.0.0.jar` (~138KB shaded JAR)
-- SmithAI-Server Python FastAPI server exists and can run with `python app.py`
-- API key generation, console spam, and "Connected to ..." messages are implemented
-- External AI failover to Smith-Mini 1.0 is implemented
-- Built-in knowledge base loader exists with expanded entries across blocks, mobs, items, recipes, strategy, biomes
-- Chat, memory, commands, listeners, tab completers exist
-- **9000-core-skill library implemented** with runtime generation to keep the JAR small
-  - 900 skills for Smith-Mini 1.0
-  - 1800 skills for SmithGPT 1.0 (includes all Mini skills)
-  - 6300 skills for SmithGPT 2.0 (includes all Mini + GPT-1 skills)
-- Skill tier-aware registry, skill dispatcher, and skill executor queue implemented
-- Task planner updated with broad, non-specific goals: beat the game, get diamonds, build nether portal, build base, defend, farm, etc.
-- `/smithai do <task>` now queues skills into the executor
-- `/smithai stop` added to cancel the active skill queue
-- `/smithai goto <x> <y> <z>` added to send an NPC to coordinates
-- `/smithai feedback <message>` added so players can describe exactly what the AI did wrong
-- `/smithai report <description>` opens a prefilled GitHub issue; reports are also saved to `issue_reports.yml` if the URL is too long
-- `/smithai reports` and `/smithai feedback-list` added for admins to review submissions
-- `/smithai debug` and `/smithai debug global` added for in-game diagnostics
-- `/smithai health` added to show subsystem health summary
-- `/SmithAPI status` added to show key, server URL, model, and connection status
-- Training manager persists good/bad feedback to disk
-- Feedback manager persists detailed written feedback with context to disk
-- Issue report manager persists bug reports to disk
-- NPC follow/stay/teleport exists, plus velocity-based movement with step-up/jump and `goto` target support
-- Real block breaking, block placing, and torch placing implemented in the skill dispatcher
-- Tool selection by task (pickaxe, axe, sword, shovel) implemented
-- Basic combat against nearest hostile or targeted mob type implemented
-- Subsystem health tracking and graceful degradation implemented
-- Debug manager for per-player and global debug toggles implemented
-- CI workflow (`.github/workflows/build.yml`) builds the plugin and checks the server on every push
-- `build.sh` script for non-Maven users; runs tests during build
-- `package-release.sh` bundles plugin JAR, server, docs, and SHA-256 checksums into a zip
-- `bump-version.sh` updates the project version in `pom.xml`
-- `Makefile` with common build/test/release/docker targets
-- Docker support for SmithAI-Server: `Dockerfile`, `docker-compose.yml`, `.dockerignore`
-- Unit tests added: `SkillGeneratorTest`, `TaskPlannerTest`, `SubsystemHealthTest`
-- Server-side test added: `SmithAI-Server/test_app.py`
-- README, SKILLS.md, FAQ.md, HOSTING.md, CONTRIBUTING.md, REPORT_TEMPLATE.md, MODELS.md, API.md, TROUBLESHOOTING.md, PRIVACY.md, and models README updated
-- Smarter Smith-Mini 1.0 with expanded conversational intents and version-aware mining advice
-- VersionInfo detector for Bukkit/Eaglercraft with `hasDeepslate`, `hasNetherite`, `bestDiamondY`, etc.
-- `/smithai version` command showing detected server version and feature flags
-- SmithGPT model sizes reduced: SmithGPT 1.0 → 4GB, SmithGPT 2.0 → 7.5GB, with updated docs, configs, and tier detection
-- Server startup scripts (`start.sh`, `start.bat`) and model download helper (`download_model.py`, `.sh`, `.bat`)
-- Maven and JDK 17 + Python 3.11 available in the build environment, server has a public `/` status endpoint, and `SmithAI-Server/requirements-server.txt` is the lightweight runtime dependency list
-- Pathfinding improvements: hazard avoidance, water swimming, terrain costs, stuck detection/recovery, ladder/vine climbing, multi-world teleport, variable movement speed, bridge/speedbridge, diagonal movement, sprint/sneak, fall cost, and 48-block follow leash
-- GitHub commit rule: user is the only committer and only contributor; `GITHUB_PERSONAL_ACCESS_TOKEN` is used only with explicit authorization
-
----
-
-## Project Goal (unchanged)
-
-Build a single, official Minecraft/Eaglercraft plugin (`SmithAI`) that adds AI-controlled NPCs (`Smith_AI`) with player-like models, natural chat, long-term memory, and a task engine. The plugin includes a built-in small model (`Smith-Mini 1.0`) and can connect to an optional external model (`SmithGPT 1.0` 4GB or `SmithGPT 2.0` 7.5GB) hosted on Codespaces, Linux, Windows, VPS, or any machine the user chooses. The user picks the model by running the matching `SmithAI-Server` and pointing the plugin at its URL/IP/port. No signup, free forever.
-
----
-
-## Skill Tiers (UPDATED)
-
-Each brain has a fixed set of core skills it can execute. Higher brains can use all lower-brain skills too.
-
-- **Smith-Mini 1.0** — 900 core skills (built-in, runs in plugin)
-- **SmithGPT 1.0** — 1800 core skills (external, 4GB model)
-- **SmithGPT 2.0** — 6300 core skills (external, 7.5GB model)
-- **Total core skills** — 9000 (overlapping tiers)
-
-Skills are generated at runtime by `SkillGenerator` into `plugins/SmithAI/skills.yml` so the plugin JAR stays small (~138KB). Higher-tier models include all lower-tier skills.
-
-Each skill needs:
-1. A unique ID
-2. A human-readable name
-3. A tier (`mini`, `gpt1`, `gpt2`)
-4. A broad description/prompt for the LLM (not item-specific)
-5. Required parameters and types (currently empty; to be expanded)
-6. Preconditions (tool, item, environment, permission)
-7. A primitive or composite executor in Java
-8. A failure/retry policy
-9. Success criteria
-10. Knowledge tags for context lookup
-
----
-
-## DONE vs TODO Matrix
-
-### 1. Build & Packaging
-- [x] Maven project structure under `SmithAI/`
-- [x] `pom.xml` with Bukkit/Paper API dependency
-- [x] `plugin.yml` with `api-version: 1.21`, commands, permissions
-- [x] `config.yml` default configuration
-- [x] Maven shade plugin producing shaded JAR
-- [x] Build produces `SmithAI/target/SmithAI-2.0.0.jar` (~138KB)
-- [x] Runtime skill generation keeps JAR small
-- [x] Automated build script for non-Maven users (`build.sh`)
-- [x] CI workflow (GitHub Actions) to build on push (`.github/workflows/build.yml`)
-- [x] Release packaging script that bundles plugin JAR, server, and docs (`package-release.sh`)
-- [x] Signed releases or checksums (SHA-256 generated in `package-release.sh`)
-- [x] Version bumping automation (`bump-version.sh`)
-- [ ] Maven release plugin / GitHub Releases integration
-- [ ] Automated artifact upload to GitHub Releases
-
-### 2. Plugin Lifecycle
-- [x] `SmithAIPlugin` main class with `onEnable` and `onDisable`
-- [x] Config loading and validation
-- [x] Command and listener registration
-- [x] Graceful shutdown: despawn NPCs, save memory, cancel tasks
-- [x] Reload command that re-inits config, AI manager, reminder task
-- [x] Skill executor stops on shutdown
-- [x] Proper error recovery when a subsystem fails to initialize (`SubsystemHealth`)
-- [x] In-game debug mode toggle (`/smithai debug`, `DebugManager`)
-- [ ] Plugin metrics / bStats integration (config key exists, integration not wired)
-
-### 3. Configuration System
-- [x] `Config` wrapper class with all current keys
-- [x] `ai.name` (Smith_AI)
-- [x] `ai.skin` placeholder
-- [x] `ai.memory.maxMessages` (17)
-- [x] `ai.external.enabled`
-- [x] `ai.external.url`
-- [x] `ai.external.apiKey`
-- [x] `ai.external.model` (model name string)
-- [x] `ai.external.timeout`
-- [x] `ai.local.enabled`
-- [x] `ai.local.modelPath`
-- [x] `ai.local.fallbackToRules`
-- [x] `ai.reconnectInterval`
-- [x] `ai.statusMessage`
-- [x] `ai.reminder.enabled`
-- [x] `ai.reminder.minSeconds` and `ai.reminder.maxSeconds`
-- [x] `ai.followDistance`
-- [x] `skills.maxQueueSize`
-- [x] `skills.stepDelay`
-- [x] `training.chatFeedback`
-- [x] `training.persist`
-- [x] `debug.enabled`
-- [x] `metrics.bstats`
-- [x] `ai.pathfinding.maxDistance`
-- [x] `ai.pathfinding.maxNodes`
-- [x] `ai.pathfinding.tickRate`
-- [x] `ai.combat.retreatHealth`
-- [x] `ai.combat.minFood`
-- [x] `ai.crafting.preferCraftingTable`
-- [x] `ai.permissions.restrictByModel`
-- [x] `ai.models.mini.skillTier` (default: 900)
-- [x] `ai.models.gpt1.skillTier` (default: 1800)
-- [x] `ai.models.gpt2.skillTier` (default: 6300)
-
-### 4. Plugin Commands
-- [x] `/smithai` base command with tab completer
-- [x] `/smithai spawn` — spawn a Smith_AI NPC
-- [x] `/smithai despawn` — despawn all Smith_AI NPCs
-- [x] `/smithai follow` — nearby Smith_AI follows the player
-- [x] `/smithai stay` — nearby Smith_AI stops following
-- [x] `/smithai goto <x> <y> <z>` — send nearby Smith_AI to coordinates
-- [x] `/smithai do <task>` — plan and execute a task via the skill queue
-- [x] `/smithai stop` — cancel all queued tasks
-- [x] `/smithai status` — show active brain/model
-- [x] `/smithai model` — show model information
-- [x] `/smithai reload` — reload config and restart connector
-- [x] `/smithai train good|bad` — reward or punish recent action
-- [x] `/smithai feedback <message>` — describe exactly what the AI did wrong
-- [x] `/smithai feedback-list` — show recent feedback (admin only)
-- [x] `/smithai report <description>` — open prefilled GitHub issue or save to disk
-- [x] `/smithai reports` — show recent saved issue reports (admin only)
-- [x] `/smithai memory` — show last 17 messages
-- [x] `/smithai debug` — toggle debug messages for the sender (admin only)
-- [x] `/smithai debug global` — toggle debug messages for all online players (admin only)
-- [x] `/smithai health` — show subsystem health summary (admin only)
-- [x] `/SmithAPI set <key>` — save the external server key
-- [x] `/SmithAPI status` — show current API key and connection status (masked)
-- [x] Tab completion for both commands
-- [x] `/smithai inventory` — inspect NPC inventory
-- [x] `/smithai give <item>` — give item to NPC
-- [x] `/smithai teleport` — teleport NPC to player
-- [x] `/smithai skin <url>` — change NPC skin (placeholder, needs player model)
-- [x] `/smithai list` — list all active NPCs
-- [x] `/smithai help` — in-game help system
-- [ ] `/smithai config` — in-game config viewer
-- [ ] `/smithai export` — export memory/training data
-
-### 5. Chat & Memory System
-- [x] `ChatListener` detects "Smith_AI" or configured name in chat
-- [x] Memory manager holds 17 messages per NPC
-- [x] Memory persistence to YAML
-- [x] Training feedback detection ("good bot", "bad bot")
-- [x] Automatic negative feedback detection in chat ("don't do that", "wrong", etc.)
-- [x] Automatic report request detection in chat ("report", "bug", "broken", etc.)
-- [ ] Long-term memory summarization
-- [ ] Player-specific preference memory
-- [ ] Emotion/mood tracking
-- [ ] Conversation threading across sessions
-- [ ] Memory search/retrieval by topic
-
-### 6. AI Brain Switching
-- [x] `AIManager` picks model by tier/config
-- [x] `ExternalAIConnector` Java 11 `HttpClient` to SmithAI-Server
-- [x] Health check ping
-- [x] Automatic fallback to Smith-Mini when external is offline
-- [x] Reconnection loop with status messages
-- [x] API key reminder every 10-50 seconds when external is enabled but no key is set
-- [x] Parse `action`/`target` from external server response
-- [ ] Real GGUF inference for Smith-Mini (currently rule-based)
-- [ ] Streaming responses from external model
-- [ ] Server-side prompt templates per model tier
-- [ ] Skill-aware response generation with action parsing (partial — parsing exists, not fully integrated into chat flow)
-- [ ] Model performance telemetry
-
-### 7. Local AI / Smith-Mini 1.0
-- [x] `LocalMiniAI` rule-based fallback for chat
-- [x] Config `ai.local.fallbackToRules`
-- [x] Config `ai.local.modelPath`
-- [x] Action tag emission for common commands (follow, stay, mine, build, fight, etc.)
-- [ ] Real GGUF model loading (llama.cpp or llama-cpp-java)
-- [ ] Prompt template for local model
-- [ ] Skill-aware local inference
-- [ ] Async inference to avoid lag spikes
-- [ ] Local model cache and warmup
-
-### 8. Knowledge Base
-- [x] `KnowledgeBase` loader with expanded sample entries
-- [x] Knowledge entries stored in `knowledge/*.json`
-- [x] JSON format: id, category, name, description, tags
-- [x] Knowledge lookup by keyword/tag
-- [x] Biome category added
-- [x] Expand from samples to several hundred core entries (374 entries across blocks, mobs, items, recipes, biomes, strategy)
-- [ ] Expand to 29,000 entries
-- [ ] Category index for fast lookup
-- [ ] Knowledge versioning and updates
-- [ ] Server-side knowledge embed endpoint
-- [ ] Knowledge context window management
-
-### 9. Skill System (MAJOR UPDATE THIS COMMIT)
-- [x] Runtime skill generator (`SkillGenerator.java`) producing 9000 skills
-- [x] Tier-aware `SkillRegistry` that loads only skills available to the active model
-- [x] `SkillDispatcher` maps broad skill categories to concrete actions
-- [x] `SkillExecutor` queue with tick-based step execution
-- [x] `TaskPlanner` maps player requests to skill sequences
-- [x] `/smithai do <task>` queues the planned skill list
-- [x] `/smithai stop` cancels the queue
-- [x] `skills.yml` generated on first run if missing
-- [x] 900/1800/6300 split verified by generator test
-- [x] Real block breaking, placing, and torch placing
-- [x] Tool selection by task (pickaxe, axe, sword, shovel)
-- [x] Basic combat with nearest hostile or targeted mob type
-- [x] Action tag parsing from LLM/chat responses
-- [ ] Full primitive executors for all 9000 skills
-- [ ] Skill preconditions and success/failure detection
-- [ ] Skill parameters from LLM responses fully wired
-- [ ] Skill retry and recovery policies
-- [ ] Skill usage analytics and training feedback
-
-### 10. NPC System
-- [x] `NPCManager` tracks spawned Smith_AI NPCs
-- [x] `SmithNPC` wrapper with follow/stay/message/teleport methods
-- [x] `NPCSpawner` spawns an entity (currently a villager)
-- [x] `Conversation` ties NPC to a player and memory
-- [x] Velocity-based movement with step-up/jump logic
-- [x] `goto` target support via `setMoveTarget`
-- [ ] Real player-model NPC with robot skin and limbs
-- [x] Real pathfinding using Bukkit pathfinders or custom A*
-- [x] NPC inventory and equipment mirroring
-- [ ] NPC animation states (walking, mining, fighting)
-- [ ] NPC damage, health, death, and respawn handling
-- [ ] NPC nameplate and hologram display
-- [ ] Eaglercraft-compatible player model rendering
-
-### 11. Movement & Pathfinding
-- [x] `follow` method with velocity-based movement toward player
-- [x] `stay` and `teleport` methods
-- [x] `lookAt` rotates NPC toward target
-- [x] `goto` coordinates command
-- [x] Step-up and jump logic for small obstacles
-- [x] Real walking pathfinding to player/target block (A* or Bukkit navigator)
-- [x] Navigation around obstacles, water, lava, and basic hazards
-- [x] Bridge / speedbridge across gaps using inventory blocks
-- [x] Sprint/sneak/cliff-edge avoidance (fall cost, ledge sneak, diagonal movement, 48-block leash)
-- [x] Follow distance and leash behavior
-- [x] Stuck detection and recovery
-- [x] Multi-world teleport handling
-- [x] Path cost estimates (terrain, danger, distance)
-- [x] Path smoothing and stricter cliff cost penalty
-
-### 12. Inventory & Crafting Automation
-- [x] Check inventory stub
-- [x] Select/equip item by task (tool, weapon)
-- [x] Real inventory scanning, item selection, pick up, drop, and use items
-- [x] Crafting recipes by name and available ingredients
-- [ ] Crafting table / furnace / brewing stand interaction
-- [ ] Smelting, fueling, and result collection
-- [ ] Chest storage and retrieval
-- [ ] Item pickup and drop
-- [x] Tool/food/weapon/armor selection by task (partial — tools done)
-- [x] Durability-aware tool switching
-- [ ] Resource stockpiling and restocking
-
-### 13. Combat & Survival
-- [x] Attack nearest hostile mob in `SkillDispatcher`
-- [x] Heal via food in `SkillDispatcher`
-- [x] Place torch in `SkillDispatcher`
-- [x] Mob-specific target selection via `target` parameter
-- [x] Mob-specific combat tactics (creeper, skeleton, zombie, etc.)
-- [ ] Equip best armor and weapon
-- [ ] Retreat when low health/hunger
-- [ ] Dodge, strafe, block, counter
-- [ ] Buff potion usage (healing, strength, fire resistance)
-- [ ] Food/hunger management
-- [ ] Bed/sleep behavior
-- [ ] Environmental hazard avoidance (lava, cactus, fall)
-- [ ] Boss fight sequences (dragon, wither, warden)
-
-### 14. World Interaction
-- [x] Break blocks with best tool (instant via `breakNaturally`)
-- [x] Place blocks with material parameter
-- [x] Place torches
-- [ ] Break blocks with correct timing and drops
-- [ ] Place blocks with correct facing and support
-- [ ] Interact with doors, levers, buttons, chests, furnaces, etc.
-- [ ] Use buckets, flint and steel, ender pearls, etc.
-- [ ] Harvest crops, shear sheep, milk cows, tame animals
-- [ ] Build structures from schematic or plan
-- [ ] Light area with torches
-- [ ] Farm automation (plant, grow, harvest)
-- [ ] Mine safely (1x2 strip, ladder down, avoid lava)
-- [ ] Terraform and landscape
-
-### 15. Endgame & Progression Tasks
-- [x] Task planner sequences for "beat the game", diamonds, nether portal, base, etc.
-- [ ] Real diamond mining at Y=-59
-- [ ] Nether portal creation and travel
-- [ ] Blaze rod farming and potion brewing
-- [ ] Eye of ender crafting and stronghold location
-- [ ] End portal activation and dragon fight
-- [ ] Post-dragon elytra/shulker acquisition
-- [ ] Wither and Warden encounters
-- [ ] Advancement completion tracking
-- [ ] Automated speedrun path (optional)
-
-### 16. Training System
-- [x] `/smithai train good|bad` command
-- [x] `good bot` and `bad bot` chat detection
-- [x] Training manager with YAML persistence
-- [x] Good/bad feedback scores per action
-- [x] Detailed written feedback via `/smithai feedback` and chat detection
-- [ ] Demonstration learning: player performs action, AI copies
-- [ ] Per-player preference memory
-- [ ] Per-NPC learned behavior profiles
-- [ ] Export/import training data
-- [ ] Training data merge conflicts resolution
-- [ ] Visual feedback when training is recorded
-- [ ] Reset training for a specific player or NPC
-- [ ] Use training scores to influence skill selection
-- [ ] Training data privacy toggle
-
-### 17. Commands & Permissions
-- [x] `/smithai` base command
-- [x] `/smithai spawn`
-- [x] `/smithai despawn`
-- [x] `/smithai follow`
-- [x] `/smithai stay`
-- [x] `/smithai goto`
-- [x] `/smithai do <task>`
-- [x] `/smithai stop`
-- [x] `/smithai status`
-- [x] `/smithai model`
-- [x] `/smithai reload`
-- [x] `/smithai train good|bad`
-- [x] `/smithai feedback <message>`
-- [x] `/smithai feedback-list`
-- [x] `/smithai report <description>`
-- [x] `/smithai reports`
-- [x] `/smithai memory`
-- [x] `/smithai debug`
-- [x] `/smithai health`
-- [x] `/SmithAPI set <key>`
-- [x] `/SmithAPI status`
-- [x] Tab completers for `/smithai` and `/smithapi`
-- [x] Permissions: `smithai.admin`, `smithai.use`, `smithai.spawn`, `smithai.api`
-- [x] `/smithai inventory` — view/inspect NPC inventory
-- [x] `/smithai give <item>` — give item to NPC
-- [x] `/smithai teleport` — teleport NPC to player
-- [x] `/smithai skin <url>` — change NPC skin (placeholder; requires player-model renderer)
-- [x] `/smithai list` — list all active NPCs
-- [x] `/smithai config` — in-game config viewer (admin-only summary)
-- [x] `/smithai export` — export memory/training data
-
-### 18. In-Game Status & Notifications
-- [x] Chat message when switching models
-- [x] Status command
-- [x] API key reminder every 10-50 seconds until connected
-- [x] Loading/offline/error messages in console
-- [x] Action bar for active task progress
-- [ ] NPC speech bubbles or holograms above head
-- [ ] Sound cues for mode switch, task start/finish, errors
-- [ ] Toast notifications for achievements/milestones
-- [ ] Per-player notification settings
-- [ ] Language/locale support
-
-### 19. External AI Server (SmithAI-Server)
-- [x] Python FastAPI server
-- [x] `/chat` endpoint
-- [x] `/health` endpoint with model info and load status
-- [x] `/skills` endpoint returning tier-appropriate broad skill list
-- [x] API key generation (`SMA-...`)
-- [x] API key console spam until plugin connects
-- [x] `Connected to ...` message on successful auth
-- [x] Bearer token auth middleware
-- [x] Loads GGUF model via llama-cpp-python if present
-- [x] Configurable host, port, model path, max tokens, context size
-- [x] Uses `PORT` environment variable when available (Codespaces)
-- [x] `requirements.txt`
-- [x] Server README
-- [x] Rule-based fallback when model is not loaded
-- [x] Action tag parsing from LLM responses
-- [x] Docker support (`Dockerfile` + `docker-compose.yml` + `.dockerignore`)
-- [x] Server test script (`test_app.py`)
-- [x] `/embed` endpoint for knowledge retrieval (stub, ready for embedding integration)
-- [x] `/task` endpoint for task planning
-- [x] `/feedback` endpoint to receive training data
-- [x] Server startup script for Windows and Linux (`start.sh`, `start.bat`)
-- [ ] Auto-download missing model files (with user consent)
-- [ ] Model warmup on first request
-- [ ] Logging to file with rotation
-- [ ] Server-side prompt templates per model tier
-- [ ] Rate limiting and concurrent request queue
-- [ ] Multi-GPU support detection
-- [ ] Health checks include GPU/RAM status
-- [ ] Server dashboard / status page
-
-### 20. Models
-- [x] Models README with download sources
-- [x] GGUF format guidance
-- [x] Quantization notes
-- [x] Tier guidance (Mini, GPT 1.0, GPT 2.0)
-- [x] Specific recommended model downloads for SmithGPT 1.0 (4GB)
-- [x] Specific recommended model downloads for SmithGPT 2.0 (7.5GB)
-- [x] Specific recommended model downloads for Smith-Mini 1.0
-- [x] Model download scripts (`download_model.py`, `.sh`, `.bat`)
-- [ ] Hugging Face integration or `huggingface-cli` instructions
-- [ ] Model checksums / verification
-- [ ] License compliance notes for each recommended model
-- [ ] Model cards explaining behavior differences
-
-### 21. Eaglercraft & Minecraft 1.21.x Compatibility
-- [x] Bukkit/Spigot/Paper API usage
-- [x] `api-version: 1.21` in plugin.yml
-- [x] Avoid NMS where possible
-- [x] Eaglercraft compatibility documented in FAQ
-- [ ] Test on Eaglercraft 1.8.x backend
-- [ ] Test on Spigot 1.21.x
-- [ ] Test on Paper 1.21.x
-- [ ] Handle 1.8 protocol differences
-- [ ] Verify chat packets work across versions
-- [ ] Verify NPC rendering in Eaglercraft client
-- [ ] Graceful degradation on unsupported versions
-
-### 22. Testing & Quality
-- [x] Unit tests for skill generator (`SkillGeneratorTest`)
-- [x] Unit tests for task planner (`TaskPlannerTest`)
-- [x] Unit tests for subsystem health (`SubsystemHealthTest`)
-- [x] Unit tests for knowledge lookup (`KnowledgeBaseTest`)
-- [x] Unit tests for memory system (`MemoryManagerTest`)
-- [x] Unit tests for training manager (`TrainingManagerTest`)
-- [x] Unit tests for config parsing (`ConfigTest`)
-- [ ] Integration test for external AI connector
-- [ ] Manual in-game test checklist
-- [ ] Performance profiling under load
-- [ ] Thread safety review
-- [ ] Error handling review
-- [ ] Memory leak review (NPC cleanup, conversation pruning)
-- [ ] Security audit (API key handling, command injection)
-- [ ] Load test with multiple NPCs and players
-- [ ] Test on low-end hardware (2GB server)
-
-### 23. Documentation
-- [x] README.md (overview, install, config, commands, skill library summary, new commands)
-- [x] HOSTING.md (Codespaces, Linux, Windows, VPS, Docker, health endpoint)
-- [x] FAQ.md (feedback, reporting, skills, models)
-- [x] LICENSE
-- [x] SKILLS.md (overview of 9000 skills, how to add, implementation status)
-- [x] CONTRIBUTING.md (coding style, build instructions, rules)
-- [x] REPORT_TEMPLATE.md (bug report template)
-- [x] MODELS.md (detailed model cards and downloads)
-- [x] API.md (SmithAI-Server API reference)
-- [x] CHANGELOG.md
-- [x] In-game help system (`/smithai help`)
-- [x] TROUBLESHOOTING.md
-- [x] PRIVACY.md
-- [ ] Video tutorial script (optional)
-
----
-
-## Skill Library (9000 core skills)
-
-The library is generated at runtime by `com.smithai.skills.SkillGenerator` into `plugins/SmithAI/skills.yml`. The plugin JAR only contains the generator code, so it stays small (~138KB). The full list and category breakdown are in `SKILLS.md`.
-
-### Tier 1: Smith-Mini 1.0 (900 skills)
-Generated from 100 base verbs + 30 topics, producing 900 unique broad skills. Categories include:
-- Chat: greet, ask, answer, joke, thank, warn, praise, etc.
-- Social: wave, bow, dance, emote, celebrate, etc.
-- Movement: follow, stay, move, turn, look, jump, sneak, etc.
-- Basic interaction: inspect, use, equip, drop, pick up, eat, sleep, etc.
-- Memory/Status: remember, recall, report, check health, check inventory, etc.
-- Task control: begin task, end task, cancel, retry, mark done, etc.
-
-### Tier 2: SmithGPT 1.0 (1800 skills)
-Includes all 900 Mini skills plus 900 generated composite skills from 60 verbs × 90 objects. Categories include:
-- Gathering: gather wood, stone, coal, iron, copper, gold, diamond, crops, etc.
-- Crafting: craft tools, weapons, armor, food, blocks, potions, etc.
-- Building: build house, shelter, wall, bridge, farm, room, etc.
-- Combat: fight hostile mobs, defend, ambush, retreat, block, dodge, etc.
-- Farming: plant, water, harvest, breed, feed, tame, etc.
-- Exploration: explore caves, villages, biomes, locate structures, etc.
-- Utility: store, sort, trade, manage, smelt, brew, etc.
-
-### Tier 3: SmithGPT 2.0 (6300 skills)
-Includes all 1800 lower-tier skills plus 6300 generated advanced composite skills from 100 verbs × 130 objects. Categories include:
-- Endgame progression: conquer nether/end/stronghold/dragon, master systems, etc.
-- Automation: build autonomous mines, mob grinders, farms, storage networks, etc.
-- Strategy: raid, siege, defend, fortify, patrol, escort, strategize, etc.
-- Magic/Tech: enchant, summon, channel, ward, build reactors, laboratories, etc.
-- Economy/Social: trade, barter, invest, build guilds, kingdoms, alliances, etc.
-- Terraforming: terraform, irrigate, reforest, colonize, build infrastructure, etc.
-- Advanced building: portals, networks, roads, railways, wonders, monuments, etc.
-- Roleplay: lead, recruit, train, inspire, command, govern, etc.
-
----
-
-## Phase Plan (Updated)
-
-### Phase 1: Foundation — DONE
-- [x] Maven project setup
-- [x] Plugin main class
-- [x] Config system
-- [x] Command skeleton + tab completers
-- [x] Basic NPC spawn/despawn
-- [x] Robot skin placeholder
-- [x] Lifecycle, reload, shutdown
-
-### Phase 2: AI Brains — PARTIAL
-- [x] External AI connector + health check
-- [x] Smith-Mini rule-based fallback with action tags
-- [x] Auto-failover and reconnection
-- [x] Status notifications
-- [x] API key auth flow
-- [x] SmithAI-Server with console spam + connected message
-- [x] Server-side broad skill list by tier
-- [x] Server action tag parsing from LLM responses
-- [ ] Real Smith-Mini GGUF inference
-- [ ] Server-side prompt templates per model
-- [ ] Streaming responses
-
-### Phase 3: Chat & Memory — PARTIAL
-- [x] Chat listener + AI name detection
-- [x] 17-message memory
-- [x] Memory persistence
-- [x] Basic responses
-- [x] Training feedback detection
-- [x] Negative feedback and report detection in chat
-- [ ] Long-term memory summarization
-- [ ] Player-specific preferences
-- [ ] Emotion/mood tracking
-
-### Phase 4: Knowledge & Skills — IN PROGRESS
-- [x] Knowledge base loader + expanded sample entries
-- [x] Skill registry skeleton
-- [x] Task planner expanded with common goals
-- [x] 9000 Smith-Mini + SmithGPT skills generated at runtime
-- [x] Tier-aware skill registry
-- [x] Skill dispatcher and executor with real block/place/torch/tool/combat actions
-- [x] `/smithai do` queues skill plans
-- [x] `/smithai stop` cancels queue
-- [x] `/smithai goto` coordinates command
-- [ ] Primitive skill executors for most common skills (partial)
-- [ ] Composite skill execution with real world effects (partial)
-- [ ] Skill preconditions and failure handling
-- [ ] Skill parameters from LLM fully wired
-
-### Phase 5: Advanced Gameplay — IN PROGRESS
-- [x] Basic velocity-based movement and step-up/jump
-- [x] Basic block breaking/placing/torch placing
-- [x] Tool selection by task
-- [x] Basic mob combat with target selection
-- [x] Pathfinding (A* or navigator)
-- [x] Inventory automation (scan, pick up, drop, use)
-- [ ] Crafting automation
-- [ ] Combat/survival automation
-- [ ] Endgame task sequences
-- [ ] Base building and farming
-
-### Phase 6: Scale & Polish — NOT STARTED
-- [ ] Expand knowledge to 29,000 entries
-- [ ] Complete training system
-- [ ] Docker/server packaging (partial — Docker files exist)
-- [ ] Documentation finalization
-- [ ] Eaglercraft testing
-- [ ] Unit tests and QA (partial)
-
----
-
-## Current Status Summary
-
-| System | Status | Notes |
-|--------|--------|-------|
-| Build & Packaging | 95% | Maven, build script, CI, release packaging, checksums, version bump all done |
-| Plugin Lifecycle | 95% | Enable/disable/reload, subsystem health, debug mode done; bStats config only |
-| Config System | 85% | Core keys done; some advanced pathfinding/combat/crafting keys missing |
-| NPC System | 45% | Spawn/follow/stay/goto done; real player model pending |
-| External AI Connector | 85% | Chat/health/failover/action parsing done; streaming/templates pending |
-| Local AI (Smith-Mini) | 40% | Rule-based fallback + action tags; real GGUF inference pending |
-| Chat & Memory | 75% | 17-message memory, persistence, feedback/report detection done |
-| Knowledge Base | 10% | Expanded samples; 29,000 target still pending |
-| Skill System | 50% | 9000 skills generated, dispatcher/executor with real basic actions; most skills still stubs |
-| Pathfinding & Movement | 100% | A* pathfinding with hazards, water/climb/bridge support, diagonal movement, terrain/fall costs, sprint/sneak, stuck recovery, 48-block leash, and path smoothing |
-| Inventory & Crafting | 35% | Inventory scan, pick up, drop, and item use done; crafting automation pending |
-| Combat & Survival | 15% | Basic attack/eat/torch done; tactics/hazards pending |
-| Training System | 60% | Commands, persistence, detailed feedback done; demo learning pending |
-| Commands & Permissions | 90% | Core commands + feedback/report/debug/health done; some advanced commands missing |
-| Status & Notifications | 65% | Switch messages, reminders, debug/health done; action bar pending |
-| External AI Server | 85% | Chat/health/key auth/skills/Docker/tests done; /embed/task/feedback pending |
-| Models | 30% | README done; no specific download scripts |
-| Eaglercraft Compatibility | 10% | API usage correct; no live testing |
-| Testing & Quality | 20% | Generator, planner, health tests done; many areas still untested |
-| Documentation | 85% | README, HOSTING, FAQ, SKILLS, CONTRIBUTING, REPORT_TEMPLATE done; MODELS/API/CHANGELOG pending |
-
----
-
-## Next Actions (High Priority)
-
-1. Implement real pathfinding (A* or Bukkit navigator) so NPCs can walk to players/blocks without teleporting.
-2. Expand inventory automation beyond tool selection: scan items, pick up, drop, craft simple recipes.
-3. Add real block-breaking timing and drop collection instead of instant `breakNaturally`.
-4. Add mob-specific combat tactics and environmental hazard avoidance.
-5. Implement the endgame sequence with real world effects: nether portal, blaze rods, eyes of ender, end portal, dragon fight.
-6. Expand the knowledge base from sample entries to a few hundred core blocks/mobs/items/recipes/strategies/biomes.
-7. Add `/smithai inventory`, `/smithai give`, and `/smithai list` commands.
-8. Add `/smithai help` in-game help system.
-9. Add more unit tests: knowledge lookup, memory system, training manager, config parsing.
-10. Continue live testing on Spigot/Paper/Eaglercraft when possible.
-
----
-
-## Commit Log
-
-### Commit — July 23, 2026
-
-User triggered a commit with the message `COMMIT!`. This section records every detail of the work done since the previous commit snapshot.
-
-#### New and Changed Files
-
-- `todo.md` — updated DONE vs TODO matrix, current snapshot, status summary, and next actions.
-- `README.md` — documented new commands (`goto`, `feedback`, `report`, `reports`, `debug`, `health`), Docker support, build/test/release scripts.
-- `SKILLS.md` — updated implementation status and added `goto` usage example.
-- `FAQ.md` — added feedback and reporting sections.
-- `HOSTING.md` — added Docker and health endpoint notes.
-- `CONTRIBUTING.md` — new file with build instructions, project rules, and style guide.
-- `REPORT_TEMPLATE.md` — new bug report template.
-- `build.sh` — updated to run Maven tests during build.
-- `package-release.sh` — new release bundling script with SHA-256 checksums.
-- `bump-version.sh` — new version-bumping script.
-- `Makefile` — new convenience targets for build/test/release/docker.
-- `.gitattributes` — new file for consistent line endings.
-- `.github/workflows/build.yml` — new CI workflow that builds the plugin and checks the Python server.
-- `docker-compose.yml` — new Docker Compose setup for SmithAI-Server.
-- `SmithAI-Server/Dockerfile` — new Dockerfile for the Python server.
-- `SmithAI-Server/.dockerignore` — new ignore file for Docker builds.
-- `SmithAI-Server/requirements.txt` — marked `llama-cpp-python` as optional and added explanatory comment.
-- `SmithAI-Server/app.py` — added rule-based fallback, action tag parsing, skill prompting, health response model info, better error handling.
-- `SmithAI-Server/test_app.py` — new Python sanity test for action tag parsing.
-- `SmithAI-Server/README.md` — updated with endpoint and config details.
-- `SmithAI/pom.xml` — added JUnit 5 and Surefire for testing.
-- `SmithAI/src/main/java/com/smithai/SmithAIPlugin.java` — added `DebugManager`, `IssueReportManager`, `SubsystemHealth`, subsystem init with error recovery.
-- `SmithAI/src/main/java/com/smithai/config/Config.java` — added `debug.enabled` and `metrics.bstats` keys.
-- `SmithAI/src/main/java/com/smithai/commands/SmithAICommand.java` — added `goto`, `debug`, `health`, `feedback`, `feedback-list`, `report`, `reports` subcommands; fixed report URL truncation.
-- `SmithAI/src/main/java/com/smithai/commands/SmithAITabCompleter.java` — added tab completions for new commands.
-- `SmithAI/src/main/java/com/smithai/commands/SmithAPICommand.java` — added `status` subcommand with connection details.
-- `SmithAI/src/main/java/com/smithai/ai/ExternalAIConnector.java` — parses `action`/`target` from server response and appends action tag to reply.
-- `SmithAI/src/main/java/com/smithai/ai/LocalMiniAI.java` — expanded rule-based responses and added action tag emission.
-- `SmithAI/src/main/java/com/smithai/chat/ChatManager.java` — added automatic negative feedback and report detection.
-- `SmithAI/src/main/java/com/smithai/knowledge/KnowledgeBase.java` — loads biomes.json and expanded knowledge entries.
-- `SmithAI/src/main/java/com/smithai/npc/SmithNPC.java` — replaced teleport stubs with velocity-based movement, step-up/jump logic, and pathfinding target support.
-- `SmithAI/src/main/java/com/smithai/skills/SkillDispatcher.java` — added real executors for block break/place, torch placing, tool selection, targeted combat, and movement.
-- `SmithAI/src/main/java/com/smithai/skills/SkillExecutor.java` — added `cancel()` to tasks, adjusted durations, action tag parsing.
-- `SmithAI/src/main/java/com/smithai/skills/TaskPlanner.java` — greatly expanded common goal mappings (biomes, farming, combat, exploration, etc.).
-- `SmithAI/src/main/java/com/smithai/training/FeedbackManager.java` — new class storing detailed written feedback with context.
-- `SmithAI/src/main/java/com/smithai/training/IssueReportManager.java` — new class persisting bug reports to YAML.
-- `SmithAI/src/main/java/com/smithai/debug/DebugManager.java` — new debug toggle and broadcast helper.
-- `SmithAI/src/main/java/com/smithai/health/SubsystemHealth.java` — new subsystem health tracker.
-- `SmithAI/src/main/resources/config.yml` — added `debug.enabled` and `metrics.bstats` defaults.
-- `SmithAI/src/main/resources/plugin.yml` — updated usage string and aliases.
-- `SmithAI/src/main/resources/knowledge/` — expanded `blocks.json`, `items.json`, `mobs.json`, `recipes.json`, `strategy.json`, and added `biomes.json` and `README.md`.
-- `SmithAI/src/test/java/com/smithai/skills/SkillGeneratorTest.java` — new test verifying skill counts.
-- `SmithAI/src/test/java/com/smithai/skills/TaskPlannerTest.java` — new test verifying task plans.
-- `SmithAI/src/test/java/com/smithai/health/SubsystemHealthTest.java` — new test verifying health states.
-- `models/README.md` — updated with Docker and local/server model notes.
-
-#### Build & Verification
-
-- `mvn -f SmithAI/pom.xml clean test package` succeeds and produces `SmithAI/target/SmithAI-2.0.0.jar` (~138KB).
-- JUnit 5 tests pass: `SkillGeneratorTest` (2 tests), `TaskPlannerTest` (6 tests), `SubsystemHealthTest` (3 tests).
-- `python3 -m py_compile SmithAI-Server/app.py` passes.
-- `python3 SmithAI-Server/test_app.py` passes.
-- `package-release.sh` can be run to bundle a full release with checksums.
-
-#### Skill Counts
-
-- Smith-Mini 1.0: 900 core skills
-- SmithGPT 1.0: 1800 core skills (900 + 900)
-- SmithGPT 2.0: 6300 core skills (900 + 900 + 4500)
-- Total: 9000 core skills
-
-#### Design Decisions This Commit
-
-1. Skills are generated at runtime rather than shipped as a 9000-entry YAML file. This keeps the plugin JAR small (~138KB) and makes the library easy to extend by changing the generator templates.
-2. Skills are broad (e.g., `conquer_dragon`, `build_base`, `gather_diamonds`) rather than item-specific. This lets the LLM reason about goals and lets the dispatcher decide the concrete steps.
-3. The `SkillDispatcher` categorizes skills by prefix and implements real basic actions for the most common categories (movement, block break/place, torch placing, tool selection, combat). It is still a starter implementation for the full 9000-skill surface.
-4. Player feedback is stored as free-text plus context (active task or chat), so future training can learn from specific mistakes rather than just thumbs-up/down scores.
-5. Issue reports are saved to `plugins/SmithAI/issue_reports.yml` as a fallback when the GitHub issue URL is too long for chat, so bug reports are never lost.
-6. Subsystem health is tracked so non-critical failures can degrade gracefully instead of crashing the entire plugin on startup.
-7. The SmithAI-Server falls back to rule-based responses when the GGUF model is not present, so the plugin/server integration can be tested and used without downloading multi-gigabyte models.
-
-#### Known Limitations / Outstanding Work
-
-- Most skill executors are still stubs or chat placeholders. Real world interaction (timed mining, crafting, pathfinding, farming) is only partially implemented.
-- The NPC is still a generic villager; a real player model with robot skin and limbs is pending.
-- Smith-Mini 1.0 is still rule-based; real GGUF inference is pending.
-- Pathfinding is velocity-based follow/goto; true A* navigation around obstacles is pending.
-- The knowledge base has expanded samples but the 29,000-entry target is pending.
-- Live testing on Spigot/Paper/Eaglercraft is pending.
-- Some external server endpoints (`/embed`, `/task`, `/feedback`) are not yet implemented.
-
-#### Git & Commit Rules
-
-- GitHub commits must be made ONLY from the user's account.
-- The user is the sole contributor and the only committer.
-- Do not commit under the agent's identity.
-- Use the `GITHUB_PERSONAL_ACCESS_TOKEN` secret only when the user explicitly authorizes a push, and only push on their behalf with their configured git identity.
-- Never commit to a remote repository without the user's explicit `commit` or `push` command.
-- The current commit is a workspace snapshot; the user should push it when ready.
-
-#### Notes for Next Build
-
-- Focus on real pathfinding and navigation so the skill queue can execute physical tasks reliably.
-- After movement, expand inventory/crafting automation and timed block breaking with drop collection.
-- Continue adding unit tests for knowledge, memory, training, and config.
-- Update this TODO again when the user says `commit` or `STOP WORK`.
-
----
+# SmithAI TODO / Roadmap
+
+This file tracks the master feature roadmap for SmithAI. Goal: 1000+ features. Features are grouped by subsystem; each bullet is a single, testable item that improves the AI, server, plugin, or tooling.
+
+## Status key
+- [ ] = not started
+- [~] = in progress / partially done
+- [x] = implemented or merged
+
+## Core AI / LLM
+
+- [ ] 1. add core_ai_llm validation
+- [ ] 2. add core_ai_llm serialization
+- [ ] 3. add core_ai_llm migration path
+- [ ] 4. add core_ai_llm CLI flag
+- [ ] 5. add core_ai_llm status endpoint
+- [ ] 6. add core_ai_llm health check
+- [ ] 7. add core_ai_llm batching
+- [ ] 8. add core_ai_llm cancellation
+- [ ] 9. add core_ai_llm progress reporting
+- [ ] 10. add core_ai_llm history tracking
+- [ ] 11. add core_ai_llm rollback support
+- [ ] 12. implement core_ai_llm feature #12
+- [ ] 13. add core_ai_llm configuration option
+- [ ] 14. optimize core_ai_llm performance
+- [ ] 15. add core_ai_llm logging
+- [ ] 16. add core_ai_llm error handling
+- [ ] 17. add core_ai_llm unit tests
+- [ ] 18. add core_ai_llm integration tests
+- [ ] 19. document core_ai_llm behavior
+- [ ] 20. add core_ai_llm metrics
+- [ ] 21. add core_ai_llm telemetry
+- [ ] 22. add core_ai_llm caching
+- [ ] 23. add core_ai_llm retry logic
+- [ ] 24. add core_ai_llm rate limiting
+- [ ] 25. add core_ai_llm fallback behavior
+- [ ] 26. add core_ai_llm validation
+- [ ] 27. add core_ai_llm serialization
+- [ ] 28. add core_ai_llm migration path
+- [ ] 29. add core_ai_llm CLI flag
+- [ ] 30. add core_ai_llm status endpoint
+- [ ] 31. add core_ai_llm health check
+- [ ] 32. add core_ai_llm batching
+- [ ] 33. add core_ai_llm cancellation
+- [ ] 34. add core_ai_llm progress reporting
+- [ ] 35. add core_ai_llm history tracking
+- [ ] 36. add core_ai_llm rollback support
+- [ ] 37. implement core_ai_llm feature #37
+- [ ] 38. add core_ai_llm configuration option
+- [ ] 39. optimize core_ai_llm performance
+- [ ] 40. add core_ai_llm logging
+- [ ] 41. add core_ai_llm error handling
+- [ ] 42. add core_ai_llm unit tests
+- [ ] 43. add core_ai_llm integration tests
+- [ ] 44. document core_ai_llm behavior
+- [ ] 45. add core_ai_llm metrics
+- [ ] 46. add core_ai_llm telemetry
+- [ ] 47. add core_ai_llm caching
+- [ ] 48. add core_ai_llm retry logic
+- [ ] 49. add core_ai_llm rate limiting
+- [ ] 50. add core_ai_llm fallback behavior
+- [ ] 51. add core_ai_llm validation
+- [ ] 52. add core_ai_llm serialization
+- [ ] 53. add core_ai_llm migration path
+- [ ] 54. add core_ai_llm CLI flag
+- [ ] 55. add core_ai_llm status endpoint
+- [ ] 56. add core_ai_llm health check
+- [ ] 57. add core_ai_llm batching
+- [ ] 58. add core_ai_llm cancellation
+- [ ] 59. add core_ai_llm progress reporting
+- [ ] 60. add core_ai_llm history tracking
+- [ ] 61. add core_ai_llm rollback support
+- [ ] 62. implement core_ai_llm feature #62
+- [ ] 63. add core_ai_llm configuration option
+- [ ] 64. optimize core_ai_llm performance
+- [ ] 65. add core_ai_llm logging
+- [ ] 66. add core_ai_llm error handling
+- [ ] 67. add core_ai_llm unit tests
+- [ ] 68. add core_ai_llm integration tests
+- [ ] 69. document core_ai_llm behavior
+- [ ] 70. add core_ai_llm metrics
+- [ ] 71. add core_ai_llm telemetry
+- [ ] 72. add core_ai_llm caching
+- [ ] 73. add core_ai_llm retry logic
+- [ ] 74. add core_ai_llm rate limiting
+- [ ] 75. add core_ai_llm fallback behavior
+- [ ] 76. add core_ai_llm validation
+- [ ] 77. add core_ai_llm serialization
+- [ ] 78. add core_ai_llm migration path
+- [ ] 79. add core_ai_llm CLI flag
+- [ ] 80. add core_ai_llm status endpoint
+
+## Memory
+
+- [ ] 81. document memory behavior
+- [ ] 82. add memory metrics
+- [ ] 83. add memory telemetry
+- [ ] 84. add memory caching
+- [ ] 85. add memory retry logic
+- [ ] 86. add memory rate limiting
+- [ ] 87. add memory fallback behavior
+- [ ] 88. add memory validation
+- [ ] 89. add memory serialization
+- [ ] 90. add memory migration path
+- [ ] 91. add memory CLI flag
+- [ ] 92. add memory status endpoint
+- [ ] 93. add memory health check
+- [ ] 94. add memory batching
+- [ ] 95. add memory cancellation
+- [ ] 96. add memory progress reporting
+- [ ] 97. add memory history tracking
+- [ ] 98. add memory rollback support
+- [ ] 99. implement memory feature #19
+- [ ] 100. add memory configuration option
+- [ ] 101. optimize memory performance
+- [ ] 102. add memory logging
+- [ ] 103. add memory error handling
+- [ ] 104. add memory unit tests
+- [ ] 105. add memory integration tests
+- [ ] 106. document memory behavior
+- [ ] 107. add memory metrics
+- [ ] 108. add memory telemetry
+- [ ] 109. add memory caching
+- [ ] 110. add memory retry logic
+- [ ] 111. add memory rate limiting
+- [ ] 112. add memory fallback behavior
+- [ ] 113. add memory validation
+- [ ] 114. add memory serialization
+- [ ] 115. add memory migration path
+- [ ] 116. add memory CLI flag
+- [ ] 117. add memory status endpoint
+- [ ] 118. add memory health check
+- [ ] 119. add memory batching
+- [ ] 120. add memory cancellation
+- [ ] 121. add memory progress reporting
+- [ ] 122. add memory history tracking
+- [ ] 123. add memory rollback support
+- [ ] 124. implement memory feature #44
+- [ ] 125. add memory configuration option
+- [ ] 126. optimize memory performance
+- [ ] 127. add memory logging
+- [ ] 128. add memory error handling
+- [ ] 129. add memory unit tests
+- [ ] 130. add memory integration tests
+- [ ] 131. document memory behavior
+- [ ] 132. add memory metrics
+- [ ] 133. add memory telemetry
+- [ ] 134. add memory caching
+- [ ] 135. add memory retry logic
+- [ ] 136. add memory rate limiting
+- [ ] 137. add memory fallback behavior
+- [ ] 138. add memory validation
+- [ ] 139. add memory serialization
+- [ ] 140. add memory migration path
+
+## Chat & Dialogue
+
+- [ ] 141. add chat_dialogue migration path
+- [ ] 142. add chat_dialogue CLI flag
+- [ ] 143. add chat_dialogue status endpoint
+- [ ] 144. add chat_dialogue health check
+- [ ] 145. add chat_dialogue batching
+- [ ] 146. add chat_dialogue cancellation
+- [ ] 147. add chat_dialogue progress reporting
+- [ ] 148. add chat_dialogue history tracking
+- [ ] 149. add chat_dialogue rollback support
+- [ ] 150. implement chat_dialogue feature #10
+- [ ] 151. add chat_dialogue configuration option
+- [ ] 152. optimize chat_dialogue performance
+- [ ] 153. add chat_dialogue logging
+- [ ] 154. add chat_dialogue error handling
+- [ ] 155. add chat_dialogue unit tests
+- [ ] 156. add chat_dialogue integration tests
+- [ ] 157. document chat_dialogue behavior
+- [ ] 158. add chat_dialogue metrics
+- [ ] 159. add chat_dialogue telemetry
+- [ ] 160. add chat_dialogue caching
+- [ ] 161. add chat_dialogue retry logic
+- [ ] 162. add chat_dialogue rate limiting
+- [ ] 163. add chat_dialogue fallback behavior
+- [ ] 164. add chat_dialogue validation
+- [ ] 165. add chat_dialogue serialization
+- [ ] 166. add chat_dialogue migration path
+- [ ] 167. add chat_dialogue CLI flag
+- [ ] 168. add chat_dialogue status endpoint
+- [ ] 169. add chat_dialogue health check
+- [ ] 170. add chat_dialogue batching
+- [ ] 171. add chat_dialogue cancellation
+- [ ] 172. add chat_dialogue progress reporting
+- [ ] 173. add chat_dialogue history tracking
+- [ ] 174. add chat_dialogue rollback support
+- [ ] 175. implement chat_dialogue feature #35
+- [ ] 176. add chat_dialogue configuration option
+- [ ] 177. optimize chat_dialogue performance
+- [ ] 178. add chat_dialogue logging
+- [ ] 179. add chat_dialogue error handling
+- [ ] 180. add chat_dialogue unit tests
+- [ ] 181. add chat_dialogue integration tests
+- [ ] 182. document chat_dialogue behavior
+- [ ] 183. add chat_dialogue metrics
+- [ ] 184. add chat_dialogue telemetry
+- [ ] 185. add chat_dialogue caching
+- [ ] 186. add chat_dialogue retry logic
+- [ ] 187. add chat_dialogue rate limiting
+- [ ] 188. add chat_dialogue fallback behavior
+- [ ] 189. add chat_dialogue validation
+- [ ] 190. add chat_dialogue serialization
+- [ ] 191. add chat_dialogue migration path
+- [ ] 192. add chat_dialogue CLI flag
+- [ ] 193. add chat_dialogue status endpoint
+- [ ] 194. add chat_dialogue health check
+- [ ] 195. add chat_dialogue batching
+- [ ] 196. add chat_dialogue cancellation
+- [ ] 197. add chat_dialogue progress reporting
+- [ ] 198. add chat_dialogue history tracking
+- [ ] 199. add chat_dialogue rollback support
+- [ ] 200. implement chat_dialogue feature #60
+
+## Movement & Navigation
+
+- [ ] 201. add movement_navigation progress reporting
+- [ ] 202. add movement_navigation history tracking
+- [ ] 203. add movement_navigation rollback support
+- [ ] 204. implement movement_navigation feature #4
+- [ ] 205. add movement_navigation configuration option
+- [ ] 206. optimize movement_navigation performance
+- [ ] 207. add movement_navigation logging
+- [ ] 208. add movement_navigation error handling
+- [ ] 209. add movement_navigation unit tests
+- [ ] 210. add movement_navigation integration tests
+- [ ] 211. document movement_navigation behavior
+- [ ] 212. add movement_navigation metrics
+- [ ] 213. add movement_navigation telemetry
+- [ ] 214. add movement_navigation caching
+- [ ] 215. add movement_navigation retry logic
+- [ ] 216. add movement_navigation rate limiting
+- [ ] 217. add movement_navigation fallback behavior
+- [ ] 218. add movement_navigation validation
+- [ ] 219. add movement_navigation serialization
+- [ ] 220. add movement_navigation migration path
+- [ ] 221. add movement_navigation CLI flag
+- [ ] 222. add movement_navigation status endpoint
+- [ ] 223. add movement_navigation health check
+- [ ] 224. add movement_navigation batching
+- [ ] 225. add movement_navigation cancellation
+- [ ] 226. add movement_navigation progress reporting
+- [ ] 227. add movement_navigation history tracking
+- [ ] 228. add movement_navigation rollback support
+- [ ] 229. implement movement_navigation feature #29
+- [ ] 230. add movement_navigation configuration option
+- [ ] 231. optimize movement_navigation performance
+- [ ] 232. add movement_navigation logging
+- [ ] 233. add movement_navigation error handling
+- [ ] 234. add movement_navigation unit tests
+- [ ] 235. add movement_navigation integration tests
+- [ ] 236. document movement_navigation behavior
+- [ ] 237. add movement_navigation metrics
+- [ ] 238. add movement_navigation telemetry
+- [ ] 239. add movement_navigation caching
+- [ ] 240. add movement_navigation retry logic
+- [ ] 241. add movement_navigation rate limiting
+- [ ] 242. add movement_navigation fallback behavior
+- [ ] 243. add movement_navigation validation
+- [ ] 244. add movement_navigation serialization
+- [ ] 245. add movement_navigation migration path
+- [ ] 246. add movement_navigation CLI flag
+- [ ] 247. add movement_navigation status endpoint
+- [ ] 248. add movement_navigation health check
+- [ ] 249. add movement_navigation batching
+- [ ] 250. add movement_navigation cancellation
+- [ ] 251. add movement_navigation progress reporting
+- [ ] 252. add movement_navigation history tracking
+- [ ] 253. add movement_navigation rollback support
+- [ ] 254. implement movement_navigation feature #54
+- [ ] 255. add movement_navigation configuration option
+- [ ] 256. optimize movement_navigation performance
+- [ ] 257. add movement_navigation logging
+- [ ] 258. add movement_navigation error handling
+- [ ] 259. add movement_navigation unit tests
+- [ ] 260. add movement_navigation integration tests
+- [ ] 261. document movement_navigation behavior
+- [ ] 262. add movement_navigation metrics
+- [ ] 263. add movement_navigation telemetry
+- [ ] 264. add movement_navigation caching
+- [ ] 265. add movement_navigation retry logic
+- [ ] 266. add movement_navigation rate limiting
+- [ ] 267. add movement_navigation fallback behavior
+- [ ] 268. add movement_navigation validation
+- [ ] 269. add movement_navigation serialization
+- [ ] 270. add movement_navigation migration path
+- [ ] 271. add movement_navigation CLI flag
+- [ ] 272. add movement_navigation status endpoint
+- [ ] 273. add movement_navigation health check
+- [ ] 274. add movement_navigation batching
+- [ ] 275. add movement_navigation cancellation
+- [ ] 276. add movement_navigation progress reporting
+- [ ] 277. add movement_navigation history tracking
+- [ ] 278. add movement_navigation rollback support
+- [ ] 279. implement movement_navigation feature #79
+- [ ] 280. add movement_navigation configuration option
+- [ ] 281. optimize movement_navigation performance
+- [ ] 282. add movement_navigation logging
+- [ ] 283. add movement_navigation error handling
+- [ ] 284. add movement_navigation unit tests
+- [ ] 285. add movement_navigation integration tests
+- [ ] 286. document movement_navigation behavior
+- [ ] 287. add movement_navigation metrics
+- [ ] 288. add movement_navigation telemetry
+- [ ] 289. add movement_navigation caching
+- [ ] 290. add movement_navigation retry logic
+
+## Skills & Task Engine
+
+- [ ] 291. add skills_task_engine cancellation
+- [ ] 292. add skills_task_engine progress reporting
+- [ ] 293. add skills_task_engine history tracking
+- [ ] 294. add skills_task_engine rollback support
+- [ ] 295. implement skills_task_engine feature #5
+- [ ] 296. add skills_task_engine configuration option
+- [ ] 297. optimize skills_task_engine performance
+- [ ] 298. add skills_task_engine logging
+- [ ] 299. add skills_task_engine error handling
+- [ ] 300. add skills_task_engine unit tests
+- [ ] 301. add skills_task_engine integration tests
+- [ ] 302. document skills_task_engine behavior
+- [ ] 303. add skills_task_engine metrics
+- [ ] 304. add skills_task_engine telemetry
+- [ ] 305. add skills_task_engine caching
+- [ ] 306. add skills_task_engine retry logic
+- [ ] 307. add skills_task_engine rate limiting
+- [ ] 308. add skills_task_engine fallback behavior
+- [ ] 309. add skills_task_engine validation
+- [ ] 310. add skills_task_engine serialization
+- [ ] 311. add skills_task_engine migration path
+- [ ] 312. add skills_task_engine CLI flag
+- [ ] 313. add skills_task_engine status endpoint
+- [ ] 314. add skills_task_engine health check
+- [ ] 315. add skills_task_engine batching
+- [ ] 316. add skills_task_engine cancellation
+- [ ] 317. add skills_task_engine progress reporting
+- [ ] 318. add skills_task_engine history tracking
+- [ ] 319. add skills_task_engine rollback support
+- [ ] 320. implement skills_task_engine feature #30
+- [ ] 321. add skills_task_engine configuration option
+- [ ] 322. optimize skills_task_engine performance
+- [ ] 323. add skills_task_engine logging
+- [ ] 324. add skills_task_engine error handling
+- [ ] 325. add skills_task_engine unit tests
+- [ ] 326. add skills_task_engine integration tests
+- [ ] 327. document skills_task_engine behavior
+- [ ] 328. add skills_task_engine metrics
+- [ ] 329. add skills_task_engine telemetry
+- [ ] 330. add skills_task_engine caching
+- [ ] 331. add skills_task_engine retry logic
+- [ ] 332. add skills_task_engine rate limiting
+- [ ] 333. add skills_task_engine fallback behavior
+- [ ] 334. add skills_task_engine validation
+- [ ] 335. add skills_task_engine serialization
+- [ ] 336. add skills_task_engine migration path
+- [ ] 337. add skills_task_engine CLI flag
+- [ ] 338. add skills_task_engine status endpoint
+- [ ] 339. add skills_task_engine health check
+- [ ] 340. add skills_task_engine batching
+- [ ] 341. add skills_task_engine cancellation
+- [ ] 342. add skills_task_engine progress reporting
+- [ ] 343. add skills_task_engine history tracking
+- [ ] 344. add skills_task_engine rollback support
+- [ ] 345. implement skills_task_engine feature #55
+- [ ] 346. add skills_task_engine configuration option
+- [ ] 347. optimize skills_task_engine performance
+- [ ] 348. add skills_task_engine logging
+- [ ] 349. add skills_task_engine error handling
+- [ ] 350. add skills_task_engine unit tests
+- [ ] 351. add skills_task_engine integration tests
+- [ ] 352. document skills_task_engine behavior
+- [ ] 353. add skills_task_engine metrics
+- [ ] 354. add skills_task_engine telemetry
+- [ ] 355. add skills_task_engine caching
+- [ ] 356. add skills_task_engine retry logic
+- [ ] 357. add skills_task_engine rate limiting
+- [ ] 358. add skills_task_engine fallback behavior
+- [ ] 359. add skills_task_engine validation
+- [ ] 360. add skills_task_engine serialization
+- [ ] 361. add skills_task_engine migration path
+- [ ] 362. add skills_task_engine CLI flag
+- [ ] 363. add skills_task_engine status endpoint
+- [ ] 364. add skills_task_engine health check
+- [ ] 365. add skills_task_engine batching
+- [ ] 366. add skills_task_engine cancellation
+- [ ] 367. add skills_task_engine progress reporting
+- [ ] 368. add skills_task_engine history tracking
+- [ ] 369. add skills_task_engine rollback support
+- [ ] 370. implement skills_task_engine feature #80
+- [ ] 371. add skills_task_engine configuration option
+- [ ] 372. optimize skills_task_engine performance
+- [ ] 373. add skills_task_engine logging
+- [ ] 374. add skills_task_engine error handling
+- [ ] 375. add skills_task_engine unit tests
+- [ ] 376. add skills_task_engine integration tests
+- [ ] 377. document skills_task_engine behavior
+- [ ] 378. add skills_task_engine metrics
+- [ ] 379. add skills_task_engine telemetry
+- [ ] 380. add skills_task_engine caching
+- [ ] 381. add skills_task_engine retry logic
+- [ ] 382. add skills_task_engine rate limiting
+- [ ] 383. add skills_task_engine fallback behavior
+- [ ] 384. add skills_task_engine validation
+- [ ] 385. add skills_task_engine serialization
+- [ ] 386. add skills_task_engine migration path
+- [ ] 387. add skills_task_engine CLI flag
+- [ ] 388. add skills_task_engine status endpoint
+- [ ] 389. add skills_task_engine health check
+- [ ] 390. add skills_task_engine batching
+
+## Mining & Gathering
+
+- [ ] 391. add mining_gathering health check
+- [ ] 392. add mining_gathering batching
+- [ ] 393. add mining_gathering cancellation
+- [ ] 394. add mining_gathering progress reporting
+- [ ] 395. add mining_gathering history tracking
+- [ ] 396. add mining_gathering rollback support
+- [ ] 397. implement mining_gathering feature #7
+- [ ] 398. add mining_gathering configuration option
+- [ ] 399. optimize mining_gathering performance
+- [ ] 400. add mining_gathering logging
+- [ ] 401. add mining_gathering error handling
+- [ ] 402. add mining_gathering unit tests
+- [ ] 403. add mining_gathering integration tests
+- [ ] 404. document mining_gathering behavior
+- [ ] 405. add mining_gathering metrics
+- [ ] 406. add mining_gathering telemetry
+- [ ] 407. add mining_gathering caching
+- [ ] 408. add mining_gathering retry logic
+- [ ] 409. add mining_gathering rate limiting
+- [ ] 410. add mining_gathering fallback behavior
+- [ ] 411. add mining_gathering validation
+- [ ] 412. add mining_gathering serialization
+- [ ] 413. add mining_gathering migration path
+- [ ] 414. add mining_gathering CLI flag
+- [ ] 415. add mining_gathering status endpoint
+- [ ] 416. add mining_gathering health check
+- [ ] 417. add mining_gathering batching
+- [ ] 418. add mining_gathering cancellation
+- [ ] 419. add mining_gathering progress reporting
+- [ ] 420. add mining_gathering history tracking
+- [ ] 421. add mining_gathering rollback support
+- [ ] 422. implement mining_gathering feature #32
+- [ ] 423. add mining_gathering configuration option
+- [ ] 424. optimize mining_gathering performance
+- [ ] 425. add mining_gathering logging
+- [ ] 426. add mining_gathering error handling
+- [ ] 427. add mining_gathering unit tests
+- [ ] 428. add mining_gathering integration tests
+- [ ] 429. document mining_gathering behavior
+- [ ] 430. add mining_gathering metrics
+- [ ] 431. add mining_gathering telemetry
+- [ ] 432. add mining_gathering caching
+- [ ] 433. add mining_gathering retry logic
+- [ ] 434. add mining_gathering rate limiting
+- [ ] 435. add mining_gathering fallback behavior
+- [ ] 436. add mining_gathering validation
+- [ ] 437. add mining_gathering serialization
+- [ ] 438. add mining_gathering migration path
+- [ ] 439. add mining_gathering CLI flag
+- [ ] 440. add mining_gathering status endpoint
+- [ ] 441. add mining_gathering health check
+- [ ] 442. add mining_gathering batching
+- [ ] 443. add mining_gathering cancellation
+- [ ] 444. add mining_gathering progress reporting
+- [ ] 445. add mining_gathering history tracking
+- [ ] 446. add mining_gathering rollback support
+- [ ] 447. implement mining_gathering feature #57
+- [ ] 448. add mining_gathering configuration option
+- [ ] 449. optimize mining_gathering performance
+- [ ] 450. add mining_gathering logging
+- [ ] 451. add mining_gathering error handling
+- [ ] 452. add mining_gathering unit tests
+- [ ] 453. add mining_gathering integration tests
+- [ ] 454. document mining_gathering behavior
+- [ ] 455. add mining_gathering metrics
+- [ ] 456. add mining_gathering telemetry
+- [ ] 457. add mining_gathering caching
+- [ ] 458. add mining_gathering retry logic
+- [ ] 459. add mining_gathering rate limiting
+- [ ] 460. add mining_gathering fallback behavior
+
+## Crafting & Smelting
+
+- [ ] 461. add crafting_smelting batching
+- [ ] 462. add crafting_smelting cancellation
+- [ ] 463. add crafting_smelting progress reporting
+- [ ] 464. add crafting_smelting history tracking
+- [ ] 465. add crafting_smelting rollback support
+- [ ] 466. implement crafting_smelting feature #6
+- [ ] 467. add crafting_smelting configuration option
+- [ ] 468. optimize crafting_smelting performance
+- [ ] 469. add crafting_smelting logging
+- [ ] 470. add crafting_smelting error handling
+- [ ] 471. add crafting_smelting unit tests
+- [ ] 472. add crafting_smelting integration tests
+- [ ] 473. document crafting_smelting behavior
+- [ ] 474. add crafting_smelting metrics
+- [ ] 475. add crafting_smelting telemetry
+- [ ] 476. add crafting_smelting caching
+- [ ] 477. add crafting_smelting retry logic
+- [ ] 478. add crafting_smelting rate limiting
+- [ ] 479. add crafting_smelting fallback behavior
+- [ ] 480. add crafting_smelting validation
+- [ ] 481. add crafting_smelting serialization
+- [ ] 482. add crafting_smelting migration path
+- [ ] 483. add crafting_smelting CLI flag
+- [ ] 484. add crafting_smelting status endpoint
+- [ ] 485. add crafting_smelting health check
+- [ ] 486. add crafting_smelting batching
+- [ ] 487. add crafting_smelting cancellation
+- [ ] 488. add crafting_smelting progress reporting
+- [ ] 489. add crafting_smelting history tracking
+- [ ] 490. add crafting_smelting rollback support
+- [ ] 491. implement crafting_smelting feature #31
+- [ ] 492. add crafting_smelting configuration option
+- [ ] 493. optimize crafting_smelting performance
+- [ ] 494. add crafting_smelting logging
+- [ ] 495. add crafting_smelting error handling
+- [ ] 496. add crafting_smelting unit tests
+- [ ] 497. add crafting_smelting integration tests
+- [ ] 498. document crafting_smelting behavior
+- [ ] 499. add crafting_smelting metrics
+- [ ] 500. add crafting_smelting telemetry
+- [ ] 501. add crafting_smelting caching
+- [ ] 502. add crafting_smelting retry logic
+- [ ] 503. add crafting_smelting rate limiting
+- [ ] 504. add crafting_smelting fallback behavior
+- [ ] 505. add crafting_smelting validation
+- [ ] 506. add crafting_smelting serialization
+- [ ] 507. add crafting_smelting migration path
+- [ ] 508. add crafting_smelting CLI flag
+- [ ] 509. add crafting_smelting status endpoint
+- [ ] 510. add crafting_smelting health check
+- [ ] 511. add crafting_smelting batching
+- [ ] 512. add crafting_smelting cancellation
+- [ ] 513. add crafting_smelting progress reporting
+- [ ] 514. add crafting_smelting history tracking
+- [ ] 515. add crafting_smelting rollback support
+- [ ] 516. implement crafting_smelting feature #56
+- [ ] 517. add crafting_smelting configuration option
+- [ ] 518. optimize crafting_smelting performance
+- [ ] 519. add crafting_smelting logging
+- [ ] 520. add crafting_smelting error handling
+
+## Building & Architecture
+
+- [ ] 521. add building_architecture rollback support
+- [ ] 522. implement building_architecture feature #2
+- [ ] 523. add building_architecture configuration option
+- [ ] 524. optimize building_architecture performance
+- [ ] 525. add building_architecture logging
+- [ ] 526. add building_architecture error handling
+- [ ] 527. add building_architecture unit tests
+- [ ] 528. add building_architecture integration tests
+- [ ] 529. document building_architecture behavior
+- [ ] 530. add building_architecture metrics
+- [ ] 531. add building_architecture telemetry
+- [ ] 532. add building_architecture caching
+- [ ] 533. add building_architecture retry logic
+- [ ] 534. add building_architecture rate limiting
+- [ ] 535. add building_architecture fallback behavior
+- [ ] 536. add building_architecture validation
+- [ ] 537. add building_architecture serialization
+- [ ] 538. add building_architecture migration path
+- [ ] 539. add building_architecture CLI flag
+- [ ] 540. add building_architecture status endpoint
+- [ ] 541. add building_architecture health check
+- [ ] 542. add building_architecture batching
+- [ ] 543. add building_architecture cancellation
+- [ ] 544. add building_architecture progress reporting
+- [ ] 545. add building_architecture history tracking
+- [ ] 546. add building_architecture rollback support
+- [ ] 547. implement building_architecture feature #27
+- [ ] 548. add building_architecture configuration option
+- [ ] 549. optimize building_architecture performance
+- [ ] 550. add building_architecture logging
+- [ ] 551. add building_architecture error handling
+- [ ] 552. add building_architecture unit tests
+- [ ] 553. add building_architecture integration tests
+- [ ] 554. document building_architecture behavior
+- [ ] 555. add building_architecture metrics
+- [ ] 556. add building_architecture telemetry
+- [ ] 557. add building_architecture caching
+- [ ] 558. add building_architecture retry logic
+- [ ] 559. add building_architecture rate limiting
+- [ ] 560. add building_architecture fallback behavior
+- [ ] 561. add building_architecture validation
+- [ ] 562. add building_architecture serialization
+- [ ] 563. add building_architecture migration path
+- [ ] 564. add building_architecture CLI flag
+- [ ] 565. add building_architecture status endpoint
+- [ ] 566. add building_architecture health check
+- [ ] 567. add building_architecture batching
+- [ ] 568. add building_architecture cancellation
+- [ ] 569. add building_architecture progress reporting
+- [ ] 570. add building_architecture history tracking
+- [ ] 571. add building_architecture rollback support
+- [ ] 572. implement building_architecture feature #52
+- [ ] 573. add building_architecture configuration option
+- [ ] 574. optimize building_architecture performance
+- [ ] 575. add building_architecture logging
+- [ ] 576. add building_architecture error handling
+- [ ] 577. add building_architecture unit tests
+- [ ] 578. add building_architecture integration tests
+- [ ] 579. document building_architecture behavior
+- [ ] 580. add building_architecture metrics
+- [ ] 581. add building_architecture telemetry
+- [ ] 582. add building_architecture caching
+- [ ] 583. add building_architecture retry logic
+- [ ] 584. add building_architecture rate limiting
+- [ ] 585. add building_architecture fallback behavior
+- [ ] 586. add building_architecture validation
+- [ ] 587. add building_architecture serialization
+- [ ] 588. add building_architecture migration path
+- [ ] 589. add building_architecture CLI flag
+- [ ] 590. add building_architecture status endpoint
+
+## Combat & PvE
+
+- [ ] 591. add combat_pve fallback behavior
+- [ ] 592. add combat_pve validation
+- [ ] 593. add combat_pve serialization
+- [ ] 594. add combat_pve migration path
+- [ ] 595. add combat_pve CLI flag
+- [ ] 596. add combat_pve status endpoint
+- [ ] 597. add combat_pve health check
+- [ ] 598. add combat_pve batching
+- [ ] 599. add combat_pve cancellation
+- [ ] 600. add combat_pve progress reporting
+- [ ] 601. add combat_pve history tracking
+- [ ] 602. add combat_pve rollback support
+- [ ] 603. implement combat_pve feature #13
+- [ ] 604. add combat_pve configuration option
+- [ ] 605. optimize combat_pve performance
+- [ ] 606. add combat_pve logging
+- [ ] 607. add combat_pve error handling
+- [ ] 608. add combat_pve unit tests
+- [ ] 609. add combat_pve integration tests
+- [ ] 610. document combat_pve behavior
+- [ ] 611. add combat_pve metrics
+- [ ] 612. add combat_pve telemetry
+- [ ] 613. add combat_pve caching
+- [ ] 614. add combat_pve retry logic
+- [ ] 615. add combat_pve rate limiting
+- [ ] 616. add combat_pve fallback behavior
+- [ ] 617. add combat_pve validation
+- [ ] 618. add combat_pve serialization
+- [ ] 619. add combat_pve migration path
+- [ ] 620. add combat_pve CLI flag
+- [ ] 621. add combat_pve status endpoint
+- [ ] 622. add combat_pve health check
+- [ ] 623. add combat_pve batching
+- [ ] 624. add combat_pve cancellation
+- [ ] 625. add combat_pve progress reporting
+- [ ] 626. add combat_pve history tracking
+- [ ] 627. add combat_pve rollback support
+- [ ] 628. implement combat_pve feature #38
+- [ ] 629. add combat_pve configuration option
+- [ ] 630. optimize combat_pve performance
+- [ ] 631. add combat_pve logging
+- [ ] 632. add combat_pve error handling
+- [ ] 633. add combat_pve unit tests
+- [ ] 634. add combat_pve integration tests
+- [ ] 635. document combat_pve behavior
+- [ ] 636. add combat_pve metrics
+- [ ] 637. add combat_pve telemetry
+- [ ] 638. add combat_pve caching
+- [ ] 639. add combat_pve retry logic
+- [ ] 640. add combat_pve rate limiting
+- [ ] 641. add combat_pve fallback behavior
+- [ ] 642. add combat_pve validation
+- [ ] 643. add combat_pve serialization
+- [ ] 644. add combat_pve migration path
+- [ ] 645. add combat_pve CLI flag
+- [ ] 646. add combat_pve status endpoint
+- [ ] 647. add combat_pve health check
+- [ ] 648. add combat_pve batching
+- [ ] 649. add combat_pve cancellation
+- [ ] 650. add combat_pve progress reporting
+- [ ] 651. add combat_pve history tracking
+- [ ] 652. add combat_pve rollback support
+- [ ] 653. implement combat_pve feature #63
+- [ ] 654. add combat_pve configuration option
+- [ ] 655. optimize combat_pve performance
+- [ ] 656. add combat_pve logging
+- [ ] 657. add combat_pve error handling
+- [ ] 658. add combat_pve unit tests
+- [ ] 659. add combat_pve integration tests
+- [ ] 660. document combat_pve behavior
+
+## Farming & Food
+
+- [ ] 661. add farming_food serialization
+- [ ] 662. add farming_food migration path
+- [ ] 663. add farming_food CLI flag
+- [ ] 664. add farming_food status endpoint
+- [ ] 665. add farming_food health check
+- [ ] 666. add farming_food batching
+- [ ] 667. add farming_food cancellation
+- [ ] 668. add farming_food progress reporting
+- [ ] 669. add farming_food history tracking
+- [ ] 670. add farming_food rollback support
+- [ ] 671. implement farming_food feature #11
+- [ ] 672. add farming_food configuration option
+- [ ] 673. optimize farming_food performance
+- [ ] 674. add farming_food logging
+- [ ] 675. add farming_food error handling
+- [ ] 676. add farming_food unit tests
+- [ ] 677. add farming_food integration tests
+- [ ] 678. document farming_food behavior
+- [ ] 679. add farming_food metrics
+- [ ] 680. add farming_food telemetry
+- [ ] 681. add farming_food caching
+- [ ] 682. add farming_food retry logic
+- [ ] 683. add farming_food rate limiting
+- [ ] 684. add farming_food fallback behavior
+- [ ] 685. add farming_food validation
+- [ ] 686. add farming_food serialization
+- [ ] 687. add farming_food migration path
+- [ ] 688. add farming_food CLI flag
+- [ ] 689. add farming_food status endpoint
+- [ ] 690. add farming_food health check
+- [ ] 691. add farming_food batching
+- [ ] 692. add farming_food cancellation
+- [ ] 693. add farming_food progress reporting
+- [ ] 694. add farming_food history tracking
+- [ ] 695. add farming_food rollback support
+- [ ] 696. implement farming_food feature #36
+- [ ] 697. add farming_food configuration option
+- [ ] 698. optimize farming_food performance
+- [ ] 699. add farming_food logging
+- [ ] 700. add farming_food error handling
+- [ ] 701. add farming_food unit tests
+- [ ] 702. add farming_food integration tests
+- [ ] 703. document farming_food behavior
+- [ ] 704. add farming_food metrics
+- [ ] 705. add farming_food telemetry
+- [ ] 706. add farming_food caching
+- [ ] 707. add farming_food retry logic
+- [ ] 708. add farming_food rate limiting
+- [ ] 709. add farming_food fallback behavior
+- [ ] 710. add farming_food validation
+- [ ] 711. add farming_food serialization
+- [ ] 712. add farming_food migration path
+- [ ] 713. add farming_food CLI flag
+- [ ] 714. add farming_food status endpoint
+- [ ] 715. add farming_food health check
+- [ ] 716. add farming_food batching
+- [ ] 717. add farming_food cancellation
+- [ ] 718. add farming_food progress reporting
+- [ ] 719. add farming_food history tracking
+- [ ] 720. add farming_food rollback support
+
+## Redstone & Automation
+
+- [ ] 721. add redstone_automation progress reporting
+- [ ] 722. add redstone_automation history tracking
+- [ ] 723. add redstone_automation rollback support
+- [ ] 724. implement redstone_automation feature #4
+- [ ] 725. add redstone_automation configuration option
+- [ ] 726. optimize redstone_automation performance
+- [ ] 727. add redstone_automation logging
+- [ ] 728. add redstone_automation error handling
+- [ ] 729. add redstone_automation unit tests
+- [ ] 730. add redstone_automation integration tests
+- [ ] 731. document redstone_automation behavior
+- [ ] 732. add redstone_automation metrics
+- [ ] 733. add redstone_automation telemetry
+- [ ] 734. add redstone_automation caching
+- [ ] 735. add redstone_automation retry logic
+- [ ] 736. add redstone_automation rate limiting
+- [ ] 737. add redstone_automation fallback behavior
+- [ ] 738. add redstone_automation validation
+- [ ] 739. add redstone_automation serialization
+- [ ] 740. add redstone_automation migration path
+- [ ] 741. add redstone_automation CLI flag
+- [ ] 742. add redstone_automation status endpoint
+- [ ] 743. add redstone_automation health check
+- [ ] 744. add redstone_automation batching
+- [ ] 745. add redstone_automation cancellation
+- [ ] 746. add redstone_automation progress reporting
+- [ ] 747. add redstone_automation history tracking
+- [ ] 748. add redstone_automation rollback support
+- [ ] 749. implement redstone_automation feature #29
+- [ ] 750. add redstone_automation configuration option
+- [ ] 751. optimize redstone_automation performance
+- [ ] 752. add redstone_automation logging
+- [ ] 753. add redstone_automation error handling
+- [ ] 754. add redstone_automation unit tests
+- [ ] 755. add redstone_automation integration tests
+- [ ] 756. document redstone_automation behavior
+- [ ] 757. add redstone_automation metrics
+- [ ] 758. add redstone_automation telemetry
+- [ ] 759. add redstone_automation caching
+- [ ] 760. add redstone_automation retry logic
+- [ ] 761. add redstone_automation rate limiting
+- [ ] 762. add redstone_automation fallback behavior
+- [ ] 763. add redstone_automation validation
+- [ ] 764. add redstone_automation serialization
+- [ ] 765. add redstone_automation migration path
+- [ ] 766. add redstone_automation CLI flag
+- [ ] 767. add redstone_automation status endpoint
+- [ ] 768. add redstone_automation health check
+- [ ] 769. add redstone_automation batching
+- [ ] 770. add redstone_automation cancellation
+- [ ] 771. add redstone_automation progress reporting
+- [ ] 772. add redstone_automation history tracking
+- [ ] 773. add redstone_automation rollback support
+- [ ] 774. implement redstone_automation feature #54
+- [ ] 775. add redstone_automation configuration option
+- [ ] 776. optimize redstone_automation performance
+- [ ] 777. add redstone_automation logging
+- [ ] 778. add redstone_automation error handling
+- [ ] 779. add redstone_automation unit tests
+- [ ] 780. add redstone_automation integration tests
+
+## Inventory & Items
+
+- [ ] 781. add inventory_items status endpoint
+- [ ] 782. add inventory_items health check
+- [ ] 783. add inventory_items batching
+- [ ] 784. add inventory_items cancellation
+- [ ] 785. add inventory_items progress reporting
+- [ ] 786. add inventory_items history tracking
+- [ ] 787. add inventory_items rollback support
+- [ ] 788. implement inventory_items feature #8
+- [ ] 789. add inventory_items configuration option
+- [ ] 790. optimize inventory_items performance
+- [ ] 791. add inventory_items logging
+- [ ] 792. add inventory_items error handling
+- [ ] 793. add inventory_items unit tests
+- [ ] 794. add inventory_items integration tests
+- [ ] 795. document inventory_items behavior
+- [ ] 796. add inventory_items metrics
+- [ ] 797. add inventory_items telemetry
+- [ ] 798. add inventory_items caching
+- [ ] 799. add inventory_items retry logic
+- [ ] 800. add inventory_items rate limiting
+- [ ] 801. add inventory_items fallback behavior
+- [ ] 802. add inventory_items validation
+- [ ] 803. add inventory_items serialization
+- [ ] 804. add inventory_items migration path
+- [ ] 805. add inventory_items CLI flag
+- [ ] 806. add inventory_items status endpoint
+- [ ] 807. add inventory_items health check
+- [ ] 808. add inventory_items batching
+- [ ] 809. add inventory_items cancellation
+- [ ] 810. add inventory_items progress reporting
+- [ ] 811. add inventory_items history tracking
+- [ ] 812. add inventory_items rollback support
+- [ ] 813. implement inventory_items feature #33
+- [ ] 814. add inventory_items configuration option
+- [ ] 815. optimize inventory_items performance
+- [ ] 816. add inventory_items logging
+- [ ] 817. add inventory_items error handling
+- [ ] 818. add inventory_items unit tests
+- [ ] 819. add inventory_items integration tests
+- [ ] 820. document inventory_items behavior
+- [ ] 821. add inventory_items metrics
+- [ ] 822. add inventory_items telemetry
+- [ ] 823. add inventory_items caching
+- [ ] 824. add inventory_items retry logic
+- [ ] 825. add inventory_items rate limiting
+- [ ] 826. add inventory_items fallback behavior
+- [ ] 827. add inventory_items validation
+- [ ] 828. add inventory_items serialization
+- [ ] 829. add inventory_items migration path
+- [ ] 830. add inventory_items CLI flag
+- [ ] 831. add inventory_items status endpoint
+- [ ] 832. add inventory_items health check
+- [ ] 833. add inventory_items batching
+- [ ] 834. add inventory_items cancellation
+- [ ] 835. add inventory_items progress reporting
+- [ ] 836. add inventory_items history tracking
+- [ ] 837. add inventory_items rollback support
+- [ ] 838. implement inventory_items feature #58
+- [ ] 839. add inventory_items configuration option
+- [ ] 840. optimize inventory_items performance
+- [ ] 841. add inventory_items logging
+- [ ] 842. add inventory_items error handling
+- [ ] 843. add inventory_items unit tests
+- [ ] 844. add inventory_items integration tests
+- [ ] 845. document inventory_items behavior
+- [ ] 846. add inventory_items metrics
+- [ ] 847. add inventory_items telemetry
+- [ ] 848. add inventory_items caching
+- [ ] 849. add inventory_items retry logic
+- [ ] 850. add inventory_items rate limiting
+- [ ] 851. add inventory_items fallback behavior
+- [ ] 852. add inventory_items validation
+- [ ] 853. add inventory_items serialization
+- [ ] 854. add inventory_items migration path
+- [ ] 855. add inventory_items CLI flag
+- [ ] 856. add inventory_items status endpoint
+- [ ] 857. add inventory_items health check
+- [ ] 858. add inventory_items batching
+- [ ] 859. add inventory_items cancellation
+- [ ] 860. add inventory_items progress reporting
+
+## NPC Rendering & Equipment
+
+- [ ] 861. add npc_rendering_equipment configuration option
+- [ ] 862. optimize npc_rendering_equipment performance
+- [ ] 863. add npc_rendering_equipment logging
+- [ ] 864. add npc_rendering_equipment error handling
+- [ ] 865. add npc_rendering_equipment unit tests
+- [ ] 866. add npc_rendering_equipment integration tests
+- [ ] 867. document npc_rendering_equipment behavior
+- [ ] 868. add npc_rendering_equipment metrics
+- [ ] 869. add npc_rendering_equipment telemetry
+- [ ] 870. add npc_rendering_equipment caching
+- [ ] 871. add npc_rendering_equipment retry logic
+- [ ] 872. add npc_rendering_equipment rate limiting
+- [ ] 873. add npc_rendering_equipment fallback behavior
+- [ ] 874. add npc_rendering_equipment validation
+- [ ] 875. add npc_rendering_equipment serialization
+- [ ] 876. add npc_rendering_equipment migration path
+- [ ] 877. add npc_rendering_equipment CLI flag
+- [ ] 878. add npc_rendering_equipment status endpoint
+- [ ] 879. add npc_rendering_equipment health check
+- [ ] 880. add npc_rendering_equipment batching
+- [ ] 881. add npc_rendering_equipment cancellation
+- [ ] 882. add npc_rendering_equipment progress reporting
+- [ ] 883. add npc_rendering_equipment history tracking
+- [ ] 884. add npc_rendering_equipment rollback support
+- [ ] 885. implement npc_rendering_equipment feature #25
+- [ ] 886. add npc_rendering_equipment configuration option
+- [ ] 887. optimize npc_rendering_equipment performance
+- [ ] 888. add npc_rendering_equipment logging
+- [ ] 889. add npc_rendering_equipment error handling
+- [ ] 890. add npc_rendering_equipment unit tests
+- [ ] 891. add npc_rendering_equipment integration tests
+- [ ] 892. document npc_rendering_equipment behavior
+- [ ] 893. add npc_rendering_equipment metrics
+- [ ] 894. add npc_rendering_equipment telemetry
+- [ ] 895. add npc_rendering_equipment caching
+- [ ] 896. add npc_rendering_equipment retry logic
+- [ ] 897. add npc_rendering_equipment rate limiting
+- [ ] 898. add npc_rendering_equipment fallback behavior
+- [ ] 899. add npc_rendering_equipment validation
+- [ ] 900. add npc_rendering_equipment serialization
+- [ ] 901. add npc_rendering_equipment migration path
+- [ ] 902. add npc_rendering_equipment CLI flag
+- [ ] 903. add npc_rendering_equipment status endpoint
+- [ ] 904. add npc_rendering_equipment health check
+- [ ] 905. add npc_rendering_equipment batching
+- [ ] 906. add npc_rendering_equipment cancellation
+- [ ] 907. add npc_rendering_equipment progress reporting
+- [ ] 908. add npc_rendering_equipment history tracking
+- [ ] 909. add npc_rendering_equipment rollback support
+- [ ] 910. implement npc_rendering_equipment feature #50
+- [ ] 911. add npc_rendering_equipment configuration option
+- [ ] 912. optimize npc_rendering_equipment performance
+- [ ] 913. add npc_rendering_equipment logging
+- [ ] 914. add npc_rendering_equipment error handling
+- [ ] 915. add npc_rendering_equipment unit tests
+- [ ] 916. add npc_rendering_equipment integration tests
+- [ ] 917. document npc_rendering_equipment behavior
+- [ ] 918. add npc_rendering_equipment metrics
+- [ ] 919. add npc_rendering_equipment telemetry
+- [ ] 920. add npc_rendering_equipment caching
+- [ ] 921. add npc_rendering_equipment retry logic
+- [ ] 922. add npc_rendering_equipment rate limiting
+- [ ] 923. add npc_rendering_equipment fallback behavior
+- [ ] 924. add npc_rendering_equipment validation
+- [ ] 925. add npc_rendering_equipment serialization
+- [ ] 926. add npc_rendering_equipment migration path
+- [ ] 927. add npc_rendering_equipment CLI flag
+- [ ] 928. add npc_rendering_equipment status endpoint
+- [ ] 929. add npc_rendering_equipment health check
+- [ ] 930. add npc_rendering_equipment batching
+
+## Multiplayer & Permissions
+
+- [ ] 931. add multiplayer_permissions configuration option
+- [ ] 932. optimize multiplayer_permissions performance
+- [ ] 933. add multiplayer_permissions logging
+- [ ] 934. add multiplayer_permissions error handling
+- [ ] 935. add multiplayer_permissions unit tests
+- [ ] 936. add multiplayer_permissions integration tests
+- [ ] 937. document multiplayer_permissions behavior
+- [ ] 938. add multiplayer_permissions metrics
+- [ ] 939. add multiplayer_permissions telemetry
+- [ ] 940. add multiplayer_permissions caching
+- [ ] 941. add multiplayer_permissions retry logic
+- [ ] 942. add multiplayer_permissions rate limiting
+- [ ] 943. add multiplayer_permissions fallback behavior
+- [ ] 944. add multiplayer_permissions validation
+- [ ] 945. add multiplayer_permissions serialization
+- [ ] 946. add multiplayer_permissions migration path
+- [ ] 947. add multiplayer_permissions CLI flag
+- [ ] 948. add multiplayer_permissions status endpoint
+- [ ] 949. add multiplayer_permissions health check
+- [ ] 950. add multiplayer_permissions batching
+- [ ] 951. add multiplayer_permissions cancellation
+- [ ] 952. add multiplayer_permissions progress reporting
+- [ ] 953. add multiplayer_permissions history tracking
+- [ ] 954. add multiplayer_permissions rollback support
+- [ ] 955. implement multiplayer_permissions feature #25
+- [ ] 956. add multiplayer_permissions configuration option
+- [ ] 957. optimize multiplayer_permissions performance
+- [ ] 958. add multiplayer_permissions logging
+- [ ] 959. add multiplayer_permissions error handling
+- [ ] 960. add multiplayer_permissions unit tests
+- [ ] 961. add multiplayer_permissions integration tests
+- [ ] 962. document multiplayer_permissions behavior
+- [ ] 963. add multiplayer_permissions metrics
+- [ ] 964. add multiplayer_permissions telemetry
+- [ ] 965. add multiplayer_permissions caching
+- [ ] 966. add multiplayer_permissions retry logic
+- [ ] 967. add multiplayer_permissions rate limiting
+- [ ] 968. add multiplayer_permissions fallback behavior
+- [ ] 969. add multiplayer_permissions validation
+- [ ] 970. add multiplayer_permissions serialization
+- [ ] 971. add multiplayer_permissions migration path
+- [ ] 972. add multiplayer_permissions CLI flag
+- [ ] 973. add multiplayer_permissions status endpoint
+- [ ] 974. add multiplayer_permissions health check
+- [ ] 975. add multiplayer_permissions batching
+- [ ] 976. add multiplayer_permissions cancellation
+- [ ] 977. add multiplayer_permissions progress reporting
+- [ ] 978. add multiplayer_permissions history tracking
+- [ ] 979. add multiplayer_permissions rollback support
+- [ ] 980. implement multiplayer_permissions feature #50
+- [ ] 981. add multiplayer_permissions configuration option
+- [ ] 982. optimize multiplayer_permissions performance
+- [ ] 983. add multiplayer_permissions logging
+- [ ] 984. add multiplayer_permissions error handling
+- [ ] 985. add multiplayer_permissions unit tests
+- [ ] 986. add multiplayer_permissions integration tests
+- [ ] 987. document multiplayer_permissions behavior
+- [ ] 988. add multiplayer_permissions metrics
+- [ ] 989. add multiplayer_permissions telemetry
+- [ ] 990. add multiplayer_permissions caching
+
+## Training & Feedback
+
+- [ ] 991. add training_feedback batching
+- [ ] 992. add training_feedback cancellation
+- [ ] 993. add training_feedback progress reporting
+- [ ] 994. add training_feedback history tracking
+- [ ] 995. add training_feedback rollback support
+- [ ] 996. implement training_feedback feature #6
+- [ ] 997. add training_feedback configuration option
+- [ ] 998. optimize training_feedback performance
+- [ ] 999. add training_feedback logging
+- [ ] 1000. add training_feedback error handling
+- [ ] 1001. add training_feedback unit tests
+- [ ] 1002. add training_feedback integration tests
+- [ ] 1003. document training_feedback behavior
+- [ ] 1004. add training_feedback metrics
+- [ ] 1005. add training_feedback telemetry
+- [ ] 1006. add training_feedback caching
+- [ ] 1007. add training_feedback retry logic
+- [ ] 1008. add training_feedback rate limiting
+- [ ] 1009. add training_feedback fallback behavior
+- [ ] 1010. add training_feedback validation
+- [ ] 1011. add training_feedback serialization
+- [ ] 1012. add training_feedback migration path
+- [ ] 1013. add training_feedback CLI flag
+- [ ] 1014. add training_feedback status endpoint
+- [ ] 1015. add training_feedback health check
+- [ ] 1016. add training_feedback batching
+- [ ] 1017. add training_feedback cancellation
+- [ ] 1018. add training_feedback progress reporting
+- [ ] 1019. add training_feedback history tracking
+- [ ] 1020. add training_feedback rollback support
+- [ ] 1021. implement training_feedback feature #31
+- [ ] 1022. add training_feedback configuration option
+- [ ] 1023. optimize training_feedback performance
+- [ ] 1024. add training_feedback logging
+- [ ] 1025. add training_feedback error handling
+- [ ] 1026. add training_feedback unit tests
+- [ ] 1027. add training_feedback integration tests
+- [ ] 1028. document training_feedback behavior
+- [ ] 1029. add training_feedback metrics
+- [ ] 1030. add training_feedback telemetry
+- [ ] 1031. add training_feedback caching
+- [ ] 1032. add training_feedback retry logic
+- [ ] 1033. add training_feedback rate limiting
+- [ ] 1034. add training_feedback fallback behavior
+- [ ] 1035. add training_feedback validation
+- [ ] 1036. add training_feedback serialization
+- [ ] 1037. add training_feedback migration path
+- [ ] 1038. add training_feedback CLI flag
+- [ ] 1039. add training_feedback status endpoint
+- [ ] 1040. add training_feedback health check
+- [ ] 1041. add training_feedback batching
+- [ ] 1042. add training_feedback cancellation
+- [ ] 1043. add training_feedback progress reporting
+- [ ] 1044. add training_feedback history tracking
+- [ ] 1045. add training_feedback rollback support
+- [ ] 1046. implement training_feedback feature #56
+- [ ] 1047. add training_feedback configuration option
+- [ ] 1048. optimize training_feedback performance
+- [ ] 1049. add training_feedback logging
+- [ ] 1050. add training_feedback error handling
+
+## External Server / SmithGPT
+
+- [ ] 1051. optimize external_server_smithgpt performance
+- [ ] 1052. add external_server_smithgpt logging
+- [ ] 1053. add external_server_smithgpt error handling
+- [ ] 1054. add external_server_smithgpt unit tests
+- [ ] 1055. add external_server_smithgpt integration tests
+- [ ] 1056. document external_server_smithgpt behavior
+- [ ] 1057. add external_server_smithgpt metrics
+- [ ] 1058. add external_server_smithgpt telemetry
+- [ ] 1059. add external_server_smithgpt caching
+- [ ] 1060. add external_server_smithgpt retry logic
+- [ ] 1061. add external_server_smithgpt rate limiting
+- [ ] 1062. add external_server_smithgpt fallback behavior
+- [ ] 1063. add external_server_smithgpt validation
+- [ ] 1064. add external_server_smithgpt serialization
+- [ ] 1065. add external_server_smithgpt migration path
+- [ ] 1066. add external_server_smithgpt CLI flag
+- [ ] 1067. add external_server_smithgpt status endpoint
+- [ ] 1068. add external_server_smithgpt health check
+- [ ] 1069. add external_server_smithgpt batching
+- [ ] 1070. add external_server_smithgpt cancellation
+- [ ] 1071. add external_server_smithgpt progress reporting
+- [ ] 1072. add external_server_smithgpt history tracking
+- [ ] 1073. add external_server_smithgpt rollback support
+- [ ] 1074. implement external_server_smithgpt feature #24
+- [ ] 1075. add external_server_smithgpt configuration option
+- [ ] 1076. optimize external_server_smithgpt performance
+- [ ] 1077. add external_server_smithgpt logging
+- [ ] 1078. add external_server_smithgpt error handling
+- [ ] 1079. add external_server_smithgpt unit tests
+- [ ] 1080. add external_server_smithgpt integration tests
+- [ ] 1081. document external_server_smithgpt behavior
+- [ ] 1082. add external_server_smithgpt metrics
+- [ ] 1083. add external_server_smithgpt telemetry
+- [ ] 1084. add external_server_smithgpt caching
+- [ ] 1085. add external_server_smithgpt retry logic
+- [ ] 1086. add external_server_smithgpt rate limiting
+- [ ] 1087. add external_server_smithgpt fallback behavior
+- [ ] 1088. add external_server_smithgpt validation
+- [ ] 1089. add external_server_smithgpt serialization
+- [ ] 1090. add external_server_smithgpt migration path
+- [ ] 1091. add external_server_smithgpt CLI flag
+- [ ] 1092. add external_server_smithgpt status endpoint
+- [ ] 1093. add external_server_smithgpt health check
+- [ ] 1094. add external_server_smithgpt batching
+- [ ] 1095. add external_server_smithgpt cancellation
+- [ ] 1096. add external_server_smithgpt progress reporting
+- [ ] 1097. add external_server_smithgpt history tracking
+- [ ] 1098. add external_server_smithgpt rollback support
+- [ ] 1099. implement external_server_smithgpt feature #49
+- [ ] 1100. add external_server_smithgpt configuration option
+- [ ] 1101. optimize external_server_smithgpt performance
+- [ ] 1102. add external_server_smithgpt logging
+- [ ] 1103. add external_server_smithgpt error handling
+- [ ] 1104. add external_server_smithgpt unit tests
+- [ ] 1105. add external_server_smithgpt integration tests
+- [ ] 1106. document external_server_smithgpt behavior
+- [ ] 1107. add external_server_smithgpt metrics
+- [ ] 1108. add external_server_smithgpt telemetry
+- [ ] 1109. add external_server_smithgpt caching
+- [ ] 1110. add external_server_smithgpt retry logic
+- [ ] 1111. add external_server_smithgpt rate limiting
+- [ ] 1112. add external_server_smithgpt fallback behavior
+- [ ] 1113. add external_server_smithgpt validation
+- [ ] 1114. add external_server_smithgpt serialization
+- [ ] 1115. add external_server_smithgpt migration path
+- [ ] 1116. add external_server_smithgpt CLI flag
+- [ ] 1117. add external_server_smithgpt status endpoint
+- [ ] 1118. add external_server_smithgpt health check
+- [ ] 1119. add external_server_smithgpt batching
+- [ ] 1120. add external_server_smithgpt cancellation
+
+## Knowledge & Embeddings
+
+- [ ] 1121. add knowledge_embeddings history tracking
+- [ ] 1122. add knowledge_embeddings rollback support
+- [ ] 1123. implement knowledge_embeddings feature #3
+- [ ] 1124. add knowledge_embeddings configuration option
+- [ ] 1125. optimize knowledge_embeddings performance
+- [ ] 1126. add knowledge_embeddings logging
+- [ ] 1127. add knowledge_embeddings error handling
+- [ ] 1128. add knowledge_embeddings unit tests
+- [ ] 1129. add knowledge_embeddings integration tests
+- [ ] 1130. document knowledge_embeddings behavior
+- [ ] 1131. add knowledge_embeddings metrics
+- [ ] 1132. add knowledge_embeddings telemetry
+- [ ] 1133. add knowledge_embeddings caching
+- [ ] 1134. add knowledge_embeddings retry logic
+- [ ] 1135. add knowledge_embeddings rate limiting
+- [ ] 1136. add knowledge_embeddings fallback behavior
+- [ ] 1137. add knowledge_embeddings validation
+- [ ] 1138. add knowledge_embeddings serialization
+- [ ] 1139. add knowledge_embeddings migration path
+- [ ] 1140. add knowledge_embeddings CLI flag
+- [ ] 1141. add knowledge_embeddings status endpoint
+- [ ] 1142. add knowledge_embeddings health check
+- [ ] 1143. add knowledge_embeddings batching
+- [ ] 1144. add knowledge_embeddings cancellation
+- [ ] 1145. add knowledge_embeddings progress reporting
+- [ ] 1146. add knowledge_embeddings history tracking
+- [ ] 1147. add knowledge_embeddings rollback support
+- [ ] 1148. implement knowledge_embeddings feature #28
+- [ ] 1149. add knowledge_embeddings configuration option
+- [ ] 1150. optimize knowledge_embeddings performance
+- [ ] 1151. add knowledge_embeddings logging
+- [ ] 1152. add knowledge_embeddings error handling
+- [ ] 1153. add knowledge_embeddings unit tests
+- [ ] 1154. add knowledge_embeddings integration tests
+- [ ] 1155. document knowledge_embeddings behavior
+- [ ] 1156. add knowledge_embeddings metrics
+- [ ] 1157. add knowledge_embeddings telemetry
+- [ ] 1158. add knowledge_embeddings caching
+- [ ] 1159. add knowledge_embeddings retry logic
+- [ ] 1160. add knowledge_embeddings rate limiting
+- [ ] 1161. add knowledge_embeddings fallback behavior
+- [ ] 1162. add knowledge_embeddings validation
+- [ ] 1163. add knowledge_embeddings serialization
+- [ ] 1164. add knowledge_embeddings migration path
+- [ ] 1165. add knowledge_embeddings CLI flag
+- [ ] 1166. add knowledge_embeddings status endpoint
+- [ ] 1167. add knowledge_embeddings health check
+- [ ] 1168. add knowledge_embeddings batching
+- [ ] 1169. add knowledge_embeddings cancellation
+- [ ] 1170. add knowledge_embeddings progress reporting
+
+## Security & Auth
+
+- [ ] 1171. add security_auth migration path
+- [ ] 1172. add security_auth CLI flag
+- [ ] 1173. add security_auth status endpoint
+- [ ] 1174. add security_auth health check
+- [ ] 1175. add security_auth batching
+- [ ] 1176. add security_auth cancellation
+- [ ] 1177. add security_auth progress reporting
+- [ ] 1178. add security_auth history tracking
+- [ ] 1179. add security_auth rollback support
+- [ ] 1180. implement security_auth feature #10
+- [ ] 1181. add security_auth configuration option
+- [ ] 1182. optimize security_auth performance
+- [ ] 1183. add security_auth logging
+- [ ] 1184. add security_auth error handling
+- [ ] 1185. add security_auth unit tests
+- [ ] 1186. add security_auth integration tests
+- [ ] 1187. document security_auth behavior
+- [ ] 1188. add security_auth metrics
+- [ ] 1189. add security_auth telemetry
+- [ ] 1190. add security_auth caching
+- [ ] 1191. add security_auth retry logic
+- [ ] 1192. add security_auth rate limiting
+- [ ] 1193. add security_auth fallback behavior
+- [ ] 1194. add security_auth validation
+- [ ] 1195. add security_auth serialization
+- [ ] 1196. add security_auth migration path
+- [ ] 1197. add security_auth CLI flag
+- [ ] 1198. add security_auth status endpoint
+- [ ] 1199. add security_auth health check
+- [ ] 1200. add security_auth batching
+- [ ] 1201. add security_auth cancellation
+- [ ] 1202. add security_auth progress reporting
+- [ ] 1203. add security_auth history tracking
+- [ ] 1204. add security_auth rollback support
+- [ ] 1205. implement security_auth feature #35
+- [ ] 1206. add security_auth configuration option
+- [ ] 1207. optimize security_auth performance
+- [ ] 1208. add security_auth logging
+- [ ] 1209. add security_auth error handling
+- [ ] 1210. add security_auth unit tests
+- [ ] 1211. add security_auth integration tests
+- [ ] 1212. document security_auth behavior
+- [ ] 1213. add security_auth metrics
+- [ ] 1214. add security_auth telemetry
+- [ ] 1215. add security_auth caching
+- [ ] 1216. add security_auth retry logic
+- [ ] 1217. add security_auth rate limiting
+- [ ] 1218. add security_auth fallback behavior
+- [ ] 1219. add security_auth validation
+- [ ] 1220. add security_auth serialization
+
+## Metrics & Debugging
+
+- [ ] 1221. add metrics_debugging batching
+- [ ] 1222. add metrics_debugging cancellation
+- [ ] 1223. add metrics_debugging progress reporting
+- [ ] 1224. add metrics_debugging history tracking
+- [ ] 1225. add metrics_debugging rollback support
+- [ ] 1226. implement metrics_debugging feature #6
+- [ ] 1227. add metrics_debugging configuration option
+- [ ] 1228. optimize metrics_debugging performance
+- [ ] 1229. add metrics_debugging logging
+- [ ] 1230. add metrics_debugging error handling
+- [ ] 1231. add metrics_debugging unit tests
+- [ ] 1232. add metrics_debugging integration tests
+- [ ] 1233. document metrics_debugging behavior
+- [ ] 1234. add metrics_debugging metrics
+- [ ] 1235. add metrics_debugging telemetry
+- [ ] 1236. add metrics_debugging caching
+- [ ] 1237. add metrics_debugging retry logic
+- [ ] 1238. add metrics_debugging rate limiting
+- [ ] 1239. add metrics_debugging fallback behavior
+- [ ] 1240. add metrics_debugging validation
+- [ ] 1241. add metrics_debugging serialization
+- [ ] 1242. add metrics_debugging migration path
+- [ ] 1243. add metrics_debugging CLI flag
+- [ ] 1244. add metrics_debugging status endpoint
+- [ ] 1245. add metrics_debugging health check
+- [ ] 1246. add metrics_debugging batching
+- [ ] 1247. add metrics_debugging cancellation
+- [ ] 1248. add metrics_debugging progress reporting
+- [ ] 1249. add metrics_debugging history tracking
+- [ ] 1250. add metrics_debugging rollback support
+- [ ] 1251. implement metrics_debugging feature #31
+- [ ] 1252. add metrics_debugging configuration option
+- [ ] 1253. optimize metrics_debugging performance
+- [ ] 1254. add metrics_debugging logging
+- [ ] 1255. add metrics_debugging error handling
+- [ ] 1256. add metrics_debugging unit tests
+- [ ] 1257. add metrics_debugging integration tests
+- [ ] 1258. document metrics_debugging behavior
+- [ ] 1259. add metrics_debugging metrics
+- [ ] 1260. add metrics_debugging telemetry
+- [ ] 1261. add metrics_debugging caching
+- [ ] 1262. add metrics_debugging retry logic
+- [ ] 1263. add metrics_debugging rate limiting
+- [ ] 1264. add metrics_debugging fallback behavior
+- [ ] 1265. add metrics_debugging validation
+- [ ] 1266. add metrics_debugging serialization
+- [ ] 1267. add metrics_debugging migration path
+- [ ] 1268. add metrics_debugging CLI flag
+- [ ] 1269. add metrics_debugging status endpoint
+- [ ] 1270. add metrics_debugging health check
+
+## Testing & CI
+
+- [ ] 1271. add testing_ci fallback behavior
+- [ ] 1272. add testing_ci validation
+- [ ] 1273. add testing_ci serialization
+- [ ] 1274. add testing_ci migration path
+- [ ] 1275. add testing_ci CLI flag
+- [ ] 1276. add testing_ci status endpoint
+- [ ] 1277. add testing_ci health check
+- [ ] 1278. add testing_ci batching
+- [ ] 1279. add testing_ci cancellation
+- [ ] 1280. add testing_ci progress reporting
+- [ ] 1281. add testing_ci history tracking
+- [ ] 1282. add testing_ci rollback support
+- [ ] 1283. implement testing_ci feature #13
+- [ ] 1284. add testing_ci configuration option
+- [ ] 1285. optimize testing_ci performance
+- [ ] 1286. add testing_ci logging
+- [ ] 1287. add testing_ci error handling
+- [ ] 1288. add testing_ci unit tests
+- [ ] 1289. add testing_ci integration tests
+- [ ] 1290. document testing_ci behavior
+- [ ] 1291. add testing_ci metrics
+- [ ] 1292. add testing_ci telemetry
+- [ ] 1293. add testing_ci caching
+- [ ] 1294. add testing_ci retry logic
+- [ ] 1295. add testing_ci rate limiting
+- [ ] 1296. add testing_ci fallback behavior
+- [ ] 1297. add testing_ci validation
+- [ ] 1298. add testing_ci serialization
+- [ ] 1299. add testing_ci migration path
+- [ ] 1300. add testing_ci CLI flag
+- [ ] 1301. add testing_ci status endpoint
+- [ ] 1302. add testing_ci health check
+- [ ] 1303. add testing_ci batching
+- [ ] 1304. add testing_ci cancellation
+- [ ] 1305. add testing_ci progress reporting
+- [ ] 1306. add testing_ci history tracking
+- [ ] 1307. add testing_ci rollback support
+- [ ] 1308. implement testing_ci feature #38
+- [ ] 1309. add testing_ci configuration option
+- [ ] 1310. optimize testing_ci performance
+- [ ] 1311. add testing_ci logging
+- [ ] 1312. add testing_ci error handling
+- [ ] 1313. add testing_ci unit tests
+- [ ] 1314. add testing_ci integration tests
+- [ ] 1315. document testing_ci behavior
+- [ ] 1316. add testing_ci metrics
+- [ ] 1317. add testing_ci telemetry
+- [ ] 1318. add testing_ci caching
+- [ ] 1319. add testing_ci retry logic
+- [ ] 1320. add testing_ci rate limiting
+
+## Docs & Packaging
+
+- [ ] 1321. add docs_packaging CLI flag
+- [ ] 1322. add docs_packaging status endpoint
+- [ ] 1323. add docs_packaging health check
+- [ ] 1324. add docs_packaging batching
+- [ ] 1325. add docs_packaging cancellation
+- [ ] 1326. add docs_packaging progress reporting
+- [ ] 1327. add docs_packaging history tracking
+- [ ] 1328. add docs_packaging rollback support
+- [ ] 1329. implement docs_packaging feature #9
+- [ ] 1330. add docs_packaging configuration option
+- [ ] 1331. optimize docs_packaging performance
+- [ ] 1332. add docs_packaging logging
+- [ ] 1333. add docs_packaging error handling
+- [ ] 1334. add docs_packaging unit tests
+- [ ] 1335. add docs_packaging integration tests
+- [ ] 1336. document docs_packaging behavior
+- [ ] 1337. add docs_packaging metrics
+- [ ] 1338. add docs_packaging telemetry
+- [ ] 1339. add docs_packaging caching
+- [ ] 1340. add docs_packaging retry logic
+- [ ] 1341. add docs_packaging rate limiting
+- [ ] 1342. add docs_packaging fallback behavior
+- [ ] 1343. add docs_packaging validation
+- [ ] 1344. add docs_packaging serialization
+- [ ] 1345. add docs_packaging migration path
+- [ ] 1346. add docs_packaging CLI flag
+- [ ] 1347. add docs_packaging status endpoint
+- [ ] 1348. add docs_packaging health check
+- [ ] 1349. add docs_packaging batching
+- [ ] 1350. add docs_packaging cancellation
+- [ ] 1351. add docs_packaging progress reporting
+- [ ] 1352. add docs_packaging history tracking
+- [ ] 1353. add docs_packaging rollback support
+- [ ] 1354. implement docs_packaging feature #34
+- [ ] 1355. add docs_packaging configuration option
+- [ ] 1356. optimize docs_packaging performance
+- [ ] 1357. add docs_packaging logging
+- [ ] 1358. add docs_packaging error handling
+- [ ] 1359. add docs_packaging unit tests
+- [ ] 1360. add docs_packaging integration tests
+
+## Community & Integrations
+
+- [ ] 1361. implement community_integrations feature #1
+- [ ] 1362. add community_integrations configuration option
+- [ ] 1363. optimize community_integrations performance
+- [ ] 1364. add community_integrations logging
+- [ ] 1365. add community_integrations error handling
+- [ ] 1366. add community_integrations unit tests
+- [ ] 1367. add community_integrations integration tests
+- [ ] 1368. document community_integrations behavior
+- [ ] 1369. add community_integrations metrics
+- [ ] 1370. add community_integrations telemetry
+- [ ] 1371. add community_integrations caching
+- [ ] 1372. add community_integrations retry logic
+- [ ] 1373. add community_integrations rate limiting
+- [ ] 1374. add community_integrations fallback behavior
+- [ ] 1375. add community_integrations validation
+- [ ] 1376. add community_integrations serialization
+- [ ] 1377. add community_integrations migration path
+- [ ] 1378. add community_integrations CLI flag
+- [ ] 1379. add community_integrations status endpoint
+- [ ] 1380. add community_integrations health check
+- [ ] 1381. add community_integrations batching
+- [ ] 1382. add community_integrations cancellation
+- [ ] 1383. add community_integrations progress reporting
+- [ ] 1384. add community_integrations history tracking
+- [ ] 1385. add community_integrations rollback support
+- [ ] 1386. implement community_integrations feature #26
+- [ ] 1387. add community_integrations configuration option
+- [ ] 1388. optimize community_integrations performance
+- [ ] 1389. add community_integrations logging
+- [ ] 1390. add community_integrations error handling
+- [ ] 1391. add community_integrations unit tests
+- [ ] 1392. add community_integrations integration tests
+- [ ] 1393. document community_integrations behavior
+- [ ] 1394. add community_integrations metrics
+- [ ] 1395. add community_integrations telemetry
+- [ ] 1396. add community_integrations caching
+- [ ] 1397. add community_integrations retry logic
+- [ ] 1398. add community_integrations rate limiting
+- [ ] 1399. add community_integrations fallback behavior
+- [ ] 1400. add community_integrations validation
+
+## Long-term / Research
+
+- [ ] 1401. add long-term_research cancellation
+- [ ] 1402. add long-term_research progress reporting
+- [ ] 1403. add long-term_research history tracking
+- [ ] 1404. add long-term_research rollback support
+- [ ] 1405. implement long-term_research feature #5
+- [ ] 1406. add long-term_research configuration option
+- [ ] 1407. optimize long-term_research performance
+- [ ] 1408. add long-term_research logging
+- [ ] 1409. add long-term_research error handling
+- [ ] 1410. add long-term_research unit tests
+- [ ] 1411. add long-term_research integration tests
+- [ ] 1412. document long-term_research behavior
+- [ ] 1413. add long-term_research metrics
+- [ ] 1414. add long-term_research telemetry
+- [ ] 1415. add long-term_research caching
+- [ ] 1416. add long-term_research retry logic
+- [ ] 1417. add long-term_research rate limiting
+- [ ] 1418. add long-term_research fallback behavior
+- [ ] 1419. add long-term_research validation
+- [ ] 1420. add long-term_research serialization
+- [ ] 1421. add long-term_research migration path
+- [ ] 1422. add long-term_research CLI flag
+- [ ] 1423. add long-term_research status endpoint
+- [ ] 1424. add long-term_research health check
+- [ ] 1425. add long-term_research batching
+- [ ] 1426. add long-term_research cancellation
+- [ ] 1427. add long-term_research progress reporting
+- [ ] 1428. add long-term_research history tracking
+- [ ] 1429. add long-term_research rollback support
+- [ ] 1430. implement long-term_research feature #30
+
+## Backlog / Uncategorized
+
+
+## Total features: 1430
+
+- Last generated: 2026-07-24

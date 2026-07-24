@@ -394,7 +394,7 @@ public class SmithAICommand implements CommandExecutor {
                     sender.sendMessage("§cThis Smith_AI has no inventory.");
                     return true;
                 }
-                Inventory inv = invNpc.getInventory();
+                Inventory inv = invNpc.getBukkitInventory();
                 sender.sendMessage("§e" + invNpc.getName() + "'s inventory:");
                 if (inv != null) {
                     for (ItemStack stack : inv.getContents()) {
@@ -438,7 +438,7 @@ public class SmithAICommand implements CommandExecutor {
                         return true;
                     }
                 }
-                Inventory npcInv = giveNpc.getInventory();
+                Inventory npcInv = giveNpc.getBukkitInventory();
                 ItemStack item = new ItemStack(mat, Math.max(1, amount));
                 if (givePlayer.getInventory().containsAtLeast(item, item.getAmount())) {
                     givePlayer.getInventory().removeItem(item);

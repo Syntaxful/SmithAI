@@ -57,6 +57,8 @@ SmithAI/training.yml
 SmithAI-Server/models/*.gguf
 SmithAI-Server/models/*.bin
 SmithAI-Server/__pycache__/
+SmithAI-Server/venv/
+SmithAI-Server/venv-test/
 
 # Python
 __pycache__/

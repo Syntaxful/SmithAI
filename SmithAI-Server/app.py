@@ -1,6 +1,6 @@
 # SmithAI-Server
 # Official external AI server for SmithAI Minecraft plugin.
-# Supports SmithGPT 1.0 (4GB) and SmithGPT 2.0 (7.5GB) models.
+# Supports SmithGPT 1.0 (2.2GB) and SmithGPT 2.0 (4.4GB) models.
 # User runs this on their own host: Codespaces, Linux, Windows, VPS, or any cloud IDE.
 
 import os
@@ -12,9 +12,11 @@ import asyncio
 import uvicorn
 import re
 import random
+import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
@@ -32,8 +34,8 @@ CONFIG_PATH = os.environ.get("SMITHAI_CONFIG", "config.yml")
 with open(CONFIG_PATH, "r") as f:
     config = yaml.safe_load(f)
 
-MODEL_PATH = config.get("model", {}).get("path", "models/smithgpt-1.0-4.gguf")
-MODEL_NAME = config.get("model", {}).get("name", "SmithGPT 1.0 4GB")
+MODEL_PATH = config.get("model", {}).get("path", "models/smithgpt-1.0-2.2gb.gguf")
+MODEL_NAME = config.get("model", {}).get("name", "SmithGPT 1.0 2.2GB")
 HOST = config.get("server", {}).get("host", "0.0.0.0")
 PORT = int(os.environ.get("PORT", config.get("server", {}).get("port", 8000)))
 CONTEXT_SIZE = config.get("model", {}).get("context_size", 4096)
@@ -129,8 +131,16 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="SmithAI Server",
     description="External AI brain for the SmithAI Minecraft plugin.",
-    version="2.0.0",
+    version="2.0.1",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -139,7 +149,7 @@ async def root():
     return {
         "status": "ok",
         "name": "SmithAI Server",
-        "version": "2.0.0",
+        "version": "2.0.1",
         "model": MODEL_NAME,
         "llama_available": LLAMA_AVAILABLE,
         "model_exists": os.path.exists(MODEL_PATH),
@@ -162,7 +172,7 @@ SKILL_LIBRARY = [
 
 
 def get_model_tier():
-    if "2.0" in MODEL_NAME:
+    if "2.0" in MODEL_NAME or "4.4" in MODEL_NAME:
         return "gpt2"
     return "gpt1"
 
@@ -281,10 +291,9 @@ def chat_with_llm(req: ChatRequest) -> ChatResponse:
     skill_count = len(available_skills())
     version = VersionContext(req.context)
     system_prompt = (
-        "You are Smith_AI, an AI companion in Minecraft. You can chat, help with tasks, "
-        "and answer questions about the game. Keep replies short and useful.\n"
+        "You are Smith_AI, an AI companion in Minecraft. You can chat, move, mine, build, farm, fight, craft, and make decisions. "
+        "Keep replies short and useful. Choose skills when they help accomplish a task. "
         f"Model tier: {model_tier}. Available core skills: {skill_count}.\n"
-        "You may choose one or more skills to accomplish a task if it helps.\n"
         "If you choose a skill, end your reply with the tag [action:skill_name] or [action:skill_name,target].\n"
     )
     if version.version:
@@ -361,7 +370,7 @@ def rule_reply(last: str, knowledge: List[str], skills: List[str], task: Optiona
     if any(p in last for p in ["what is your name", "what's your name", "who are you", "what are you called"]):
         return "I'm Smith_AI, your Minecraft companion."
     if any(p in last for p in ["how old are you", "when were you made", "what version are you"]):
-        return "Version 2.0.0 of the SmithAI plugin, running on the SmithAI-Server."
+        return "Version 2.0.1 of the SmithAI plugin, running on the SmithAI-Server."
     if any(p in last for p in ["tell me about yourself", "what are you", "introduce yourself"]):
         return "I'm Smith_AI, a trainable AI companion for Minecraft. I can chat, follow, mine, build, farm, fight, and help beat the game."
     if any(p in last for p in ["tell me a joke", "make me laugh", "say something funny"]):
@@ -502,7 +511,7 @@ def receive_feedback(req: FeedbackRequest, token: str = Depends(verify_token)):
 
 
 if __name__ == "__main__":
-    print(f"Starting SmithAI-Server v2.0.0")
+    print(f"Starting SmithAI-Server v2.0.1")
     print(f"Model: {MODEL_NAME}")
     print(f"Listening on {HOST}:{PORT}")
     uvicorn.run(app, host=HOST, port=PORT)

@@ -12,7 +12,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
@@ -27,8 +26,16 @@ public class NPCSpawner {
             // Do NOT call setSilent(true) here: PlayerModelHelper already sets silent(false)
             // so the NPC is audible and visible as required.
             entity.setInvulnerable(true);
-            if (entity instanceof Player) equipPlayer((Player) entity);
-            return new SmithNPC(UUID.randomUUID(), entity, name);
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
+                if (plugin.getPluginConfig().isSpawnEquipped()) {
+                    equipPlayer(player);
+                }
+                // Force the equipment update packet so armor/offhand is visible to clients.
+                updateEquipment(player);
+                return new SmithNPC(UUID.randomUUID(), entity, name, new NPCInventory(player));
+            }
+            return new SmithNPC(UUID.randomUUID(), entity, name, new NPCInventory());
         }
 
         plugin.getLogger().info("Citizens not found; spawning Smith_AI as a villager fallback.");
@@ -44,17 +51,26 @@ public class NPCSpawner {
             VillagerCompat.setNoProfession(villager);
         }
         if (fallback instanceof LivingEntity) LivingEntityCompat.setAI((LivingEntity) fallback, false);
-        return new SmithNPC(UUID.randomUUID(), fallback, name);
+        return new SmithNPC(UUID.randomUUID(), fallback, name, new NPCInventory());
     }
 
     private static void equipPlayer(Player player) {
-        PlayerInventory inv = player.getInventory();
-        inv.setHelmet(item("IRON_HELMET"));
-        inv.setChestplate(item("IRON_CHESTPLATE"));
-        inv.setLeggings(item("IRON_LEGGINGS"));
-        inv.setBoots(item("IRON_BOOTS"));
-        inv.setItemInMainHand(item("DIAMOND_SWORD"));
-        inv.setItemInOffHand(item("SHIELD"));
+        NPCInventory inv = new NPCInventory(player);
+        inv.setArmor(item("IRON_HELMET"), item("IRON_CHESTPLATE"), item("IRON_LEGGINGS"), item("IRON_BOOTS"));
+        inv.setMainHand(item("DIAMOND_SWORD"));
+        inv.setOffHand(item("SHIELD"));
+    }
+
+    private static void updateEquipment(Player player) {
+        try {
+            // Refresh the equipment update for nearby players by resetting the held item slot.
+            player.getInventory().setHeldItemSlot(0);
+            // Bukkit/Spigot sends the equipment packet automatically when inventory changes.
+            // Forcing a small update by setting the hand again ensures the offhand is visible.
+            ItemStack offHand = player.getInventory().getItemInOffHand();
+            player.getInventory().setItemInOffHand(null);
+            player.getInventory().setItemInOffHand(offHand);
+        } catch (Exception ignored) {}
     }
 
     private static ItemStack item(String name) {

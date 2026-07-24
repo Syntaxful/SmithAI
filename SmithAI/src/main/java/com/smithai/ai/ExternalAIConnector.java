@@ -15,6 +15,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class ExternalAIConnector {
 
@@ -40,11 +41,14 @@ public class ExternalAIConnector {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url + "/health"))
             .timeout(Duration.ofSeconds(config.getExternalTimeout()))
+            .header("Accept", "application/json")
             .GET()
             .build();
 
         return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(response -> response.statusCode() == 200)
+            .exceptionally(ex -> false)
+            .orTimeout(config.getExternalTimeout(), TimeUnit.SECONDS)
             .exceptionally(ex -> false);
     }
 
@@ -54,12 +58,16 @@ public class ExternalAIConnector {
 
         JSONObject body = buildChatBody(player, message, conversation, task, knowledge, skills);
 
+        return sendChatWithRetry(url, body, config.getExternalApiKey(), config.getExternalTimeout(), 3);
+    }
+
+    private CompletableFuture<String> sendChatWithRetry(String url, JSONObject body, String apiKey, int timeout, int retries) {
         HttpRequest.Builder builder = HttpRequest.newBuilder()
             .uri(URI.create(url + "/chat"))
-            .timeout(Duration.ofSeconds(config.getExternalTimeout()))
-            .header("Content-Type", "application/json");
+            .timeout(Duration.ofSeconds(timeout))
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json");
 
-        String apiKey = config.getExternalApiKey();
         if (apiKey != null && !apiKey.isEmpty()) {
             builder.header("Authorization", "Bearer " + apiKey);
         }
@@ -68,7 +76,7 @@ public class ExternalAIConnector {
             .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
             .build();
 
-        return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        CompletableFuture<String> future = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(response -> {
                 if (response.statusCode() != 200) {
                     throw new RuntimeException("External AI returned status " + response.statusCode());
@@ -84,6 +92,15 @@ public class ExternalAIConnector {
                 }
                 return reply;
             });
+
+        if (retries > 0) {
+            future = future.exceptionallyCompose(ex -> {
+                plugin.getLogger().warning("External AI chat failed (retrying " + retries + " more): " + ex.getMessage());
+                return sendChatWithRetry(url, body, apiKey, timeout, retries - 1);
+            });
+        }
+
+        return future.orTimeout(timeout, TimeUnit.SECONDS);
     }
 
     private JSONObject buildChatBody(Player player, String message, Conversation conversation, String task, List<String> knowledge, List<String> skills) {

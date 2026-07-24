@@ -52,6 +52,7 @@ training:
 npc:
   followDistance: 3.0
   pathfinderTimeout: 30
+  spawnEquipped: false
 
 debug:
   enabled: false
